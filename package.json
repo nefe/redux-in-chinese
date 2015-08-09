@@ -1,0 +1,40 @@
+{
+  "name": "redux-in-chinese",
+  "description": "Redux 中文文档",
+  "scripts": {
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm run clean && npm run docs:publish",
+    "prepublish": "npm run clean && npm run build",
+    "docs:clean": "rimraf _book",
+    "docs:build": "gitbook build -g camsong/redux-in-chinese",
+    "docs:watch": "gitbook serve",
+    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:camsong/redux-in-chinese gh-pages --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/camsong/redux-in-chinese.git"
+  },
+  "keywords": [
+    "flux",
+    "redux",
+    "reducer",
+    "react",
+    "reactjs",
+    "hot",
+    "reload",
+    "hmr",
+    "live",
+    "edit",
+    "webpack"
+  ],
+  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/camsong)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/camsong/redux-in-chinese/issues"
+  },
+  "homepage": "https://github.com/camsong/redux-in-chinese",
+  "devDependencies": {
+    "rimraf": "^2.3.4",
+    "gitbook-cli": "^0.3.4"
+  }
+}
