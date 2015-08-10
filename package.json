@@ -34,7 +34,8 @@
   },
   "homepage": "https://github.com/camsong/redux-in-chinese",
   "devDependencies": {
-    "rimraf": "^2.3.4",
-    "gitbook-cli": "^0.3.4"
+    "gitbook-cli": "^0.3.4",
+    "gitbook-plugin-ga": "^0.2.1",
+    "rimraf": "^2.3.4"
   }
 }
