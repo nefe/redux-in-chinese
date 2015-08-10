@@ -1,12 +1,12 @@
-# Basics
+# 基础
 
-Don’t be fooled by all the fancy talk about reducers, middleware, store enhancers—Redux is incredibly simple. If you’ve ever built a Flux application, you will feel right at home. (If you’re new to Flux it’s easy too!)
+不要被各种关于 reducers, middleware, store 的演讲所蒙蔽。Redux 实际是非常简单的。如果你有 Flux 开发经验，用起来会非常习惯。（没用过 Flux 也不怕，很容易！）
 
-In this guide, we’ll walk through the process of creating a simple Todo app.
+下面的教程将会一步步教你开发简单的 Todo 应用。
 
 * [Actions](Actions.md)
 * [Reducers](Reducers.md)
 * [Store](Store.md)
-* [Data Flow](DataFlow.md)
-* [Usage with React](UsageWithReact.md)
-* [Example: Todo List](ExampleTodoList.md)
+* [数据流](DataFlow.md)
+* [结合 React 方法](UsageWithReact.md)
+* [示例：Todo List](ExampleTodoList.md)
