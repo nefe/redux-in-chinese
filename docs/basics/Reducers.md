@@ -1,17 +1,17 @@
 # Reducers
 
-[Actions](./Actions.md) describe the fact that *something happened*, but don’t specify how the application’s state changes in response. This is the job of a reducer.
+[Actions](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。这是 reducer 要做的事情。
 
-## Designing the State Shape
+## 设置 State 结构
 
-In Redux, all state of your application is stored as a single object. It’s a good idea to think of its shape before writing any code. What’s the minimal representation of your app’s state as an object?
+应用所有的 state 都被保存在一个单一对象中（我们称之为 state 树）。建议在写代码前先想一下这个对象的结构。如何才能以最简的形式把应用的 state 用对象描述出来？
 
-For our todo app, we want to store two different things:
+以 todo 应用为例，需要保存两个不同的内容：
 
-* The currently selected visibility filter;
-* The actual list of todos.
+* 当前选中的任务过滤条件；
+* 真实的任务列表。
 
-You’ll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separately from the UI state.
+通常，这个 state 树还需要存放其它一些数据，还有界面 state。这样做没问题，但尽量把这些数据与界面 state 分开。
 
 ```js
 {
@@ -30,24 +30,24 @@ You’ll often find that you need to store some data, as well as some UI state, 
 
 >In a more complex app, you’re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app’s state as of a database. This approach is described in [normalizr](https://github.com/gaearon/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we’re keeping the example simple.
 
-## Handling Actions
+## Action 处理
 
-Now that we decided what our state object looks like, we are ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
+现在我们已经确定了 state 对象的结构，就可以开始开发 reducer。reducer 就是一个函数，接收旧的 state 和 action，返回新的 state。
 
 ```js
 (previousState, action) => newState
 ```
 
-It’s called a reducer because it’s the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It’s very important that the reducer stays pure. Things you should **never** do inside a reducer:
+之所以称作 reducer 是因为和 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 格式很像。保持 reducer 纯净非常重要。永远**不要**在 reducer 里做这些操作：
 
-* Mutate its arguments;
-* Perform side effects like API calls and routing transitions.
+* 修改传入参数；
+* 执行有副作用的操作，如 API 请求和路由跳转。
 
-We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
+在[高级篇](../advanced/README.md)里会介绍如何执行有副作用的操作。现在只需要谨记 reducer 一定要保持纯净。**只要传入参数一样，返回必须一样。没有特殊情况、没有副作用，没有 API 请求、没有修改参数，单纯执行计算。**
 
-With this out of the way, let’s start writing our reducer by gradually teaching it to understand the [actions](Actions.md) we defined earlier.
+明白了这些之后，就可以开始编写 reducer，并让它来处理之前定义过的 [actions](Actions.md)。
 
-We’ll start by specifying the initial state. Redux will call our reducer with an `undefined` state for the first time. This is our chance to return the initial state of our app:
+我们在开始时定义默认的 state。Redux 首次执行时，state 为 `undefined`，这时候会返回默认 state。
 
 ```js
 import { VisibilityFilters } from './actions';
@@ -62,23 +62,21 @@ function todoApp(state, action) {
     return initialState;
   }
 
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // 这里暂不处理任何 action，仅返回传入的 state。
   return state;
 }
 ```
 
-One neat trick is to use the [ES6 default arguments syntax](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) to write this in a more compact way:
+这里一个技巧是使用 [ES6 参数默认值语法](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) 来精简代码。
 
 ```js
 function todoApp(state = initialState, action) {
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // 这里暂不处理任何 action，仅返回传入的 state。
   return state;
 }
 ```
 
-Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
+现在可以处理 `SET_VISIBILITY_FILTER`。需要做的只是改变 state 中的 `visibilityFilter`。
 
 ```js
 function todoApp(state = initialState, action) {
@@ -93,25 +91,25 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that:
+注意:
 
-1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, ...)` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the experimental [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for ES7 to write `{ ...state, ...newState }` instead.
+1. **不要修改 `state`。** 使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 新建了一个副本。不能这样使用 `Object.assign(state, ...)`，因为它会改变第一个参数的值。**一定**要把第一个参数设置为空对象。也可以使用 ES7 中还在试验阶段的特性 `{ ...state, ...newState }`，参考 [对象展开语法](https://github.com/sebmarkbage/ecmascript-rest-spread)。
 
-2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
+2. **在 `default` 情况下返回旧的 `state`。**遇到未知的 action 时，一定要返回旧的 `state`。
 
->##### Note on `Object.assign`
+>##### `Object.assign` 使用提醒
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://github.com/babel-plugins/babel-plugin-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 是 ES6 特性，但多数浏览器并不支持。你要么使用 polyfill，[Babel 插件](https://github.com/babel-plugins/babel-plugin-object-assign)，或者使用其它库如 [`_.assign()`](https://lodash.com/docs#assign) 提供的帮助方法。 
 
->##### Note on `switch` and Boilerplate
+>##### `switch` 和样板代码提醒
 
->The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
+>`state` 语句并不是严格意义上的样板代码。Flux 中真实的样板代码是概念性的：更新必须要发送、Store 必须要注册到 Dispatcher、Store 必须是对象（开发同构应用时变得非常复杂）。为了解决这些问题，Redux 放弃了 event emitters（事件发送器），转而使用纯 reducer。
 
->It’s unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don’t like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
+>很不幸到现在为步，还有很多人存在一个误区：根据文档中是否使用 `switch` 来决定是否使用它。如果你不喜欢 `switch`，完全可以自定义一个 `createReducer` 函数来接收一个事件处理函数列表，参照["减少样板代码"](../recipes/ReducingBoilerplate.md#reducers)。
 
-## Handling More Actions
+## 处理多个 action
 
-We have two more actions to handle! Let’s extend our reducer to handle `ADD_TODO`.
+还有两个 action 需要处理。让我们先处理 `ADD_TODO`。
 
 ```js
 function todoApp(state = initialState, action) {
@@ -132,10 +130,9 @@ function todoApp(state = initialState, action) {
   }
 }
 ```
+如上，不直接修改 `state` 中的字段，而是返回新对象。新的 `todos` 对象就相当于旧的 `todos` 在末尾加上新建的 todo。而这个新的 todo 又是在 action 中创建的。
 
-Just like before, we never write directly to `state` or its fields, and instead we return new objects. The new `todos` is equal to the old `todos` concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.
-
-Finally, the implementation of `COMPLETE_TODO` handler shouldn’t come as a complete surprise:
+最后，`COMPLETE_TODO` 的实现也很好理解：
 
 ```js
 case COMPLETE_TODO:
@@ -150,11 +147,11 @@ case COMPLETE_TODO:
   });
 ```
 
-Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [React.addons.update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
+因为我们不能直接修改却要更新数组中指定的一项数据，这里需要先把前面和后面都切开。如果经常需要这类的操作，可以选择使用帮助类 [React.addons.update](https://facebook.github.io/react/docs/update.html)，[updeep](https://github.com/substantial/updeep)，或者使用原生支持深度更新的库 [Immutable](http://facebook.github.io/immutable-js/)。最后，时刻谨记永远不要在克隆 `state` 前修改它。
 
-## Splitting Reducers
+## 拆分 Reducer
 
-Here is our code so far. It is rather verbose:
+目前的代码看起来非常拖沓冗余：
 
 ```js
 function todoApp(state = initialState, action) {
@@ -274,7 +271,7 @@ import * as reducers from './reducers';
 const todoApp = combineReducers(reducers);
 ```
 
-## Source Code
+## 源码
 
 #### `reducers.js`
 
@@ -321,6 +318,6 @@ import * as reducers from './reducers';
 let todoApp = combineReducers(reducers);
 ```
 
-## Next Steps
+## 下一步
 
-Next, we’ll expore how to [create a Redux store](Store.md) that holds the state and takes care of calling your reducer when you dispatch an action.
+接下来会学习 [创建 Redux store](Store.md)。store 能维持应用的 state，并在当你发起 action 的时候调用 reducer。

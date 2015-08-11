@@ -1,4 +1,4 @@
-# Data Flow
+# 数据流
 
 Redux architecture revolves around a **strict unidirectional data flow**.
 
