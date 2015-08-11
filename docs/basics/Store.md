@@ -1,17 +1,17 @@
 # Store
 
-In the previous steps, we have defined the [actions](Action.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
+上面章节中，我们学会了使用 [action](Action.md) 来表示“发生了什么”，和使用 [reducers](Reducers.md) 来根据 action 更新 state 的用法。
 
-**Store** is an object that brings them together. The store has the following responsibilities:
+**Store** 就是把它们联系到一起的对象。Store 有以下职责：
 
-* Holds application state;
-* Allows access to state via [`getState()`](../api/Store.md#getState);
-* Allows state to be updated via [`dispatch(action)`](../api/Store.md#dispatch);
-* Registers listeners via [`subscribe(listener)`](../api/Store.md#subscribe).
+* 维持应用的 state；
+* 提供 [`getState()`](../api/Store.md#getState) 方法获取 state；
+* 提供 [`dispatch(action)`](../api/Store.md#dispatch) 方法更新 state；
+* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器。
 
-It’s important to note that you’ll only have a single store in a Redux application. When you want to split your data handling logic, you’ll use [reducer composition](Reducers.md#splitting-reducers) instead of many stores.
+再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分处理数据的逻辑时，使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
 
-It’s easy to create a store if you have a reducer. For example, if we had a single `todoApp` reducer in our app, we would have written this:
+根据 reducer 创建 store 非常容易。例如，假如应用中只有一个 `todoApp` 的 reducer，可以这样写：
 
 ```js
 import { createStore } from 'redux';
@@ -20,7 +20,7 @@ import todoApp from './reducers';
 let store = createStore(todoApp);
 ```
 
-For maintainability, we previously split them into separate reducers, so we’ll combine them with [`combineReducers()`](../api/combineReducers.md):
+为了提高可维护性，拆分成多个 reducer，这时需要使用 [`combineReducers()`](../api/combineReducers.md) 来把它们组合起来。
 
 ```js
 import { combineReducers, createStore } from 'redux';
@@ -30,28 +30,29 @@ let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 ```
 
-You may optionally specify the initial state as the second argument to [`createStore()`](../api/createStore.md). This is useful for hydrating the state of the client to match the state of a Redux application running on the server.
+[`createStore()`](../api/createStore.md) 的第二个参数可以设置初始状态。
+这对开发同构应用时非常有用，可以用于把服务器端生成的 state 转变后在浏览器端传给应用。
 
 ```js
 let store = createStore(todoApp, window.STATE_FROM_SERVER);
 ```
 
-## Dispatching Actions
+## 发起 Actions
 
-Now that we have created a store, let’s verify our program works! Even without any UI, we can already test the update logic.
+创建好了 store 后，就可以验证程序是否工作。虽然还没有界面，我们已经可以测试更新逻辑了。
 
 ```js
 import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions';
 
-// Log the initial state
+// 打印初始状态
 console.log(store.getState());
 
-// Every time the state changes, log it
+// 监听 state 更新时，打印日志
 let unsubscribe = store.subscribe(() =>
   console.log(store.getState())
 );
 
-// Dispatch some actions
+// 发起一系列 action
 store.dispatch(addTodo('Learn about actions'));
 store.dispatch(addTodo('Learn about reducers'));
 store.dispatch(addTodo('Learn about store'));
@@ -59,17 +60,17 @@ store.dispatch(completeTodo(0));
 store.dispatch(completeTodo(1));
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
 
-// Stop listening to state updates
+// 停止监听 state 更新
 unsubscribe();
 ```
 
-You can see how this causes the state held by the store to change:
+可以看到 store 里的 state 是如何变化的：
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
 
-We specified the behavior of our app before we even started writing the UI. We won’t do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won’t need to mock anything because they are just functions. Call them, and make assertions on what they return.
+可以看到，在还没有开发界面的时候，我们就可以定义程序的行为。而且这时候已经可以写 reducer 和 action 生成器的测试。不需要模拟任何东西，因为它们都是纯函数。只需调用一下，对返回值做断言，写测试就是这么简单。
 
-## Source Code
+## 源码
 
 #### `index.js`
 
@@ -81,6 +82,6 @@ let todoApp = combineReducers(reducers);
 let store = createStore(todoApp);
 ```
 
-## Next Steps
+## 下一步
 
-Before creating a UI for our todo app, we will take a detour to [how the data flows in a Redux application](DataFlow.md).
+在创建 todo 应用界面之前，我们先穿插学习一下[数据在 Redux 应用中如何流动的](DataFlow.md)
