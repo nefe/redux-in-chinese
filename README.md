@@ -1,5 +1,7 @@
 # [Redux 中文文档](http://github.com/camsong/redux-in-chinese)
 
+在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
+
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
@@ -7,12 +9,6 @@ Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 
 Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。
 体小精悍（只有2kB）且没有任何依赖。
-
-[![build status](https://img.shields.io/travis/gaearon/redux/master.svg?style=flat-square)](https://travis-ci.org/gaearon/redux)
-[![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
-[![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
-[![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
-
 
 ### 评价
 
