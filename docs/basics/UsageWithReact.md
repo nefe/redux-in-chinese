@@ -1,24 +1,24 @@
-# Usage with React
+# 搭配 React
 
-From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
+这里需要再强调一下：Redux 和 React 之间没有关系。Redux 支持 React、Angular、Ember、jQuery 甚至纯 JavaScript。
 
-That said, Redux works especially well with frameworks like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
+尽管如此，Redux 还是和 [React](http://facebook.github.io/react/) 和 [Deku](https://github.com/dekujs/deku) 这类框架搭配起来用最好，因为这类框架允许你以 state 函数的形式来描述界面，Rdux 通过 action 的形式来发起 state 变化。
 
-We will use React to build our simple todo app.
+下面使用 React 来开发一个 todo 任务管理应用。
 
-## Installing React Redux
+## 安装 React Redux
 
-[React bindings](https://github.com/gaearon/react-redux) are not included in Redux by default. You need to install them explicitly:
+Redux 默认并不包含 [React 绑定库](https://github.com/gaearon/react-redux)，需要单独安装。
 
 ```
 npm install --save react-redux
 ```
 
-## Smart and Dumb Components
+## 智能组件（Smart Components）和木偶组件（Dumb Components）
 
-React bindings for Redux embrace the idea of [dividing “smart” and “dumb” components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+Redux 的 React 绑定库拥抱了 [智能组件和木偶组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
 
-It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be “dumb” and receive all data via props.
+明智的做法是只在最顶层组件（如路由操作）里使用 Redux。内部组件应该像木偶一样保持“呆滞”，所有数据都通过 props 传入。
 
 <center>
 <table>
@@ -50,11 +50,11 @@ It is advisable that only top-level components of your app (such as route handle
 </table>
 </center>
 
-In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest you to pass props down whenever possible.
+在这个 todo 应用中，只应有一个智能组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个智能组件。虽然你也可以嵌套使用智能组件，但应该尽可能的使用传递 props 的形式。
 
-## Desigining Component Hierarchy
+## 设计组件层次结构
 
-Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
+还记得当初如何 [设计 reducer 结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
 
 Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incompleted todos.
 
@@ -79,9 +79,9 @@ If you migrate from Redux to something else, you’ll be able to keep all these 
 
 Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
 
-## Dumb Components
+## 木偶组件
 
-These are all normal React components, so we won’t stop to examine them in details. Here they go:
+这就是普通的 React 组件，所以就不在详述。直接看代码：
 
 #### `components/AddTodo.js`
 
@@ -216,7 +216,7 @@ Footer.propTypes = {
 };
 ```
 
-This is it! We can verify that they work correctly by writing a dummy `App` to render them:
+就这些，现在开发一个木偶型的组件 `App` 把它们渲染出来，验证下是否工作。
 
 #### `containers/App.js`
 
@@ -256,13 +256,13 @@ export default class App extends Component {
 }
 ```
 
-This is what I see when I render `<App />`:
+渲染 `<App />` 结果如下：
 
 <img src='http://i.imgur.com/lj4QTfD.png' width='40%'>
 
-By itself, it’s not very interesting. Let’s connect it to Redux!
+单独来看，并没有什么特别，现在把它和 Redux 连起来。
 
-## Connecting to Redux
+## 连接到 Redux
 
 We need to do two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
 
@@ -370,8 +370,8 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-This is it! The tiny todo app now functions correctly.
+到此为止，迷你型的任务管理应用就开发完毕。
 
-## Next Steps
+## 下一步
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have received. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network and routing!
+参照 [本示例完整](ExampleTodoList.md) 来深化理解。然后就可以跳到 [高级教程](../advanced/README.md) 学习网络请求处理和路由。

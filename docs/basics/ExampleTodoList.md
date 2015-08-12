@@ -1,8 +1,8 @@
-# Example: Todo List
+# 示例: Todo 列表
 
-This is the complete source code of the tiny todo app we built during the [basics tutorial](./README.md).
+这是我们在[基础教程](./README.md)里开发的迷你型的任务管理应用的完整源码。
 
-## Entry Point
+## 入口文件
 
 #### `index.js`
 
@@ -18,8 +18,8 @@ let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');
 React.render(
-  // The child must be wrapped in a function
-  // to work around an issue in React 0.13.
+  // 为了解决 React 0.13 的问题，
+  // 一定要把 child 用函数包起来。
   <Provider store={store}>
     {() => <App />}
   </Provider>,
@@ -27,7 +27,7 @@ React.render(
 );
 ```
 
-## Action Creators and Constants
+## Action 生成器和常量
 
 #### `actions.js`
 
@@ -41,7 +41,7 @@ export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 
 /*
- * other constants
+ * 其它的常量
  */
 
 export const VisibilityFilters = {
@@ -51,7 +51,7 @@ export const VisibilityFilters = {
 };
 
 /*
- * action creators
+ * action 生成器
  */
 
 export function addTodo(text) {
@@ -105,7 +105,7 @@ export function todos(state = [], action) {
 }
 ```
 
-## Smart Components
+## 智能组件
 
 #### `containers/App.js`
 
@@ -178,7 +178,7 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-## Dumb Components
+## 木偶组件
 
 #### `components/AddTodo.js`
 

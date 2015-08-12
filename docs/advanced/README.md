@@ -1,10 +1,10 @@
-# Advanced
+# 高级
 
-In the [basics walkthrough](../basics/README.md), we explored how to structure a simple Redux application. In this walkthrough, we will explore how AJAX and routing fit into the picture.
+[基础章节](../basics/README.md)介绍了如何组织简单的 Redux 应用。在这一章节中，将要学习如何使用 AJAX 和路由。
 
 * [Middleware](/docs/advanced/Middleware.md)
-* [Async Actions](/docs/advanced/Async Actions.md)
-* [Async Flow](/docs/advanced/AsyncFlow.md)
-* [Usage with React Router](/docs/advanced/UsageWithReactRouter.md)
-* [Example: Reddit API](/docs/advanced/ExampleRedditAPI.md)
-* [Next Steps](/docs/advanced/NextSteps.md)
+* [异步 Actions](/docs/advanced/Async Actions.md)
+* [异步数据流](/docs/advanced/AsyncFlow.md)
+* [搭配 React Router](/docs/advanced/UsageWithReactRouter.md)
+* [示例：Reddit API](/docs/advanced/ExampleRedditAPI.md)
+* [下一步](/docs/advanced/NextSteps.md)

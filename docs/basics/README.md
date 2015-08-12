@@ -8,5 +8,5 @@
 * [Reducers](Reducers.md)
 * [Store](Store.md)
 * [数据流](DataFlow.md)
-* [结合 React 方法](UsageWithReact.md)
-* [示例：Todo List](ExampleTodoList.md)
+* [搭配 React](UsageWithReact.md)
+* [示例：Todo 列表](ExampleTodoList.md)
