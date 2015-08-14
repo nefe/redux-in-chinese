@@ -5,7 +5,7 @@
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
-超爽的开发体验，比如有一个时间旅行调试器可以编辑后实时预览。
+超爽的开发体验，比如有一个[时间旅行调试器可以编辑后实时预览](https://github.com/gaearon/redux-devtools)。
 
 Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。
 体小精悍（只有2kB）且没有任何依赖。
@@ -30,6 +30,8 @@ Redux 的开发最早开始于我在准备 React Europe 演讲[热加载与时�
 Redux 由 [Flux] 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。不管你有没有使用过它们，只需几分钟就能上手 Redux。
 
 ### 安装
+
+安装稳定版：
 
 ```
 npm install --save redux

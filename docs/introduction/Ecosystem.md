@@ -4,7 +4,7 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 如果需要关于 Redux 的所有内容的列表，推荐移步到 [Awesome Redux](https://github.com/xgrommx/awesome-redux)。它包含了示例，样板代码，中间件，工具库还有很多。
 
-本页内容将只列出其中 Redux 维护者亲自维护的一部分。不要因此而打消你尝试其它库的信心！整个生态发展太快，我们没有足够的时间去关注所有。建议只把这里的当作“内部推荐”，如果你使用 Redux 创建了很酷的内容，大胆坡发个 PR 吧。
+本页内容将只列出其中 Redux 维护者亲自维护的一部分。不要因此而打消你尝试其它库的信心！整个生态发展太快，我们没有足够的时间去关注所有。建议只把这里的当作“内部推荐”，如果你使用 Redux 创建了很酷的内容，不要犹豫，马上发个 PR 吧。
 
 ## 不同框架绑定
 
@@ -17,6 +17,7 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-compliant promise middleware
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS utilities for Redux, including a middleware for Observable
 * [redux-batched-updates](https://github.com/acdlite/redux-batched-updates) — Batch React updates that occur as a result of Redux dispatches
+* [redux-logger](https://github.com/fcomb/redux-logger) — Log every Redux action and the next state
 
 ## 工具
 

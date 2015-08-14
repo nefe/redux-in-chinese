@@ -2,7 +2,7 @@
 
 [Actions](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。这是 reducer 要做的事情。
 
-## 设置 State 结构
+## 设计 State 结构
 
 应用所有的 state 都被保存在一个单一对象中（我们称之为 state 树）。建议在写代码前先想一下这个对象的结构。如何才能以最简的形式把应用的 state 用对象描述出来？
 
@@ -62,7 +62,8 @@ function todoApp(state, action) {
     return initialState;
   }
 
-  // 这里暂不处理任何 action，仅返回传入的 state。
+  // 这里暂不处理任何 action，
+  // 仅返回传入的 state。
   return state;
 }
 ```
@@ -71,7 +72,8 @@ function todoApp(state, action) {
 
 ```js
 function todoApp(state = initialState, action) {
-  // 这里暂不处理任何 action，仅返回传入的 state。
+  // 这里暂不处理任何 action，
+  // 仅返回传入的 state。
   return state;
 }
 ```
@@ -93,7 +95,7 @@ function todoApp(state = initialState, action) {
 
 注意:
 
-1. **不要修改 `state`。** 使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 新建了一个副本。不能这样使用 `Object.assign(state, ...)`，因为它会改变第一个参数的值。**一定**要把第一个参数设置为空对象。也可以使用 ES7 中还在试验阶段的特性 `{ ...state, ...newState }`，参考 [对象展开语法](https://github.com/sebmarkbage/ecmascript-rest-spread)。
+1. **不要修改 `state`。** 使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 新建了一个副本。不能这样使用 `Object.assign(state, { visibilityFilter: action.filter })`，因为它会改变第一个参数的值。**一定**要把第一个参数设置为空对象。也可以使用 ES7 中还在试验阶段的特性 `{ ...state, ...newState }`，参考 [对象展开语法](https://github.com/sebmarkbage/ecmascript-rest-spread)。
 
 2. **在 `default` 情况下返回旧的 `state`。**遇到未知的 action 时，一定要返回旧的 `state`。
 
@@ -130,6 +132,7 @@ function todoApp(state = initialState, action) {
   }
 }
 ```
+
 如上，不直接修改 `state` 中的字段，而是返回新对象。新的 `todos` 对象就相当于旧的 `todos` 在末尾加上新建的 todo。而这个新的 todo 又是在 action 中创建的。
 
 最后，`COMPLETE_TODO` 的实现也很好理解：
@@ -241,54 +244,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn’t need to know the complete initial state anymore. It’s enough that the child reducers return their initial state when given `undefined` at first.
 
 ```js
-function todoApp(state = {}, action) {
-  return {
-    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
-    todos: todos(state.todos, action)
-  };
-}
-```
-
-This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.
-
-Finally, Redux provides a utility called [`combineReducers`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
-
-```js
-import { combineReducers } from 'redux';
-
-const todoApp = combineReducers({
-  visibilityFilter,
-  todos
-});
-```
-
-Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
-
-```js
-import { combineReducers } from 'redux';
-import * as reducers from './reducers';
-
-const todoApp = combineReducers(reducers);
-```
-
-## 源码
-
-#### `reducers.js`
-
-```js
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
-const { SHOW_ALL } = VisibilityFilters;
-
-export function visibilityFilter(state = SHOW_ALL, action) {
-  switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
-  }
-}
-
-export function todos(state = [], action) {
+function todos(state = [], action) {
   switch (action.type) {
   case ADD_TODO:
     return [...state, {
@@ -307,15 +263,131 @@ export function todos(state = [], action) {
     return state;
   }
 }
+
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return action.filter;
+  default:
+    return state;
+  }
+}
+
+function todoApp(state = {}, action) {
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  };
+}
 ```
 
-#### `index.js`
+**Note that each of these reducers is managing its own part of the global state. The `state` parameter is different for every reducer, and corresponds to the part of the state it manages.**
+
+This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.
+
+Finally, Redux provides a utility called [`combineReducers()`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
 
 ```js
 import { combineReducers } from 'redux';
-import * as reducers from './reducers';
 
-let todoApp = combineReducers(reducers);
+const todoApp = combineReducers({
+  visibilityFilter,
+  todos
+});
+
+export default todoApp;
+```
+
+Note that this is completely equivalent to:
+
+```js
+export default function todoApp(state, action) {
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  };
+}
+```
+
+You could also give them different keys, or call functions differently. These two ways to write a combined reducer are completely equivalent:
+
+```js
+const reducer = combineReducers({
+  a: doSomethingWithA,
+  b: processB,
+  c: c
+});
+```
+
+```js
+function reducer(state, action) {
+  return {
+    a: doSomethingWithA(state.a, action),
+    b: processB(state.b, action),
+    c: c(state.c, action)
+  };
+}
+```
+
+All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It’s not magic.](https://github.com/gaearon/redux/issues/428#issuecomment-129223274)
+
+>##### Note for ES6 Savvy Users
+
+>Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
+
+>```js
+>import { combineReducers } from 'redux';
+>import * as reducers from './reducers';
+>
+>const todoApp = combineReducers(reducers);
+>```
+>
+>Because `import *` is still new syntax, we don’t use it anymore in the documentation to avoid [confusion](https://github.com/gaearon/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
+
+## Source Code
+
+#### `reducers.js`
+
+```js
+import { combineReducers } from 'redux';
+import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
+const { SHOW_ALL } = VisibilityFilters;
+
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+  case SET_VISIBILITY_FILTER:
+    return action.filter;
+  default:
+    return state;
+  }
+}
+
+function todos(state = [], action) {
+  switch (action.type) {
+  case ADD_TODO:
+    return [...state, {
+      text: action.text,
+      completed: false
+    }];
+  case COMPLETE_TODO:
+    return [
+      ...state.slice(0, action.index),
+      Object.assign({}, state[action.index], {
+        completed: true
+      }),
+      ...state.slice(action.index + 1)
+    ];
+  default:
+    return state;
+  }
+}
+
+const todoApp = combineReducers({
+  visibilityFilter,
+  todos
+});
+
+export default todoApp;
 ```
 
 ## 下一步
