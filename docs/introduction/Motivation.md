@@ -8,4 +8,4 @@
 
 这里的复杂性很大程度上来自于：**两大人类难以理解的概念困扰着我们：变化和异步。** 我称它们为[Mentos and Coke](https://en.wikipedia.org/wiki/Diet_Coke_and_Mentos_eruption)。如果把二都分开，能做的很好，但混到一起，就变得一团糟。一些库如 [React](http://facebook.github.io/react) 试图在视图层禁止异步和直接 DOM 操作来解决这个问题。美中不足的是，React 把处理 state 里数据的问题又留给了你自己。
 
-跟随 [Flux](http://facebook.github.io/flux)、[CQRS](http://martinfowler.com/bliki/CQRS.html) 和 [Event Sourcing](http://martinfowler.com/eaaDev/EventSourcing.html) 的脚步，通过限制更新发生的时间和方式，**React 试图让 state 的变化变得可预测。**这些限制反映在 Redux 的 [三大原则](ThreePrinciples.md)中。
+跟随 [Flux](http://facebook.github.io/flux)、[CQRS](http://martinfowler.com/bliki/CQRS.html) 和 [Event Sourcing](http://martinfowler.com/eaaDev/EventSourcing.html) 的脚步，通过限制更新发生的时间和方式，**Redux 试图让 state 的变化变得可预测。**这些限制反映在 Redux 的 [三大原则](ThreePrinciples.md)中。

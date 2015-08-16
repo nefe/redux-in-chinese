@@ -27,7 +27,7 @@ Redux 的开发最早开始于我在准备 React Europe 演讲[热加载与时�
 
 ### 启示
 
-Redux 由 [Flux] 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。不管你有没有使用过它们，只需几分钟就能上手 Redux。
+Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。不管你有没有使用过它们，只需几分钟就能上手 Redux。
 
 ### 安装
 
