@@ -1,16 +1,16 @@
 # 数据流
 
-Redux architecture revolves around a **strict unidirectional data flow**.
+**严格的单向数据流**是 Redux 架构的设计核心。
 
-This means that all data in an application follows the same lifecycle pattern, making the logic of your app more predictable and easier to understand. It also encourages data normalization, so that you don't end up with multiple, independent copies of the same data that are unaware of one another.
+这意味着应用中所有的数据都遵循相同的生命周期，这样可以让应用变得更加可预测且容易理解。同时也鼓励做数据规格化，这样可以避免使用多个，独立的无法相互引用的重复数据。
 
-If you're still not convinced, read [Motivation](../introduction/Motivation.md) and [The Case for Flux](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6) for a compelling argument in favor of unidirectional data flow. Although [Redux is not exactly Flux](../introduction/Relation to Other Libraries.md), it shares the same key benefits.
+如何这些理由还不足以今你信服，读一下 [动机](../introduction/Motivation.md) 和 [Flux 案例](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6)，这里面有更加详细的单向数据流优势分析。虽然 [Redux 就不是严格意义上的 [Flux](../introduction/Relation to Other Libraries.md)，但它们有共同的设计思想。
 
-The data lifecycle in any Redux app follows these 4 steps:
+Redux 应用中数据的生命周期遵循下面 4 个步骤： 
 
-1. **You call** [`store.dispatch(action)`](../api/Store.md#dispatch).
+1. **调用** [`store.dispatch(action)`](../api/Store.md#dispatch)。
 
-  An action is a plain object describing *what happened*. For example:
+  action 就是一个描述“发生了什么”的普通对象。比如：
 
     ```js
     { type: 'LIKE_ARTICLE', articleId: 42 };
@@ -18,16 +18,16 @@ The data lifecycle in any Redux app follows these 4 steps:
     { type: 'ADD_TODO', text: 'Read the Redux docs.'};
     ```
 
-  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “'Read the Redux docs.' was added to the list of todos.”
+  可以把 action 理解成新闻的摘要。如 “玛丽喜欢42号文章。” 或者 “任务列表里添加了'学习 Redux 文档'”。
 
-  You can call [`store.dispatch(action)`](../api/Store.md#dispatch) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
+  你可以在任何地方调用 [`store.dispatch(action)`](../api/Store.md#dispatch)，包括组件中、XHR 回调中、甚至定时器中。
 
-2. **The Redux store calls the reducer function you gave it.**
+2. **Redux store 调用传入的 reducer 函数。**
 
-  The store will pass two arguments to the reducer, the current state tree and the action. For example, in the todo app, the root reducer might receive something like this:
+  Store 会把两个参数传入 reducer，当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
 
     ```js
-    // The current application state (list of todos and chosen filter)
+    // 当前应用的 state（todos 列表和选中的过滤器）
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
       todos: [{
@@ -36,32 +36,32 @@ The data lifecycle in any Redux app follows these 4 steps:
       }]
     };
 
-    // The action being performed (adding a todo)
+    // 将要执行的 action（添加一个 todo）
     let action = {
       type: 'ADD_TODO',
       text: 'Understand the flow.'
     };
 
-    // Your reducer returns the next application state
+    // render 返回处理后的应用状态
     let nextState = todoApp(previousState, action);
     ```
 
-    Note that a reducer is a pure function. It only *computes* the next state. It should be completely predictable: calling it with the same inputs many times should produce the same outputs. It shouldn’t perform any side effects like API calls or router transitions. These should happen before an action is dispatched.
+    注意 reducer 是纯函数。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应用做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
-3. **The root reducer may combine the output of multiple reducers into a single state tree.**
+3. **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
 
-  How you structure the root reducer is completely up to you. Redux ships with a [`combineReducers()`](../api/combineReducers.md) helper function, useful for “splitting” the root reducer into separate functions that each manage one branch of the state tree.
+  根 reducer 的结构完全由你决定。Redux 原生提供[`combineReducers()`](../api/combineReducers.md)辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
 
-  Here’s how [`combineReducers()`](../api/combineReducers.md) works. Let’s say you have a list of todos, and the currently selected filter setting to keep track of with two reducers:
+  下面演示 [`combineReducers()`](../api/combineReducers.md) 如何使用。假如你有一个 todos 列表，使用当前的选择过滤器来追踪两个 reducers（原文：and the currently selected filter setting to keep track of with two reducers）：
 
     ```js
     function todos(state = [], action) {
-      // Somehow calculate it...
+      // 省略处理逻辑...
       return nextState;
     }
 
     function visibleTodoFilter(state = 'SHOW_ALL', action) {
-      // Somehow calculate it...
+      // 省略处理逻辑...
       return nextState;
     }
 
@@ -71,14 +71,14 @@ The data lifecycle in any Redux app follows these 4 steps:
     });
     ```
 
-  When you emit an action, `todoApp` returned by `combineReducers` will call both reducers:
+  当你触发 action 后，`combineReducers` 返回的 `todoApp` 会负责调用两个 reducer：
 
     ```js
     let nextTodos = todos(state.todos, action);
     let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action);
     ```
 
-  It will then combine both sets of results into a single state tree:
+  然后会把两个结果集合并成一个 state 树：
 
     ```js
     return {
@@ -87,17 +87,17 @@ The data lifecycle in any Redux app follows these 4 steps:
     };
     ```
 
-  While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility, but you don’t have to use it; feel free to write your own root reducer!
+  虽然 [`combineReducers()`](../api/combineReducers.md) 是一个很方便的辅助工具，你也可以选择不用；你可以自行实现自己的根 reducer！
 
-4. **The Redux store saves the complete state tree returned by the root reducer.**
+4. **Redux store 保存了根 reducer 返回的完整 state 树。**
 
-  This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribe) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state.
+  这个新的树就是应用的下一个 state！所有订阅 [`store.subscribe(listener)`](../api/Store.md#subscribe) 的监听器都将被调用；监听器里可以调用 [`store.getState()`](../api/Store.md#getState) 获得当前 state。
 
-  Now, the UI can be updated to reflect the new state. If you use bindings like [React Redux](https://github.com/gaearon/react-redux), this is the point at which `component.setState(newState)` is called.
+  现在，可以应用新的 state 来更新 UI。如果你使用了 [React Redux](https://github.com/gaearon/react-redux) 这类的绑定库，这时就应该调用 `component.setState(newState)` 来更新。
 
-## Next Steps
+## 下一步
 
-Now that you know how Redux works, let’s [connect it to a React app](UsageWithReact.md).
+现在你已经理解了 Redux 如何工作，是时候[结合 React 开发应用](UsageWithReact.md)了。
 
->##### Note for Advanced Users
->If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async flow](../advanced/AsyncFlow.md) in the [advanced tutorial](../advanced/README.md) to learn how middleware transforms [async actions](../advanced/AsyncActions.md) before they reach the reducer.
+>##### 高级用户使用注意
+>如果你已经熟悉了基础概念且完成了这个教程，可以学习[高级教程](../advanced/README.md)中的[异步数据流](../advanced/AsyncFlow.md)，你将学到如何使用 middleware 在 [异步 action](../advanced/AsyncActions.md) 到达 reducer 前处理它们。
