@@ -1,6 +1,6 @@
 # Store
 
-上面章节中，我们学会了使用 [action](Action.md) 来表示“发生了什么”，和使用 [reducers](Reducers.md) 来根据 action 更新 state 的用法。
+上面章节中，我们学会了使用 [action](Action.md) 来描述“发生了什么”，和使用 [reducers](Reducers.md) 来根据 action 更新 state 的用法。
 
 **Store** 就是把它们联系到一起的对象。Store 有以下职责：
 
