@@ -26,9 +26,9 @@
 }
 ```
 
->##### Note on Relationships
+>##### 处理 Reducer 关系时注意
 
->In a more complex app, you’re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app’s state as of a database. This approach is described in [normalizr](https://github.com/gaearon/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we’re keeping the example simple.
+>开发复杂的应用时，不可避免会有一些数据相互引用。建议你尽可能地把 state 规格化，不存在嵌套。把所有数据放到一个对象里，每个数据以 ID 为主键，不同数据相互引用时通过 ID 来查找。把应用的 state 想像成数据库。这种方法在 [normalizr](https://github.com/gaearon/normalizr) 文档里有详细阐述。例如，实际开发中，在 state 里同时存放 `todosById: { id -> todo }` 和 `todos: array<id>` 是比较好的方式（虽然你可以觉得冗余）。
 
 ## Action 处理
 
@@ -154,7 +154,7 @@ case COMPLETE_TODO:
 
 ## 拆分 Reducer
 
-目前的代码看起来非常拖沓冗余：
+目前的代码看起来有些冗余：
 
 ```js
 function todoApp(state = initialState, action) {
@@ -186,7 +186,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
+上面代码能否变得更通俗易懂？这里的 `todos` 和 `visibilityFilter` 的更新看起来是相互独立的。有时 state 中的字段是相互依赖的，需要认真考虑，但在这个案例中我们可以把 `todos` 更新的业务逻辑拆分到一个单独的函数里：
 
 ```js
 function todos(state = [], action) {
@@ -226,9 +226,9 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that `todos` also accepts `state`—but it’s an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it’s the fundamental pattern of building Redux apps.**
+注意 `todos` 依旧接收 `state`，但它变成了一个数组！现在 `todoApp` 只把需要更新的一部分 state 传给 `todos` 函数，`todos` 函数自己确定如何更新这部分数据。**这就是所谓的 **reducer 合成**，它是开发 Redux 应用最基础的模式。**
 
-Let’s explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can:
+下面深入探讨一下如何做 reducer 合成。能否抽出一个 reducer 来专门管理 `visibilityFilter`？当然可以：
 
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -241,7 +241,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 }
 ```
 
-Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn’t need to know the complete initial state anymore. It’s enough that the child reducers return their initial state when given `undefined` at first.
+现在我们可以开发一个函数来做为主 reducer，它调用多个子 reducer 分别处理 state 中的一部分数据，然后再把这些数据合成一个大的单一对象。主 reducer 并不需要设置初始化时完整的 state。初始时，如果给子 reducer 传入 `undefined` 只要返回它们的默认值即可。
 
 ```js
 function todos(state = [], action) {
@@ -281,11 +281,11 @@ function todoApp(state = {}, action) {
 }
 ```
 
-**Note that each of these reducers is managing its own part of the global state. The `state` parameter is different for every reducer, and corresponds to the part of the state it manages.**
+**注意每个 reducer 只负责管理全局 state 中它负责的一部分。每个 reducer 的 `state` 参数都不同，分别对应它管理的那部分 state 数据。**
 
-This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.
+现在看过起来好多了！随着应用的膨胀，我们已经学会把 reducer 拆分成独立文件来分别处理不同的数据域了。
 
-Finally, Redux provides a utility called [`combineReducers()`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
+最后，Redux 提供了 [`combineReducers()`](../api/combineReducers.md) 工具类来做上面 `todoApp` 做的事情，这样就能消灭一些样板代码了。有了它，可以这样重构 `todoApp`：
 
 ```js
 import { combineReducers } from 'redux';
@@ -298,7 +298,7 @@ const todoApp = combineReducers({
 export default todoApp;
 ```
 
-Note that this is completely equivalent to:
+注意上面的写法和下面完全等价：
 
 ```js
 export default function todoApp(state, action) {
@@ -309,7 +309,7 @@ export default function todoApp(state, action) {
 }
 ```
 
-You could also give them different keys, or call functions differently. These two ways to write a combined reducer are completely equivalent:
+你也可以给它们设置不同的 key，或者调用不同的函数。下面两种合成 reducer 方法完全等价：
 
 ```js
 const reducer = combineReducers({
@@ -329,11 +329,11 @@ function reducer(state, action) {
 }
 ```
 
-All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It’s not magic.](https://github.com/gaearon/redux/issues/428#issuecomment-129223274)
+[`combineReducers()`](../api/combineReducers.md) 所做的只是生成一个函数，这个函数来调用你的一系列 reducer，每个 reducer **根据它们的 key 来筛选出 state 中的一部分数据并处理**，然后这个生成的函数所所有 reducer 的结果合并成一个大的对象。[没有任何魔法。](https://github.com/gaearon/redux/issues/428#issuecomment-129223274)
 
->##### Note for ES6 Savvy Users
+>##### ES6 用户使用注意
 
->Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
+>`combineReducers` 接收一个对象，可以把所有顶级的 reducer 放到一个独立的文件中，通过 `export` 暴露出每个 reducer 函数，然后使用 `import * as reducers` 得到一个以它们名字作为 key 的 object：
 
 >```js
 >import { combineReducers } from 'redux';
@@ -342,9 +342,9 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 >const todoApp = combineReducers(reducers);
 >```
 >
->Because `import *` is still new syntax, we don’t use it anymore in the documentation to avoid [confusion](https://github.com/gaearon/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
+>由于 `import *` 还是比较新的语法，为了避免[困惑](https://github.com/gaearon/redux/issues/428#issuecomment-129223274)，我们不会在文档使用它。但在一些社区示例中你可能会遇到它们。
 
-## Source Code
+## 源码
 
 #### `reducers.js`
 
