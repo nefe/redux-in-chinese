@@ -1,10 +1,10 @@
-# Examples
+# 示例
 
-Redux is distributed with a few examples in its [source code](https://github.com/gaearon/redux/tree/master/examples).  
-**To run any of them, clone the repo and run `npm install` both in the root and the example folder.**
+Redux [源码](https://github.com/gaearon/redux/tree/master/examples)里包含一些示例一起发行。 
+**运行示例的方法是，先 clone 仓库，然后分别在根目录和示例目录下执行 `npm install`。**
 
->##### Note on Copying
->If you copy Redux examples outside their folders, remove these lines from their `webpack.config.js`:
+>##### 复制代码时注意
+>如果你把 Redux 示例代码到其它目录，删除 `webpack.config.js` 里的这几行代码：
 >
 >```js
 >alias: {
@@ -20,11 +20,11 @@ Redux is distributed with a few examples in its [source code](https://github.com
 >},
 ```
 >
-> Otherwise they’ll try to resolve Redux to a relative `src` folder, and the build will fail.
+> 否则运行时会试图从相对的 `src` 目录定位 Redux，构建会失败。
 
-## Counter
+## Counter 计数器示例
 
-Run the [Counter](https://github.com/gaearon/redux/tree/master/examples/counter) example:
+运行 [Counter](https://github.com/gaearon/redux/tree/master/examples/counter) 示例：
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -39,14 +39,14 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+这个示例包含：
 
-* Basic Redux flow;
-* Testing.
+* 基础的 Redux 开发流程；
+* 测试代码。
 
-## TodoMVC
+## TodoMVC 示例
 
-Run the [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) example:
+运行 [TodoMVC](https://github.com/gaearon/redux/tree/master/examples/todomvc) 示例：
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -61,15 +61,15 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+这个示例包含：
 
-* Redux flow with two reducers;
-* Updating nested data;
-* Testing.
+* 在 Redux 使用两个 reducer 的方法；
+* 嵌套数据更新；
+* 测试样例。
 
-## Async
+## 异步
 
-Run the [Async](https://github.com/gaearon/redux/tree/master/examples/async) example:
+运行 [Async](https://github.com/gaearon/redux/tree/master/examples/async) 示例：
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -84,15 +84,16 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+这个示例包含：
 
-* Basic async Redux flow with [redux-thunk](https://github.com/gaearon/redux-thunk);
-* Caching responses and showing a spinner while data is fetching;
-* Invalidating the cached data.
+* 
+* 使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 处理简单的异步开发流程；
+* 缓存服务器响应数据和在获取数据过程中显示加载进度条；
+* 缓存数据过期方法。
 
-## Real World
+## Real World 示例
 
-Run the [Real World](https://github.com/gaearon/redux/tree/master/examples/real-world) example:
+运行 [Real World](https://github.com/gaearon/redux/tree/master/examples/real-world) 示例：
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -107,15 +108,15 @@ npm start
 open http://localhost:3000/
 ```
 
-It covers:
+这个示例包含：
 
-* Real-world async Redux flow;
-* Keeping entities in a normalized entity cache;
-* A custom middleware for API calls;
-* Caching responses and showing a spinner while data is fetching;
-* Pagination;
-* Routing.
+* 实际应用中如何做异步处理；
+* 使用 [normalized](https://github.com/gaearon/normalizr) 结果集来保存并缓存数据；
+* 自定义 middleware 来做 API 请求；
+* 缓存服务器响应数据和在获取数据过程中显示加载进度条；
+* 分页；
+* 路由。
 
-## More Examples
+## 更多
 
-You can find more examples in [Awesome Redux](https://github.com/xgrommx/awesome-redux).
+参考 [Awesome Redux](https://github.com/xgrommx/awesome-redux) 获取更多示例。
