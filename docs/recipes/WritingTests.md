@@ -1,4 +1,4 @@
-# Writing tests
+# 编写测试
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
 

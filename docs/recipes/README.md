@@ -1,9 +1,9 @@
-# Recipes
+# 技巧
 
-These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [basic](../basics/README.md) and [advanced](../advanced/README.md) tutorials.
+这一章是关于实现应用开发中会遇到的一些典型场景和代码片段。本章内容建立在你已经学会[基础章节]和[高级章节]的基础上。
 
-* [Migrating to Redux](MigratingToRedux.md)
-* [Reducing Boilerplate](ReducingBoilerplate.md)
-* [Server Rendering](ServerRendering.md)
-* [Writing Tests](WritingTests.md)
+* [迁移到 Redux](MigratingToRedux.md)
+* [减少样板代码](ReducingBoilerplate.md)
+* [服务端渲染](ServerRendering.md)
+* [编写测试](WritingTests.md)
 * [Computing Derived Data](ComputingDerivedData.md)
