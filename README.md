@@ -118,8 +118,69 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cycle](https://github.com/staltz/cycle) 介绍了 function 是如何在很多场景都是最好的工具；
 * [React](https://github.com/facebook/react) 实践启迪。
 
-非常感谢 [Jamie Paton](http://jdpaton.github.io/) 把 `redux` NPM 包转让给我。
 
-### 许可协议
+## 加入翻译
 
-MIT
+非常感谢你的关注，如果你也想为 Redux 推广贡献一份力量，欢迎加入我们一起翻译。目前翻译工作还没有完成，校对工作更是才刚刚开始。你可以按照以下的步骤进行认领提交。在认领之前，你需要先到 fork 一份代码，建议使用 Markdown 类编辑器开启横向双列模式，
+
+### 认领制度
+
+你应该在翻译之前进行翻译认领来保证没有人和你重复工作。很简单，只要在 contributes.md 中找到或者加入你想翻译的文章的资料，
+
+加入：
+
+```
+work_in_progress: true
+contributor: +your_github_acount+
+```
+
+之后，发个 pull request 过来就代表你成功的占到了一个坑，你可以开始慢慢的翻译自己的文章了。
+
+你可以在 contributor 一栏中加入自己的 github 用户名，以便其他人可以联系到你。另外如果你占坑太久你的占位可能会被取消。尽量在半个月内完成你的工作。
+
+### 翻译约定
+
+* 专有名词保持大写：HTML, HAML, SASS, REST...等等。
+* 英文数字与中文之间要留空格。
+* 译文和原文行数应保持一致，以便于后期同步更新。
+
+### 约定翻译的名词
+
+英文          | 中文
+------------ | -------------
+plain object | 普通对象
+manage  | 管理
+dispatch | 发起
+compose | 组合
+action creator | action 生成器
+note | 注意
+hold | 维持
+state shape | state 结构
+handle | 处理
+boilerplate | 样板代码
+normalized | 规格化
+function | 函数/方法？
+composition | 合成
+helper utility | 辅助工具
+
+
+### 保留不译的名词
+
+前端开发常用的专有名词，在不造成读者困扰的情况下，尽量保持原汁原味。
+
+英文  | 说明
+----- | ------
+action | 动作
+reducer | -
+store | -
+middleware | 中间件
+state | 状态
+props | 属性
+
+### 与原文同步机制
+
+TBD
+
+
+### 建议与反馈
+欢迎任何建议！直接开一个 github issues 就可以了。
