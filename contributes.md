@@ -20,11 +20,6 @@ contributor: camsong
 ```
 
 ```
-url: advanced/AsyncFlow.html
-work_in_progress: false
-```
-
-```
 url: advanced/ExampleRedditAPI.html
 work_in_progress: false
 ```
@@ -68,6 +63,3 @@ work_in_progress: false
 url: api/index.html
 work_in_progress: false
 ```
-
-
-
