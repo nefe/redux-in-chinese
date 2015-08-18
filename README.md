@@ -2,6 +2,8 @@
 
 在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
 
+英文原版：http://rackt.github.io/redux/
+
 **翻译正在进行中，[加入我们](#加入翻译)**
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
@@ -39,7 +41,7 @@ Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](ht
 npm install --save redux
 ```
 
-多数情况下，你还需要使用 [React 绑定库](http://github.com/gaearon/react-redux) 和 [开发者工具]。
+多数情况下，你还需要使用 [React 绑定库](http://github.com/gaearon/react-redux)和[开发者工具](http://github.com/gaearon/redux-devtools)。
 
 ```
 npm install --save react-redux
@@ -143,7 +145,6 @@ contributor: +your_github_acount+
 ### 翻译约定
 
 * 专有名词保持大写：HTML, HAML, SASS, REST... 等等。
-
 * 英文和数字与中文之间要留空格。中文标点符号和中文之间不需要留空格。
 * 使用中文的标点符号。句号是 `。` 不是 `.`，破折号是 `——` 不是 `-`。
 * 英文有斜体、中文没有，可用强调取代 `**强调**`。
@@ -158,9 +159,9 @@ contributor: +your_github_acount+
 ------------ | -------------
 plain object | 普通对象
 manage  | 管理
-dispatch | 发起
 compose | 组合
 action creator | action 生成器
+dispatch | 发起
 note | 注意
 hold | 维持
 state shape | state 结构
@@ -173,7 +174,7 @@ helper utility | 辅助工具
 
 ### 保留不译的名词
 
-前端开发常用的专有名词，在不造成读者困扰的情况下，尽量保持原汁原味。
+前端开发常用的专有名词，在不造成读者理解困难的情况下，尽量保持原汁原味。
 
 英文  | 说明
 ----- | ------
@@ -181,6 +182,7 @@ action | 动作
 reducer | -
 store | -
 middleware | 中间件
+dispatcher | 分发器
 state | 状态
 props | 属性
 
@@ -192,14 +194,13 @@ TBD
 
 一、fork 本 repo
 
-二、如果是新翻译章节，找到对应的原文进行翻译：https://github.com/rackt/redux/tree/master/docs；
-如果是校对可直接修改
+二、如果是新翻译章节，应参照对应的[原文](https://github.com/rackt/redux/tree/master/docs)进行翻译；如果是校对则直接修改
 
 三、翻译时启动 watch 来实时看结果
 ```
 npm run watch
 ```
-打开：http://localhost:4000
+打开：[localhost:4000](http://localhost:4000)
 
 四、提交并发 Pull Request
 
