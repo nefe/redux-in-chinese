@@ -2,6 +2,8 @@
 
 在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
 
+**翻译正在进行中，[加入我们](#加入翻译)**
+
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
@@ -141,6 +143,7 @@ contributor: +your_github_acount+
 ### 翻译约定
 
 * 专有名词保持大写：HTML, HAML, SASS, REST... 等等。
+
 * 英文和数字与中文之间要留空格。中文标点符号和中文之间不需要留空格。
 * 使用中文的标点符号。句号是 `。` 不是 `.`，破折号是 `——` 不是 `-`。
 * 英文有斜体、中文没有，可用强调取代 `**强调**`。
@@ -212,8 +215,6 @@ git push origin master
 ```
 
 更多参考：https://help.github.com/articles/syncing-a-fork/
-
-#### 翻译时启动 watch 来实时看结果
 
 ### 建议与反馈
 欢迎任何建议！直接开一个 github issues 就可以了。
