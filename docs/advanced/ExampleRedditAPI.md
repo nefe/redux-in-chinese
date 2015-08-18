@@ -1,6 +1,4 @@
-# 例子: Reddit API
-
-This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).
+# 示例：Reddit API
 
 这是一个[高级教程](README.md)的例子，包含通过 Reddit API 请求文章标题的全部源码。
 
