@@ -21,12 +21,14 @@ contributor: camsong
 
 ```
 url: advanced/ExampleRedditAPI.html
-work_in_progress: false
+work_in_progress: true
+contributor: demohi
 ```
 
 ```
 url: recipes/MigratingToRedux.html
-work_in_progress: false
+work_in_progress: true
+contributor: demohi
 ```
 
 ```
