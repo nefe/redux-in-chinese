@@ -2,7 +2,7 @@
 
 在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
 
-英文原版：http://rackt.github.io/redux/
+英文原版：http://camsong.github.io/redux-in-chinese//
 
 **翻译正在进行中，[加入我们](#加入翻译)**
 
@@ -107,20 +107,20 @@ store.dispatch({ type: 'DECREMENT' });
 
 ### 文档
 
-* [介绍](http://rackt.github.io/redux/docs/introduction/index.html)
-* [基础](http://rackt.github.io/redux/docs/basics/index.html)
-* [高级](http://rackt.github.io/redux/docs/advanced/index.html)
-* [技巧](http://rackt.github.io/redux/docs/recipes/index.html)
-* [排错](http://rackt.github.io/redux/docs/Troubleshooting.html)
-* [词汇表](http://rackt.github.io/redux/docs/Glossary.html)
-* [API 文档](http://rackt.github.io/redux/docs/api/index.html)
+* [介绍](http://camsong.github.io/redux-in-chinese//docs/introduction/index.html)
+* [基础](http://camsong.github.io/redux-in-chinese//docs/basics/index.html)
+* [高级](http://camsong.github.io/redux-in-chinese//docs/advanced/index.html)
+* [技巧](http://camsong.github.io/redux-in-chinese//docs/recipes/index.html)
+* [排错](http://camsong.github.io/redux-in-chinese//docs/Troubleshooting.html)
+* [词汇表](http://camsong.github.io/redux-in-chinese//docs/Glossary.html)
+* [API 文档](http://camsong.github.io/redux-in-chinese//docs/api/index.html)
 
 ### 示例
 
-* [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
-* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
-* [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
-* [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
+* [Counter](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
+* [TodoMVC](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
+* [Async](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
+* [Real World](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
 
 如果你是 NPM 新手，创建和运行一个新的项目有难度，或者不知道上面的代码应该放到哪里使用，请下载 [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) 这个示例，它是一个集成了 React、Browserify 和 Redux 的最简化的示例项目。
 
