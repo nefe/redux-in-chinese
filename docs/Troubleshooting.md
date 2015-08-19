@@ -1,33 +1,33 @@
-# Troubleshooting
+# 排错
 
-This is a place to share common problems and solutions to them.  
-The examples use React, but you should still find them useful if you use something else.
+这里会列出常见的问题和对应的解决方案。
+虽然使用 React 做示例，即使你使用要其它库仍然会有帮助。
 
-### Nothing happens when I dispatch an action
+### dispatch action 后什么也没有发生
 
-Sometimes, you are trying to dispatch an action, but your view does not update. Why does this happen? There may be several reasons for this.
+有时，你 dispatch action 后，view 却没有更新。这是为什么呢？可能有下面几种原因。
 
-#### Never mutate reducer arguments
+#### 永远不要直接修改 reducer 的参数
 
-It is tempting to modify `state` or `action` passed to you by Redux. Don’t do this!
+如果你想修改 Redux 给你传入的 `state` 或 `action`，请住手！
 
-Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don’t use a library like [Immutable](https://facebook.github.io/immutable-js/), you need to completely avoid mutation.
+Redux 假定你永远不会修改 reducer 里传入的对象。**任何时候，你都应该返回一个新的 state 对象。**即使你没有使用 [Immutable](https://facebook.github.io/immutable-js/) 这样的库，也要保证做到不修改对象。
 
-Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](http://github.com/gaearon/redux-devtools).
+不变性（Immutability）可以让 [react-redux](https://github.com/gaearon/react-redux) 高效的监听 state 的细粗度更新。它也让 [redux-devtools](http://github.com/gaearon/redux-devtools) 能提供“时间旅行”这类强大特性。
 
-For example, a reducer like this is wrong because it mutates the state:
+例如，下面的 reducer 就是错误的，因为它改变了 state：
 
 ```js
 function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
-    // Wrong! This mutates state.actions.
+    // 错误！这会改变 state.actions。
     state.actions.push({
       text: action.text,
       completed: false
     });
   case 'COMPLETE_TODO':
-    // Wrong! This mutates state.actions[action.index].
+    // 错误！这会改变 state.actions[action.index].
     state.actions[action.index].completed = true;
   }
 
@@ -35,22 +35,22 @@ function todos(state = [], action) {
 }
 ```
 
-needs to be rewritten like this:
+应该重写成这样：
 
 ```js
 function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
-    // Return a new array
+    // 返回新数组
     return [...state, {
       text: action.text,
       completed: false
     }];
   case 'COMPLETE_TODO':
-    // Return a new array
+    // 返回新数组
     return [
       ...state.slice(0, action.index),
-      // Copy the object before mutating
+      // 修改之前复制数组
       Object.assign({}, state[action.index], {
         completed: true
       }),
@@ -62,10 +62,11 @@ function todos(state = [], action) {
 }
 ```
 
-It’s more code, but it’s exactly what makes Redux predictable and efficient. If you want to have less code, you can use a helper like [`React.addons.update`](https://facebook.github.io/react/docs/update.html) to write immutable transformations with a terse syntax:
+虽然需要写更多代码，但是让 Redux 变得可具有可预测性和高效。如果你想减少代码量，你可以用一些辅助方法类似
+ [`React.addons.update`](https://facebook.github.io/react/docs/update.html) 来让这样的不可变转换操作变得更简单：
 
 ```js
-// Before:
+// 修改前
 return [
   ...state.slice(0, action.index),
   Object.assign({}, state[action.index], {
@@ -74,7 +75,7 @@ return [
   ...state.slice(action.index + 1)
 ]
 
-// After
+// 修改后
 return update(state, {
   [action.index]: {
     completed: {
@@ -84,14 +85,14 @@ return update(state, {
 });
 ```
 
-Finally, to update objects, you’ll need something like `_.extend` from Underscore, or better, an [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) polyfill.
+最后，如果需要更新 object，你需要使用 Underscore 提供的 `_.extend` 方法，或者更好的，使用 [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 的 polyfill
 
-Make sure that you use `Object.assign` correctly. For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`.
+要注意 `Object.assign` 的使用方法。例如，在 reducer 里不要这样使用 `Object.assign(state, newData)`，应该用 `Object.assign({}, state, newData)`。这样它才不会覆盖以前的 `state`。
 
-You can also enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/):
+你也可以通过使用 [Babel 阶段 1](http://babeljs.io/docs/usage/experimental/) 模式来开启 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread)：
 
 ```js
-// Before:
+// 修改前：
 return [
   ...state.slice(0, action.index),
   Object.assign({}, state[action.index], {
@@ -100,7 +101,7 @@ return [
   ...state.slice(action.index + 1)
 ]
 
-// After:
+// 修改后：
 return [
   ...state.slice(0, action.index),
   { ...state[action.index], completed: true },
@@ -108,12 +109,11 @@ return [
 ]
 ```
 
-Note that experimental language features are subject to change, and it’s unwise to rely on them in large codebases.
+注意还在实验阶段的特性注定经常改变，最好不要在大的项目里过多依赖它们。
 
-#### Don’t forget to call [`dispatch(action)`](api/Store.md#dispatch)
+#### 不要忘记调用 [`dispatch(action)`](api/Store.md#dispatch)
 
-If you define an action creator, calling it will *not* automatically dispatch the action. For example, this code will do nothing:
-
+如果你定义了一个 action 生成器，调用它并**不**会自动 dispatch 这个 action。比如，下面的代码什么也不会做：
 
 #### `TodoActions.js`
 
@@ -131,7 +131,7 @@ import { addTodo } from './TodoActions';
 
 class AddTodo extends Component {
   handleClick() {
-    // Won't work!
+    // 不起作用！
     addTodo('Fix the issue');
   }
 
@@ -145,20 +145,20 @@ class AddTodo extends Component {
 }
 ```
 
-It doesn’t work because your action creator is just a function that *returns* an action. It is up to you to actually dispatch it. We can’t bind your action creators to a particular Store instance during the definition because apps that render on the server need a separate Redux store for every request.
+它不起作用是因为你的 action 生成器只是一个**返回** action 的函数而已。你需要手动 dispatch 它。我们不能在定义时把 action 生成器绑定到指定的 Store 上，因为应用在服务端渲染时需要为每个请求都对应一个独立的 Redux store。
 
-The fix is to call [`dispatch()`](api/Store.md#dispatch) method on the [store](api/Store.md) instance:
+解法是调用 [store](api/Store.md) 实例上的 [`dispatch()`](api/Store.md#dispatch) 方法。
 
 ```js
 handleClick() {
-  // Works! (but you need to grab store somehow)
+  // 生效！（但你需要先以某种方式拿到 store）
   store.dispatch(addTodo('Fix the issue'));
 }
 ```
 
-If you’re somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why [react-redux](https://github.com/gaearon/react-redux) lets you use a `connect` [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that will, apart from subscribing you to a Redux store, inject `dispatch` into your component’s props.
+如果组件的层级非常深，把 store 一层层传下去很麻烦。因此 [react-redux](https://github.com/gaearon/react-redux) 提供了 `connect` 这个 [高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)，它除了可以帮你监听 Redux store，还会把 `dispatch` 注入到组件的 props 中。
 
-The fixed code will look like this:
+修复后的代码是这样的：
 
 ```js
 import { Component } from 'react';
@@ -167,7 +167,7 @@ import { addTodo } from './TodoActions';
 
 class AddTodo extends Component {
   handleClick() {
-    // Works!
+    // 生效！
     this.props.dispatch(addTodo('Fix the issue'));
   }
 
@@ -180,13 +180,13 @@ class AddTodo extends Component {
   }
 }
 
-// In addition to the state, `connect` puts `dispatch` in our props.
+// 除了 state，`connect` 还把 `dispatch` 放到 props 里。
 export default connect(AddTodo, state => ({}))
 ```
 
-You can then pass `dispatch` down to other components manually, if you want to.
+如果你想的话也可以把 `dispatch` 手动传给其它组件。
 
-## Something else doesn’t work
+## 其它问题
 
-Ask around on **#redux** [Reactiflux](http://reactiflux.com/) Slack channel, or [create an issue](https://github.com/gaearon/redux/issues).  
-If you figure it out, [edit this document](https://github.com/gaearon/redux/edit/master/docs/Troubleshooting.md) as a courtesy to the next person having the same problem.
+在 Slack [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。
+如果问题终于解决了，请把解法[写到文档里](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md)，以便别人遇到同样问题时参考。
