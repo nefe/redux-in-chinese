@@ -1,4 +1,7 @@
 {
+  "structure": {
+    "summary": "docs/README.md"
+  },
   "plugins": ["ga"],
   "pluginsConfig": {
     "ga": {
