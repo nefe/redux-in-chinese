@@ -2,7 +2,7 @@
 
 在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
 
-英文原版：http://camsong.github.io/redux-in-chinese//
+英文原版：http://rackt.github.io/redux/
 
 **翻译正在进行中，[加入我们](#加入翻译)**
 
