@@ -29,7 +29,7 @@
   * [编写测试](/docs/recipes/WritingTests.md)
 * [排错](docs/Troubleshooting.md)
 * [词汇表](docs/Glossary.md)
-* [API 参考](docs/api/README.md)
+* [API 文档](docs/api/README.md)
   * [createStore](docs/api/createStore.md)
   * [Store](docs/api/Store.md)
   * [combineReducers](docs/api/combineReducers.md)

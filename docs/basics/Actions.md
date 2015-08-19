@@ -104,7 +104,7 @@ store 里能直接通过 [`store.dispatch()`](../api/Store.md#dispatch) 调用 `
 
 export const ADD_TODO = 'ADD_TODO';
 export const COMPLETE_TODO = 'COMPLETE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
 
 /*
  * 其它的常量

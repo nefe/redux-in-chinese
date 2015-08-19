@@ -105,6 +105,25 @@ store.dispatch({ type: 'DECREMENT' });
 
 用这个架构开发计数器有点杀鸡用牛刀，但它的美在于做复杂应用和庞大系统时优秀的扩展能力。由于它可以用 action 追溯应用的每一次修改，因此才有强大的开发工具。如录制用户会话并回放所有 action 来重现它。
 
+### 文档
+
+* [介绍](http://rackt.github.io/redux/docs/introduction/index.html)
+* [基础](http://rackt.github.io/redux/docs/basics/index.html)
+* [高级](http://rackt.github.io/redux/docs/advanced/index.html)
+* [技巧](http://rackt.github.io/redux/docs/recipes/index.html)
+* [排错](http://rackt.github.io/redux/docs/Troubleshooting.html)
+* [词汇表](http://rackt.github.io/redux/docs/Glossary.html)
+* [API 文档](http://rackt.github.io/redux/docs/api/index.html)
+
+### 示例
+
+* [Counter](http://rackt.github.io/redux/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
+* [TodoMVC](http://rackt.github.io/redux/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
+* [Async](http://rackt.github.io/redux/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
+* [Real World](http://rackt.github.io/redux/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
+
+如果你是 NPM 新手，创建和运行一个新的项目有难度，或者不知道上面的代码应该放到哪里使用，请下载 [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) 这个示例，它是一个集成了 React、Browserify 和 Redux 的最简化的示例项目。
+
 ### 交流
 
 打开 Slack，加入 [Reactiflux](http://reactiflux.com/) 中的 **#redux** 频道。
