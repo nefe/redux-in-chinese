@@ -204,6 +204,7 @@ middleware | 中间件
 dispatcher | 分发器
 state | 状态
 props | 属性
+UI | 用户界面
 
 ### 与原文同步机制
 
