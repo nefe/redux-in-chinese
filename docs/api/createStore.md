@@ -1,19 +1,20 @@
 # `createStore(reducer, [initialState])`
 
-Creates a Redux [store](Store.md) that holds the complete state tree of your app.  
-There should only be a single store in your app.
+创建一个 Redux [store](Store.md) 来以存放应用中所有的 state。
+应用中应有且仅有一个 store。
 
-#### Arguments
+#### 参数
 
-1. `reducer` *(Function)*: A [reducing function](../Glossary.md#reducer) that returns the next [state tree](../Glossary.md#state), given the current state tree and an [action](../Glossary.md#action) to handle.
+1. `reducer` *(Function)*: 接收两个参数，分别是当前的 state 树和要处理的 [action](../Glossary.md#action)，返回新的 [state 树](../Glossary.md#state)。
 
-2. [`initialState`] *(any)*: The initial state. You may optionally specify it to hydrate the state from the server in universal apps, or to restore a previously serialized user session. If you produced `reducer` with [`combineReducers`](combineReducers.md), this must be a plain object with the same shape as the keys passed to it. Otherwise, you are free to pass anything that your `reducer` can understand.
+2. [`initialState`] *(any)*: 初始时的 state。
+在同构应用中，你可以决定是否把服务端传来的 state 水合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 [`combineReducers`](combineReducers.md) 创建 `reducer`，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 `reducer` 可理解的内容。[TODO: Optimize]
 
-#### Returns
+#### 返回
 
-([*`Store`*](Store.md)): An object that holds the complete state of your app. The only way to change its state is by [dispatching actions](Store.md#dispatch). You may also [subscribe](Store.md#subscribe) to the changes to its state to update the UI.
+([*`Store`*](Store.md)): 保存了应用所有 state 的对象。改变 state 的惟一方法是 [dispatch](Store.md#dispatch) action。你也可以 [subscribe 监听](Store.md#subscribe) state 的变化，然后更新 UI。
 
-#### Example
+#### 示例
 
 ```js
 import { createStore } from 'redux';
@@ -38,14 +39,14 @@ console.log(store.getState());
 // ['Use Redux', 'Read the docs']
 ```
 
-#### Tips
+#### 小提示
 
-* Don’t create more than one store in an application! Instead, use [`combineReducers`](combineReducers.md) to create a single root reducer out of many.
+* 应用中不要创建多个 store！相反，使用 [`combineReducers`](combineReducers.md) 来把多个 reducer 创建成一个根 reducer。
 
-* It is up to you to choose the state format. You can use plain objects or something like [Immutable](http://facebook.github.io/immutable-js/). If you’re not sure, start with plain objects.
+* 你可以决定 state 的格式。你可以使用普通对象或者 [Immutable](http://facebook.github.io/immutable-js/) 这类的实现。如果你不知道如何做，刚开始可以使用普通对象。
 
-* If your state is a plain object, make sure you never mutate it! For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`. You can also write `return { ...state, ...newData }` if you enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/).
+* 如果 state 是普通对象，永远不要修改它！比如，reducer 里不要使用 `Object.assign(state, newData)`，应该使用 `Object.assign({}, state, newData)`。这样才不会覆盖旧的 `state`。也可以使用 [Babel 阶段 1](http://babeljs.io/docs/usage/experimental/) 中的 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread) 特性中的 `return { ...state, ...newData }`。
 
-* For universal apps that run on the server, create a store instance with every request so that they are isolated. Dispatch a few data fetching actions to a store instance and wait for them to complete before rendering the app on the server.
+* 对于服务端运行的同构应用，为每一个请求创建一个 store 实例，以此让 store 相隔离。dispatch 一系列请求数据的 action 到 store 实例上，等待请求完成后再在服务端渲染应用。
 
-* When a store is created, Redux dispatches a dummy action to your reducer to populate the store with the initial state. You are not meant to handle the dummy action directly. Just remember that your reducer should return some kind of initial state if the state given to it as the first argument is `undefined`, and you’re all set.
+* 当 store 创建后，Redux 会 dispatch 一个 action 到 reducer 上，来用初始的 state 来填充 store。你不需要处理这个 action。但要记住，如果第一个参数也就是传入的 state 如果是 `undefined` 的话，reducer 应该返回初始的 state 值。
