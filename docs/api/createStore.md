@@ -39,7 +39,7 @@ console.log(store.getState());
 // ['Use Redux', 'Read the docs']
 ```
 
-#### 小提示
+#### 小贴士
 
 * 应用中不要创建多个 store！相反，使用 [`combineReducers`](combineReducers.md) 来把多个 reducer 创建成一个根 reducer。
 

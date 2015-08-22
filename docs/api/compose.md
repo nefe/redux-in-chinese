@@ -58,6 +58,6 @@ if (process.env.NODE_ENV === 'production') {
 let store = finalCreateStore(reducer);
 ```
 
-#### 小提示
+#### 小贴士
 
 * `compse` 做的只是让你不使用深度右括号的情况下来写深度嵌套的函数。不要觉得它很复杂。
