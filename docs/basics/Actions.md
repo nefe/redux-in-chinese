@@ -44,11 +44,11 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 }
 ```
 
-## Action 生成器
+## Action 创建函数
 
-**Action 生成器** 就是生成 action 的方法。“action” 和 “action 生成器” 这两个概念很容易混在一起，使用时最好注意区分。
+**Action 创建函数** 就是生成 action 的方法。“action” 和 “action 创建函数” 这两个概念很容易混在一起，使用时最好注意区分。
 
-在 [传统的 Flux](http://facebook.github.io/flux) 实现中，当调用 action 生成器时，一般会触发一个 dispatch，像这样：
+在 [传统的 Flux](http://facebook.github.io/flux) 实现中，当调用 action 创建函数时，一般会触发一个 dispatch，像这样：
 
 ```js
 function addTodoWithDispatch(text) {
@@ -59,7 +59,7 @@ function addTodoWithDispatch(text) {
   dispatch(action);
 }
 ```
-不同的是，Redux 中的 action 生成器是 **纯函数**，它没有任何副作用，只是返回 action 对象而已。
+不同的是，Redux 中的 action 创建函数是 **纯函数**，它没有任何副作用，只是返回 action 对象而已。
 
 ```js
 function addTodo(text) {
@@ -70,14 +70,14 @@ function addTodo(text) {
 }
 ```
 
-这让代码更易于测试和移植。只需把 action 生成器的结果传给 `dispatch()` 方法即可实例化 dispatch。
+这让代码更易于测试和移植。只需把 action 创建函数的结果传给 `dispatch()` 方法即可实例化 dispatch。
 
 ```js
 dispatch(addTodo(text));
 dispatch(completeTodo(index));
 ```
 
-或者创建一个 **被绑定的 action 生成器** 来自动 dispatch：
+或者创建一个 **被绑定的 action 创建函数** 来自动 dispatch：
 
 ```js
 const boundAddTodo = (text) => dispatch(addTodo(text));
@@ -91,7 +91,7 @@ boundAddTodo(text);
 boundCompleteTodo(index);
 ```
 
-store 里能直接通过 [`store.dispatch()`](../api/Store.md#dispatch) 调用 `dispatch()` 方法，但是多数情况下你会使用 [react-redux](http://github.com/gaearon/react-redux) 提供的 `connect()` 帮助器来调用。[`bindActionCreators()`](../api/bindActionCreators.md) 可以自动把多个 action 生成器 绑定到 `dispatch()` 方法上。
+store 里能直接通过 [`store.dispatch()`](../api/Store.md#dispatch) 调用 `dispatch()` 方法，但是多数情况下你会使用 [react-redux](http://github.com/gaearon/react-redux) 提供的 `connect()` 帮助器来调用。[`bindActionCreators()`](../api/bindActionCreators.md) 可以自动把多个 action 创建函数 绑定到 `dispatch()` 方法上。
 
 ## 源码
 
@@ -117,7 +117,7 @@ export const VisibilityFilters = {
 };
 
 /*
- * action 生成器
+ * action 创建函数
  */
 
 export function addTodo(text) {
@@ -138,4 +138,4 @@ export function setVisibilityFilter(filter) {
 现在让我们 [开发一些 reducers](Reducers.md) 来指定发起 action 后 state 应该如何更新。
 
 >##### 高级用户建议
->如果你已经熟悉这些基本概念且已经完成了这个示例，不要忘了看一下在 [高级教程](../advanced/README.md) 中的 [异步 actions] (../advanced/AsyncActions.md)，你将学习如何处理 AJAX 响应和如何把 action 生成器组合成异步控制流。
+>如果你已经熟悉这些基本概念且已经完成了这个示例，不要忘了看一下在 [高级教程](../advanced/README.md) 中的 [异步 actions] (../advanced/AsyncActions.md)，你将学习如何处理 AJAX 响应和如何把 action 创建函数组合成异步控制流。

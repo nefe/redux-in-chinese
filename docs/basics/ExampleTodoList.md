@@ -26,7 +26,7 @@ React.render(
 );
 ```
 
-## Action 生成器和常量
+## Action 创建函数和常量
 
 #### `actions.js`
 
@@ -50,7 +50,7 @@ export const VisibilityFilters = {
 };
 
 /*
- * action 生成器
+ * action 创建函数
  */
 
 export function addTodo(text) {
