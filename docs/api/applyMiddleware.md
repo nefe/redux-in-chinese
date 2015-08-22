@@ -8,11 +8,11 @@ For example, [redux-thunk](https://github.com/gaearon/redux-thunk) lets the acti
 
 Middleware is not baked into [`createStore`](createStore.md) and is not a fundamental part of the Redux architecture, but we consider it useful enough to be supported right in the core. This way, there is a single standard way to extend [`dispatch`](Store.md#dispatch) in the ecosystem, and different middleware may compete in expressiveness and utility.
 
-#### Arguments
+#### 参数
 
 * `...middlewares` (*arguments*): Functions that conform to the Redux *middleware API*. Each middleware receives [`Store`](Store.md)’s [`dispatch`](Store.md#dispatch) and [`getState`](Store.md#getState) functions as named arguments, and returns a function. That function will be given the `next` middleware’s dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in chain will receive the real store’s [`dispatch`](Store.md#dispatch) method as the `next` parameter, thus closing the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
 
-#### Returns
+#### 返回
 
 (*Function*) A store enhancer that applies the given middleware. The store enhancer is a function that needs to be applied to `createStore`. It will return a different `createStore` which has the middleware enabled.
 
@@ -181,7 +181,7 @@ export default connect(
 );
 ```
 
-#### Example: Custom Logger Middleware
+#### 示例：自定义 Logger 日志 Middleware
 
 ```js
 import { createStore, applyMiddleware } from 'redux';
@@ -215,7 +215,7 @@ store.dispatch({
 ```
 
 
-#### Tips
+#### 小贴士
 
 * Middleware only wraps the store’s [`dispatch`](Store.md#dispatch) function. Technically, anything a middleware can do, you can do manually by wrapping every `dispatch` call, but it’s easier to manage this in a single place and define action transformations on the scale of the whole project.
 

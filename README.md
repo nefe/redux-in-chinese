@@ -190,6 +190,9 @@ normalized | 规格化
 function | 函数/方法？
 composition | 合成
 helper utility | 辅助工具
+this won’t work | 这样做行不通
+this will work | 这样做行得通
+tips | 小贴士
 
 ### 保留不译的名词
 

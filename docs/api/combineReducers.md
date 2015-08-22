@@ -1,25 +1,25 @@
 # `combineReducers(reducers)`
 
-As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate different functions managing independent parts of the [state](../Glossary.md#state).
+As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
 
-This helper turns an object whose values are different reducing functions into a single
+The `combineReducers` helper function turns an object whose values are different reducing functions into a single
 reducing function you can pass to [`createStore`](createStore.md).
 
 The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
 
->##### A Note for Flux Users
+>##### Flux 用户使用注意
 
 >This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
 
-#### Arguments
+#### 参数
 
-1. `reducer` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. One handy way to obtain it is to use ES6 `import * as reducers` syntax, but you can also construct this object manually. See the notes below for some rules every passed reducer must follow.
+1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. One handy way to obtain it is to use ES6 `import * as reducers` syntax, but you can also construct this object manually. See the notes below for some rules every passed reducer must follow.
 
-#### Returns
+#### 返回
 
 (*Function*): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
 
-#### Notes
+#### 注意
 
 This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don’t have to follow if you write the root reducer manually.
 
@@ -29,11 +29,11 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 
 * It may never return `undefined`. It is too easy to do this by mistake via an early `return` statement, so `combineReducers` throws if you do that instead of letting the error manifest itself somewhere else.
 
-* If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
+* If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
 
 While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them.
 
-#### Example
+#### 示例
 
 #### `reducers.js`
 
@@ -90,7 +90,7 @@ console.log(store.getState());
 // }
 ```
 
-#### Tips
+#### 小贴士
 
 * This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
 

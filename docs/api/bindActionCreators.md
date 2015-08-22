@@ -6,19 +6,20 @@ Normally you should just call [`dispatch`](Store.md#dispatch) directly on your [
 
 The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn’t aware of Redux, and you don’t want to pass [`dispatch`](Store.md#dispatch) or the Redux store to it.
 
+为方便起见，你可以在第一个参数的位置传入一个函数，它又会返回一个函数。
 For convenience, you can also pass a single function as the first argument, and get a function in return.
 
-#### Parameters
+#### 参数
 
 1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values action creators.
 
 2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
 
-#### Returns
+#### 返回
 
 (*Function* or *Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
 
-#### Example
+#### 示例
 
 #### `TodoActionCreators.js`
 
@@ -57,23 +58,23 @@ class TodoListContainer extends Component {
     // Injected by react-redux:
     let { dispatch } = this.props;
 
-    // Note: this won’t work:
+    // 注意：这样做行不通：
     // TodoActionCreators.addTodo('Use Redux');
 
-    // You’re just calling a function that creates an action.
-    // You must dispatch the action, too!
+    // 你只是调用了创建 action 的方法。
+    // 你必须要 dispatch action 而已。
 
-    // This will work:
+    // 这样做行得通：
     let action = TodoActionCreators.addTodo('Use Redux');
     dispatch(action);
   }
 
   render() {
-    // Injected by react-redux:
+    // 由 react-redux 注入：
     let { todos, dispatch } = this.props;
 
-    // Here’s a good use case for bindActionCreators:
-    // You want a child component to be completely unaware of Redux.
+    // 这是应用 bindActionCreators 比较好的场景：
+    // 在子组件里，可以完全不知道 Redux 的存在。
 
     let boundActionCreators = bindActionCreators(TodoActionCreators, dispatch);
     console.log(boundActionCreators);
@@ -101,7 +102,7 @@ export default connect(
 )
 ```
 
-#### Tips
+#### 小贴士
 
 * You might ask: why don’t we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won’t work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you’re stuck with a single store instance for all requests.
 
