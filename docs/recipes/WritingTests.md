@@ -1,17 +1,17 @@
 # 编写测试
 
-因为你写的大部分 Redux 代码都是些函数，而且他们中的很多都是纯函数，所以不用mock就能跑测试变得很轻松。
+因为你写的大部分 Redux 代码都是些函数，而且大部分是纯函数，所以很好测，不需要 mock。
 
 ### 设置
 
-我们建议用 [Mocha](http://mochajs.org/) 作为测试引擎。
-注意它是泡在node环境下的，所以你用不着访问DOM。
+我们建议用 [Mocha](http://mochajs.org/) 作为测试引擎。  
+注意因为是在 node 环境下运行，所以你不能访问 DOM。
 
 ```
 npm install --save-dev mocha
 ```
 
-To use it together with [Babel](http://babeljs.io), add this to `scripts` in your `package.json`:
+想结合 [Babel](http://babeljs.io) 使用的话，在 `package.json` 的 `scripts` 里加入这一段：
 
 ```js
 {
@@ -25,13 +25,13 @@ To use it together with [Babel](http://babeljs.io), add this to `scripts` in you
 }
 ```
 
-然后运行 `npm test` 就能单次运行了，或者也可以 `npm run test:watch` 每次有文件改变时测试。
+然后运行 `npm test` 就能单次运行了，或者也可以使用 `npm run test:watch` 在每次有文件改变时自动执行测试。
 
 ### Action Creators
 
-Redux 里的 action creators 是些返回普通对象的函数。在测试 action creators 的时候我们想要测试是不是调用了正确的 action creator 还有是不是返回了正确的 action 。
+Redux 里的 action creators 是会返回普通对象的函数。在测试 action creators 的时候我们想要测试不仅是调用了正确的 action creator，还有是否返回了正确的 action。
 
-#### 例子
+#### 示例
 
 ```js
 export function addTodo(text) {
@@ -62,9 +62,9 @@ describe('actions', () => {
 
 ### Reducers
 
-Reducer 应该在给之前的 state 应用了 action 之后返回了新的 state。下面测试的行为就是这样的。
+Reducer 应该是把 action 应用到之前的 state，并返回新的 state。测试起来是下面这样的。
 
-#### 例子
+#### 示例
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes';
@@ -144,9 +144,9 @@ describe('todos reducer', () => {
 
 React components 有一点好，就是他们一般都很小而且依赖于他们的 props。所以很好测。
 
-要测 components 我们要建一个叫 `setup()` 的辅助方法，用来把打桩回调传递成 props 再用 [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) 渲染成 component 。 这样独立的测试就能以“回调是否在需要被调用的时候被调用了”为准做断言。
+要测 components 我们要建一个叫 `setup()` 的辅助方法，用来把模拟过的（stubbed）回调函数当作 props 来传入，然后使用 [React 浅渲染](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) 来渲染组件。这样就可以通过做 “是否调用了回调函数” 这样的断言来写独立的测试。
 
-#### 例子
+#### 示例
 
 ```js
 import React, { PropTypes, Component } from 'react';
@@ -237,15 +237,15 @@ describe('components', () => {
 });
 ```
 
-#### 修坏掉的 `setState()`
+#### `setState()` 异常修复
 
-浅渲染目前是 [如果调用 `setState` 便抛异常](https://github.com/facebook/react/issues/4019). React 貌似想要的是，如果你用了 `setState`，DOM 就有效。要搞定这个问题，我们用了 jsdom 所以 React 在 DOM 无效的时候也不抛异常。下面是关于如何设置:
+浅渲染目前的问题是 [如果调用 `setState` 便抛异常](https://github.com/facebook/react/issues/4019). React 貌似想要的是，如果想要使用 `setState`，DOM 就一定要存在（但测试运行在 node 环境下，是没有 DOM 的）。要解决这个问题，我们用了 jsdom，为了在 DOM 无效的时候，React 也不抛异常。按下面方法设置它：
 
 ```
 npm install --save-dev jsdom mocha-jsdom
 ```
 
-添加一个 `jsdomReact()` 帮手函数长这样：  
+然后添加 `jsdomReact()` 帮助函数，是这样的：
 
 ```js
 import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
@@ -257,7 +257,7 @@ export default function jsdomReact() {
 }
 ```
 
-要在运行任何的 component 测试之前调用。注意这么干比较脏，等以后 [facebook/react#4019](https://github.com/facebook/react/issues/4019) 这个被修了我们就会马上删掉了。
+要在运行任何的 component 测试之前调用。注意这么做不优雅，等以后 [facebook/react#4019](https://github.com/facebook/react/issues/4019) 解决了之后，这段代码就可以删除了。
 
 ### 词汇表
 
@@ -265,4 +265,4 @@ export default function jsdomReact() {
 
 - [jsdom](https://github.com/tmpvar/jsdom): 一个 JavaScript 的内建 DOM 。Jsdom 允许没浏览器的时候也能跑测试。
 
-- [浅渲染](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): 浅渲染的中心思想是，初始化一个 component 然后得到它的`渲染`方法作为结果，比起渲染成 DOM 那么深的只有一级那么深。浅渲染的结果是一个 [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) ，意味着可以访问它的 children, props 还能测试是否工作正常。
+- [浅渲染（shallow renderer）](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): 浅渲染的中心思想是，初始化一个 component 然后得到它的`渲染`方法作为结果，比起渲染成 DOM 那么深的只有一级那么深。浅渲染的结果是一个 [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) ，意味着可以访问它的 children, props 还能测试是否工作正常。
