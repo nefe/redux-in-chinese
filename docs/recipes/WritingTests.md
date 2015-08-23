@@ -1,11 +1,11 @@
 # 编写测试
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
+因为你写的大部分 Redux 代码都是些函数，而且他们中的很多都是纯函数，所以不用mock就能跑测试变得很轻松。
 
-### Setting Up
+### 设置
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.  
-Note that it runs in a Node environment, so you won’t have access to DOM.
+我们建议用 [Mocha](http://mochajs.org/) 作为测试引擎。
+注意它是泡在node环境下的，所以你用不着访问DOM。
 
 ```
 npm install --save-dev mocha
@@ -25,13 +25,13 @@ To use it together with [Babel](http://babeljs.io), add this to `scripts` in you
 }
 ```
 
-and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
+然后运行 `npm test` 就能单次运行了，或者也可以 `npm run test:watch` 每次有文件改变时测试。
 
 ### Action Creators
 
-In Redux action creators are functions which return plain objects. When testing action creators we want to test whether the correct action creator was called and also whether the right action was returned.
+Redux 里的 action creators 是些返回普通对象的函数。在测试 action creators 的时候我们想要测试是不是调用了正确的 action creator 还有是不是返回了正确的 action 。
 
-#### Example
+#### 例子
 
 ```js
 export function addTodo(text) {
@@ -41,7 +41,7 @@ export function addTodo(text) {
   };
 }
 ```
-can be tested like:
+可以这么测：
 
 ```js
 import expect from 'expect';
@@ -62,9 +62,9 @@ describe('actions', () => {
 
 ### Reducers
 
-Reducer should return the new state after applying action on the previous state. And that’s the behavior tested below.
+Reducer 应该在给之前的 state 应用了 action 之后返回了新的 state。下面测试的行为就是这样的。
 
-#### Example  
+#### 例子
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes';
@@ -89,7 +89,7 @@ export default function todos(state = initialState, action) {
   }
 }
 ```
-can be tested like:
+可以这么测：
 
 ```js
 import expect from 'expect';
@@ -142,11 +142,11 @@ describe('todos reducer', () => {
 
 ### Components
 
-A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
+React components 有一点好，就是他们一般都很小而且依赖于他们的 props。所以很好测。
 
-To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering). This lets individual tests assert on whether the callbacks were called when expected.
+要测 components 我们要建一个叫 `setup()` 的辅助方法，用来把打桩回调传递成 props 再用 [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) 渲染成 component 。 这样独立的测试就能以“回调是否在需要被调用的时候被调用了”为准做断言。
 
-#### Example
+#### 例子
 
 ```js
 import React, { PropTypes, Component } from 'react';
@@ -178,7 +178,7 @@ Header.propTypes = {
 export default Header;
 ```
 
-can be tested like:
+可以这么测:
 
 ```js
 import expect from 'expect';
@@ -237,15 +237,15 @@ describe('components', () => {
 });
 ```
 
-#### Fixing Broken `setState()`
+#### 修坏掉的 `setState()`
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
+浅渲染目前是 [如果调用 `setState` 便抛异常](https://github.com/facebook/react/issues/4019). React 貌似想要的是，如果你用了 `setState`，DOM 就有效。要搞定这个问题，我们用了 jsdom 所以 React 在 DOM 无效的时候也不抛异常。下面是关于如何设置:
 
 ```
 npm install --save-dev jsdom mocha-jsdom
 ```
 
-Then add a `jsdomReact()` helper function that looks like this:  
+添加一个 `jsdomReact()` 帮手函数长这样：  
 
 ```js
 import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
@@ -257,12 +257,12 @@ export default function jsdomReact() {
 }
 ```
 
-Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
+要在运行任何的 component 测试之前调用。注意这么干比较脏，等以后 [facebook/react#4019](https://github.com/facebook/react/issues/4019) 这个被修了我们就会马上删掉了。
 
-### Glossary
+### 词汇表
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): 跟 React 一块来的测试小助手。
 
-- [jsdom](https://github.com/tmpvar/jsdom): An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
+- [jsdom](https://github.com/tmpvar/jsdom): 一个 JavaScript 的内建 DOM 。Jsdom 允许没浏览器的时候也能跑测试。
 
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) that means it is possible to access its children, props and test if it works as expected.
+- [浅渲染](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): 浅渲染的中心思想是，初始化一个 component 然后得到它的`渲染`方法作为结果，比起渲染成 DOM 那么深的只有一级那么深。浅渲染的结果是一个 [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) ，意味着可以访问它的 children, props 还能测试是否工作正常。
