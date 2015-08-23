@@ -4,10 +4,10 @@ Redux 是一个混合的产物。它和一些设计模式和技术相似，但�
 
 ### Flux
 
-Redux 可以被考虑是一种 [Flux](https://facebook.github.io/flux/) 实现吗?
-[是](https://twitter.com/fisherwebdev/status/616278911886884864)，或者说 [不是](https://twitter.com/andrestaltz/status/616270755605708800).
+Redux 可以被考虑是一种 [Flux](https://facebook.github.io/flux/) 实现吗？
+[是](https://twitter.com/fisherwebdev/status/616278911886884864)，或者说 [不是](https://twitter.com/andrestaltz/status/616270755605708800)。
 
-(不用担心，[Flux 生成器](https://twitter.com/jingc/status/616608251463909376) [赞成它](https://twitter.com/fisherwebdev/status/616286955693682688)，如果所有人都想知道结果。)
+(不用担心，[Flux 作者](https://twitter.com/jingc/status/616608251463909376) [赞成它](https://twitter.com/fisherwebdev/status/616286955693682688)，如果所有人都想知道结果。)
 
 Redux 是从很多有质量的 Flux 实现中产生的灵感。像 Flux 一样，Redux 规定集中你的 model 去更新应用的核心层里的逻辑（Flux 里的 store，Redux 里的 reducers）。替代应用代码直接改变数据，同时告诉你，描述每一个改变对象的动作叫 "action"。
 
