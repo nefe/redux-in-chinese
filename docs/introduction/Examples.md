@@ -4,14 +4,14 @@ Redux [源码](https://github.com/gaearon/redux/tree/master/examples)里包含�
 **运行示例的方法是，先 clone 仓库，然后分别在根目录和示例目录下执行 `npm install`。**
 
 >##### 复制代码时注意
->如果你把 Redux 示例代码到其它目录，删除 `webpack.config.js` 里的这几行代码：
+>如果你把 Redux 示例代码复制到其它目录，删除 `webpack.config.js` 里的这几行：
 >
 >```js
 >alias: {
 >   'redux': path.join(__dirname, '..', '..', 'src')
 >},
 >```
->and
+>还有
 >```js
 >{
 >   test: /\.js$/,
@@ -20,7 +20,7 @@ Redux [源码](https://github.com/gaearon/redux/tree/master/examples)里包含�
 >},
 ```
 >
-> 否则运行时会试图从相对的 `src` 目录定位 Redux，构建会失败。
+> 否则运行时扔会试图从相对的 `src` 目录来定位 Redux，导致构建失败。
 
 ## Counter 计数器示例
 
@@ -41,7 +41,7 @@ open http://localhost:3000/
 
 这个示例包含：
 
-* 基础的 Redux 开发流程；
+* 基本的 Redux 应用开发流程；
 * 测试代码。
 
 ## TodoMVC 示例
@@ -63,8 +63,8 @@ open http://localhost:3000/
 
 这个示例包含：
 
-* 在 Redux 使用两个 reducer 的方法；
-* 嵌套数据更新；
+* Redux 中使用两个 reducer 的方法；
+* 嵌套数据的更新；
 * 测试样例。
 
 ## 异步
@@ -86,7 +86,6 @@ open http://localhost:3000/
 
 这个示例包含：
 
-* 
 * 使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 处理简单的异步开发流程；
 * 缓存服务器响应数据和在获取数据过程中显示加载进度条；
 * 缓存数据过期方法。
