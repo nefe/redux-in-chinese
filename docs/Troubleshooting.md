@@ -113,7 +113,7 @@ return [
 
 #### 不要忘记调用 [`dispatch(action)`](api/Store.md#dispatch)
 
-如果你定义了一个 action 生成器，调用它并**不**会自动 dispatch 这个 action。比如，下面的代码什么也不会做：
+如果你定义了一个 action 创建函数，调用它并**不**会自动 dispatch 这个 action。比如，下面的代码什么也不会做：
 
 #### `TodoActions.js`
 
@@ -145,7 +145,7 @@ class AddTodo extends Component {
 }
 ```
 
-它不起作用是因为你的 action 生成器只是一个**返回** action 的函数而已。你需要手动 dispatch 它。我们不能在定义时把 action 生成器绑定到指定的 Store 上，因为应用在服务端渲染时需要为每个请求都对应一个独立的 Redux store。
+它不起作用是因为你的 action 创建函数只是一个**返回** action 的函数而已。你需要手动 dispatch 它。我们不能在定义时把 action 创建函数绑定到指定的 Store 上，因为应用在服务端渲染时需要为每个请求都对应一个独立的 Redux store。
 
 解法是调用 [store](api/Store.md) 实例上的 [`dispatch()`](api/Store.md#dispatch) 方法。
 

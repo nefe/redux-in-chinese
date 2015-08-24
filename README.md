@@ -179,15 +179,16 @@ contributor: +your_github_acount+
 plain object | 普通对象
 manage  | 管理
 compose | 组合
-action creator | action 生成器
+action creator | action 创建函数
 dispatch | 发起
 note | 注意
 hold | 维持
+state tree | state 树？
 state shape | state 结构
 handle | 处理
 boilerplate | 样板代码
-normalized | 规格化
-function | 函数/方法？
+normalized | 范式化
+function | 函数？
 composition | 合成
 helper utility | 辅助工具
 this won’t work | 这样做行不通
