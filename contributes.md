@@ -33,8 +33,7 @@ contributor: demohi
 
 ```
 url: recipes/ReducingBoilerplate.html
-work_in_progress: true
-contributor: namelos
+work_in_progress: false
 ```
 
 ```
