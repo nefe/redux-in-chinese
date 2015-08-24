@@ -51,7 +51,7 @@ type Dispatch = (a: Action | AsyncAction) => any;
 
 一个 *dispatching function* (或者简单点叫 *dispatch function*) 是一个接收一个 action 或者[异步 action](#async-action)的函数，它可以或不可以分发一个或多个 action 到 store。
 
-我们必须搞清dispatch 妇女ction 和由没有中间件的 store 实例提供的base [`dispatch`](api/Store.md#dispatch) function其中的区别。
+我们必须搞清 dispatch function 和由没有中间件的 store 实例提供的 base [`dispatch`](api/Store.md#dispatch) function 其中的区别。
 
 Base dispatch function *总是* 同步发 action 给 store 的 reducer，以及由 store 返回的上一个 state 计算出新 state。它期望 actions 会是一个准备好被 reducer 消费掉的普通对象。
 
