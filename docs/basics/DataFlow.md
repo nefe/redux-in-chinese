@@ -4,7 +4,7 @@
 
 这意味着应用中所有的数据都遵循相同的生命周期，这样可以让应用变得更加可预测且容易理解。同时也鼓励做数据范式化，这样可以避免使用多个，独立的无法相互引用的重复数据。
 
-如何这些理由还不足以今你信服，读一下 [动机](../introduction/Motivation.md) 和 [Flux 案例](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6)，这里面有更加详细的单向数据流优势分析。虽然 [Redux 就不是严格意义上的 [Flux](../introduction/Relation to Other Libraries.md)，但它们有共同的设计思想。
+如何这些理由还不足以今你信服，读一下 [动机](../introduction/Motivation.md) 和 [Flux 案例](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6)，这里面有更加详细的单向数据流优势分析。虽然 Redux不是严格意义上的 [Flux](../introduction/Relation to Other Libraries.md)，但它们有共同的设计思想。
 
 Redux 应用中数据的生命周期遵循下面 4 个步骤： 
 
@@ -46,7 +46,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     let nextState = todoApp(previousState, action);
     ```
 
-    注意 reducer 是纯函数。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应用做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
+    注意 reducer 是纯函数。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
 3. **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
 
