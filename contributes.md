@@ -59,7 +59,8 @@ work_in_progress: false
 
 ```
 url: Glossary.html
-work_in_progress: false
+work_in_progress: true
+contributor: omytea
 ```
 
 ```
