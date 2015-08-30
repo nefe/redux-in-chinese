@@ -25,7 +25,7 @@
   * [迁移到 Redux](/docs/recipes/MigratingToRedux.md)
   * [减少样板代码](/docs/recipes/ReducingBoilerplate.md)
   * [服务端渲染](/docs/recipes/ServerRendering.md)
-  * [Computing Derived Data](/docs/recipes/ComputingDerivedData.md)
+  * [计算衍生数据](/docs/recipes/ComputingDerivedData.md)
   * [编写测试](/docs/recipes/WritingTests.md)
 * [排错](/docs/Troubleshooting.md)
 * [词汇表](/docs/Glossary.md)

@@ -6,4 +6,4 @@
 * [减少样板代码](ReducingBoilerplate.md)
 * [服务端渲染](ServerRendering.md)
 * [编写测试](WritingTests.md)
-* [Computing Derived Data](ComputingDerivedData.md)
+* [计算衍生数据](ComputingDerivedData.md)
