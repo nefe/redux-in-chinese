@@ -464,7 +464,7 @@ export function todos(state = [], action) {
 }
 ```
 
-`switch` 陈述 *不是* 真正的模版。真正的 Flux 模版是概念性的：发送更新的需求，用 Dispatcher 注册 Store 的需求，Store 是对象的需求 (当你想要一个哪都能跑的 App 的时候复杂度会提升)。
+`switch` 语句 *不是* 真正的模版。真正的 Flux 模版是概念性的：发送更新的需求，用 Dispatcher 注册 Store 的需求，Store 是对象的需求 (当你想要一个哪都能跑的 App 的时候复杂度会提升)。
 
 不幸的是很多人仍然靠文档里用没用 `switch` 来选择 Flux 框架。如果你不爱用 `switch` 你可以用一个单独的函数来解决，下面会演示。
 
