@@ -1,23 +1,22 @@
 # `bindActionCreators(actionCreators, dispatch)`
 
-Turns an object whose values are [action creators](../Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatch) call so they may be invoked directly.
+把 [action creators](../Glossary.md#action-creator) 转成拥有同名 keys 的对象，但使用 [`dispatch`](Store.md#dispatch) 把每个 action creator 包围起来，这样可以直接调用它们。
 
-Normally you should just call [`dispatch`](Store.md#dispatch) directly on your [`Store`](Store.md) instance. If you use Redux with React, [react-redux](https://github.com/gaearon/react-redux) will provide you with the [`dispatch`](Store.md#dispatch) function so you can call it directly, too.
+一般情况下你可以直接在 [`Store`](Store.md) 实例上调用 [`dispatch`](Store.md#dispatch)。如果你在 React 中使用 Redux，[react-redux](https://github.com/gaearon/react-redux) 会提供 [`dispatch`](Store.md#dispatch) 。
 
-The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn’t aware of Redux, and you don’t want to pass [`dispatch`](Store.md#dispatch) or the Redux store to it.
+惟一使用 `bindActionCreators` 的场景是当你需要把 action creator 往下传到一个组件上，却不想让这个组件觉察到 Redux 的存在，而且不希望把 Redux store 或 [`dispatch`](Store.md#dispatch) 传给它。
 
-为方便起见，你可以在第一个参数的位置传入一个函数，它又会返回一个函数。
-For convenience, you can also pass a single function as the first argument, and get a function in return.
+为方便起见，你可以传入一个函数作为第一个参数，它会返回一个函数。
 
 #### 参数
 
-1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values action creators.
+1. `actionCreators` (*Function* or *Object*): 一个 [action creator](../Glossary.md#action-creator)，或者键值是 action creators 的对象。
 
-2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
+2. `dispatch` (*Function*): 一个 [`dispatch`](Store.md#dispatch) 函数，由 [`Store`](Store.md) 实例提供。
 
-#### 返回
+#### 返回值
 
-(*Function* or *Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
+(*Function* or *Object*): 一个与原对象类似的对象，只不过这个对象中的的每个函数值都可以直接 dispatch action。如果传入的是一个函数，返回的也是一个函数。
 
 #### 示例
 
@@ -55,7 +54,7 @@ console.log(TodoActionCreators);
 
 class TodoListContainer extends Component {
   componentDidMount() {
-    // Injected by react-redux:
+    // 由 react-redux 注入：
     let { dispatch } = this.props;
 
     // 注意：这样做行不通：
@@ -88,10 +87,9 @@ class TodoListContainer extends Component {
                 {...boundActionCreators} />
     );
 
-    // An alternative to bindActionCreators is to pass
-    // just the dispatch function down, but then your child component
-    // needs to import action creators and know about them.
-
+    // 一种可以替换 bindActionCreators 的做法是直接把 dispatch 函数
+    // 和 action creators 当作 props 
+    // 传递给子组件
     // return <TodoList todos={todos} dispatch={dispatch} />;
   }
 }
@@ -104,6 +102,6 @@ export default connect(
 
 #### 小贴士
 
-* You might ask: why don’t we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won’t work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you’re stuck with a single store instance for all requests.
+* 你或许要问：为什么不直接把 action creators 绑定到 store 实例上，就像传统 Flux 那样？问题是这样做的话如果开发同构应用，在服务器端渲染时就不行了。多数情况下，你 每个请求都需要一个独立的 store 实例，这样你可以为它们提供不同的数据，但是在定义的时候绑定 action creators，你就可以使用一个唯一的 store 实例来对应所有请求了。
 
-* If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn’t matter.
+* 如果你使用 ES5，不能使用 `import * as` 语法，你可以把 `require('./TodoActionCreators')` 作为第一个参数传给 `bindActionCreators`。惟一要考虑的是 `actionCreators` 的参数全是函数。模块加载系统并不重要。
