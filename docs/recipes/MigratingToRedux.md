@@ -13,7 +13,7 @@ Redux 不是一个整体的框架，而是一系列的约定和[一些让他们�
 
 你的迁移过程大致包含几个步骤：
 
-* 创建一个叫做 `createFluxStore(reducer)` 的函数，通过 reducer 函数适配你当前项目的 Flux Store 。从代码来看，这个函数很像 Redux 中 [`createStore`](../api/createStore.md) 的实现。它的 dispatch 处理器应该根据不同的 action 来调用不同的 `reducer`，保存新的 state 并抛出更新事件。
+* 创建一个叫做 `createFluxStore(reducer)` 的函数，通过 reducer 函数适配你当前项目的 Flux Store。从代码来看，这个函数很像 Redux 中 [`createStore`](../api/createStore.md) 的实现。它的 dispatch 处理器应该根据不同的 action 来调用不同的 `reducer`，保存新的 state 并抛出更新事件。
 
 * 通过创建 `createFluxStore(reducer)` 的方法来将每个 Flux Store 逐步重写为 Reducer，这个过程中你的应用中其他部分代码感知不到任何变化，仍可以和原来一样使用 Flux Store 。
 

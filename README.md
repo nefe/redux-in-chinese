@@ -183,7 +183,6 @@ action creator | action 创建函数
 dispatch | 发起
 note | 注意
 hold | 维持
-state tree | state 树？
 state shape | state 结构
 handle | 处理
 boilerplate | 样板代码
@@ -194,6 +193,7 @@ helper utility | 辅助工具
 this won’t work | 这样做行不通
 this will work | 这样做行得通
 tips | 小贴士
+create | 创建
 
 ### 保留不译的名词
 
@@ -207,6 +207,7 @@ store | -
 middleware | 中间件
 dispatcher | 分发器
 state | 状态
+state tree | 状态树
 props | 属性
 UI | 用户界面
 

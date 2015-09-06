@@ -3,68 +3,20 @@
 
 ```
 url: advanced/Middleware.html
-work_in_progress: true
-contributor: jasonslyvia
+work_in_progress: false
 ```
 
 ```
 url: advanced/AsyncActions.html
-work_in_progress: true
-contributor: jasonslyvia
-```
-
-```
-url: advanced/AsyncFlow.html
-work_in_progress: true
-contributor: camsong
-```
-
-```
-url: advanced/ExampleRedditAPI.html
-work_in_progress: true
-contributor: demohi
-```
-
-```
-url: recipes/MigratingToRedux.html
-work_in_progress: true
-contributor: demohi
-```
-
-```
-url: recipes/ReducingBoilerplate.html
-work_in_progress: true
-contributor: omytea
-```
-
-```
-url: recipes/ComputingDerivedData.html
 work_in_progress: false
 ```
 
 ```
-url: recipes/WritingTests.html
-work_in_progress: true
-contributor: omytea
-```
-
-```
-url: recipes/MigratingToRedux.html
+url: api/combineReducers.html
 work_in_progress: false
 ```
 
 ```
-url: Troubleshooting.html
-work_in_progress: false
-```
-
-```
-url: Glossary.html
-work_in_progress: true
-contributor: omytea
-```
-
-```
-url: api/index.html
+url: api/applyMiddleware.html
 work_in_progress: false
 ```
