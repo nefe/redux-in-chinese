@@ -1,6 +1,6 @@
-# Reducers
+# Reducer
 
-[Actions](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。这是 reducer 要做的事情。
+[Action](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。这是 reducer 要做的事情。
 
 ## 设计 State 结构
 

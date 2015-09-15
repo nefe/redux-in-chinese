@@ -1,4 +1,4 @@
-# Actions
+# Action
 
 首先，让我们来给 action 下个定义。
 

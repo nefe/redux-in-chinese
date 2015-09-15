@@ -1,18 +1,10 @@
 # Middleware
 
-If you used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you are familiar with a concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
+You’ve seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you’ve used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
 
-Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the store.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
+Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
-This article is divided in an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
-
->##### Note for the Impatient
-
->You will find some practical advice on using middleware for asynchronous actions [in the next section](AsyncActions.md). However we strongly advise you to resist the urge to skip this article.
-
->Middleware is the most “magical” part of Redux you are likely to encounter. Learning how it works and how to write your own is the best investment you can make into your productivity using Redux.
-
->If you’re really impatient, skip ahead to [seven examples](#seven-examples) and come back.
+This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
 
 ## Understanding Middleware
 
@@ -76,7 +68,7 @@ We could end this here, but it’s not very convenient to import a special funct
 
 ### Attempt #3: Monkeypatching Dispatch
 
-What if we just replace the `dispatch` function on the store instance? Redux store is just a plain object with [a few methods](../api/Store.md), and we’re writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
+What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](../api/Store.md), and we’re writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
 
 ```js
 let next = store.dispatch;
@@ -92,7 +84,7 @@ This is already closer to what we want!  No matter where we dispatch an action, 
 
 ### Problem: Crash Reporting
 
-What if we want to apply **more then one** such transformation to `dispatch`?
+What if we want to apply **more than one** such transformation to `dispatch`?
 
 A different useful transformation that comes to my mind is reporting JavaScript errors in production. The global `window.onerror` event is not reliable because it doesn’t provide stack information in some older browsers, which is crucial to understand why an error is happening.
 
@@ -274,10 +266,10 @@ function applyMiddleware(store, middlewares) {
 
 The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
 
-* It only exposes a subset of [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
+* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
 md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we will see [later](AsyncActions.md).
+* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
@@ -316,17 +308,14 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 
 // applyMiddleware takes createStore() and returns
 // a function with a compatible API.
-let createStoreWithMiddleware = applyMiddleware(
-  logger,
-  crashReporter
-)(createStore);
+let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore);
 
 // Use it like you would use createStore()
 let todoApp = combineReducers(reducers);
 let store = createStoreWithMiddleware(todoApp);
 ```
 
-This is it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
+That’s it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
 
 ```js
 // Will flow through both logger and crashReporter middleware!
@@ -335,7 +324,7 @@ store.dispatch(addTodo('Use Redux'));
 
 ## Seven Examples
 
-If your head boiled from reading the above section, imagine what it was like to write it. This part is meant to be a relaxation for you and me, and will help get your gears turning.
+If your head boiled from reading the above section, imagine what it was like to write it. This section is meant to be a relaxation for you and me, and will help get your gears turning.
 
 Each function below is a valid Redux middleware. They are not equally useful, but at least they are equally fun.
 
@@ -372,20 +361,20 @@ const crashReporter = store => next => action => {
 
 /**
  * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
- * Makes `dispatch` return a function to cancel the interval in this case.
+ * Makes `dispatch` return a function to cancel the timeout in this case.
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
     return next(action);
   }
 
-  let intervalId = setTimeout(
+  let timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
   );
 
   return function cancel() {
-    clearInterval(intervalId);
+    clearTimeout(timeoutId);
   };
 };
 
@@ -490,7 +479,7 @@ let createStoreWithMiddleware = applyMiddleware(
   vanillaPromise,
   readyStatePromise,
   logger,
-  errorHandler
+  crashReporter
 )(createStore);
 let todoApp = combineReducers(reducers);
 let store = createStoreWithMiddleware(todoApp);

@@ -4,8 +4,8 @@
 
 下面的教程将会一步步教你开发简单的 Todo 应用。
 
-* [Actions](Actions.md)
-* [Reducers](Reducers.md)
+* [Action](Actions.md)
+* [Reducer](Reducers.md)
 * [Store](Store.md)
 * [数据流](DataFlow.md)
 * [搭配 React](UsageWithReact.md)
