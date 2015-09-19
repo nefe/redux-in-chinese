@@ -6,23 +6,23 @@
 
 **翻译正在进行中，[加入我们](#加入翻译)**
 
-Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
+Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
 超爽的开发体验，比如有一个[时间旅行调试器可以编辑后实时预览](https://github.com/gaearon/redux-devtools)。
 
-Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。
-体小精悍（只有2kB）且没有任何依赖。
+Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。  
+它体小精悍（只有2kB）且没有任何依赖。
 
 ### 评价
 
->[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
+>[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)  
 >Jing Chen，Flux 作者
 
->[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
+>[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)  
 >Bill Fisher，Flux 作者
 
->[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
+>[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
 >André Staltz，Cycle 作者
 
 ### 开发经历
@@ -31,7 +31,8 @@ Redux 的开发最早开始于我在准备 React Europe 演讲[热加载与时�
 
 ### 启示
 
-Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。不管你有没有使用过它们，只需几分钟就能上手 Redux。
+Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。  
+不管你有没有使用过它们，只需几分钟就能上手 Redux。
 
 ### 安装
 
@@ -50,8 +51,8 @@ npm install --save-dev redux-devtools
 
 ### 要点
 
-应用中所有的 state 都以一个对象树的形式储存在一个单一的 *store* 中。
-惟一改变 state 的办法是触发 *action*，一个描述发生什么的对象。
+应用中所有的 state 都以一个对象树的形式储存在一个单一的 *store* 中。  
+惟一改变 state 的办法是触发 *action*，一个描述发生什么的对象。  
 为了描述 action 如何改变 state 树，你需要编写 *reducers*。
 
 就是这样！
