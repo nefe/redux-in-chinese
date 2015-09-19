@@ -181,7 +181,7 @@ manage  | 管理
 compose | 组合
 action creator | action 创建函数
 dispatch | 发起
-note | 注意
+note | 注意/须知
 hold | 维持
 state shape | state 结构
 handle | 处理
@@ -194,6 +194,7 @@ this won’t work | 这样做行不通
 this will work | 这样做行得通
 tips | 小贴士
 create | 创建
+flag | 标记位
 
 ### 保留不译的名词
 
