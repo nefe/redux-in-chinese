@@ -185,7 +185,7 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-## 木偶组件
+## 笨拙组件
 
 #### `components/AddTodo.js`
 

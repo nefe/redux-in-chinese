@@ -14,9 +14,9 @@ Redux 默认并不包含 [React 绑定库](https://github.com/gaearon/react-redu
 npm install --save react-redux
 ```
 
-## 智能组件（Smart Components）和木偶组件（Dumb Components）
+## 智能组件（Smart Components）和笨拙组件（Dumb Components）
 
-Redux 的 React 绑定库拥抱了 [智能组件和木偶组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
+Redux 的 React 绑定库拥抱了 [智能组件和笨拙组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
 
 明智的做法是只在最顶层组件（如路由操作）里使用 Redux。内部组件应该像木偶一样保持“呆滞”，所有数据都通过 props 传入。
 
@@ -79,7 +79,7 @@ If you migrate from Redux to something else, you’ll be able to keep all these 
 
 Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
 
-## 木偶组件
+## 笨拙组件
 
 这就是普通的 React 组件，所以就不在详述。直接看代码：
 

@@ -307,7 +307,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(AsyncApp);
 ```
 
-## 木偶组件
+## 笨拙组件
 
 #### `components/Picker.js`
 
