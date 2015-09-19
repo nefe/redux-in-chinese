@@ -483,7 +483,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 >##### 服务端渲染须知
 
->异步 action creator 对于做服务器端渲染非常方便。你可以创建一个 store，dispatch 一个异步 action creator，这个 action creator 又 dispatch 另一个异步 action creator 来为应用的一整块请求数据，同时在 Promise 完成和结束时才 render 界面。然后在 render 前，store 里就已经存在了需要用的 state。
+>异步 action creator 对于做服务端渲染非常方便。你可以创建一个 store，dispatch 一个异步 action creator，这个 action creator 又 dispatch 另一个异步 action creator 来为应用的一整块请求数据，同时在 Promise 完成和结束时才 render 界面。然后在 render 前，store 里就已经存在了需要用的 state。
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) 并不是 Redux 处理异步 action 的惟一方式。你也可以使用 [redux-promise](https://github.com/acdlite/redux-promise) 或者 [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) 来 dispatch Promise 而不是函数。你也可以使用 [redux-rx](https://github.com/acdlite/redux-rx) dispatch Observable。你甚至可以写一个自定义的 middleware 来描述 API 请求，就像这个[真实场景的案例](../introduction/Examples.html#real-world)中的做法一样。你也可以先尝试一些不同做法，选择喜欢的，并使用下去，不论有没有使用到 middleware 都行。
 
