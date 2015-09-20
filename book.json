@@ -1,9 +1,14 @@
 {
+  "gitbook": "2.3.3",
   "structure": {
     "summary": "docs/README.md"
   },
-  "plugins": ["ga"],
+  "plugins": ["edit-link", "prism", "ga"],
   "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/camsong/redux-in-chinese/tree/master",
+      "label": "开始纠错"
+    },
     "ga": {
       "token": "UA-66122997-1"
     }
