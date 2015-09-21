@@ -212,6 +212,8 @@ state | 状态
 state tree | 状态树
 props | 属性
 UI | 用户界面
+monkeypatch | -
+currying | 柯里化
 
 ### 与原文同步机制
 
