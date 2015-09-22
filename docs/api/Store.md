@@ -15,7 +15,6 @@ Store 不是类。它只是有几个方法的对象。
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`getReducer()`](#getReducer)
 - [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store 方法
@@ -118,29 +117,7 @@ handleChange();
 
 <hr>
 
-### <a id='getReducer'></a>[`getReducer()`](#getReducer)
-
->##### 已过期
-
->此 API 已[过期](https://github.com/rackt/redux/issues/350).  
->我们找到更好的方式来处理后会移除它。
-
-返回 store 当前用来计算 state 的 reducer。
-
-这是一个高级 API。只有在你需要实现 Redux 热加载机制的时候才可能用到它。
-
-#### 返回
-
-(*Function*): store 当前的 reducer.
-
-<hr>
-
 ### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
-
->##### 已过期
-
->此 API 已[过期](https://github.com/rackt/redux/issues/350).  
->我们找到更好的方式来处理后会移除它。
 
 替换 store 当前用来计算 state 的 reducer。
 
