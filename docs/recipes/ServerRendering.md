@@ -1,43 +1,44 @@
-# Server Rendering
+# 服务端渲染
 
-The most common use case for server-side rendering is to handle the _initial render_ when a user (or search engine crawler) first requests our app.  When the server receives the request, it renders the required component(s) into an HTML string, and then sends it as a response to the client.  From that point on, the client takes over rendering duties.
+服务端渲染一个很常见的场景是当用户（或搜索引擎爬虫）第一次请求页面时，用它来做_初始渲染_。当服务器接收到请求后，它把需要的组件渲染成 HTML 字符串，然后把它返回给客户端（这里统指浏览器）。之后，客户端会接手控制所有渲染。
 
-We will use React in the examples below, but the same techniques can be used with other view frameworks that can render on the server.
+下面我们使用 React 来做示例，对于支持服务端渲染的其它 view 框架，做法也是类似的。
 
-### Redux on the Server
+### 服务端使用 Redux
 
-When using Redux with server rendering, we must also send the state of our app along in our response, so the client can use it as the initial state. This is important because, if we preload any data before generating the HTML, we want the client to also have access to this data. Otherwise, the markup generated on the client won’t match the server markup, and the client would have to load the data again.
+当在服务器使用 Redux 渲染时，一定要在响应中包含应用的 state，这样客户端可以把它作为初始 state。这样做至关重要，因为如果在生成 HTML 前预加载了数据，我们希望客户端也能访问这些数据。否则，客户端生成的 HTML 与服务器端返回的 HTML 就会不匹配，客户端还需要再加载一次数据。
 
-To send the data down to the client, we need to:
+把数据发送到客户端，需要以下步骤：
 
-* create a fresh, new Redux store instance on every request;
-* optionally dispatch some actions;
-* pull the state out of store;
-* and then pass the state along to the client.
+* 为每次请求创建全新的 Redux store 实例；
+* 按需 dispatch 一些 action；
+* 从 store 中取出 state；
+* 把 state 一同返回给客户端。
 
-On the client side, a new Redux store will be created and initialized with the state provided from the server.  
-Redux’s **_only_** job on the server side is to provide the **initial state** of our app.
+在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。  
+Redux 在服务端**惟一**要做的事情是提供应用所需的**初始 state**。
 
-## Setting Up
+## 安装
 
-In the following recipe, we are going to look at how to set up server-side rendering. We’ll use the simplistic [Counter app](https://github.com/rackt/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
+下面来介绍如何配置服务端渲染。使用极简的 [Counter 计数器应用](https://github.com/rackt/redux/tree/master/examples/counter) 来做示例，介绍如何根据请求在服务端提前渲染 state。
 
-### Install Packages
+### 安装依赖库
 
-For this example, we’ll be using [Express](http://expressjs.com/) as a simple web server. We’ll include the [serve-static](https://www.npmjs.com/package/serve-static) middleware to handle static files, which we’ll see in just a bit.
+本例会使用 [Express](http://expressjs.com/) 来做小型的 web 服务器。引入 [serve-static](https://www.npmjs.com/package/serve-static) middleware 来处理静态文件，马上会看到。
 
-We also need to install the React bindings for Redux, since they are not included in Redux by default.
+还需要安装 Redux 对 React 的绑定库，因为它默认并不包含在 Redux 中。
 
 ```
 npm install --save express serve-static react-redux
 ```
 
-## The Server Side
+## 服务端开发
 
-The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. We do the same with the `serve-static` middleware to be able to serve up our client javascript bundle. If you’re unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
+下面是服务端代码大概的样子。使用 [app.use](http://expressjs.com/api.html#app.use) 挂载 [Express middleware](http://expressjs.com/guide/using-middleware.html) 处理所有请求。`serve-static` middleware 也以同样的方式处理来自客户端的 javascript 文件请求。如果你还不熟悉 Express 或者 middleware，只需要了解每次服务器收到请求时就会调用 handleRender 函数。
 
->##### Note on Production Usage
->In production, it’s better to serve static files using a server like nginx, and only use Node for handling application requests. However, this is out of scope of this tutorial.
+
+>##### 生产环境使用须知
+>在生产环境中，最好使用类似 nigix 这样的服务器来处理静态文件请求，只使用 Node 处理应用请求。虽然这个话题已经超出本教程讨论范畴。
 
 ##### `server.js`
 
@@ -53,56 +54,56 @@ import App from './containers/App';
 const app = Express();
 const port = 3000;
 
-// Use this middleware to serve up static files built into the dist directory
+// 使用这个 middleware 处理 dist 目录下的静态文件请求
 app.use(require('serve-static')(path.join(__dirname, 'dist')));
 
-// This is fired every time the server side receives a request
+// 每当收到请求时都会触发
 app.use(handleRender);
 
-// We are going to fill these out in the sections to follow
+// 接下来会补充这部分代码
 function handleRender(req, res) { /* ... */ }
 function renderFullPage(html, initialState) { /* ... */ }
 
 app.listen(port);
 ```
 
-### Handling the Request
+### 处理请求
 
-The first thing that we need to do on every request is create a new Redux store instance. The only purpose of this store instance is to provide the initial state of our application.
+第一件要做的事情就是对每个请求创建一个新的 Redux store 实例。这个 store 惟一作用是提供应用初始的 state。
 
-When rendering, we will wrap `<App />`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in [Usage with React](../basics/UsageWithReact.md).
+渲染时，使用 `<Provider>` 来包住根组件 `<App />`，以此来让组件树中所有组件都能访问到 store，就像之前的[搭配 React](../basics/UsageWithReact.md) 教程。
 
-The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side. To do this, we use [React.renderToString()](https://facebook.github.io/react/docs/top-level-api.html#react.rendertostring).
+服务端渲染最关键的一步是在**发送响应前**渲染初始的 HTML。这就要使用 [React.renderToString()](https://facebook.github.io/react/docs/top-level-api.html#react.rendertostring).
 
-We then get the initial state from our Redux store using [`store.getState()`](../api/Store.md#getState). We will see how this is passed along in our `renderFullPage` function.
+然后使用 [`store.getState()`](../api/Store.md#getState) 从 store 得到初始 state。`renderFullPage` 函数会介绍接下来如何传递。
 
 ```js
 function handleRender(req, res) {
-  // Create a new Redux store instance
+  // 创建新的 Redux store 实例
   const store = createStore(counterApp);
 
-  // Render the component to a string
+  // 把组件渲染成字符串
   const html = React.renderToString(
     <Provider store={store}>
       {() => <App />}
     </Provider>
   );
 
-  // Grab the initial state from our Redux store
+  // 从 store 中获得 state
   const initialState = store.getState();
 
-  // Send the rendered page back to the client
+  // 把渲染后的页面内容发送给客户端
   res.send(renderFullPage(html, initialState));
 }
 ```
 
-### Inject Initial Component HTML and State
+### 注入初始组件的 HTML 和 State
 
-The final step on the server side is to inject our initial component HTML and initial state into a template to be rendered on the client side. To pass along the state, we add a `<script>` tag that will attach `initialState` to `window.__INITIAL_STATE__`.
+服务端最后一步就是把初始组件的 HTML 和初始 state 注入到客户端能够渲染的模板中。如何传递 state 呢，我们添加一个 `<script>` 标签来把 `initialState` 赋给 `window.__INITIAL_STATE__`。
 
-The `initialState` will then be available on the client side by accessing `window.__INITIAL_STATE__`.
+客户端可以通过 `window.__INITIAL_STATE__` 获取 `initialState`。
 
-We also include our bundle file for the client-side application via a script tag. The `serve-static` middleware included above will serve up this file. We’ll see what that file contains in just a bit.
+同时使用 script 标签来引入打包后的 js bundle 文件。之前引入的 `serve-static` middleware 会处理它的请求。下面是代码。
 
 ```js
 function renderFullPage(html, initialState) {
@@ -124,15 +125,15 @@ function renderFullPage(html, initialState) {
 }
 ```
 
->##### Note on String Interpolation Syntax
+>##### 字符串插值语法须知
 
->In the example above, we use ES6 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings) syntax. It lets us write multiline strings and interpolate values, but it requires ES6 support. If you’d like to write your Node code using ES6, check out [Babel require hook](https://babeljs.io/docs/usage/require/) documentation. Or you can just keep writing ES5 code.
+>上面的示例使用了 ES6 的[模板字符串](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings) 语法。它支持多行字符串和字符串插补特性，但需要支持 ES6。如果要在 Node 端使用 ES6，参考 [Babel require hook](https://babeljs.io/docs/usage/require/) 文档。或者继续使用 ES5。
 
-## The Client Side
+## 客户端开发
 
-The client side is very straightforward. All we need to do is grab the initial state from `window.__INITIAL_STATE__`, and pass it to our [`createStore()`](../api/createStore.md) function as the initial state.
+客户端代码非常直接。只需要从 `window.__INITIAL_STATE__` 得到初始 state，并传给 [`createStore()`](../api/createStore.md) 函数即可。
 
-Let’s take a look at our new client file:
+代码如下:
 
 #### `client.js`
 
@@ -143,10 +144,10 @@ import { Provider } from 'react-redux';
 import App from './containers/App';
 import counterApp from './reducers';
 
-// Grab the state from a global injected into server-generated HTML
+// 通过服务端注入的全局变量得到初始 state
 const initialState = window.__INITIAL_STATE__;
 
-// Create Redux store with initial state
+// 使用初始 state 创建 Redux store
 const store = createStore(counterApp, initialState);
 
 React.render(
@@ -281,7 +282,7 @@ For our simplistic example, coercing our input into a number is sufficiently sec
 
 Furthermore, you can add additional layers of security by sanitizing your state output. `JSON.stringify` can be subject to script injections. To counter this, you can scrub the JSON string of HTML tags and other dangerous characters. This can be done with either a simple text replacement on the string or via more sophisticated libraries such as [serialize-javascript](https://github.com/yahoo/serialize-javascript).
 
-## Next Steps
+## 下一步
 
 You may want to read [Async Actions](../advanced/AsyncActions.md) to learn more about expressing asynchronous flow in Redux with async primitives such Promises and thunks. Keep in mind that anything you learn there can also be applied to universal rendering.
 
