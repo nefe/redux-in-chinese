@@ -12,7 +12,7 @@ Middleware is not baked into [`createStore`](createStore.md) and is not a fundam
 
 * `...middlewares` (*arguments*): Functions that conform to the Redux *middleware API*. Each middleware receives [`Store`](Store.md)’s [`dispatch`](Store.md#dispatch) and [`getState`](Store.md#getState) functions as named arguments, and returns a function. That function will be given the `next` middleware’s dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in chain will receive the real store’s [`dispatch`](Store.md#dispatch) method as the `next` parameter, thus closing the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
 
-#### 返回
+#### 返回值
 
 (*Function*) A store enhancer that applies the given middleware. The store enhancer is a function that needs to be applied to `createStore`. It will return a different `createStore` which has the middleware enabled.
 

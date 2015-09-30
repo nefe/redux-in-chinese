@@ -24,7 +24,7 @@ Store 不是类。它只是有几个方法的对象。
 返回应用当前的 state 树。  
 它与 store 的最后一个 reducer 返回值相同。
 
-#### 返回
+#### 返回值
 
 *(any)*: 应用当前的 state 树。
 
@@ -45,7 +45,7 @@ Store 不是类。它只是有几个方法的对象。
 
 1. `action` (*Object*<sup>†</sup>): 描述应用变化的普通对象。Action 是把数据传入 store 的惟一途径，所以任何数据，无论来自 UI 事件，网络回调或者是其它资源如 WebSockets，最终都应该以 action 的形式被 dispatch。按照约定，action 具有 `type` 字段来表示它的类型。type 也可被定义为常量或者是从其它模块引入。最好使用字符串，而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action，因为字符串是可以被序列化的。除了 `type` 字段外，action 对象的结构完全取决于你。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取如何组织 action 的建议。
 
-#### 返回
+#### 返回值
 
 (Object<sup>†</sup>): 要 dispatch 的 action。
 
@@ -90,7 +90,7 @@ store.dispatch(addTodo('Read about the middleware'));
 
 1. `listener` (*Function*): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
 
-##### 返回
+##### 返回值
 
 (*Function*): 一个可以解绑变化监听器的函数。
 

@@ -10,7 +10,7 @@
 2. [`initialState`] *(any)*: 初始时的 state。
 在同构应用中，你可以决定是否把服务端传来的 state 水合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 [`combineReducers`](combineReducers.md) 创建 `reducer`，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 `reducer` 可理解的内容。[TODO: Optimize]
 
-#### 返回
+#### 返回值
 
 ([*`Store`*](Store.md)): 保存了应用所有 state 的对象。改变 state 的惟一方法是 [dispatch](Store.md#dispatch) action。你也可以 [subscribe 监听](Store.md#subscribe) state 的变化，然后更新 UI。
 
