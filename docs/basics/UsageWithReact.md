@@ -216,7 +216,7 @@ Footer.propTypes = {
 };
 ```
 
-就这些，现在开发一个木偶型的组件 `App` 把它们渲染出来，验证下是否工作。
+就这些，现在开发一个笨拙型的组件 `App` 把它们渲染出来，验证下是否工作。
 
 #### `containers/App.js`
 
@@ -271,7 +271,7 @@ First, we need to import `Provider` from [`react-redux`](http://github.com/gaear
 #### `index.js`
 
 ```js
-import React from 'react'; 
+import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './containers/App';
