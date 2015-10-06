@@ -1,6 +1,6 @@
 # 技巧
 
-这一章是关于实现应用开发中会遇到的一些典型场景和代码片段。本章内容建立在你已经学会[基础章节]和[高级章节]的基础上。
+这一章是关于实现应用开发中会遇到的一些典型场景和代码片段。本章内容建立在你已经学会[基础章节](../basics/README.md)和[高级章节](../advanced/README.md)的基础上。
 
 * [迁移到 Redux](MigratingToRedux.md)
 * [减少样板代码](ReducingBoilerplate.md)
