@@ -1,16 +1,16 @@
 # `applyMiddleware(...middlewares)`
 
-使用包含自定义功能的 middleware 来扩展 Redux 是一种推荐的方式。Middleware 可以让你包装 store 的 [`dispatch`](Store.md#dispatch) 方法来达到你想要的目的。同时， middleware 还拥有“可组合”这一关键特性。多个 middleware 可以被组合到一起使用，其中，每个 middleware 都不需要关心它前后的 middleware 的任何信息。
+使用包含自定义功能的 middleware 来扩展 Redux 是一种推荐的方式。Middleware 可以让你包装 store 的 [`dispatch`](Store.md#dispatch) 方法来达到你想要的目的。同时， middleware 还拥有“可组合”这一关键特性。多个 middleware 可以被组合到一起使用，形成 middleware 链。其中，每个 middleware 都不需要关心链中它前后的 middleware 的任何信息。
 
 Middleware 最常见的使用场景是无需引用大量代码或依赖类似 [Rx](https://github.com/Reactive-Extensions/RxJS) 的第三方库实现异步 actions。这种方式可以让你像 dispatch 一般的 actions 那样 dispatch [异步 actions](../Glossary.md#async-action)。
 
 例如，[redux-thunk](https://github.com/gaearon/redux-thunk) 支持 dispatch function，以此让 action creator 控制反转。被 dispatch 的 function 会接收 [`dispatch`](Store.md#dispatch) 作为参数，并且可以异步调用它。这类的 function 就称为 *thunk*。另一个 middleware 的示例是 [redux-promise](https://github.com/acdlite/redux-promise)。它支持 dispatch 一个异步的 [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) action，并且在 Promise resolve 后可以 dispatch 一个普通的 action。
 
-Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，也不是 Redux 架构的基础组成部分，但它带来的益处让我们认为有必要在 Redux 核心组件中包含对它的支持。因此，虽然不同的 middleware 可能在易用性和用法上有所不同，它仍被作为扩展 [`dispatch`](Store.md#dispatch) 的唯一标准的方式。
+Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，也不是 Redux 架构的基础组成部分，但它带来的益处让我们认为有必要在 Redux 核心中包含对它的支持。因此，虽然不同的 middleware 可能在易用性和用法上有所不同，它仍被作为扩展 [`dispatch`](Store.md#dispatch) 的唯一标准的方式。
 
 #### 参数
 
-* `...middlewares` (*arguments*): 兼容 Redux *middleware API* 的函数。每个 middleware 接受 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 函数作为命名参数，并返回一个函数。该函数会被传入
+* `...middlewares` (*arguments*): 遵循 Redux *middleware API* 的函数。每个 middleware 接受 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 函数作为命名参数，并返回一个函数。该函数会被传入
 被称为 `next` 的下一个 middleware 的 dispatch 方法，并返回一个接收 action 的新函数，这个函数可以直接调用 `next(action)`，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个 middleware 会接受真实的 store 的 [`dispatch`](Store.md#dispatch) 方法作为 `next` 参数，并借此结束调用链。所以，middleware 的函数签名是 `({ getState, dispatch }) => next => action`。
 
 #### 返回值
