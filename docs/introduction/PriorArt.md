@@ -15,7 +15,7 @@ Redux 是从很多有质量的 Flux 实现中产生的灵感。像 Flux 一样�
 
 和 Flux 另一个重要的区别是 **Redux 假设你永远不会改变你的数据**。你可以用纯对象和数组来管理好，在 reducers 里改变会深感挫折。你可以返回一个新对象， 它可以很容易的使用 [ES7 所提议的对象 spread 语法](https://github.com/sebmarkbage/ecmascript-rest-spread) 和 [Babel](http://babeljs.io)，或使用一个库像 [Immutable](https://facebook.github.io/immutable-js) 来实现。
 
-虽然技术上*可能* [写不纯的 reducers](https://github.com/gaearon/redux/issues/328#issuecomment-125035516) 来改变数据为了性能方面，但我们不鼓励你这么做。像开发时间旅行、记录/回放或热加载特性将会被不可实现。此外，在大部分应用，不像不可变特性会影响性能问题，因为，像 [Om](https://github.com/omcljs/om) 里的示范，即时是对象分配失败，仍然可以防止昂贵的重渲染和重计算，因为你知道什么改变了，这得感谢 reducer 的纯度。
+虽然技术上*可能* [写不纯的 reducers](https://github.com/gaearon/redux/issues/328#issuecomment-125035516) 来改变数据为了性能方面，但我们不鼓励你这么做。像开发时间旅行、记录/回放或热加载特性将会被不可实现。此外，在大部分应用，不像不可变特性会影响性能问题，因为，像 [Om](https://github.com/omcljs/om) 里的示范，即使是对象分配失败，仍然可以防止昂贵的重渲染和重计算，因为你知道什么改变了，这得感谢 reducer 的纯度。
 
 ### Elm
 
