@@ -1,20 +1,21 @@
 # `applyMiddleware(...middlewares)`
 
-Middleware 是扩展 Redux，添加自定义功能建议使用的方式。Middleware 可以让你包装 store 的 [`dispatch`](Store.md#dispatch) 方法来实现功能。middleware 最大的优点是它的可组合性。多个 middleware 可以组合在一起，形成 middleware 链，其中每个 middleware 并不需要知道它在链中前面或后面的信息。
+使用包含自定义功能的 middleware 来扩展 Redux 是一种推荐的方式。Middleware 可以让你包装 store 的 [`dispatch`](Store.md#dispatch) 方法来达到你想要的目的。同时， middleware 还拥有“可组合”这一关键特性。多个 middleware 可以被组合到一起使用，其中，每个 middleware 都不需要关心它前后的 middleware 的任何信息。
 
-Middleware 最常见的使用场景是来做异步 action。优点是不需要太多样板代码，或者引入 [Rx](https://github.com/Reactive-Extensions/RxJS) 这样的第三方库。这得益于它不但可以让你 dispatch 普通 action 还可以 dispatch [异步 action](../Glossary.md#async-action)。
+Middleware 最常见的使用场景是无需引用大量代码或依赖类似 [Rx](https://github.com/Reactive-Extensions/RxJS) 的第三方库实现异步 actions。这种方式可以让你像 dispatch 一般的 actions 那样 dispatch [异步 actions](../Glossary.md#async-action)。
 
 例如，[redux-thunk](https://github.com/gaearon/redux-thunk) 支持 dispatch function，以此让 action creator 控制反转。被 dispatch 的 function 会接收 [`dispatch`](Store.md#dispatch) 作为参数，并且可以异步调用它。这类的 function 就称为 *thunk*。另一个 middleware 的示例是 [redux-promise](https://github.com/acdlite/redux-promise)。它支持 dispatch 一个异步的 [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) action，并且在 Promise resolve 后可以 dispatch 一个普通的 action。
 
-Middleware 并没有和 [`createStore`](createStore.md) 捆绑在一起，也不是 Redux 架构的基础组成部分，但我们觉得它非常有用，因为在 Redux 核心里就支持它。也因此，它是扩展 [`dispatch`](Store.md#dispatch) 的惟一标准方式，虽然不同的 middleware 在易用性和用法上有所不同。
+Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，也不是 Redux 架构的基础组成部分，但它带来的益处让我们认为有必要在 Redux 核心组件中包含对它的支持。因此，虽然不同的 middleware 可能在易用性和用法上有所不同，它仍被作为扩展 [`dispatch`](Store.md#dispatch) 的唯一标准的方式。
 
 #### 参数
 
-* `...middlewares` (*arguments*): 符合 Redux *middleware API* 的 function。每个 middleware 接收 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 方法作为参数，并返回一个 function。这个 function 会被给予 `next` middleware 的 dispatch 方法，并预期返回一个 `action` 的函数，它可能使用不同的参数调用 `next(action)` 方法，可以不同的时间调用，也可能根本不调用。链中的最后一个 middleware 会接收真正 store 的 [`dispatch`](Store.md#dispatch) 方法作为 `next` 参数，以此结束链的调用。所以，middleware 的格式是 `({ getState, dispatch }) => next => action`。
+* `...middlewares` (*arguments*): 兼容 Redux *middleware API* 的函数。每个 middleware 接受 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 函数作为命名参数，并返回一个函数。该函数会被传入
+被称为 `next` 的下一个 middleware 的 dispatch 方法，并返回一个接收 action 的新函数，这个函数可以直接调用 `next(action)`，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个 middleware 会接受真实的 store 的 [`dispatch`](Store.md#dispatch) 方法作为 `next` 参数，并借此结束调用链。所以，middleware 的函数签名是 `({ getState, dispatch }) => next => action`。
 
 #### 返回值
 
-(*Function*) 一个应用了 middleware 后的 store enhancer。这个 store enhancer 就是一个函数，并且需要应用到 `createStore`。它会返回一个应用了 middleware 的不同的 `createStore`。
+(*Function*) 一个应用了 middleware 后的 store enhancer。这个 store enhancer 就是一个函数，并且需要应用到 `createStore`。它会返回一个应用了 middleware 的新的 `createStore`。
 
 #### 示例: 自定义 Logger Middleware
 
@@ -179,7 +180,8 @@ store.dispatch(
   response.send(React.renderToString(<MyApp store={store} />))
 );
 
-// 也可以在任何导致组件的 props 变化的时修 dispatch 一个异步 thunk action。
+// 也可以在任何导致组件的 props 变化的时刻
+// dispatch 一个异步 thunk action。
 
 import { connect } from 'react-redux';
 import { Component } from 'react';
@@ -213,9 +215,9 @@ export default connect(
 
 #### 小贴士
 
-* Middleware 只是包装了 store 的 [`dispatch`](Store.md#dispatch) 方法。技术上讲，任何 middleware 能做的事情，都可能通过手动包装每一个 `dispatch` 调用来做。不过在一个地方统一管理比较容易而且在整个应用的层级上定义 action 转换。
+* Middleware 只是包装了 store 的 [`dispatch`](Store.md#dispatch) 方法。技术上讲，任何 middleware 能做的事情，都可能通过手动包装 `dispatch` 调用来实现，但是放在同一个地方统一管理会使整个项目的扩展变的容易得多。
 
-* 如果你使用了 `applyMiddleware` 之外的 store enhancer，一定要把 `applyMiddleware` 放到组合链的前面，因为 middleware 可能会做异步操作。比如，它应该在 [redux-devtools](https://github.com/gaearon/redux-devtools) 前面，不然 DevTools 就看不到 Promise middleware 里 dispatch 的 action 了。
+* 如果除了 `applyMiddleware`，你还用了其它 store enhancer，一定要把 `applyMiddleware` 放到组合链的前面，因为 middleware 可能会包含异步操作。比如，它应该在 [redux-devtools](https://github.com/gaearon/redux-devtools) 前面，否则 DevTools 就看不到 Promise middleware 里 dispatch 的 action 了。
 
 * 如果你想有条件地使用 middleware，记住只 import 需要的部分：
 
@@ -233,4 +235,4 @@ export default connect(
 
 * 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancers](../Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/gaearon/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
 
-* Middleware 听起来比实际难一些。真正理解 middleware 的惟一办法是看一下现有的 middleware 是如何工作的，并尝试自己写一些。实现的功能可能错综复杂，但是大部分 middleware 实际上很小，只有 10 行左右，组成起来后才变得强大。
+* Middleware 听起来比实际难一些。真正理解 middleware 的唯一办法是了解现有的 middleware 是如何工作的，并尝试自己实现。需要的功能可能错综复杂，但是你会发现大部分 middleware 实际上很小，只有 10 行左右，是通过对它们的组合使用来达到最终的目的。
