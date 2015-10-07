@@ -15,7 +15,7 @@
 * 从 store 中取出 state；
 * 把 state 一同返回给客户端。
 
-在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。  
+在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。
 Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初始 state**。
 
 ## 安装
@@ -161,10 +161,8 @@ React.render(
 当页面加载时，打包后的 js 会启动，并调用 [`React.render()`](https://facebook.github.io/react/docs/top-level-api.html#react.render)，然后会与服务端渲染的 HTML 的 `data-react-id` 属性做关联。这会把新生成的 React 实例与服务端的虚拟 DOM 连接起来。因为同样使用了来自 Redux store 的初始 state，并且 view 组件代码是一样的，结果就是我们得到了相同的 DOM。
 
 就是这样！这就是实现服务端渲染的所有步骤。
-And that’s it! That is all we need to do to implement server side rendering.
 
 但这样做还是比较原始的。只会用动态代码渲染一个静态的 View。下一步要做的是动态创建初始 state 支持动态渲染 view。
-But the result is pretty vanilla. It essentially renders a static view from dynamic code. What we need to do next is build an initial state dynamically to allow that rendered view to be dynamic.
 
 ## 准备初始 State
 
@@ -274,7 +272,7 @@ function handleRender(req, res) {
 
 ### 安全注意事项
 
-因为我们代码中很多是基于用户生成内容（UGC）和输入的，不知不觉中，提高了应用可能受攻击区域。任何应用都应该对用户输入做安全处理以避免跨丫攻击（XSS）或者代码注入。
+因为我们代码中很多是基于用户生成内容（UGC）和输入的，不知不觉中，提高了应用可能受攻击区域。任何应用都应该对用户输入做安全处理以避免跨站脚本攻击（XSS）或者代码注入。
 
 我们的示例中，只对安全做基本处理。当从请求中拿参数时，对 `counter` 参数使用 `parseInt` 把它转成数字。如果不这样做，当 request 中有 script 标签时，很容易在渲染的 HTML 中生成危险代码。就像这样的：`?counter=</script><script>doSomethingBad();</script>`
 
