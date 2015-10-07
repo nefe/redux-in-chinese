@@ -4,9 +4,9 @@ Redux 可以被描述成三大基础原则：
 
 ### 单一数据源
 
-**整个应用的 [state](../Glossary.md#state) 被储存在一棵对象树中，它只有一个单一的 [store](../Glossary.md#store) 。**
+**整个应用的 [state](../Glossary.md#state) 被储存在一棵 object tree 中，它只有一个单一的 [store](../Glossary.md#store) 。**
 
-这让同构应用开发变得非常容易。来自服务端的 state 可以轻而易举地被序列化并融合到没有额外代码影响的客户端上。由于是单一的 state 树，调试也变得非常容易。你也可以把应用的 state 保存下来加快开发速度。此外，受益于单一的 state 树，以前难以实现的像“撤销/重做”这类的功能也变得轻而易举。
+这让同构应用开发变得非常容易。来自服务端的 state 可以轻而易举地被序列化并融合到没有额外代码影响的客户端上。由于是单一的 state tree ，调试也变得非常容易。你也可以把应用的 state 保存下来加快开发速度。此外，受益于单一的 state tree ，以前难以实现的像“撤销/重做”这类的功能也变得轻而易举。
 
 ```js
 console.log(store.getState());
@@ -43,9 +43,9 @@ store.dispatch({
 
 ### 纯函数的形式来执行修改
 
-**为了描述 action 如何改变 state 树，你需要编写 [reducers](../Glossary.md#reducer)。**
+**为了描述 action 如何改变 state tree ，你需要编写 [reducers](../Glossary.md#reducer)。**
 
-Reducer 只是一些纯函数，它接收之前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state 树的不同部分，因为 reducer 只是普通函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来做一些通用任务，如分页器。
+Reducer 只是一些纯函数，它接收之前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state tree 的不同部分，因为 reducer 只是普通函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来做一些通用任务，如分页器。
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
