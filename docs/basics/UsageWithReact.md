@@ -264,9 +264,9 @@ export default class App extends Component {
 
 ## 连接到 Redux
 
-We need to do two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
+我们需要做出两个变化，将 `App` 组件连接到 Redux 并且让它能够 dispatch actions 以及从 Redux store 读取到 state。
 
-First, we need to import `Provider` from [`react-redux`](http://github.com/gaearon/react-redux) we installed earlier, and **wrap the root component in `<Provider>`** before rendering.
+首先，我们需要获取从之前安装好的 [`react-redux`](http://github.com/gaearon/react-redux) 提供的  `Provider`，并且在渲染之前**将根组件包装进 `<Provider>`**。
 
 #### `index.js`
 
@@ -281,8 +281,8 @@ let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');
 React.render(
-  // The child must be wrapped in a function
-  // to work around an issue in React 0.13.
+  // 为了解决在 React 0.13 的一个问题
+  // 子标签必须包装成一个 function。
   <Provider store={store}>
     {() => <App />}
   </Provider>,
@@ -290,13 +290,13 @@ React.render(
 );
 ```
 
-This makes our store instance available to the components below. (Internally, this is done via React [undocumented “context” feature](http://www.youtube.com/watch?v=H7vlH-wntD4), but it’s not exposed directly in the API so don’t worry about it.)
+这使得我们的 store 能为下面的组件所用。（在内部，这个是通过 React 的 [非文件“ context ”特性](http://www.youtube.com/watch?v=H7vlH-wntD4) 完成的，但它不直接暴露 API，所以不用担心。）
 
-Then, we **wrap the components we want to connect to Redux with `connect()` function from [`react-redux`](http://github.com/gaearon/react-redux)**. Try to only do this for a top-level component, or route handlers. While technically you can `connect()` any component in your app to Redux store, avoid doing this too deeply because it will make the data flow harder to trace.
+接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
 
-**Any component wrapped with `connect()` call will receive a [`dispatch`](../api/Store.md#dispatch) function as a prop, and any state it needs from the global state.** The only argument to `connect()` is a function we call a **selector**. This function takes the global Redux store’s state, and returns the props you need for the component. In the simplest case, you can just return the `state` given to you, but you may also wish to transform it first.
+**任何一个从 `contect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
 
-To make performant memoized transformations with composable selectors, check out [reselect](https://github.com/faassen/reselect). In this example, we won’t use it, but it works great for larger apps.
+为了组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 
 #### `containers/App.js`
 
