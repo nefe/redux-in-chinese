@@ -8,62 +8,63 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 ## 不同框架绑定
 
-* [react-redux](https://github.com/gaearon/react-redux) — React
-* [ng-redux](https://github.com/wbuchwalter/ng-redux) — Angular
-* [ng2-redux](https://github.com/wbuchwalter/ng2-redux) — Angular 2
+* [react-redux](https://github.com/gaearon/react-redux) —— React
+* [ng-redux](https://github.com/wbuchwalter/ng-redux) —— Angular
+* [ng2-redux](https://github.com/wbuchwalter/ng2-redux) —— Angular 2
 
 ## 中间件
 
-* [redux-thunk](http://github.com/gaearon/redux-thunk) — 用最简单的方式写异步 action 构造器
-* [redux-promise](https://github.com/acdlite/redux-promise) — 遵从[FSA](https://github.com/acdlite/flux-standard-action) 的 promise 中间件
-* [redux-rx](https://github.com/acdlite/redux-rx) — 给 Redux 用的 RxJS 工具，包括观察变量的中件间
-* [redux-logger](https://github.com/fcomb/redux-logger) — 记录所有 Redux action 和下一次 state 的日志
-* [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — 开发中的状态变更提醒
+* [redux-thunk](http://github.com/gaearon/redux-thunk) —— 用最简单的方式搭建异步 action 构造器
+* [redux-promise](https://github.com/acdlite/redux-promise) —— 遵从 [FSA](https://github.com/acdlite/flux-standard-action) 的 promise 中间件
+* [redux-rx](https://github.com/acdlite/redux-rx) —— 给 Redux 用的 RxJS 工具，包括观察变量的中间件
+* [redux-logger](https://github.com/fcomb/redux-logger) —— 记录所有 Redux action 和下一次 state 的日志
+* [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) —— 开发中的状态变更提醒
 
 ## 组件
 
-* [redux-form](https://github.com/erikras/redux-form) — 在 Redux 中维持 React 表格的状态
+* [redux-form](https://github.com/erikras/redux-form) —— 在 Redux 中时时持有 React 表格的 state
 
 ## Store 增效器
 
-* [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — 对于 store subscribers 的自定义批处理与防跳请求 
-* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — 基于随意 action 的历史记录变动
+* [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) —— 针对 store subscribers 的自定义批处理与防跳请求 
+* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) —— 基于独断的 action 的 history 库转换
 
 ## Reducer 增效器
 
-* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Optimistically apply actions that can be later commited or reverted 随后提交或重做的 action 的乐观
-* [redux-undo](https://github.com/omnidan/redux-undo) — Effortless undo/redo and action history for your reducers
+* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) —— 乐观使用将被提交或还原的 action
+* [redux-undo](https://github.com/omnidan/redux-undo) —— 
+使 reducer 具有便捷的重做/撤销，以及 action 记录功能
 
 ## 工具集
 
-* [reselect](https://github.com/faassen/reselect) — 有效派生数据的选择器，受 NuclearJS 启发
-* [normalizr](https://github.com/gaearon/normalizr) — 标准化内嵌 API 的响应，为了通过 reducers 更方便地作处理
-* [redux-actions](https://github.com/acdlite/redux-actions) — 在写 reducers and action 构造器的初始化
-* [redux-transducers](https://github.com/acdlite/redux-transducers) — Redux 的编译器工具
-* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Integration tools between Redux and [Immutable](https://github.com/facebook/immutable-js/)
-* [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Immutable and type-checked state and actions for Redux
+* [reselect](https://github.com/faassen/reselect) —— 受 NuclearJS 启发，有效派生数据的选择器。
+* [normalizr](https://github.com/gaearon/normalizr) —— 通过内嵌 API 响应标准化，使 reducer 的处理更简便。
+* [redux-actions](https://github.com/acdlite/redux-actions) —— 在初始化 reducers 和 action 构造器时减少样板代码 (boilerplate)。
+* [redux-transducers](https://github.com/acdlite/redux-transducers) —— Redux 的编译器工具
+* [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) —— Redux 和 [Immutable](https://github.com/facebook/immutable-js/) 的交互工具
+* [redux-tcomb](https://github.com/gcanti/redux-tcomb) —— 在 Redux 中使用具有不可变特性、并经过类型检查的 state 和 action 。
 
 ## 开发者工具
 
-* [redux-devtools](http://github.com/gaearon/redux-devtools) — 一个像是时间旅行似的 action 日志工具，包括热更新和 reducers 的错误处理器 [最早演示于 React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
+* [redux-devtools](http://github.com/gaearon/redux-devtools) —— 一个使用时间旅行 UI 、热加载和 reducers 错误处理器的 action 日志工具，[最早演示于 React Europe 会议](https://www.youtube.com/watch?v=xsSnOQynTHs)
 
 ## 教程与文章
 
-* [redux-tutorial](https://github.com/happypoulp/redux-tutorial) - 学习如何一步步使用 redux
-* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux)
-* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4)
-* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) — A comprehensive guide to test-first development with Redux, React, and Immutable
+* [redux-tutorial](https://github.com/happypoulp/redux-tutorial) —— 一步步学习使用 Redux
+* [What the Flux?! Let’s Redux.](https://blog.andyet.com/2015/08/06/what-the-flux-lets-redux) —— Redux 介绍
+* [Handcrafting an Isomorphic Redux Application (With Love)](https://medium.com/@bananaoomarang/handcrafting-an-isomorphic-redux-application-with-love-40ada4468af4) —— 使用数据抓取与路由分发的同构应用创建指南
+* [Full-Stack Redux Tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) —— 使用 Redux 、React 和 Immutable 的测试优先开发指南
 
 ## 演讲
 
-* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) — See how constraints enforced by Redux make hot reloading with time travel easy
-* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) — Learn how to gradually migrate existing MVC applications to Redux
+* [Live React: Hot Reloading and Time Travel](http://youtube.com/watch?v=xsSnOQynTHs) —— 了解 Redux 如何使用限制措施，让伴随时间旅行的热加载变得简单
+* [Cleaning the Tar: Using React within the Firefox Developer Tools](https://www.youtube.com/watch?v=qUlRpybs7_c) —— 了解如何从已有的 MVC 应用逐步迁移至 Redux
 
 ## 社区公约
 
-* [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — A human-friendly standard for Flux action objects
-* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — An opinionated standard for nested reducer composition
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — A proposal for bundling reducers, action types and actions
+* [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ——  Flux 中 action objects 的人性化标准
+* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) —— 嵌套 reducer 组成的武断标准
+* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) —— 关于捆绑 reducers, action 类型 和 actions 的提案
 
 ## 更多
 

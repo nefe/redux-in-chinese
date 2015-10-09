@@ -29,7 +29,7 @@ Redux 是从很多有质量的 Flux 的实现中产生的灵感。和 Flux 一�
 
 Immutable 及类似的库都与 Redux 对接良好。尽可随意地一起使用!
 
-**Redux 并不在意你*如何*存储 state，state 可以是普通对象，可以是不可变对象，或者其它类型。** 当需要于从 server 端写同构应用或融合它们的 state ，你可能要用到序列化或反序列化的机制。但除此以外，你可以使用任何数据存储的库，*只要它支持数据的不可变动性*。举例说明，对于 Redux state ，Backbone 并无意义，因为 Backbone models 是可变的。
+**Redux 并不在意你*如何*存储 state，state 可以是普通对象，可以是不可变对象，或者其它类型。** 为了从 server 端写同构应用或融合它们的 state ，你可能要用到序列化或反序列化的机制。但除此以外，你可以使用任何数据存储的库，*只要它支持数据的不可变动性*。举例说明，对于 Redux state ，Backbone 并无意义，因为 Backbone models 是可变的。
 
 注意，即便具有不可变特性的库支持 cursors，也不应在 Redux 的应用中使用。整个 state tree 应被视为只读，并需通过 Redux 来更新 state 和订阅更新。因此，通过 cursor 来改写，对 Redux 来说没有意义。**而如果只是想用 cursor 把 state tree 从 UI tree 解耦并逐步细化 cursor，应使用 selector 来替代。** Selectors 是可组合的 getter 函数组。具体可参考 [reselect](http://github.com/faassen/reselect)，这是一个优秀、简洁的可组合 selector 的实现。
 
