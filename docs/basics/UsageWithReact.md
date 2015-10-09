@@ -264,9 +264,9 @@ export default class App extends Component {
 
 ## 连接到 Redux
 
-我们需要做出两个变化，将 `App` 组件连接到Redux并且让它能够dispatch actions以及从Redux store读取到state。
+我们需要做出两个变化，将 `App` 组件连接到 Redux 并且让它能够 dispatch actions 以及从 Redux store 读取到 state。
 
-首先，我们需要获取从之前安装好的 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `Provider`，并且在渲染之前**将根组件包装进 `<Provider>`**。
+首先，我们需要获取从之前安装好的 [`react-redux`](http://github.com/gaearon/react-redux) 提供的  `Provider`，并且在渲染之前**将根组件包装进 `<Provider>`**。
 
 #### `index.js`
 
@@ -282,7 +282,7 @@ let store = createStore(todoApp);
 let rootElement = document.getElementById('root');
 React.render(
   // 为了解决在 React 0.13 的一个问题
-  // 子标签必须包装成一个function。
+  // 子标签必须包装成一个 function。
   <Provider store={store}>
     {() => <App />}
   </Provider>,
@@ -290,13 +290,13 @@ React.render(
 );
 ```
 
-这使得我们的store能为下面的组件所用。（在内部，这个是通过React的 [非文件“环境”特性](http://www.youtube.com/watch?v=H7vlH-wntD4) 完成的，但它不直接暴露API，所以不用担心。）
+这使得我们的 store 能为下面的组件所用。（在内部，这个是通过 React 的 [非文件“ context ”特性](http://www.youtube.com/watch?v=H7vlH-wntD4) 完成的，但它不直接暴露 API，所以不用担心。）
 
-接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者route处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到Redux store中，但尽量要避免这么做，因为这个数据流很难追踪。
+接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
 
-**任何一个从 `contect()` 包装好的组件都可以得到一个像prop的 [`dispatch`](../api/Store.md#dispatch) 方法。** `connect()` 的唯一参数是**selector**。此方法可以从Redux store接收到全局的state，然后返回一个你的组件中需要的props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
+**任何一个从 `contect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 prop。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
 
-为了组合selectors更有效率，不妨看看 [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
+为了组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 
 #### `containers/App.js`
 
