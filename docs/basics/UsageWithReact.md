@@ -294,7 +294,7 @@ React.render(
 
 接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
 
-**任何一个从 `contect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 prop。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
+**任何一个从 `contect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
 
 为了组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 
