@@ -290,7 +290,7 @@ React.render(
 );
 ```
 
-这使得我们的 store 能为下面的组件所用。（在内部，这个是通过 React 的 [非文件“ context ”特性](http://www.youtube.com/watch?v=H7vlH-wntD4) 完成的，但它不直接暴露 API，所以不用担心。）
+这使得我们的 store 能为下面的组件所用。（在内部，这个是通过 React 的 [文档未说明的"context" 特性](http://www.youtube.com/watch?v=H7vlH-wntD4) 完成的，但它并不是暴露在外的公有API，所以不用担心。）
 
 接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
 
