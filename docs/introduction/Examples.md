@@ -121,7 +121,7 @@ open http://localhost:3000/
 
 * 实际应用中的 Redux 的异步处理；
 * 使用 [normalized](https://github.com/gaearon/normalizr) 结果集来保存并缓存数据；
-* 用于 API 请求的 自定义 middleware ；
+* 用于 API 请求的自定义 middleware ；
 * 缓存服务器响应数据，并在获取数据过程中显示加载进度条；
 * 分页器；
 * 路由。

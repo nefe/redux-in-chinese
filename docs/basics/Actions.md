@@ -7,6 +7,10 @@
 添加新 todo 任务的 action 是这样的：
 
 ```js
+const ADD_TODO = 'ADD_TODO';
+```
+
+```js
 {
   type: 'ADD_TODO',
   text: 'Build my first Redux app'
@@ -33,6 +37,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
   index: 5
 }
 ```
+
 **action 中传递的数据越少越好**。比如，这里传递 `index` 就比把整个任务对象传过去要好。
 
 最后，再添加一个 action 类型来表示当前展示的任务状态。
@@ -59,6 +64,7 @@ function addTodoWithDispatch(text) {
   dispatch(action);
 }
 ```
+
 不同的是，Redux 中的 action 创建函数是 **纯函数**，它没有任何副作用，只是返回 action 对象而已。
 
 ```js
