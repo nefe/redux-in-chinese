@@ -56,28 +56,28 @@ Redux 的 React 绑定库拥抱了 [智能组件和笨拙组件相分离](https:
 
 还记得当初如何 [设计 reducer 结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
 
-Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incompleted todos.
+我们的概要设计很简单。我们想要显示一个 todo 项的列表。一个 todo 项被点击后，会增加一条删除线并标记 completed。我们会显示用户新增一个 todo 字段。在 footer 里显示一个可切换的显示全部/只显示 completed 的/只显示 incompleted 的 todos。
 
-I see the following components (and their props) emerge from this brief:
+以下的这些组件（和它们的 props ）就是从这个设计里来的：
 
-* **`AddTodo`** is an input field with a button.
-  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
-* **`TodoList`** is a list showing visible todos.
-  - `todos: Array` is an array of todo items with `{ text, completed }` shape.
-  - `onTodoClick(index: number)` is a callback to invoke when a todo is clicked.
-* **`Todo`** is a single todo item.
-  - `text: string` is the text to show.
-  - `completed: boolean` is whether todo should appear crossed out.
-  - `onClick()` is a callback to invoke when a todo is clicked.
-* **`Footer`** is a component where we let user change visible todo filter.
-  - `filter: string` is the current filter: `'SHOW_ALL'`, `'SHOW_COMPLETED'` or `'SHOW_ACTIVE'`.
-  - `onFilterChange(nextFilter: string)`: Callback to invoke when user chooses a different filter.
+* **`AddTodo`** 输入字段的输入框和按钮。
+  - `onAddClick(text: string)` 当按钮被点击时调用的回调函数。
+* **`TodoList`** 用于显示 todos 列表。
+  - `todos: Array` 以 `{ text, completed }` 形式显示的 todo 项数组。
+  - `onTodoClick(index: number)` 当 todo 项被点击时调用的回调函数。
+* **`Todo`** 一个 todo 项。
+  - `text: string` 显示的文本内容。
+  - `completed: boolean` todo 项是否显示删除线。
+  - `onClick()` 当 todo 项被点击时调用的回调函数。
+* **`Footer`** 一个允许用户改变可见 todo 过滤器的组件。
+  - `filter: string` 当前的过滤器为： `'SHOW_ALL'`, `'SHOW_COMPLETED'` 或 `'SHOW_ACTIVE'`。
+  - `onFilterChange(nextFilter: string)`： 当用户选择不同的过滤器时调用的回调函数。
 
-These are all “dumb” components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
+这些全部都是“笨拙”的组件。它们不知道数据是**从**哪里来的，或者数据是**怎么**变化的。你传入什么，它们就渲染什么。
 
-If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
+如果你要把 Redux 迁移到别的上，你应该要保持这些组件的一致性。因为它们不依赖 Redux。
 
-Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
+直接写就是了！我们已经不用绑定到 Redux。你可以在开发过程中给出一些实验数据，直到它们渲染对了。
 
 ## 笨拙组件
 
