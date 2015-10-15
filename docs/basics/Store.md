@@ -84,4 +84,4 @@ let store = createStore(todoApp);
 
 ## 下一步
 
-在创建 todo 应用界面之前，我们先穿插学习一下[数据在 Redux 应用中如何流动的](DataFlow.md)
+在创建 todo 应用界面之前，我们先穿插学习一下[数据在 Redux 应用中如何流动的](DataFlow.md)。

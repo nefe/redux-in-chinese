@@ -144,4 +144,4 @@ export function setVisibilityFilter(filter) {
 现在让我们 [开发一些 reducers](Reducers.md) 来指定发起 action 后 state 应该如何更新。
 
 >##### 高级用户建议
->如果你已经熟悉这些基本概念且已经完成了这个示例，不要忘了看一下在 [高级教程](../advanced/README.md) 中的 [异步 actions] (../advanced/AsyncActions.md)，你将学习如何处理 AJAX 响应和如何把 action 创建函数组合成异步控制流。
+>如果你已经熟悉这些基本概念且已经完成了这个示例，不要忘了看一下在 [高级教程](../advanced/README.md) 中的 [异步 actions](../advanced/AsyncActions.md)，你将学习如何处理 AJAX 响应和如何把 action 创建函数组合成异步控制流。
