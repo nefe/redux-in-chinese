@@ -284,4 +284,4 @@ function handleRender(req, res) {
 
 你还可以参考 [异步 Actions](../advanced/AsyncActions.md) 学习更多使用 Promise 和 thunk 这些异步元素来表示异步数据流的方法。记住，那里学到的任何内容都可以用于同构渲染。
 
-如何你使用了 [React Router](https://github.com/rackt/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。(Revision needed)
+如果你使用了 [React Router](https://github.com/rackt/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。(Revision needed)
