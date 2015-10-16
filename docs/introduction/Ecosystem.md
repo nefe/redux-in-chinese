@@ -39,14 +39,14 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 * [reselect](https://github.com/faassen/reselect) —— 受 NuclearJS 启发，有效派生数据的选择器
 * [normalizr](https://github.com/gaearon/normalizr) —— 通过内嵌 API 响应标准化，使 reducer 的处理更简便
-* [redux-actions](https://github.com/acdlite/redux-actions) —— 在初始化 reducers 和 action 构造器时减少样板代码 (boilerplate)
+* [redux-actions](https://github.com/acdlite/redux-actions) —— 在初始化 reducer 和 action 构造器时减少样板代码 (boilerplate)
 * [redux-transducers](https://github.com/acdlite/redux-transducers) —— Redux 的编译器工具
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) —— Redux 和 [Immutable](https://github.com/facebook/immutable-js/) 的交互工具
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) —— 在 Redux 中使用具有不可变特性、并经过类型检查的 state 和 action
 
 ## 开发者工具
 
-* [redux-devtools](http://github.com/gaearon/redux-devtools) —— 一个使用时间旅行 UI 、热加载和 reducers 错误处理器的 action 日志工具，[最早演示于 React Europe 会议](https://www.youtube.com/watch?v=xsSnOQynTHs)
+* [redux-devtools](http://github.com/gaearon/redux-devtools) —— 一个使用时间旅行 UI 、热加载和 reducer 错误处理器的 action 日志工具，[最早演示于 React Europe 会议](https://www.youtube.com/watch?v=xsSnOQynTHs)
 
 ## 教程与文章
 
@@ -62,9 +62,9 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 ## 社区公约
 
-* [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ——  Flux 中 action objects 的人性化标准
+* [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ——  Flux 中 action object 的人性化标准
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) —— 嵌套 reducer 组成的武断标准
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) —— 关于捆绑 reducers, action 类型 和 actions 的提案
+* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) —— 关于捆绑多个 reducer, action 类型 和 action 的提案
 
 ## 更多
 
