@@ -16,7 +16,7 @@ npm install --save react-redux
 
 ## 智能组件（Smart Components）和笨拙组件（Dumb Components）
 
-Redux 的 React 绑定库拥抱了 [智能组件和笨拙组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
+Redux 的 React 绑定库拥抱了 [“智能”组件和“笨拙”组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
 
 明智的做法是只在最顶层组件（如路由操作）里使用 Redux。内部组件应该像木偶一样保持“呆滞”，所有数据都通过 props 传入。
 
@@ -25,32 +25,32 @@ Redux 的 React 绑定库拥抱了 [智能组件和笨拙组件相分离](https:
     <thead>
         <tr>
             <th></th>
-            <th>Location</th>
-            <th>Aware of Redux</th>
-            <th>To read data</th>
-            <th>To change data</th>
+            <th>位置</th>
+            <th>使用 Redux</th>
+            <th>读取数据</th>
+            <th>修改数据</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-          <td>“Smart” Components</td>
-          <td>Top level, route handlers</td>
-          <td>Yes</th>
-          <td>Subscribe to Redux state</td>
-          <td>Dispatch Redux actions</td>
+          <td>“智能”组件</td>
+          <td>最顶层，路由处理</td>
+          <td>是</th>
+          <td>从 Redux 获取 state</td>
+          <td>向 Redux 发起 actions</td>
         </tr>
         <tr>
-          <td>“Dumb” Components</td>
-          <td>Middle and leaf components</td>
-          <td>No</th>
-          <td>Read data from props</td>
-          <td>Invoke callbacks from props</td>
+          <td>“笨拙”组件</td>
+          <td>中间和子组件</td>
+          <td>否</th>
+          <td>从 props 获取数据</td>
+          <td>从 props 调用回调函数</td>
         </tr>
     </tbody>
 </table>
 </center>
 
-在这个 todo 应用中，只应有一个智能组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个智能组件。虽然你也可以嵌套使用智能组件，但应该尽可能的使用传递 props 的形式。
+在这个 todo 应用中，只应有一个“智能”组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个智能组件。虽然你也可以嵌套使用“智能”组件，但应该尽可能的使用传递 props 的形式。
 
 ## 设计组件层次结构
 
@@ -70,7 +70,7 @@ Redux 的 React 绑定库拥抱了 [智能组件和笨拙组件相分离](https:
   - `completed: boolean` todo 项是否显示删除线。
   - `onClick()` 当 todo 项被点击时调用的回调函数。
 * **`Footer`** 一个允许用户改变可见 todo 过滤器的组件。
-  - `filter: string` 当前的过滤器为： `'SHOW_ALL'`, `'SHOW_COMPLETED'` 或 `'SHOW_ACTIVE'`。
+  - `filter: string` 当前的过滤器为： `'SHOW_ALL'`、 `'SHOW_COMPLETED'` 或 `'SHOW_ACTIVE'`。
   - `onFilterChange(nextFilter: string)`： 当用户选择不同的过滤器时调用的回调函数。
 
 这些全部都是“笨拙”的组件。它们不知道数据是**从**哪里来的，或者数据是**怎么**变化的。你传入什么，它们就渲染什么。
@@ -294,7 +294,7 @@ React.render(
 
 接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
 
-**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ,但你可能希望它发生了变化。
+**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ，但你可能希望它发生了变化。
 
 为了组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 
