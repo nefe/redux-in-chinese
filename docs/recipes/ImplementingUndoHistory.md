@@ -364,7 +364,7 @@ store.dispatch({
 
 以上这些都非常有用，但是有没有一个库能帮助我们实现`可撤销`功能，而不是由我们自己编写呢？当然有！来看看 [Redux Undo](https://github.com/omnidan/redux-undo)，它可以为你的 Redux 状态树中的任何部分提供撤销和重做功能。
 
-在这个部分中，你会学到如何让 [Todo List example](http://rackt.github.io/redux/docs/basics/ExampleTodoList.html) 拥有可撤销的功能。你可以在 [`todos-with-undo`](https://github.com/rackt/redux/tree/master/examples/todos-with-undo)找到完整的源码。
+在这个部分中，你会学到如何让 [示例：Todo List](../basics/ExampleTodoList.md) 拥有可撤销的功能。你可以在 [`todos-with-undo`](https://github.com/rackt/redux/tree/master/examples/todos-with-undo)找到完整的源码。
 
 ### 安装
 
