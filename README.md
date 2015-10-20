@@ -4,7 +4,7 @@
 
 英文原版：http://rackt.github.io/redux/
 
-**翻译正在进行中，[加入我们](#加入翻译)**
+**我们正在进行 [React Router 中文文档](https://github.com/react-guide/react-router-cn) 翻译工作，欢迎[加入我们](https://github.com/react-guide/react-router-cn/issues)**
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
@@ -252,3 +252,5 @@ git push origin master
 
 ### 建议与反馈
 欢迎任何建议！直接开一个 github issues 就可以了。
+
+**本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)**
