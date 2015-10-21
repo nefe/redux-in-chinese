@@ -4,7 +4,7 @@
 
 英文原版：http://rackt.github.io/redux/
 
-**翻译正在进行中，[加入我们](#加入翻译)**
+**我们正在进行 [React Router 中文文档](https://github.com/react-guide/react-router-cn) 翻译工作，欢迎[加入我们](https://github.com/react-guide/react-router-cn/issues)**
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
@@ -142,113 +142,4 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cycle](https://github.com/staltz/cycle) 介绍了 function 是如何在很多场景都是最好的工具；
 * [React](https://github.com/facebook/react) 实践启迪。
 
-
-## 加入翻译
-
-非常感谢你的关注，如果你也想为 Redux 推广贡献一份力量，欢迎加入我们一起翻译。目前翻译工作还没有完成，校对工作更是才刚刚开始。你可以按照以下的步骤进行认领提交。在认领之前，你需要先到 fork 一份代码，建议使用 Markdown 类编辑器开启横向双列模式，
-
-### 认领制度
-
-你应该在翻译之前进行翻译认领来保证没有人和你重复工作。很简单，只要在 contributes.md 中找到或者加入你想翻译的文章的资料，
-
-加入：
-
-```
-work_in_progress: true
-contributor: +your_github_acount+
-```
-
-之后，发个 pull request 过来就代表你成功的占到了一个坑，你可以开始慢慢的翻译自己的文章了。
-
-你可以在 contributor 一栏中加入自己的 github 用户名，以便其他人可以联系到你。另外如果你占坑太久你的占位可能会被取消。尽量在半个月内完成你的工作。
-
-### 翻译约定
-
-* 不译的英文名词复数改为单数，因为中文没有复数的概念；
-* 专有名词保持大写：HTML, HAML, SASS, REST... 等等；
-* 英文和数字与中文之间要留空格。中文标点符号和中文之间不需要留空格；
-* 使用中文的标点符号。句号是 `。` 不是 `.`，破折号是 `——` 不是 `-`；
-* 英文有斜体、中文没有，可用强调取代 `**强调**`；
-* 译文和原文行数应保持一致，以便于后期同步更新；
-* 代码缩进使用两个空格，禁止使用 Tab；
-* 按照语义把英文逗号改为中文顿号；
-* 译完自己读一次，看看像不像中文；
-* 遇到不确定的翻译很正常，请在 Pull Request 里指出，大家一起解决。
-
-### 约定翻译的名词
-
-为了免除误解，这些词第一次出现时可以用 `（）` 来显示原文。
-
-英文          | 中文
------------- | -------------
-plain object | 普通对象
-manage  | 管理
-compose | 组合
-action creator | action 创建函数
-dispatch | 发起
-note | 注意/须知
-hold | 维持
-state shape | state 结构
-handle | 处理
-boilerplate | 样板代码
-normalized | 范式化
-function | 函数？
-composition | 合成
-helper utility | 辅助工具
-this won’t work | 这样做行不通
-this will work | 这样做行得通
-tips | 小贴士
-create | 创建
-flag | 标记位
-
-### 保留不译的名词
-
-前端开发常用的专有名词，在不造成读者理解困难的情况下，尽量保持原汁原味。
-
-英文  | 说明
------ | ------
-action | 动作
-reducer | -
-store | -
-middleware | 中间件
-dispatcher | 分发器
-state | 状态
-state tree | 状态树
-props | 属性
-UI | 用户界面
-monkeypatch | -
-currying | 柯里化
-
-### 与原文同步机制
-
-TBD
-
-### 翻译流程
-
-一、fork 本 repo
-
-二、如果是新翻译章节，应参照对应的[原文](https://github.com/rackt/redux/tree/master/docs)进行翻译；如果是校对则直接修改
-
-三、翻译时启动 watch 来实时看结果
-```
-npm run watch
-```
-打开：[localhost:4000](http://localhost:4000)
-
-四、提交并发 Pull Request
-
-五、fork 后的 repo 如何同步本 repo？
-
-```
-// 添加 upstream 源，只需执行一次
-git remote add upstream git@github.com:camsong/redux-in-chinese.git
-// 拉取远程代码
-git pull upstream master
-// 更新 fork 仓库
-git push origin master
-```
-
-更多参考：https://help.github.com/articles/syncing-a-fork/
-
-### 建议与反馈
-欢迎任何建议！直接开一个 github issues 就可以了。
+**本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)，欢迎你来一起完善**
