@@ -1,5 +1,7 @@
 # [Redux 中文文档](http://github.com/camsong/redux-in-chinese)
 
+[![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
 
 英文原版：http://rackt.github.io/redux/
