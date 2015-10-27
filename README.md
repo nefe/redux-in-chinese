@@ -144,4 +144,23 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cycle](https://github.com/staltz/cycle) 介绍了 function 是如何在很多场景都是最好的工具；
 * [React](https://github.com/facebook/react) 实践启迪。
 
+### 贡献者
+
+> 定期更新，谢谢各位辛勤贡献
+
+* [@camsong](https://github.com/camsong/redux-in-chinese)
+* [@jovey-zheng](https://github.com/jovey-zheng)
+* [@pandazki](https://github.com/pandazki)
+* [@yuweiw823](https://github.com/yuweiw823)
+* [@demohi](https://github.com/demohi)
+* [@omytea](https://github.com/omytea)
+* [@arcthur](https://github.com/arcthur)
+* [@namelos](https://github.com/namelos)
+* [@amowu](https://github.com/amowu)
+* [@chentsulin](https://github.com/chentsulin)
+* [@timqian](https://github.com/timqian)
+* [@sorrycc](https://github.com/sorrycc)
+* [@denvey](https://github.com/denvey)
+* [@zousandian](https://github.com/zousandian)
+
 **本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)，欢迎你来一起完善**
