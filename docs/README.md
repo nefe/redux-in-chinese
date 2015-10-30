@@ -37,4 +37,7 @@
   * [applyMiddleware](/docs/api/applyMiddleware.md)
   * [bindActionCreators](/docs/api/bindActionCreators.md)
   * [compose](/docs/api/compose.md)
-* [修改日志](/CHANGELOG.md)
+* [react-redux 文档](/docs/react-redux/README.md)
+  * [快速入门](/docs/react-redux/quick-start.md)
+  * [API](/docs/react-redux/api.md)
+  * [排错](/docs/react-redux/troubleshooting.md)
