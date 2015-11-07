@@ -6,18 +6,18 @@
 
 ### `<Provider store>`
 
-Makes the Redux store available to the `connect()` calls in the component hierarchy below. Normally, you can’t use `connect()` without wrapping the root component in `<Provider>`.
+`<Provider store>` 使组件层级中的 `connect()` 方法都能够获得 Redux store。正常情况下，你的根组件应该嵌套在 `<Provider>` 中才能使用 `connect()` 方法。
 
-If you *really* need to, you can manually pass `store` as a prop to every `connect()`ed component, but we only recommend to do this for stubbing `store` in unit tests, or in non-fully-React codebases. Normally, you should just use `<Provider>`.
+如果你*真的*需要这样做，你可以把 `store` 作为属性传递到每一个被 `connet()` 修饰的组件，但是我们只推荐您在单元测试中对 `store` 进行伪造 (stub) 或者在非完全基于 React 的代码中才这样做。正常情况下，你应该使用 `<Provider>`。
 
-#### Props
+#### 属性
 
-* `store` (*[Redux Store](http://rackt.github.io/redux/docs/api/Store.html)*): The single Redux store in your application.
-* `children` (*ReactElement*) The root of your component hierarchy.
+* `store` (*[Redux Store](http://rackt.github.io/redux/docs/api/Store.html)*): 应用程序中唯一的 Redux store 对象
+* `children` (*ReactElement*) 组件层级的根组件。
 
-#### Example
+#### 例子
 
-##### Vanilla React
+##### React
 
 ```js
 ReactDOM.render(
@@ -31,10 +31,10 @@ ReactDOM.render(
 ##### React Router 0.13
 
 ```js
-Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // note "routerState" here
+Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // 注意这里的 "routerState"
   ReactDOM.render(
     <Provider store={store}>
-      {/* note "routerState" here: important to pass it down */}
+      {/* 注意这里的 "routerState": 该变量应该传递到子组件 */}
       <Handler routerState={routerState} />
     </Provider>,
     document.getElementById('root')
@@ -55,68 +55,68 @@ ReactDOM.render(
 
 ### `connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])`
 
-Connects a React component to a Redux store.
+连接 React 组件与 Redux store。
 
-It does not modify the component class passed to it.  
-Instead, it *returns* a new, connected component class, for you to use.
+连接操作不会改变原来的组件类，反而*返回*一个新的已与 Redux store 连接的组件类。
 
-#### Arguments
 
-* [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): If specified, the component will subscribe to Redux store updates. Any time it updates, `mapStateToProps` will be called. Its result must be a plain object, and it will be merged into the component’s props. If you omit it, the component will not be subscribed to the Redux store. If `ownProps` is specified as a second argument, its value will be the properties passed to your component, and `mapStateToProps` will be re-invoked whenever the component receives new props.
+#### 参数
 
-* [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): If an object is passed, each function inside it will be assumed to be a Redux action creator. An object with the same function names, but bound to a Redux store, will be merged into the component’s props. If a function is passed, it will be given `dispatch`. It’s up to you to return an object that somehow uses `dispatch` to bind action creators in your own way. (Tip: you may use the [`bindActionCreators()`](http://rackt.github.io/redux/docs/api/bindActionCreators.html) helper from Redux.) If you omit it, the default implementation just injects `dispatch` into your component’s props. If `ownProps` is specified as a second argument, its value will be the properties passed to your component, and `mapDispatchToProps` will be re-invoked whenever the component receives new props.
+* [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): 如果定义该参数，组件将会监听 Redux store 的变化。任何时候，只要 Redux store 发生改变，`mapStateToProps` 函数就会被调用。该回调函数必须返回一个纯对象，这个对象会与组件的属性合并。如果指定了该回调函数中的第二个参数 `ownProps`，则该参数的值为传递到组件的属性，而且只要组件接收到新的属性，`mapStateToProps` 也会被调用。
 
-* [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*): If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the parent `props`. The plain object you return from it will be passed as props to the wrapped component. You may specify this function to select a slice of the state based on props, or to bind action creators to a particular variable from props. If you omit it, `Object.assign({}, ownProps, stateProps, dispatchProps)` is used by default.
+* [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): 如果传递的是一个对象，那么每个定义在该对象的函数都将被当作 Redux action creator，而且这个对象会与 Redux store 绑定在一起，其中所定义的方法名将作为属性名，合并到组件的属性中。如果传递的是一个函数，该函数将接收一个 `dispatch` 函数，然后由你来决定如何返回一个对象，这个对象通过 `dispatch` 函数与 action creators 以某种方式绑定在一起（提示：你也许会用到 Redux 的辅助函数 [`bindActionCreators()`](http://rackt.github.io/redux/docs/api/bindActionCreators.html)）。如果你省略这个 `mapDispatchToProps` 参数，默认情况下，`dispatch` 会注入到你的组件属性中。如果指定了该回调函数中第二个参数 `ownProps`，该参数的值为传递到组件的属性，而且只要组件接收到新属性，`mapDispatchToProps` 也会被调用。
 
-* [`options`] *(Object)* If specified, further customizes the behavior of the connector.
-  * [`pure = true`] *(Boolean)*: If true, implements `shouldComponentUpdate` and shallowly compares the result of `mergeProps`, preventing unnecessary updates, assuming that the component is a “pure” component and does not rely on any input or state other than its props and the selected Redux store’s state. *Defaults to `true`.*
-  * [`withRef = false`] *(Boolean)*: If true, stores a ref to the wrapped component instance and makes it available via `getWrappedInstance()` method. *Defaults to `false`.*
+* [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*):  如果指定了这个参数，`mapStateToProps()` 与 `mapDispatchToProps()` 的执行结果和组件自身的属性将传入到这个回调函数中。该回调函数返回的对象将作为属性传递到被修饰的组件中。你也许可以用这个回调函数，根据组件的属性来筛选部分的状态数据，或者把某个特定的属性变量与 action creator 绑定在一起。如果你省略这个参数，默认情况下返回 `Object.assign({}, ownProps, stateProps, dispatchProps)` 的结果。
 
-#### Returns
+* [`options`] *(Object)* 如果指定这个参数，可以定制 connector 的行为。
+  * [`pure = true`] *(Boolean)*: 如果为 true，connector 将执行 `shouldComponentUpdate` 并且浅对比 `mergeProps` 的结果，避免不必要的更新，前提是当前组件是一个“纯”组件，它不依赖于任何的输入或状态而只依赖于属性和 Redux store 的状态。*默认值为 `true`。*
+  * [`withRef = false`] *(Boolean)*: 如果为 true，connector 会保存一个对被修饰组件实例的引用，该引用通过 `getWrappedInstance()` 方法获得。*默认值为 `false`*
 
-A React component class that injects state and action creators into your component according to the specified options.
+#### 返回值
 
-##### Static Properties
+根据配置信息，返回一个注入了状态和 action creator 的 React 组件。
 
-* `WrappedComponent` *(Component)*: The original component class passed to `connect()`.
+##### 静态属性
 
-##### Static Methods
+* `WrappedComponent` *(Component)*: 传递到 `connect()` 函数的原始组件类。
 
-All the original static methods of the component are hoisted.
+##### 静态方法
 
-##### Instance Methods
+组件原来的静态方法都被提升到修饰后的 React 组件。
+
+##### 实例方法
 
 ###### `getWrappedInstance(): ReactComponent`
 
-Returns the wrapped component instance. Only available if you pass `{ withRef: true }` as part of the `connect()`’s fourth `options` argument.
+ 仅当 `connect()` 函数的第四个参数 `options` 设置了 `{ withRef: true }` 才返回被修饰的组件实例。
 
-#### Remarks
+#### 备注
 
-* It needs to be invoked two times. The first time with its arguments described above, and a second time, with the component: `connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`.
+* 函数将被调用两次。第一次是设置参数，第二次是组件与 Redux store 连接：`connect(mapStateToProps, mapDispatchToProps, mergeProps)(MyComponent)`。
 
-* It does not modify the passed React component. It returns a new, connected component, that you should use instead.
+* connect 函数不会修改传入的 React 组件，返回的是一个新的已与 Redux store 连接的组件，而且你应该使用这个新组件。
 
-* The `mapStateToProps` function takes a single argument of the entire Redux store’s state and returns an object to be passed as props. It is often called a **selector**. Use [reselect](https://github.com/rackt/reselect) to efficiently compose selectors and [compute derived data](http://rackt.github.io/redux/docs/recipes/ComputingDerivedData.html).
+* `mapStateToProps` 函数接收整个 Redux store 的状态作为参数，然后返回一个传入到组件属性的对象。该函数被称之为 **selector**。参考使用 [reselect](https://github.com/rackt/reselect) 高效地组合多个 **selector** ，并对 [收集到的数据进行处理](http://rackt.github.io/redux/docs/recipes/ComputingDerivedData.html)。
 
-#### Examples
+#### Examples 例子
 
-##### Inject just `dispatch` and don't listen to store
+##### 只注入 `dispatch`，不监听 store
 
 ```js
 export default connect()(TodoApp);
 ```
 
-##### Inject `dispatch` and every field in the global state
+##### 注入 `dispatch` 和全局 state
 
->Don’t do this! It kills any performance optimizations because `TodoApp` will rerender after every action.  
->It’s better to have more granular `connect()` on several components in your view hierarchy that each only  
->listen to a relevant slice of the state.
+>不要这样做！由于每次发起 action 都会导致 `TodoApp` 重新渲染，这样会毁掉任何的性能优化。
+>
+>最好在多个组件上使用 `connect()`，而且这些组件只监听部分状态数据。
 
 ```js
 export default connect(state => state)(TodoApp);
 ```
 
-##### Inject `dispatch` and `todos`
+##### 注入 `dispatch` 和 `todos`
 
 ```js
 function mapStateToProps(state) {
@@ -126,7 +126,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(TodoApp);
 ```
 
-##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...)
+##### 注入 `todos` 和所有 action creator  (`addTodo`, `completeTodo`, ...)
 
 ```js
 import * as actionCreators from './actionCreators';
@@ -138,8 +138,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, actionCreators)(TodoApp);
 ```
 
-##### Inject `todos` and all action creators (`addTodo`, `completeTodo`, ...) as `actions`
-
+##### 注入 `todos` 并把所有 action creator 作为 `actions` 属性也注入组件中
 ```js
 import * as actionCreators from './actionCreators';
 import { bindActionCreators } from 'redux';
@@ -155,7 +154,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-#####  Inject `todos` and a specific action creator (`addTodo`)
+#####  注入 `todos` 和指定的 action creator (`addTodo`)
 
 ```js
 import { addTodo } from './actionCreators';
@@ -172,7 +171,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### Inject `todos`, todoActionCreators as `todoActions`, and counterActionCreators as `counterActions`
+##### 注入 `todos` 并把 todoActionCreators 作为 `todoActions` 属性、counterActionCreators 作为 `counterActions` 属性注入到组件中
 
 ```js
 import * as todoActionCreators from './todoActionCreators';
@@ -193,7 +192,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### Inject `todos`, and todoActionCreators and counterActionCreators together as `actions`
+##### 注入 `todos` 并把 todoActionCreators 与 counterActionCreators 一同作为 `actions` 属性注入到组件中
 
 ```js
 import * as todoActionCreators from './todoActionCreators';
@@ -213,7 +212,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### Inject `todos`, and all todoActionCreators and counterActionCreators directly as props
+##### 注入 `todos` 并把所有的 todoActionCreators 和 counterActionCreators 作为属性注入到组件中
 
 ```js
 import * as todoActionCreators from './todoActionCreators';
@@ -231,7 +230,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### Inject `todos` of a specific user depending on props
+##### 根据组件属性，注入特定用户的 `todos`
 
 ```js
 import * as actionCreators from './actionCreators';
@@ -243,7 +242,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps)(TodoApp);
 ```
 
-##### Inject `todos` of a specific user depending on props, and inject `props.userId` into the action
+##### 根据组件属性，注入特定用户的 `todos` 并把 `props.userId` 传入到 action 中
 
 ```js
 import * as actionCreators from './actionCreators';
