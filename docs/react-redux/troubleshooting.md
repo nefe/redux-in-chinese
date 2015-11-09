@@ -1,30 +1,26 @@
-## Troubleshooting
+## 排错
 
-我们正在尽全力翻译，但速速远远不够  
-欢迎你来翻译，加入我们：https://github.com/camsong/redux-in-chinese/issues/49  
-原文：https://raw.githubusercontent.com/rackt/react-redux/master/docs/troubleshooting.md
+首先确保你已经阅读 [Redux 排错](http://redux.js.org/docs/Troubleshooting.html)。
 
-Make sure to check out [Troubleshooting Redux](http://redux.js.org/docs/Troubleshooting.html) first.
+### 我的观点没有改变！
 
-### My views aren’t updating!
+阅读上面的链接。
+简而言之，
 
-See the link above.
-In short,
+* Reducer 永远不会去改变 state，它们只会返回新的对象，或是在 React Redux 中看不到变化。
+* 确保你使用了 `connect()` 的参数 `mapDispatchToProps` 或者 `bindActionCreators` 去绑定 action 创建函数，又或手动调用 `dispatch()` 进行绑定。当你在调用 `MyActionCreators.addTodo()` 时不起作用，仅仅是因为它**返回**的是一个 action，而不会去 *dispatch* 它。
 
-* Reducers should never mutate state, they must return new objects, or React Redux won’t see the updates.
-* Make sure you either bind action creators with the `mapDispatchToProps` argument to `connect()` or with the `bindActionCreators()` method, or that you manually call `dispatch()`. Just calling your `MyActionCreators.addTodo()` function won’t work because it just *returns* an action, but does not *dispatch* it.
+### 在使用 React Router 0.13 版本进行 route 变化中，我的观点仍旧没有改变
 
-### My views aren’t updating on route change with React Router 0.13
+如果你正在使用 React Router 0.13，你可能会[碰到这样的问题](https://github.com/rackt/react-redux/issues/43)。解决方法很简单：无论你在任何时候使用 `Router.run` 提供的 `<RouteHandler>` 或 `Handler`，通过 router state 去传递即可。
 
-If you’re using React Router 0.13, you might [bump into this problem](https://github.com/rackt/react-redux/issues/43). The solution is simple: whenever you use `<RouteHandler>` or the `Handler` provided by `Router.run`, pass the router state to it.
-
-Root view:
+根视图：
 
 ```js
-Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // note "routerState" here
+Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // 注意 "routerState" 在这
   ReactDOM.render(
     <Provider store={store}>
-      {/* note "routerState" here */}
+      {/* 注意 "routerState" 在这 */}
       <Handler routerState={routerState} />
     </Provider>,
     document.getElementById('root')
@@ -32,27 +28,27 @@ Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // note "
 });
 ```
 
-Nested view:
+嵌套视图：
 
 ```js
 render() {
-  // Keep passing it down
+  // 保持这样传递下去
   return <RouteHandler routerState={this.props.routerState} />;
 }
 ```
 
-Conveniently, this gives your components access to the router state!
-You can also upgrade to React Router 1.0 which shouldn’t have this problem. (Let us know if it does!)
+很方便地，这就让你的组件可以访问 router 的 state！
+当然，你可以将 React Router 升级到 1.0，这样就不会有此问题了。（让我们知道你已经这么做了！）
 
-### My views aren’t updating when something changes outside of Redux
+### 当外部的 Redux 改变了一些东西，我的观点还是没有改变
 
-If your views depend on global state or [React “context”](http://facebook.github.io/react/docs/context.html), you might find that views decorated with `connect()` will fail to update.
+如果你的视图依赖全局的 state 或是 [React “context”](http://facebook.github.io/react/docs/context.html)，你可能发现那些使用 `connect()` 进行修饰的视图将无法更新。
 
->This is because `connect()` implements [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) by default, assuming that your component will produce the same results given the same props and state. This is a similar concept to React’s [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html).
+>假设你的组件会产生相同的结果给同一 props 和 state，这是因为 `connect()` 是通过默认的 [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate) 实现的。这与 React 的 [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html) 有相似的概念。
 
-The _best_ solution to this is to make sure that your components are pure and pass any external state to them via props. This will ensure that your views do not re-render unless they actually need to re-render and will greatly speed up your application.
+这个问题的最好解决方案是保证组件的干净，并且任何外部的 state 都应通过 props 传递给它们。这大大地提高了应用的速度，也确保了组件不会重新渲染，除非它的确是需要重新渲染。
 
-If that’s not practical for whatever reason (for example, if you’re using a library that depends heavily on React context), you may pass the `pure: false` option to `connect()`:
+当不知道什么原因它无法实现时（比如，你使用了一个非常依赖 React context 的库），你可以通过 `pure: false` 选项去 `connect()`：
 
 ```
 function mapStateToProps(state) {
@@ -64,16 +60,16 @@ export default connect(mapStateToProps, null, null, {
 })(TodoApp);
 ```
 
-This will remove the assumption that `TodoApp` is pure and cause it to update whenever its parent component renders. Note that this will make your application less performant, so only do this if you have no other option.
+这也就消除了这个 `TodoApp` 是干净的，并使它无论什么时候更新，其父组件都会渲染的假设。注意，这会降低应用的性能，所以只有在别无他法的情况下才使用它。
 
-### Could not find "store" in either the context or props
+### 在 context 或 props 中找不到 “store”
 
-If you have context issues,
+如果你有 context 的问题，
 
-1. [Make sure you don’t have a duplicate instance of React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) on the page.
-2. Make sure you didn’t forget to wrap your root component in [`<Provider>`](#provider-store).
-3. Make sure you’re running the latest versions of React and React Redux.
+1. [确保你没有复制 React 的实例](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375) 到页面上。
+2. 确保你没有忘记将根组件包装进 [`<Provider>`](#provider-store)。
+3. 确保你运行的 React 和 React Redux 是最新版本。
 
-### Invariant Violation: addComponentAsRefTo(...): Only a ReactOwner can have refs. This usually means that you’re trying to add a ref to a component that doesn’t have an owner
+### 不变的违例：addComponentAsRefTo(...)：只有唯一的 ReactOwner 拥有 refs。通常，这就意味着你想在一个没有 owner 的组件中添加一个 ref
 
-If you’re using React for web, this usually means you have a [duplicate React](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375). Follow the linked instructions to fix this.
+如果你在 web 中使用 React，就意味着你有一个 [React 的复样](https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375)。接下来，按照指令去解决这个问题。
