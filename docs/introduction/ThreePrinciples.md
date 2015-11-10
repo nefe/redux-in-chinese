@@ -1,12 +1,12 @@
 # 三大原则
 
-Redux 可以被描述成三大基础原则：
+Redux 可以用过三个基本原则来描述：
 
 ### 单一数据源
 
-**整个应用的 [state](../Glossary.md#state) 被储存在一棵 object tree 中，它只有一个单一的 [store](../Glossary.md#store) 。**
+**整个应用的 [state](../Glossary.md#state) 被储存在一棵 object tree 中，并且这个 object tree 只存在于唯一一个 [store](../Glossary.md#store) 中。**
 
-这让同构应用开发变得非常容易。来自服务端的 state 可以轻而易举地被序列化并融合到没有额外代码影响的客户端上。由于是单一的 state tree ，调试也变得非常容易。你也可以把应用的 state 保存下来加快开发速度。此外，受益于单一的 state tree ，以前难以实现的像“撤销/重做”这类的功能也变得轻而易举。
+这让同构应用开发变得非常容易。来自服务端的 state 可以在无需编写更多代码的情况下被序列化并注入到客户端中。由于是单一的 state tree ，调试也变得非常容易。在开发中，你可以把应用的 state 保存在本地，从而加快开发速度。此外，受益于单一的 state tree ，以前难以实现的如“撤销/重做”这类功能也变得轻而易举。
 
 ```js
 console.log(store.getState());
@@ -25,9 +25,9 @@ console.log(store.getState());
 
 ### State 是只读的
 
-**惟一改变 state 的办法就是触发 [action](../Glossary.md#action)，action 是一个描述要发生什么的对象。**
+**惟一改变 state 的方法就是触发 [action](../Glossary.md#action)，action 是一个用于描述已发生事件的普通对象。**
 
-这让视图和网络请求不能直接修改 state，相反只能表达出需要修改的意图。因为所有的修改都被集中化处理，且严格按照顺序一个接一个执行，因此没有模棱两可的情况需要提防。 Action 就是普通对象而已，因此它们可以被日志打印、序列化、储存、后期调试或测试时回放出来。
+这样确保了视图和网络请求都不能直接修改 state，相反它们只能表达想要修改的意图。因为所有的修改都被集中化处理，且严格按照一个接一个的顺序执行，因此不用担心 race condition 的出现。 Action 就是普通对象而已，因此它们可以被日志打印、序列化、储存、后期调试或测试时回放出来。
 
 ```js
 store.dispatch({
@@ -41,11 +41,11 @@ store.dispatch({
 });
 ```
 
-### 纯函数的形式来执行修改
+### 使用纯函数来执行修改
 
 **为了描述 action 如何改变 state tree ，你需要编写 [reducers](../Glossary.md#reducer)。**
 
-Reducer 只是一些纯函数，它接收之前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state tree 的不同部分，因为 reducer 只是普通函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来做一些通用任务，如分页器。
+Reducer 只是一些纯函数，它接收先前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state tree 的不同部分，因为 reducer 只是函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来处理一些通用任务，如分页器。
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
@@ -82,4 +82,4 @@ let reducer = combineReducers({ visibilityFilter, todos });
 let store = createStore(reducer);
 ```
 
-就是这样，现在你已经明白 Redux 是怎么回事了。
+就是这样，现在你应该明白 Redux 是怎么回事了。
