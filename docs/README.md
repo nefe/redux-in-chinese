@@ -5,7 +5,7 @@
   * [动机](/docs/introduction/Motivation.md)
   * [三大原则](/docs/introduction/ThreePrinciples.md)
   * [先前技术](/docs/introduction/PriorArt.md)
-  * [生态](/docs/introduction/Ecosystem.md)
+  * [生态系统](/docs/introduction/Ecosystem.md)
   * [示例](/docs/introduction/Examples.md)
 * [基础](/docs/basics/README.md)
   * [Action](/docs/basics/Actions.md)

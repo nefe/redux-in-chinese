@@ -7,11 +7,11 @@ Redux 是一个混合产物。它和一些设计模式及技术相似，但也�
 Redux 可以被看作 [Flux](https://facebook.github.io/flux/) 的一种实现吗？
 [是](https://twitter.com/fisherwebdev/status/616278911886884864)，也可以说 [不是](https://twitter.com/andrestaltz/status/616270755605708800)。
 
-（不用担心，[Flux 的作者](https://twitter.com/jingc/status/616608251463909376) [认可它](https://twitter.com/fisherwebdev/status/616286955693682688)，如果你好奇这一点。）
+（别担心，它得到了[Flux 作者](https://twitter.com/jingc/status/616608251463909376)[的认可](https://twitter.com/fisherwebdev/status/616286955693682688)，如果你好奇这一点。）
 
-Redux 是从很多有质量的 Flux 的实现中产生的灵感。和 Flux 一样，Redux 规定，将模型的更新逻辑全部集中于一个特定的层（Flux 里的 store，Redux 里的 reducers）。还想告诉你的是，它不使用应用代码直接变动数据，而用一个叫作  “action” 的普通对象来对变化进行描述。
+Redux 的灵感来源于 Flux 的几个重要特性。和 Flux 一样，Redux 规定，将模型的更新逻辑全部集中于一个特定的层（Flux 里的 store，Redux 里的 reducer）。Flux 和 Redux 都不允许程序直接修改数据，而是用一个叫作  “action” 的普通对象来对更改进行描述。
 
-而不同于 Flux ，**Redux 没有 dispatcher 的概念**。原因是它依赖纯函数来替代事件处理器。纯函数构建简单，也不需额外的实体来管理它们。你可以将这点看作这两个框架的差异或细节实现，取决于你怎么看 Flux。Flux 常常[被表述为 `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot)。从这个意义上说，Redux 无疑是 Flux 架构的实现，且得益于其纯函数而更为简单。
+而不同于 Flux ，**Redux 并没有 dispatcher 的概念**。原因是它依赖纯函数来替代事件处理器。纯函数构建简单，也不需额外的实体来管理它们。你可以将这点看作这两个框架的差异或细节实现，取决于你怎么看 Flux。Flux 常常[被表述为 `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot)。从这个意义上说，Redux 无疑是 Flux 架构的实现，且得益于纯函数而更为简单。
 
 和 Flux 的另一个重要区别，是 **Redux 设想你永远不会变动你的数据**。你可以很好地使用普通对象和数组来管理 state ，而不是在多个 reducer 里变动数据，这会让你深感挫折。正确的方式是，你应该在 reducer 中返回一个新对象来更新 state， 同时配合 [ES7 所提议的 object spread 语法](https://github.com/sebmarkbage/ecmascript-rest-spread) 和 [Babel](http://babeljs.io)，或者一些库，如 [Immutable](https://facebook.github.io/immutable-js) ，这种做法简单易行。
 
@@ -19,23 +19,23 @@ Redux 是从很多有质量的 Flux 的实现中产生的灵感。和 Flux 一�
 
 ### Elm
 
-[Elm](http://elm-lang.org/) 是一种函数式编程语言，由 [Evan Czaplicki](https://twitter.com/czaplic) 受 Haskell 语言的启发开发。它执行一种 [“model view update” 的架构](http://elm-lang.org/guide/architecture) ，更新遵循 `(state, action) => state` 的规则。 从技术上说，Elm 的 “dater” 等同于 Redux 里的 reducer。
+[Elm](http://elm-lang.org/) 是一种函数式编程语言，由 [Evan Czaplicki](https://twitter.com/czaplic) 受 Haskell 语言的启发开发。它执行一种 [“model view update” 的架构](http://elm-lang.org/guide/architecture) ，更新遵循 `(state, action) => state` 的规则。 从技术上说，Elm 的 “updater” 等同于 Redux 里的 reducer。
 
-不同于 Redux，Elm 是一门语言，因此它在执行纯度，静态类型，不可变动性，action 和模式匹配等方面更具优势。即使你不打算使用 Elm，也可以读一读 Elm 的架构，尝试一把。基于此，有一个有趣的[使用 JavaScript 库实现类似想法](https://github.com/paldepind/noname-functional-frontend-framework) 的项目。我们能看到 Redux 从中取得的灵感！ 为了更接近 Elm 的静态类型，[它使用了一个类似 Flow 的渐进类型解决方案](https://github.com/gaearon/redux/issues/290) 。
+不同于 Redux，Elm 是一门语言，因此它在执行纯度，静态类型，不可变动性，action 和模式匹配等方面更具优势。即使你不打算使用 Elm，也可以读一读 Elm 的架构，尝试一把。基于此，有一个有趣的[使用 JavaScript 库实现类似想法](https://github.com/paldepind/noname-functional-frontend-framework) 的项目。Redux 应该能从中获得更多的启发！ 为了更接近 Elm 的静态类型，[Redux 可以使用一个类似 Flow 的渐进类型解决方案](https://github.com/gaearon/redux/issues/290) 。
 
 ### Immutable
 
-[Immutable](https://facebook.github.io/immutable-js) 是一个可实现不可变数据结构的 JavaScript 库。它十分高性能，并拥有常用的 JavaScript API。
+[Immutable](https://facebook.github.io/immutable-js) 是一个可实现持久数据结构的 JavaScript 库。它性能很好，并且命名符合 JavaScript API 的语言习惯 。
 
-Immutable 及类似的库都与 Redux 对接良好。尽可随意地一起使用！
+Immutable 及类似的库都可以与 Redux 对接良好。尽可随意捆绑使用！
 
-**Redux 并不在意你 如何 存储 state，state 可以是普通对象，可以是不可变对象，或者其它类型。** 为了从 server 端写同构应用或融合它们的 state ，你可能要用到序列化或反序列化的机制。但除此以外，你可以使用任何数据存储的库，**只要它支持数据的不可变动性**。举例说明，对于 Redux state ，Backbone 并无意义，因为 Backbone model 是可变的。
+**Redux 并不在意你如何存储 state，state 可以是普通对象，不可变对象，或者其它类型。** 为了从 server 端写同构应用或融合它们的 state ，你可能要用到序列化或反序列化的机制。但除此以外，你可以使用任何数据存储的库，**只要它支持数据的不可变动性**。举例说明，对于 Redux state ，Backbone 并无意义，因为 Backbone model 是可变的。
 
-注意，即便具有不可变特性的库支持 cursor，也不应在 Redux 的应用中使用。整个 state tree 应被视为只读，并需通过 Redux 来更新 state 和订阅更新。因此，通过 cursor 来改写，对 Redux 来说没有意义。**而如果只是想用 cursor 把 state tree 从 UI tree 解耦并逐步细化 cursor，应使用 selector 来替代。** Selector 是可组合的 getter 函数组。具体可参考 [reselect](http://github.com/faassen/reselect)，这是一个优秀、简洁的可组合 selector 的实现。
+注意，即便你使用支持 cursor 的不可变库，也不应在 Redux 的应用中使用。整个 state tree 应被视为只读，并需通过 Redux 来更新 state 和订阅更新。因此，通过 cursor 来改写，对 Redux 来说没有意义。**而如果只是想用 cursor 把 state tree 从 UI tree 解耦并逐步细化 cursor，应使用 selector 来替代。** Selector 是可组合的 getter 函数组。具体可参考 [reselect](http://github.com/faassen/reselect)，这是一个优秀、简洁的可组合 selector 的实现。
 
 ### Baobab
 
-[Baobab](https://github.com/Yomguithereal/baobab) 是另一个流行的库，实现了数据不可变特性 API 用以更新纯 JavaScript 对象。你当然可以在 Redux 中使用它，但两者一起使用并没有什么优势。
+[Baobab](https://github.com/Yomguithereal/baobab) 是另一个流行的库，实现了数据不可变特性的 API，用以更新纯 JavaScript 对象。你当然可以在 Redux 中使用它，但两者一起使用并没有什么优势。
 
 Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 Redux 更新数据的唯一方法是分发一个 action 。可见，两者用不同方法，解决的却是同样的问题，相互并无增益。
 
@@ -43,7 +43,7 @@ Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 
 
 ### Rx
 
-[Reactive Extensions](https://github.com/Reactive-Extensions/RxJS) (和它们正在进行的 [现代化重写](https://github.com/ReactiveX/RxJS)) 是管理复杂异步应用非常优秀的方案。[以外，还有致力于构建人机交互并将其视作相互依赖的可观测变量的库](http://cycle.js.org)。
+[Reactive Extensions](https://github.com/Reactive-Extensions/RxJS) (和它们正在进行的 [现代化重写](https://github.com/ReactiveX/RxJS)) 是管理复杂异步应用非常优秀的方案。[以外，还有致力于构建将人机交互作模拟为相互依赖的可观测变量的库](http://cycle.js.org)。
 
 同时使用它和 Redux 有意义么？ 当然！ 它们配合得很好。将 Redux store 视作可观察变量非常简便，例如：
 
