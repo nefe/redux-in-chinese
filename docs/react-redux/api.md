@@ -1,14 +1,10 @@
 ## API
 
-我们正在尽全力翻译，但速速远远不够  
-欢迎你来翻译，加入我们：https://github.com/camsong/redux-in-chinese/issues/47  
-原文：https://raw.githubusercontent.com/rackt/react-redux/master/docs/quick-start.md
-
 ### `<Provider store>`
 
 `<Provider store>` 使组件层级中的 `connect()` 方法都能够获得 Redux store。正常情况下，你的根组件应该嵌套在 `<Provider>` 中才能使用 `connect()` 方法。
 
-如果你**真的**不想把根组件嵌套在 `<Provider>` 中，你可以把 `store` 作为 props 传递到每一个被 `connet()` 修饰的组件，但是我们只推荐您在单元测试中对 `store` 进行伪造 (stub) 或者在非完全基于 React 的代码中才这样做。正常情况下，你应该使用 `<Provider>`。
+如果你**真的**不想把根组件嵌套在 `<Provider>` 中，你可以把 `store` 作为 props 传递到每一个被 `connet()` 包装的组件，但是我们只推荐您在单元测试中对 `store` 进行伪造 (stub) 或者在非完全基于 React 的代码中才这样做。正常情况下，你应该使用 `<Provider>`。
 
 #### 属性
 
@@ -70,7 +66,7 @@ ReactDOM.render(
 
 * [`options`] *(Object)* 如果指定这个参数，可以定制 connector 的行为。
   * [`pure = true`] *(Boolean)*: 如果为 true，connector 将执行 `shouldComponentUpdate` 并且浅对比 `mergeProps` 的结果，避免不必要的更新，前提是当前组件是一个“纯”组件，它不依赖于任何的输入或 state 而只依赖于 props 和 Redux store 的 state。*默认值为 `true`。*
-  * [`withRef = false`] *(Boolean)*: 如果为 true，connector 会保存一个对被修饰组件实例的引用，该引用通过 `getWrappedInstance()` 方法获得。*默认值为 `false`*
+  * [`withRef = false`] *(Boolean)*: 如果为 true，connector 会保存一个对被包装组件实例的引用，该引用通过 `getWrappedInstance()` 方法获得。*默认值为 `false`*
 
 #### 返回值
 
@@ -82,7 +78,7 @@ ReactDOM.render(
 
 ##### 静态方法
 
-组件原来的静态方法都被提升到修饰后的 React 组件。
+组件原来的静态方法都被提升到被包装的 React 组件。
 
 ##### 实例方法
 
@@ -213,7 +209,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### 注入 `todos` 并把所有的 todoActionCreators 和 counterActionCreators 作为属性注入到组件中
+##### 注入 `todos` 并把所有的 todoActionCreators 和 counterActionCreators 作为 props 注入到组件中
 
 ```js
 import * as todoActionCreators from './todoActionCreators';
@@ -231,7 +227,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
 ```
 
-##### 根据组件属性，注入特定用户的 `todos`
+##### 根据组件的 props 注入特定用户的 `todos`
 
 ```js
 import * as actionCreators from './actionCreators';
@@ -243,7 +239,7 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps)(TodoApp);
 ```
 
-##### 根据组件属性，注入特定用户的 `todos` 并把 `props.userId` 传入到 action 中
+##### 根据组件的 props 注入特定用户的 `todos` 并把 `props.userId` 传入到 action 中
 
 ```js
 import * as actionCreators from './actionCreators';
