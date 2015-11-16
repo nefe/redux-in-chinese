@@ -83,12 +83,12 @@ function todoApp(state = initialState, action) {
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      });
+    default:
+      return state;
   }
 }
 ```
@@ -107,7 +107,7 @@ function todoApp(state = initialState, action) {
 
 >`state` 语句并不是严格意义上的样板代码。Flux 中真实的样板代码是概念性的：更新必须要发送、Store 必须要注册到 Dispatcher、Store 必须是对象（开发同构应用时变得非常复杂）。为了解决这些问题，Redux 放弃了 event emitters（事件发送器），转而使用纯 reducer。
 
->很不幸到现在为步，还有很多人存在一个误区：根据文档中是否使用 `switch` 来决定是否使用它。如果你不喜欢 `switch`，完全可以自定义一个 `createReducer` 函数来接收一个事件处理函数列表，参照["减少样板代码"](../recipes/ReducingBoilerplate.md#reducers)。
+>很不幸到现在为止，还有很多人存在一个误区：根据文档中是否使用 `switch` 来决定是否使用它。如果你不喜欢 `switch`，完全可以自定义一个 `createReducer` 函数来接收一个事件处理函数列表，参照["减少样板代码"](../recipes/ReducingBoilerplate.md#reducers)。
 
 ## 处理多个 action
 
@@ -116,19 +116,19 @@ function todoApp(state = initialState, action) {
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });    
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      });
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [...state.todos, {
+          text: action.text,
+          completed: false
+        }]
+      });
+    default:
+      return state;
   }
 }
 ```
@@ -159,29 +159,29 @@ case COMPLETE_TODO:
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: [
-        ...state.todos.slice(0, action.index),
-        Object.assign({}, state.todos[action.index], {
-          completed: true
-        }),
-        ...state.todos.slice(action.index + 1)
-      ]
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      });
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [...state.todos, {
+          text: action.text,
+          completed: false
+        }]
+      });
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos.slice(0, action.index),
+          Object.assign({}, state.todos[action.index], {
+            completed: true
+          }),
+          ...state.todos.slice(action.index + 1)
+        ]
+      });
+    default:
+      return state;
   }
 }
 ```
@@ -191,37 +191,37 @@ function todoApp(state = initialState, action) {
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [...state, {
+        text: action.text,
+        completed: false
+      }];
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ];
+    default:
+      return state;
   }
 }
 
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: todos(state.todos, action)
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      });
+    case ADD_TODO:
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: todos(state.todos, action)
+      });
+    default:
+      return state;
   }
 }
 ```
@@ -233,10 +233,10 @@ function todoApp(state = initialState, action) {
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter;
+    default:
+      return state;
   }
 }
 ```
@@ -246,30 +246,30 @@ function visibilityFilter(state = SHOW_ALL, action) {
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [...state, {
+        text: action.text,
+        completed: false
+      }];
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ];
+    default:
+      return state;
   }
 }
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter;
+    default:
+      return state;
   }
 }
 
@@ -355,30 +355,30 @@ const { SHOW_ALL } = VisibilityFilters;
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter;
+    default:
+      return state;
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [...state, {
+        text: action.text,
+        completed: false
+      }];
+    case COMPLETE_TODO:
+      return [
+        ...state.slice(0, action.index),
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ];
+    default:
+      return state;
   }
 }
 
