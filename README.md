@@ -148,16 +148,16 @@ store.dispatch({ type: 'DECREMENT' });
 
 > 定期更新，谢谢各位辛勤贡献
 
-* [Cam Song 会影](https://github.com/camsong)
-* [Jovey Zheng](https://github.com/jovey-zheng)
-* [Pandazki](https://github.com/pandazki)
-* [Yuwei Wang](https://github.com/yuweiw823)
-* [Desen Meng](https://github.com/demohi)
-* [Arcthur](https://github.com/arcthur)
-* [dorayx](https://github.com/dorayx)
+* [Cam Song 会影@camsong](https://github.com/camsong)
+* [Jovey Zheng@jovey-zheng](https://github.com/jovey-zheng)
+* [Pandazki@pandazki](https://github.com/pandazki)
+* [Yuwei Wang@yuweiw823](https://github.com/yuweiw823)
+* [Desen Meng@demohi](https://github.com/demohi)
+* [Arcthur@arcthur](https://github.com/arcthur)
+* [Doray Hong@dorayx](https://github.com/dorayx)
+* [Guo Cheng@guocheng](https://github.com/guocheng)
 * [omytea](https://github.com/omytea)
 * [Fred Wang](https://github.com/namelos)
-* [Guo Cheng](https://github.com/guocheng)
 * [Amo Wu](https://github.com/amowu)
 * [C. T. Lin](https://github.com/chentsulin)
 * [钱利江](https://github.com/timqian)
@@ -166,5 +166,6 @@ store.dispatch({ type: 'DECREMENT' });
 * [三点](https://github.com/zousandian)
 * [Eric Wong](https://github.com/ele828)
 * [Owen Yang](https://github.com/owenyang0)
+* [Cai Huanyu](https://github.com/Darmody)
 
 **本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)，欢迎你来一起完善**
