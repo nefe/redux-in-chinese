@@ -34,7 +34,7 @@
 store.dispatch(addTodo('Use Redux'));
 ```
 
-为了记录这个 action 一句产生的新的 state，你可以通过这种方式记录日志：
+为了记录这个 action 以及产生的新的 state，你可以通过这种方式记录日志：
 
 ```js
 let action = addTodo('Use Redux');
