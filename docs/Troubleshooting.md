@@ -22,13 +22,13 @@ function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
     // 错误！这会改变 state.actions。
-    state.actions.push({
+    state.push({
       text: action.text,
       completed: false
     });
   case 'COMPLETE_TODO':
-    // 错误！这会改变 state.actions[action.index].
-    state.actions[action.index].completed = true;
+    // 错误！这会改变 state[action.index].
+    state[action.index].completed = true;
   }
 
   return state
@@ -42,10 +42,13 @@ function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
     // 返回新数组
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
+    return [
+      ...state,
+      {
+        text: action.text,
+        completed: false
+      }
+    ];
   case 'COMPLETE_TODO':
     // 返回新数组
     return [
@@ -82,7 +85,7 @@ return update(state, {
       $set: true
     }
   }
-});
+})
 ```
 
 最后，如果需要更新 object，你需要使用 Underscore 提供的 `_.extend` 方法，或者更好的，使用 [`Object.assign`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 的 polyfill
@@ -126,13 +129,13 @@ export function addTodo(text) {
 #### `AddTodo.js`
 
 ```js
-import { Component } from 'react';
-import { addTodo } from './TodoActions';
+import { Component } from 'react'
+import { addTodo } from './TodoActions'
 
 class AddTodo extends Component {
   handleClick() {
     // 不起作用！
-    addTodo('Fix the issue');
+    addTodo('Fix the issue')
   }
 
   render() {
@@ -140,7 +143,7 @@ class AddTodo extends Component {
       <button onClick={() => this.handleClick()}>
         Add
       </button>
-    );
+    )
   }
 }
 ```
@@ -152,7 +155,7 @@ class AddTodo extends Component {
 ```js
 handleClick() {
   // 生效！（但你需要先以某种方式拿到 store）
-  store.dispatch(addTodo('Fix the issue'));
+  store.dispatch(addTodo('Fix the issue'))
 }
 ```
 
@@ -161,14 +164,14 @@ handleClick() {
 修复后的代码是这样的：
 
 ```js
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { addTodo } from './TodoActions';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { addTodo } from './TodoActions'
 
 class AddTodo extends Component {
   handleClick() {
     // 生效！
-    this.props.dispatch(addTodo('Fix the issue'));
+    this.props.dispatch(addTodo('Fix the issue'))
   }
 
   render() {
@@ -176,17 +179,17 @@ class AddTodo extends Component {
       <button onClick={() => this.handleClick()}>
         Add
       </button>
-    );
+    )
   }
 }
 
 // 除了 state，`connect` 还把 `dispatch` 放到 props 里。
-export default connect(AddTodo, state => ({}))
+export default connect()(AddTodo)
 ```
 
 如果你想的话也可以把 `dispatch` 手动传给其它组件。
 
 ## 其它问题
 
-在 Slack [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。
+在 Discord [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。
 如果问题终于解决了，请把解法[写到文档里](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md)，以便别人遇到同样问题时参考。

@@ -5,7 +5,7 @@
 ## State
 
 ```js
-type State = any;
+type State = any
 ```
 
 *State* (也叫 *state tree*) 是一个宽泛的概念，但是在 Redux API 中它通常与被 store 所管理的，可以被 [`getState()`](api/Store.md#getState) 返回的，单独 state 值相关。 它表示了一个 Redux应用的全部状态，通常为一个多层嵌套的对象。
@@ -15,12 +15,12 @@ type State = any;
 ## Action
 
 ```js
-type Action = Object;
+type Action = Object
 ```
 
 *Action* 是一个用以表示要改变的 state 的意图的普通对象。Action 是将数据拿到 store 里的唯一方法。无论是 UI 事件，网络回调，还是其他诸如 WebSocket 之类的其他源，任何数据都或多或少的被 dispatch 成 action。
 
-约定俗成，action 应该有一个 `type` 域指明了需要被演算的 action 类型。Type 可以被定义为常数从其他 module 中导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type` 使用 String 是更好的方法因为 string 是可被串行化的。
+约定俗成，action 必须拥有一个 `type` 域指明了需要被演算的 action 类型。Type 可以被定义为常数从其他 module 中导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type` 使用 String 是更好的方法因为 string 是可被串行化的。
 
 除了 `type`之外，action 对象的结构其实完全取决于你自己。如果你感兴趣的话，请参考 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) 作为如何组织 actions 的建议。
 
@@ -29,7 +29,7 @@ type Action = Object;
 ## Reducer
 
 ```js
-type Reducer<S, A> = (state: S, action: A) => S;
+type Reducer<S, A> = (state: S, action: A) => S
 ```
 
 *Reducer* (也叫 *reducing function*) 是一个接受累积运算和一个值，返回新的累积函数的函数。用来把一个集合 reduce 到一个单独值。
@@ -45,8 +45,8 @@ Reducer 是 Redux 之中最重要的概念。
 ## dispatch function
 
 ```js
-type BaseDispatch = (a: Action) => Action;
-type Dispatch = (a: Action | AsyncAction) => any;
+type BaseDispatch = (a: Action) => Action
+type Dispatch = (a: Action | AsyncAction) => any
 ```
 
 一个 *dispatching function* (或者简单点叫 *dispatch function*) 是一个接收一个 action 或者[异步 action](#async-action)的函数，它可以或不可以分发一个或多个 action 到 store。
@@ -60,7 +60,7 @@ Base dispatch function *总是* 同步发 action 给 store 的 reducer，以及�
 ## Action Creator
 
 ```js
-type ActionCreator = (...args: any) => Action | AsyncAction;
+type ActionCreator = (...args: any) => Action | AsyncAction
 ```
 
 *Action Creator* 很简单，就是一个创建 action 的函数。别把这两个概念搞混。Action 是一个信息的负载，而 action 创建者是一个创建 action 的工厂。
@@ -72,7 +72,7 @@ type ActionCreator = (...args: any) => Action | AsyncAction;
 ## 异步 Action
 
 ```js
-type AsyncAction = any;
+type AsyncAction = any
 ```
 
 *异步 action* 是一个发给分发函数，但还没有准备好被 reducer 消费的值。它会在被发往 base [`dispatch()`](api/Store.md#dispatch) function 之前，被 [ middleware ](#middleware) 变为一个或一组 action。异步 actions 可以有多个 type，取决于使用的 middleware。通常为 Promise 或者 thunk 之类的异步原生，虽然没有被马上传给 reducer，但是操作一旦完成就会触发 action 分发。
@@ -80,8 +80,8 @@ type AsyncAction = any;
 ##  Middleware 
 
 ```js
-type MiddlewareAPI = { dispatch: Dispatch, getState: () => State };
-type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
+type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
+type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 
  Middleware 是一个高阶函数，它将 [dispatch function](#dispatching-function) 组合并返回一个新的 dispatch function。它通常将 [异步 actions](#async-action) 变为 actions。
@@ -94,11 +94,10 @@ type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
 
 ```js
 type Store = {
-  dispatch: Dispatch;
-  getState: () => State;
-  subscribe: (listener: () => void) => () => void;
-  getReducer: () => Reducer;
-  replaceReducer: (reducer: Reducer) => void;
+  dispatch: Dispatch
+  getState: () => State
+  subscribe: (listener: () => void) => () => void
+  replaceReducer: (reducer: Reducer) => void
 };
 ```
 
@@ -108,14 +107,14 @@ Store 是一个承载有应用 state tree 的对象。
 - [`dispatch(action)`](api/Store.md#dispatch) 是上面描述过的 base dispatch function。
 - [`getState()`](api/Store.md#getState) 返回当前 store 的 state。
 - [`subscribe(listener)`](api/Store.md#subscribe) 注册 funtion 用于在 state 改变时调用。
-- [`getReducer()`](api/Store.md#getReducer) 和 [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) 可被用于实现热重载荷代码分割。通常你用不上他们。
+- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) 可被用于实现热重载荷代码分割。通常你用不上他们。
 
 请见完整的 [store API reference](api/Store.md#dispatch) 获取更多细节。
 
 ## Store Creator
 
 ```js
-type StoreCreator = (reducer: Reducer, initialState: ?State) => Store;
+type StoreCreator = (reducer: Reducer, initialState: ?State) => Store
 ```
 
 Store creator 是一个创建 Redux store 的函数。就像 dispatching function 那样，我们必须分清由 [`createStore(reducer, initialState)`](api/createStore.md) 从 Redux 包中导出的 base store creator，和从 store enhancer 返回的 store creator。
@@ -123,7 +122,7 @@ Store creator 是一个创建 Redux store 的函数。就像 dispatching functio
 ## Store enhancer
 
 ```js
-type StoreEnhancer = (next: StoreCreator) => StoreCreator;
+type StoreEnhancer = (next: StoreCreator) => StoreCreator
 ```
 
 Store enhancer 是一个高阶函数,将 store creator 组合，返回一个新的强化过的 store creator。这与允许你使用可组合方式变更 store 接口的 middleware 有点相似。
