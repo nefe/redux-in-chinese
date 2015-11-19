@@ -40,58 +40,60 @@
 
 究竟使用带有标记位的同一个 action，还是多个 action type 呢，完全取决于你。这应该是你的团队共同达成的约定。使用多个 type 会降低犯错误的机率，但是如果你使用像 [redux-actions](https://github.com/acdlite/redux-actions) 这类的辅助库来生成 action creator 和 reducer 的话，这完成就不是问题了。
 
-无论使用哪种约定，一定要在整个应用中保持统一。
+无论使用哪种约定，一定要在整个应用中保持统一。  
 在本教程中，我们将使用不同的 type 来做。
 
 ## 同步 Action Creator
 
 下面先定义几个同步的 action type 和 action creator。比如，用户可以选择要显示的 reddit：
 
+#### `actions.js`
+
 ```js
-export const SELECT_REDDIT = 'SELECT_REDDIT';
+export const SELECT_REDDIT = 'SELECT_REDDIT'
 
 export function selectReddit(reddit) {
   return {
     type: SELECT_REDDIT,
     reddit
-  };
+  }
 }
 ```
 
 也可以按 "刷新" 按钮来更新它：
 
 ```js
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
+export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
 
 export function invalidateReddit(reddit) {
   return {
     type: INVALIDATE_REDDIT,
     reddit
-  };
+  }
 }
 ```
 
-这些是用户操作来控制的 action。也有另外一类 action，由网络请求来控制。后面会介绍如何使用它们，现在，我们只是来定义它们。
+这些是用户操作来控制的 action。也有另外一类 action，是由网络请求来控制。后面会介绍如何使用它们，现在，我们只是来定义它们。
 
-当需要请求指定 reddit 的帖子的时候，需要 dispatch `REQUEST_POSTS` action：
+当需要获取指定 reddit 的帖子的时候，需要 dispatch `REQUEST_POSTS` action：
 
 ```js
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 
 export function requestPosts(reddit) {
   return {
     type: REQUEST_POSTS,
     reddit
-  };
+  }
 }
 ```
 
-把 `SELECT_REDDIT` 和 `INVALIDATE_REDDIT` 分开很重要。虽然它们的发生有先后顺序，随着应用变得复杂，有些用户操作（比如，预加载最流行的 reddit，或者一段时间后自动刷新过期数据）后需要马上请求数据。路由变化时也可能需要请求数据，所以一开始如果把请求数据和特定的 UI 事件耦合到一起是不明智的。
+把 `SELECT_REDDIT` 和 `INVALIDATE_REDDIT` 分开很重要。虽然它们的发生有先后顺序，但随着应用变得复杂，有些用户操作（比如，预加载最流行的 reddit，或者一段时间后自动刷新过期数据）后需要马上请求数据。路由变化时也可能需要请求数据，所以一开始如果把请求数据和特定的 UI 事件耦合到一起是不明智的。
 
 最后，当收到请求响应时，我们会 dispatch `RECEIVE_POSTS`：
 
 ```js
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 
 export function receivePosts(reddit, json) {
   return {
@@ -99,7 +101,7 @@ export function receivePosts(reddit, json) {
     reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 ```
 
@@ -115,7 +117,7 @@ export function receivePosts(reddit, json) {
 
 这部分内容通常让初学者感到迷惑，因为选择哪些信息才能清晰地描述异步应用的 state 并不直观，还有怎么用一个树来把这些信息组织起来。
 
-我们以最通用的案例来打头：列表。Web 应用经常需要展示一些内容的列表。比如，贴子的列表，朋友的列表。首先要明确应用要显示哪些列表。然后把它们分开储存在 state 中，这样你才能对它们分别做缓存并且在需要的时候再次请求更新数据。
+我们以最通用的案例来打头：列表。Web 应用经常需要展示一些内容的列表。比如，帖子的列表，朋友的列表。首先要明确应用要显示哪些列表。然后把它们分开储存在 state 中，这样你才能对它们分别做缓存并且在需要的时候再次请求更新数据。
 
 "Reddit 头条" 应用会长这个样子：
 
@@ -132,13 +134,16 @@ export function receivePosts(reddit, json) {
       isFetching: false,
       didInvalidate: false,
       lastUpdated: 1439478405547,
-      items: [{
-        id: 42,
-        title: 'Confusion about Flux and Relay'
-      }, {
-        id: 500,
-        title: 'Creating a Simple Application Using React JS and Flux Architecture'
-      }]
+      items: [
+        {
+          id: 42,
+          title: 'Confusion about Flux and Relay'
+        },
+        {
+          id: 500,
+          title: 'Creating a Simple Application Using React JS and Flux Architecture'
+        }
+      ]
     }
   }
 }
@@ -189,7 +194,7 @@ export function receivePosts(reddit, json) {
 >       isFetching: false,
 >       didInvalidate: false,
 >       lastUpdated: 1439478405547,
->       items: [42, 100]
+>       items: [ 42, 100 ]
 >     }
 >   }
 > }
@@ -208,18 +213,18 @@ export function receivePosts(reddit, json) {
 #### `reducers.js`
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from '../actions';
+} from '../actions'
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_REDDIT:
-    return action.reddit;
-  default:
-    return state;
+    case SELECT_REDDIT:
+      return action.reddit
+    default:
+      return state
   }
 }
 
@@ -229,46 +234,46 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
-    return Object.assign({}, state, {
-      didInvalidate: true
-    });
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      isFetching: true,
-      didInvalidate: false
-    });
-  case RECEIVE_POSTS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      didInvalidate: false,
-      items: action.posts,
-      lastUpdated: action.receivedAt
-    });
-  default:
-    return state;
+    case INVALIDATE_REDDIT:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_POSTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.posts,
+        lastUpdated: action.receivedAt
+      })
+    default:
+      return state
   }
 }
 
 function postsByReddit(state = {}, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
-  case RECEIVE_POSTS:
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      [action.reddit]: posts(state[action.reddit], action)
-    });
-  default:
-    return state;
+    case INVALIDATE_REDDIT:
+    case RECEIVE_POSTS:
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        [action.reddit]: posts(state[action.reddit], action)
+      })
+    default:
+      return state
   }
 }
 
 const rootReducer = combineReducers({
   postsByReddit,
   selectedReddit
-});
+})
 
-export default rootReducer;
+export default rootReducer
 ```
 
 上面代码有两个有趣的点：
@@ -278,14 +283,14 @@ export default rootReducer;
   ```js
   return Object.assign({}, state, {
     [action.reddit]: posts(state[action.reddit], action)
-  });
+  })
   ```
   与下面代码等价：
 
   ```js
-  let nextState = {};
-  nextState[action.reddit] = posts(state[action.reddit], action);
-  return Object.assign({}, state, nextState);
+  let nextState = {}
+  nextState[action.reddit] = posts(state[action.reddit], action)
+  return Object.assign({}, state, nextState)
   ```
 
 * 我们提取出 `posts(state, action)` 来管理指定帖子列表的 state。这仅仅使用 [reducer 组合](../basics/Reducers.md#splitting-reducers)而已！我们还可以借此机会把 reducer 分拆成更小的 reducer，这种情况下，我们把对象内列表的更新代理到了 `posts` reducer 上。在[真实场景的案例](../introduction/Examples.html#real-world)中甚至更进一步，里面介绍了如何做一个 reducer 工厂来生成参数化的分页 reducer。
@@ -303,14 +308,14 @@ export default rootReducer;
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(reddit) {
   return {
     type: REQUEST_POSTS,
     reddit
-  };
+  }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -320,17 +325,17 @@ function receivePosts(reddit, json) {
     reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 
 // 来看一下我们写的第一个 thunk action creator！
 // 虽然内部操作不同，你可以像其它 action creator 一样使用它：
-// store.dispatch(fetchPosts('reactjs'));
+// store.dispatch(fetchPosts('reactjs'))
 
 export function fetchPosts(reddit) {
 
   // Thunk middleware 知道如何处理函数。
-  // 这里把 dispatch 方法通过参数的形式参给函数，
+  // 这里把 dispatch 方法通过参数的形式传给函数，
   // 以此来让它自己也能 dispatch action。
 
   return function (dispatch) {
@@ -338,13 +343,13 @@ export function fetchPosts(reddit) {
     // 首次 dispatch：更新应用的 state 来通知
     // API 请求发起了。
 
-    dispatch(requestPosts(reddit));
+    dispatch(requestPosts(reddit))
 
     // thunk middleware 调用的函数可以有返回值，
     // 它会被当作 dispatch 方法的返回值传递。
 
     // 这个案例中，我们返回一个等待处理的 promise。
-    // 这并不是 redux middleware 所必须的，但是我们的一个约定。
+    // 这并不是 redux middleware 所必须的，但这对于我们而言很方便。
 
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(response => response.json())
@@ -354,11 +359,11 @@ export function fetchPosts(reddit) {
         // 这里，使用 API 请求结果来更新应用的 state。
 
         dispatch(receivePosts(reddit, json))
-      );
+      )
 
       // 在实际应用中，还需要
       // 捕获网络请求的异常。
-  };
+  }
 }
 ```
 
@@ -368,7 +373,7 @@ export function fetchPosts(reddit) {
 
 >```js
 // 每次使用 `fetch` 前都这样调用一下
->import fetch from 'isomorphic-fetch';
+>import fetch from 'isomorphic-fetch'
 >```
 
 >在底层，它在浏览器端使用 [`whatwg-fetch` polyfill](https://github.com/github/fetch)，在服务器端使用 [`node-fetch`](https://github.com/bitinn/node-fetch)，所以如果当你把应用改成[同构](https://medium.com/@mjackson/universal-javascript-4761051b7ae9)时，并不需要改变 API 请求。
@@ -377,7 +382,7 @@ export function fetchPosts(reddit) {
 
 >```js
 >// 在应用中其它任何代码执行前调用一次
->import 'babel-core/polyfill';
+>import 'babel-core/polyfill'
 >```
 
 我们是如何在 dispatch 机制中引入 Redux Thunk middleware 的呢？我们使用了 [`applyMiddleware()`](../api/applyMiddleware.md)，如下：
@@ -385,25 +390,25 @@ export function fetchPosts(reddit) {
 #### `index.js`
 
 ```js
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
-import { createStore, applyMiddleware } from 'redux';
-import { selectReddit, fetchPosts } from './actions';
-import rootReducer from './reducers';
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+import { createStore, applyMiddleware } from 'redux'
+import { selectReddit, fetchPosts } from './actions'
+import rootReducer from './reducers'
 
-const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger()
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware, // 允许我们 dispatch() 函数
   loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
-)(createStore);
+)(createStore)
 
-const store = createStoreWithMiddleware(rootReducer);
+const store = createStoreWithMiddleware(rootReducer)
 
-store.dispatch(selectReddit('reactjs'));
+store.dispatch(selectReddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
   console.log(store.getState())
-);
+)
 ```
 
 thunk 的一个优点是它的结果可以再次被 dispatch：
@@ -411,14 +416,14 @@ thunk 的一个优点是它的结果可以再次被 dispatch：
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(reddit) {
   return {
     type: REQUEST_POSTS,
     reddit
-  };
+  }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -428,26 +433,26 @@ function receivePosts(reddit, json) {
     reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 
 function fetchPosts(reddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit));
+    dispatch(requestPosts(reddit))
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(reddit, json)));
-  };
+      .then(json => dispatch(receivePosts(reddit, json)))
+  }
 }
 
 function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit];
+  const posts = state.postsByReddit[reddit]
   if (!posts) {
-    return true;
+    return true
   } else if (posts.isFetching) {
-    return false;
+    return false
   } else {
-    return posts.didInvalidate;
+    return posts.didInvalidate
   }
 }
 
@@ -456,18 +461,18 @@ export function fetchPostsIfNeeded(reddit) {
   // 注意这个函数也接收了 getState() 方法
   // 它让你选择接下来 dispatch 什么。
 
-  // 这对缓存命中时
+  // 当缓存的值是可用时，
   // 减少网络请求很有用。
 
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), reddit)) {
       // 在 thunk 里 dispatch 另一个 thunk！
-      return dispatch(fetchPosts(reddit));
+      return dispatch(fetchPosts(reddit))
     } else {
       // 告诉调用代码不需要再等待。
-      return Promise.resolve();
+      return Promise.resolve()
     }
-  };
+  }
 }
 ```
 
@@ -477,19 +482,19 @@ export function fetchPostsIfNeeded(reddit) {
 
 ```js
 store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
-  console.log(store.getState());
-);
+  console.log(store.getState())
+)
 ```
 
 >##### 服务端渲染须知
 
 >异步 action creator 对于做服务端渲染非常方便。你可以创建一个 store，dispatch 一个异步 action creator，这个 action creator 又 dispatch 另一个异步 action creator 来为应用的一整块请求数据，同时在 Promise 完成和结束时才 render 界面。然后在 render 前，store 里就已经存在了需要用的 state。
 
-[Thunk middleware](https://github.com/gaearon/redux-thunk) 并不是 Redux 处理异步 action 的惟一方式。你也可以使用 [redux-promise](https://github.com/acdlite/redux-promise) 或者 [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) 来 dispatch Promise 而不是函数。你也可以使用 [redux-rx](https://github.com/acdlite/redux-rx) dispatch Observable。你甚至可以写一个自定义的 middleware 来描述 API 请求，就像这个[真实场景的案例](../introduction/Examples.html#real-world)中的做法一样。你也可以先尝试一些不同做法，选择喜欢的，并使用下去，不论有没有使用到 middleware 都行。
+[Thunk middleware](https://github.com/gaearon/redux-thunk) 并不是 Redux 处理异步 action 的唯一方式。你也可以使用 [redux-promise](https://github.com/acdlite/redux-promise) 或者 [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) 来 dispatch Promise 替代函数。你也可以使用 [redux-rx](https://github.com/acdlite/redux-rx) dispatch Observable。你甚至可以写一个自定义的 middleware 来描述 API 请求，就像这个[真实场景的案例](../introduction/Examples.html#real-world)中的做法一样。你也可以先尝试一些不同做法，选择喜欢的，并使用下去，不论有没有使用到 middleware 都行。
 
 ## 连接到 UI
 
-Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照[搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [Example: Reddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
+Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：Reddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
 
 ## 下一步
 
