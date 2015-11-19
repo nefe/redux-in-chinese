@@ -8,6 +8,8 @@
 
 当 middleware 链中的最后一个 middleware dispatch action 时，这个 action 必须是一个普通对象。这是 [同步式的 Redux 数据流](../basics/DataFlow.md) 开始的地方（译注：这里应该是指，你可以使用任意多异步的 middleware 去做你想做的事情，但是需要使用普通对象作为最后一个被 dispatch 的 action ，来将处理流程带回同步方式）。
 
+接着可以查看 [异步示例的完整源码](ExampleRedditAPI.md)。
+
 ## 下一步
 
-现在你已经学完 Redux 数据流的全部内容！可以查看 [异步示例源码](ExampleRedditAPI.md)，或者继续阅读 [集成 React Router](UsageWithReactRouter.md)。
+现在你对 middleware 在 Redux 中作用的例子有了初步了解，是时候应用到实际开发中了。继续阅读关于 [Middleware](Middleware.md) 的详细章节。
