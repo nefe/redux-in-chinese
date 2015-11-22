@@ -1,17 +1,17 @@
 # Reducer
 
-[Action](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。这是 reducer 要做的事情。
+[Action](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。而这正是 reducer 要做的事情。
 
 ## 设计 State 结构
 
-应用所有的 state 都被保存在一个单一对象中（我们称之为 state 树）。建议在写代码前先想一下这个对象的结构。如何才能以最简的形式把应用的 state 用对象描述出来？
+在 Redux 应用中，所有的 state 都被保存在一个单一对象中。建议在写代码前先想一下这个对象的结构。如何才能以最简的形式把应用的 state 用对象描述出来？
 
 以 todo 应用为例，需要保存两个不同的内容：
 
 * 当前选中的任务过滤条件；
 * 真实的任务列表。
 
-通常，这个 state 树还需要存放其它一些数据，还有界面 state。这样做没问题，但尽量把这些数据与界面 state 分开。
+通常，这个 state 树还需要存放其它一些数据，例如 UI 相关的 state。这样做没问题，但尽量把这些数据与 UI 相关的 state 分开。
 
 ```js
 {
@@ -26,9 +26,9 @@
 }
 ```
 
->##### 处理 Reducer 关系时注意
+>##### 处理 Reducer 关系时的注意事项
 
->开发复杂的应用时，不可避免会有一些数据相互引用。建议你尽可能地把 state 范式化，不存在嵌套。把所有数据放到一个对象里，每个数据以 ID 为主键，不同数据相互引用时通过 ID 来查找。把应用的 state 想像成数据库。这种方法在 [normalizr](https://github.com/gaearon/normalizr) 文档里有详细阐述。例如，实际开发中，在 state 里同时存放 `todosById: { id -> todo }` 和 `todos: array<id>` 是比较好的方式（虽然你可以觉得冗余）。
+>开发复杂的应用时，不可避免会有一些数据相互引用。建议你尽可能地把 state 范式化，不存在嵌套。把所有数据放到一个对象里，每个数据以 ID 为主键，不同数据相互引用时通过 ID 来查找。把应用的 state 想像成数据库。这种方法在 [normalizr](https://github.com/gaearon/normalizr) 文档里有详细阐述。例如，实际开发中，在 state 里同时存放 `todosById: { id -> todo }` 和 `todos: array<id>` 是比较好的方式，本文中为了保持示例简单没有这样处理。
 
 ## Action 处理
 
@@ -38,7 +38,7 @@
 (previousState, action) => newState
 ```
 
-之所以称作 reducer 是因为和 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 格式很像。保持 reducer 纯净非常重要。永远**不要**在 reducer 里做这些操作：
+之所以称作 reducer 是因为和 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 格式很像。保持 reducer 纯净非常重要。**永远不要**在 reducer 里做这些操作：
 
 * 修改传入参数；
 * 执行有副作用的操作，如 API 请求和路由跳转。
@@ -95,7 +95,7 @@ function todoApp(state = initialState, action) {
 
 注意:
 
-1. **不要修改 `state`。** 使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 新建了一个副本。不能这样使用 `Object.assign(state, { visibilityFilter: action.filter })`，因为它会改变第一个参数的值。**一定**要把第一个参数设置为空对象。也可以使用 ES7 中还在试验阶段的特性 `{ ...state, ...newState }`，参考 [对象展开语法](https://github.com/sebmarkbage/ecmascript-rest-spread)。
+1. **不要修改 `state`。** 使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 新建了一个副本。不能这样使用 `Object.assign(state, { visibilityFilter: action.filter })`，因为它会改变第一个参数的值。你**必须**把第一个参数设置为空对象。也可以使用 ES7 中还在试验阶段的特性 `{ ...state, ...newState }`，参考 [对象展开语法](https://github.com/sebmarkbage/ecmascript-rest-spread)。
 
 2. **在 `default` 情况下返回旧的 `state`。**遇到未知的 action 时，一定要返回旧的 `state`。
 
@@ -105,7 +105,7 @@ function todoApp(state = initialState, action) {
 
 >##### `switch` 和样板代码提醒
 
->`state` 语句并不是严格意义上的样板代码。Flux 中真实的样板代码是概念性的：更新必须要发送、Store 必须要注册到 Dispatcher、Store 必须是对象（开发同构应用时变得非常复杂）。为了解决这些问题，Redux 放弃了 event emitters（事件发送器），转而使用纯 reducer。
+>`switch` 语句并不是严格意义上的样板代码。Flux 中真实的样板代码是概念性的：更新必须要发送、Store 必须要注册到 Dispatcher、Store 必须是对象（开发同构应用时变得非常复杂）。为了解决这些问题，Redux 放弃了 event emitters（事件发送器），转而使用纯 reducer。
 
 >很不幸到现在为止，还有很多人存在一个误区：根据文档中是否使用 `switch` 来决定是否使用它。如果你不喜欢 `switch`，完全可以自定义一个 `createReducer` 函数来接收一个事件处理函数列表，参照["减少样板代码"](../recipes/ReducingBoilerplate.md#reducers)。
 
@@ -133,7 +133,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-如上，不直接修改 `state` 中的字段，而是返回新对象。新的 `todos` 对象就相当于旧的 `todos` 在末尾加上新建的 todo。而这个新的 todo 又是在 action 中创建的。
+如上，不直接修改 `state` 中的字段，而是返回新对象。新的 `todos` 对象就相当于旧的 `todos` 在末尾加上新建的 todo。而这个新的 todo 又是基于 action 中的数据创建的。
 
 最后，`COMPLETE_TODO` 的实现也很好理解：
 
@@ -226,7 +226,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-注意 `todos` 依旧接收 `state`，但它变成了一个数组！现在 `todoApp` 只把需要更新的一部分 state 传给 `todos` 函数，`todos` 函数自己确定如何更新这部分数据。**这就是所谓的 **reducer 合成**，它是开发 Redux 应用最基础的模式。**
+注意 `todos` 依旧接收 `state`，但它变成了一个数组！现在 `todoApp` 只把需要更新的一部分 state 传给 `todos` 函数，`todos` 函数自己确定如何更新这部分数据。**这就是所谓的 *reducer 合成*，它是开发 Redux 应用最基础的模式。**
 
 下面深入探讨一下如何做 reducer 合成。能否抽出一个 reducer 来专门管理 `visibilityFilter`？当然可以：
 
