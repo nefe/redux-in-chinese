@@ -1,6 +1,6 @@
 # 计算衍生数据
 
-[Reselect](https://github.com/faassen/reselect.git) 是用来创建可记忆的(Memoized)、可组合的 **selector** 函数。Reselect selectors 可以用来高效地计算 Redux store 里的衍生数据。
+[Reselect](https://github.com/faassen/reselect.git) 库可以创建可记忆的(Memoized)、可组合的 **selector** 函数。Reselect selectors 可以用来高效地计算 Redux store 里的衍生数据。
 
 ### 可记忆的 Selectors 初衷
 
@@ -71,11 +71,11 @@ function select(state) {
   };
 }
 
-// 把组件包起来，以此来注入 dispatch 和 state
+// 打包组件，注入 dispatch 和 state
 export default connect(select)(App);
 ```
 
-上面的示例中，`select` 调用了 `selectTodos` 来计算 `visibleTodos`。运行没问题，但有一个缺点：每当组件更新时都会计算 `visibleTodos`。如果 state tree 非常大，或者计算量非常大，每次更新都重新计算可能会带来性能问题。Reselect 能帮你省去这些没必要的重新计算。
+上面的示例中，`select` 调用了 `selectTodos` 来计算 `visibleTodos`。运行没问题，但有一个缺点：每当组件更新时都会重新计算 `visibleTodos`。如果 state tree 非常大，或者计算量非常大，每次更新都重新计算可能会带来性能问题。Reselect 能帮你省去这些没必要的重新计算。
 
 ### 创建可记忆的 Selector
 
@@ -83,7 +83,7 @@ export default connect(select)(App);
 
 Reselect 提供 `createSelector` 函数来创建可记忆的 selector。`createSelector` 接收一个 input-selectors 数组和一个转换函数作为参数。如果 state tree 的改变会引起 input-selector 值变化，那么 selector 会调用转换函数，传入 input-selectors 作为参数，并返回结果。如果 input-selectors 的值的前一次的一样，它将会直接返回前一次计算的数据，而不会再调用一次转换函数。
 
-让我们定义一个可记忆的 selector `visibleTodosSelector` 来替代 `select`：
+定义一个可记忆的 selector `visibleTodosSelector` 来替代 `select`：
 
 #### `selectors/TodoSelectors.js`
 
@@ -123,35 +123,35 @@ export const visibleTodosSelector = createSelector(
 可记忆的 selector 自身可以作为其它可记忆的 selector 的 input-selector。下面的 `visibleTodosSelector` 被当作另一个 selector 的 input-selector，来进一步通过关键字（keyword）过滤 todos。
 
 ```js
-const keywordSelector = (state) => state.keyword;
+const keywordSelector = (state) => state.keyword
 
 const keywordFilterSelector = createSelector(
-  [visibleTodosSelector, keywordSelector],
+  [ visibleTodosSelector, keywordSelector ],
   (visibleTodos, keyword) => visibleTodos.filter(
     todo => todo.indexOf(keyword) > -1
   )
-);
+)
 ```
 
 ### 连接 Selector 和 Redux Store
 
-如果你在使用 react-redux，你可以使用 connect 来连接可忘记的 selector 和 Redux store。
+如果你在使用 react-redux，你可以使用 connect 来连接可记忆的 selector 和 Redux store。
 
 #### `containers/App.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { addTodo, completeTodo, setVisibilityFilter } from '../actions';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
-import { visibleTodosSelector } from '../selectors/todoSelectors.js';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { addTodo, completeTodo, setVisibilityFilter } from '../actions'
+import AddTodo from '../components/AddTodo'
+import TodoList from '../components/TodoList'
+import Footer from '../components/Footer'
+import { visibleTodosSelector } from '../selectors/todoSelectors'
 
 class App extends Component {
   render() {
-    // 通过 connect() 注入：
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    // Injected by connect() call:
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         <AddTodo
@@ -169,7 +169,7 @@ class App extends Component {
             dispatch(setVisibilityFilter(nextFilter))
           } />
       </div>
-    );
+    )
   }
 }
 
@@ -183,8 +183,8 @@ App.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 
 // 把 selector 传递给连接的组件
-export default connect(visibleTodosSelector)(App);
+export default connect(visibleTodosSelector)(App)
 ```

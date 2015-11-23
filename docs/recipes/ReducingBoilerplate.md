@@ -1,12 +1,12 @@
 # 减少样板代码
 
-Redux 很大部分 [受到 Flux 的启发](../introduction/PriorArt.md)，并且最常见的关于 Flux 抱怨是它如何使得你写了一大堆的模板。在这个技巧中，我们将考虑 Redux 如何使得我们选择我们的代码会变得怎样繁复，取决于个人样式，团队选项，长期可维护等等。
+Redux 很大部分 [受到 Flux 的启发](../introduction/PriorArt.md)，而最常见的关于 Flux 的抱怨是必须写一大堆的模板。而在这章技巧中，根据个人样式，团队选项，长期可维护等等因素，Redux 可以让我们自由决定代码的繁复程度。
 
 ## Actions
 
-Actions 是描述了在 app 中所发生的，以单独方式描述对象变异意图的服务的一个普通对象。很重要的一点是 **你必须分发的 action 对象并不是一个模板，而是  Redux 的一个[基本设计选项](../introduction/ThreePrinciples.md)**.
+Actions 是用来描述在 app 中发生了什么的普通对象，是描述对象变异意图的唯一途径。很重要的一点是 **必须分发的 action 对象并非模板，而是 Redux 的一个[基本设计选项](../introduction/ThreePrinciples.md)**.
 
-有些框架生成自己和 Flux 很像，不过缺少了 action 对象的概念。为了变得可预测，这是一个从 Flux or Redux 的倒退。如果没有可串行的普通对象 action，便无法记录或重放用户会话，或者无法实现 [带有时间旅行的热重载](https://www.youtube.com/watch?v=xsSnOQynTHs)。如果你更喜欢直接修改数据，那么你并不需要 Redux 。
+不少框架声称自己和 Flux 很像，只不过缺少了 action 对象的概念。但可预测的是，这是从 Flux 或 Redux 的倒退。如果没有可串行的普通对象 action，便无法记录或重演用户会话，也无法实现 [带有时间旅行的热重载](https://www.youtube.com/watch?v=xsSnOQynTHs)。如果你更喜欢直接修改数据，那你并不需要使用 Redux 。
 
 Action 一般长这样:
 
@@ -16,9 +16,9 @@ Action 一般长这样:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-一个约定俗成的是 actions 拥有一个定值 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可串行的，而使用 Symbols 的话你会把记录和重演变得比所需要的更难。
+一个约定俗成的做法是，actions 拥有一个定值 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可串行的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
 
-在 Flux 中，传统上认为你将每个 action type 定义为string定值：
+在 Flux 中，传统的想法是将每个 action type 定义为 string 定值：
 
 ```js
 const ADD_TODO = 'ADD_TODO';
@@ -26,20 +26,20 @@ const REMOVE_TODO = 'REMOVE_TODO';
 const LOAD_ARTICLE = 'LOAD_ARTICLE';
 ```
 
-这么做的优势？**人们通常声称定值不是必要的，对于小的项目可能是正确的。** 对于大的项目，将action types定义为定值有如下好处：
+这么做的优势？**人们通常声称定值不是必要的。对于小项目也许正确。** 对于大的项目，将 action types 定义为定值有如下好处：
 
 * 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
-* 有的时候，在开发一个新功能之前你想看到所有现存的 actions 。可能的情况是你的团队里已经有人添加了你所需要的action，而你并不知道。
-* Action types 列表在Pull Request中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
+* 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的action，而你并不知道。
+* Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
 * 如果你在导入一个 Action 定值的时候拼写错误，你会得到 `undefined` 。当你纳闷 action 被分发出去而什么也没发生的时候，一个拼写错误更容易被发现。
 
-你的项目的约定取决与你自己。你开始的时候可能用的是inline string，之后转为定值，也许之后将他们归为一个独立文件。Redux 不会给予任何建议，选择你自己最喜欢的。
+你的项目的约定取决与你自己。开始时，可能用的是 inline string，之后转为定值，也许之后将他们归为一个独立文件。Redux 不会给予任何建议，选择你自己最喜欢的。
 
 ## Action Creators
 
-另一个约定是，你创建生成 action 对象的函数，而不是在你分发的时候内联生成它们。
+另一个约定俗成的做法，通过创建函数生成 action 对象，而不是在你分发的时候内联生成它们。
 
-例如，用文字对象取代调用 `dispatch` ：
+例如，比起使用对象文字调用 `dispatch` ：
 
 ```js
 // somewhere in an event handler
@@ -49,7 +49,7 @@ dispatch({
 });
 ```
 
-你可以在单独的文件中写一个 action creator ，然后从 component 里导入：
+你其实可以在单独的文件中写一个 action creator ，然后从 component 里导入：
 
 #### `actionCreators.js`
 
@@ -71,9 +71,9 @@ import { addTodo } from './actionCreators';
 dispatch(addTodo('Use Redux'))
 ```
 
-Action creators 总被当作模板受到批评。好吧，其实你并不用把他们写出来！**如果你觉得更适合你的项目你可以选用对象文字** 然而，你应该知道写 action creators 是存在某种优势的。
+Action creators 总被当作模板受到批评。好吧，其实你并不非得把他们写出来！**如果你觉得更适合你的项目，你可以选用对象文字** 然而，你应该知道写 action creators 是存在某种优势的。
 
-假设有个设计师看完我们的原型之后回来说，我们需要允许三个 todo 不能再多了。我们可以使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 中间件添加一个提前退出，把我们的 action creator 重写成回调形式：
+假设有个设计师看完我们的原型之后回来说，我们最多只允许三个 todo 。我们可以使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 中间件，并添加一个提前退出，把我们的 action creator 重写成回调形式：
 
 ```js
 function addTodoWithoutCheck(text) {
@@ -97,57 +97,66 @@ export function addTodo(text) {
 }
 ```
 
-我们刚修改了 `addTodo` action creator 的行为，对调用它的代码完全不可见。**我们不用担心去看每个添加 todo 的地方保证他们有了这个检查** Action creator 让你可以解耦额外的分发 action 逻辑与实际的 components 发送这些 actions，而且当你在重开发经常要改变需求的时候也会非常有用。
+我们刚修改了 `addTodo` action creator 的行为，使得它对调用它的代码完全不可见。**我们不用担心去每个添加 todo 的地方看一看，以确认他们有了这个检查** Action creator 让你可以解耦额外的分发 action 逻辑与实际发送这些 action 的 components 。当你有大量开发工作且需求经常变更的时候，这种方法十分简便易用。
 
 ### 生成 Action Creators
 
-某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 定值。这个想法是说你不需要 `ADD_TODO` 定值和 `addTodo()` action creator两个都自己定义。这样的方法在底层也生成 action type 定值，但他们是隐式生成的，也就是间接级。
+某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 定值。这个想法是说你不需要同时定义 `ADD_TODO` 定值和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 定值，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 定值。
 
-我们不建议用这样的方法。如果你写像这样简单的 action creator 写烦了：
+写简单的 action creator 很容易容易让人厌烦，且往往最终生成多余的样板代码：
 
 ```js
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
+}
+
+export function editTodo(id, text) {
+  return {
+    type: 'EDIT_TODO',
+    id,
+    text
+  }
 }
 
 export function removeTodo(id) {
   return {
     type: 'REMOVE_TODO',
     id
-  };
+  }
 }
 ```
 
-你可以写一个生成 action creator 的函数：
+你可以写一个用于生成 action creator 的函数：
 
 ```js
 function makeActionCreator(type, ...argNames) {
   return function(...args) {
-    let action = { type };
+    let action = { type }
     argNames.forEach((arg, index) => {
-      action[argNames[index]] = args[index];
-    });
-    return action;
+      action[argNames[index]] = args[index]
+    })
+    return action
   }
 }
 
-export const addTodo = makeActionCreator('ADD_TODO', 'todo');
-export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
+const ADD_TODO = 'ADD_TODO'
+const EDIT_TODO = 'EDIT_TODO'
+const REMOVE_TODO = 'REMOVE_TODO'
+
+export const addTodo = makeActionCreator(ADD_TODO, 'todo')
+export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
+export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-
-参见 [redux-action-utils](https://github.com/insin/redux-action-utils) 和 [redux-actions](https://github.com/acdlite/redux-actions) 获得更多介绍这样的常用工具。
-
-注意这样的工具给你的代码添加了魔法。
-魔法和间接声明真的值得多写一两行代码么？
+一些工具库也可以帮助生成 action creator ，例如 [redux-action-utils](https://github.com/insin/redux-action-utils) 和 [redux-actions](https://github.com/acdlite/redux-actions) 。这些库可以有效减少你的样板代码，并紧守例如 [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action) 一类的标准。
 
 ## 异步 Action Creators
 
-[中间件](../Glossary.html#middleware) 让你注入一个定制逻辑，可以在每个 action 对象分发出去之前解释。异步 actions 是中间件的最常见用例。
+[中间件](../Glossary.html#middleware) 让你在每个 action 对象分发出去之前，注入一个自定义的逻辑来解释你的 action 对象。异步 action 是中间件的最常见用例。
 
-没有中间件的话，[`dispatch`](../api/Store.md#dispatch) 只能接收一个普通对象。所以我们在 components 里面进行 AJAX 调用：
+如果没有中间件，[`dispatch`](../api/Store.md#dispatch) 只能接收一个普通对象。因此我们必须在 components 里面进行 AJAX 调用：
 
 #### `actionCreators.js`
 
@@ -232,17 +241,17 @@ export default connect(state => ({
 }))(Posts);
 ```
 
-然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且，我们想要在多个components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
+然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
 
-**中间件让我们写的更清楚M的潜在的异步  action creators.** 它使得我们分发普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经分发的 Promises 并把他们变为一对请求和成功/失败 actions.
+**中间件让我们能写表达更清晰的、潜在的异步 action creators。 ** 它允许我们分发普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经分发的 Promises 并把他们变为一对请求和成功/失败的 action.
 
-最简单的中间件例子是 [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” 中间件让你把 action creators 写成 “thunks”，也就是返回函数的函数。** 这使得控制被反转了： 你会像一个参数一样取得 `dispatch` ，所以你也能写一个多次分发的 action creator 。
+中间件最简单的例子是 [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” 中间件让你可以把 action creators 写成 “thunks”，也就是返回函数的函数。** 这使得控制被反转了： 你会像一个参数一样取得 `dispatch` ，所以你也能写一个多次分发的 action creator 。
 
 >##### 注意
 
->Thunk 只是中间件的一个例子。中间件不是关于 “让你分发函数” 的：它是关于让你分发你用的特定中间件知道如何处理的任何东西的。Thunk 中间件添加了一个特定的行为用来分发函数，但这实际上取决于你用的中间件。
+>Thunk 只是一个中间件的例子。中间件不仅仅是关于 “分发函数” 的：而是关于，你可以使用特定的中间件来分发任何该中间件可以处理的东西。例子中的 Thunk 中间件添加了一个特定的行为用来分发函数，但这实际取决于你用的中间件。
 
-考虑上面的代码用 [redux-thunk](https://github.com/gaearon/redux-thunk) 重写：
+用 [redux-thunk](https://github.com/gaearon/redux-thunk) 上面的代码：
 
 #### `actionCreators.js`
 
@@ -261,7 +270,7 @@ export function loadPosts(userId) {
       userId
     });
 
-    // 异步分发原味 actions 
+    // 异步分发原味 action
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response => dispatch({
         type: 'LOAD_POSTS_SUCCESS',
@@ -314,9 +323,9 @@ export default connect(state => ({
 }))(Posts);
 ```
 
-这样打得字少多了！如果你喜欢，你还是可以保留 “原味” action creators 比如从一个 “聪明的” `loadPosts` action creator 里用到的 `loadPostsSuccess` 。
+这样打得字少多了！如果你喜欢，你还是可以保留 “原味” action creators 比如从一个容器 `loadPosts` action creator 里用到的 `loadPostsSuccess` 。
 
-**最后，你可以重写中间件** 你可以把上面的模式泛化，然后代之以这样的异步 action creators ：
+**最后，你可以编写你自己的中间件** 你可以把上面的模式泛化，然后代之以这样的异步 action creators ：
 
 ```js
 export function loadPosts(userId) {
@@ -347,7 +356,7 @@ function callAPIMiddleware({ dispatch, getState }) {
       } = action;
 
       if (!types) {
-        // 普通 action：传走
+        // 普通 action：传递
         return next(action);
       }
 
@@ -429,25 +438,27 @@ export function addComment(postId, message) {
 
 Redux 用函数描述逻辑更新减少了模版里大量的 Flux stores 。函数比对象简单，比类更简单得多。
 
-考虑这个 Flux store:
+这个 Flux store:
 
 ```js
-let _todos = [];
+let _todos = []
 
-export default const TodoStore = assign({}, EventEmitter.prototype, {
+const TodoStore = Object.assign({}, EventEmitter.prototype, {
   getAll() {
-    return _todos;
+    return _todos
   }
-});
+})
 
 AppDispatcher.register(function (action) {
   switch (action.type) {
-  case ActionTypes.ADD_TODO:
-    let text = action.text.trim();
-    _todos.push(text);
-    TodoStore.emitChange();
+    case ActionTypes.ADD_TODO:
+      let text = action.text.trim()
+      _todos.push(text)
+      TodoStore.emitChange()
   }
-});
+})
+
+export default TodoStore
 ```
 
 用了 Redux 之后，同样的逻辑更新可以被写成 reducing function：
@@ -456,10 +467,10 @@ AppDispatcher.register(function (action) {
 export function todos(state = [], action) {
   switch (action.type) {
   case ActionTypes.ADD_TODO:
-    let text = action.text.trim();
-    return [...state, text];
+    let text = action.text.trim()
+    return [ ...state, text ]
   default:
-    return state;
+    return state
   }
 }
 ```
@@ -470,7 +481,7 @@ export function todos(state = [], action) {
 
 ### 生成 Reducers
 
-让我们写一个函数使得我们将 reducers 表达为 action types 到 handlers 的映射对象。例如，在我们的 `todos` reducer 里这样定义：
+写一个函数将 reducers 表达为 action types 到 handlers 的映射对象。例如，如果想在 `todos` reducer 里这样定义：
 
 ```js
 export const todos = createReducer([], {
@@ -481,7 +492,7 @@ export const todos = createReducer([], {
 }
 ```
 
-我们可以写下面的帮忙函数来完成：
+我们可以编写下面的辅助函数来完成：
 
 ```js
 function createReducer(initialState, handlers) {
@@ -495,6 +506,6 @@ function createReducer(initialState, handlers) {
 }
 ```
 
-不难对吧？Redux 没有默认提供这样的帮忙函数，因为有好多种写的方法。可能你想要自动把普通 JS 对象变成不可变对象通过湿化服务器状态。可能你想合并返回状态和当前状态。有很多方法 “获取所有” handler。这些都取决于你为你的团队在特定项目中选择的约定。
+不难对吧？鉴于写法多种多样，Redux 没有默认提供这样的辅助函数。可能你想要自动地将普通 JS 对象变成 Immutable 对象，以填满服务器状态的对象数据。可能你想合并返回状态和当前状态。有多种多样的方法来 “获取所有” handler，具体怎么做则取决于项目中你和你的团队的约定。
 
 Redux reducer 的 API 是 `(state, action) => state`，但是怎么创建这些 reducers 由你来定。
