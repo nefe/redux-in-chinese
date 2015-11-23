@@ -424,9 +424,9 @@ export default connect(mapStateToProps)(App)
 import App from './App'
 ```
 
-但是，当这样导入时，实际上持有的是 `connect()` 返回的封装组件，而不是 `App` 组件本身。如果想测试它和 Redux 间的互动，好消息是可以使用一个专为单元测试创建的 store， 将它封装在[`<Provider>`](https://github.com/rackt/react-redux#provider-store) 中。但有时我们仅仅是想测试组件的渲染，并不想要这么一个 Redux store。
+但是，当这样导入时，实际上持有的是 `connect()` 返回的包装过组件，而不是 `App` 组件本身。如果想测试它和 Redux 间的互动，好消息是可以使用一个专为单元测试创建的 store， 将它包装在[`<Provider>`](https://github.com/rackt/react-redux#provider-store) 中。但有时我们仅仅是想测试组件的渲染，并不想要这么一个 Redux store。
 
-想要不和装饰件打交道而测试 App 组件本身，我们建议你同时导出未经装饰件封装的组件：
+想要不和装饰件打交道而测试 App 组件本身，我们建议你同时导出未包装的组件：
 
 ```js
 import { connect } from 'react-redux'
@@ -438,7 +438,7 @@ export class App extends Component { /* ... */ }
 export default connect(mapDispatchToProps)(App)
 ```
 
-鉴于默认导出的依旧是经装饰件封装的组件，上面的导入语句会和之前一样工作，不需要更改应用中的代码。不过，可以这样在测试文件中导入没有经装饰件封装 `App` 组件：
+鉴于默认导出的依旧是包装过的组件，上面的导入语句会和之前一样工作，不需要更改应用中的代码。不过，可以这样在测试文件中导入没有包装的 `App` 组件：
 
 ```js
 // 注意花括号：抓取命名导出，而不是默认导出
