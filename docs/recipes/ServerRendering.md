@@ -24,20 +24,15 @@ Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初�
 
 ### 安装依赖库
 
-本例会使用 [Express](http://expressjs.com/) 来做小型的 web 服务器。引入 [serve-static](https://www.npmjs.com/package/serve-static) middleware 来处理静态文件，稍后有代码。
-
-还需要安装 Redux 对 React 的绑定库，Redux 默认并不包含。
+本例会使用 [Express](http://expressjs.com/) 来做小型的 web 服务器。还需要安装 Redux 对 React 的绑定库，Redux 默认并不包含。
 
 ```
-npm install --save express serve-static react-redux
+npm install --save express react-redux
 ```
 
 ## 服务端开发
 
-下面是服务端代码大概的样子。使用 [app.use](http://expressjs.com/api.html#app.use) 挂载 [Express middleware](http://expressjs.com/guide/using-middleware.html) 处理所有请求。`serve-static` middleware 以同样的方式处理来自客户端的 javascript 文件请求。如果你还不熟悉 Express 或者 middleware，只需要了解每次服务器收到请求时都会调用 handleRender 函数。
-
->##### 生产环境使用须知
->在生产环境中，最好使用类似 nigix 这样的服务器来处理静态文件请求，只使用 Node 处理应用请求。虽然这个话题已经超出本教程讨论范畴。
+下面是服务端代码大概的样子。使用 [app.use](http://expressjs.com/api.html#app.use) 挂载 [Express middleware](http://expressjs.com/guide/using-middleware.html) 处理所有请求。如果你还不熟悉 Express 或者 middleware，只需要了解每次服务器收到请求时都会调用 handleRender 函数。
 
 ##### `server.js`
 
@@ -52,9 +47,6 @@ import App from './containers/App';
 
 const app = Express();
 const port = 3000;
-
-// 使用这个 middleware 处理 dist 目录下的静态文件请求
-app.use(require('serve-static')(path.join(__dirname, 'dist')));
 
 // 每当收到请求时都会触发
 app.use(handleRender);
@@ -77,18 +69,20 @@ app.listen(port);
 然后使用 [`store.getState()`](../api/Store.md#getState) 从 store 得到初始 state。`renderFullPage` 函数会介绍接下来如何传递。
 
 ```js
+import { renderToString } from 'react-dom/server'
+
 function handleRender(req, res) {
   // 创建新的 Redux store 实例
   const store = createStore(counterApp);
 
   // 把组件渲染成字符串
-  const html = React.renderToString(
+  const html = renderToString(
     <Provider store={store}>
-      {() => <App />}
+      <App />
     </Provider>
-  );
+  )
 
-  // 从 store 中获得 state
+  // 从 store 中获得初始 state
   const initialState = store.getState();
 
   // 把渲染后的页面内容发送给客户端
@@ -115,12 +109,12 @@ function renderFullPage(html, initialState) {
       <body>
         <div id="app">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
-        <script src="/bundle.js"></script>
+        <script src="/static/bundle.js"></script>
       </body>
     </html>
-    `;
+    `
 }
 ```
 
@@ -137,25 +131,27 @@ function renderFullPage(html, initialState) {
 #### `client.js`
 
 ```js
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import App from './containers/App';
-import counterApp from './reducers';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './containers/App'
+import counterApp from './reducers'
 
 // 通过服务端注入的全局变量得到初始 state
-const initialState = window.__INITIAL_STATE__;
+const initialState = window.__INITIAL_STATE__
 
 // 使用初始 state 创建 Redux store
-const store = createStore(counterApp, initialState);
+const store = createStore(counterApp, initialState)
 
-React.render(
+render(
   <Provider store={store}>
-    {() => <App />}
+    <App />
   </Provider>,
   document.getElementById('root')
-);
+)
 ```
+
 你可以选择自己喜欢的打包工具（Webpack, Browserify 或其它）来编译并打包文件到 `dist/bundle.js`。
 
 当页面加载时，打包后的 js 会启动，并调用 [`React.render()`](https://facebook.github.io/react/docs/top-level-api.html#react.render)，然后会与服务端渲染的 HTML 的 `data-react-id` 属性做关联。这会把新生成的 React 实例与服务端的虚拟 DOM 连接起来。因为同样使用了来自 Redux store 的初始 state，并且 view 组件代码是一样的，结果就是我们得到了相同的 DOM。
@@ -178,30 +174,31 @@ React.render(
 
 ```js
 import qs from 'qs'; // 添加到文件开头
+import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // 如果存在的话，从 request 读取 counter
-  const params = qs.parse(req.query);
-  const counter = parseInt(params.counter) || 0;
+  const params = qs.parse(req.query)
+  const counter = parseInt(params.counter) || 0
 
   // 得到初始 state
-  let initialState = { counter };
+  let initialState = { counter }
 
   // 创建新的 Redux store 实例
-  const store = createStore(counterApp, initialState);
+  const store = createStore(counterApp, initialState)
 
   // 把组件渲染成字符串
-  const html = React.renderToString(
+  const html = renderToString(
     <Provider store={store}>
-      {() => <App />}
+      <App />
     </Provider>
-  );
+  )
 
   // 从 Redux store 得到初始 state
-  const finalState = store.getState();
+  const finalState = store.getState()
 
   // 把渲染后的页面发给客户端
-  res.send(renderFullPage(html, finalState));
+  res.send(renderFullPage(html, finalState))
 }
 ```
 
@@ -219,13 +216,13 @@ function handleRender(req, res) {
 
 ```js
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min
 }
 
 export function fetchCounter(callback) {
   setTimeout(() => {
-    callback(getRandomInt(1, 100));
-  }, 500);
+    callback(getRandomInt(1, 100))
+  }, 500)
 }
 ```
 
@@ -236,34 +233,35 @@ export function fetchCounter(callback) {
 #### `server.js`
 
 ```js
-// Add this to our imports
-import { fetchCounter } from './api/counter';
+// 添加到 import 
+import { fetchCounter } from './api/counter'
+import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // 异步请求模拟的 API
   fetchCounter(apiResult => {
     // 如果存在的话，从 request 读取 counter
-    const params = qs.parse(req.query);
-    const counter = parseInt(params.counter) || apiResult || 0;
+    const params = qs.parse(req.query)
+    const counter = parseInt(params.counter) || apiResult || 0
 
     // 得到初始 state
-    let initialState = { counter };
+    let initialState = { counter }
 
     // 创建新的 Redux store 实例
-    const store = createStore(counterApp, initialState);
+    const store = createStore(counterApp, initialState)
 
     // 把组件渲染成字符串
-    const html = React.renderToString(
+    const html = renderToString(
       <Provider store={store}>
-        {() => <App />}
+        <App />
       </Provider>
-    );
+    )
 
     // 从 Redux store 得到初始 state
-    const finalState = store.getState();
+    const finalState = store.getState()
 
     // 把渲染后的页面发给客户端
-    res.send(renderFullPage(html, finalState));
+    res.send(renderFullPage(html, finalState))
   });
 }
 ```
@@ -284,4 +282,5 @@ function handleRender(req, res) {
 
 你还可以参考 [异步 Actions](../advanced/AsyncActions.md) 学习更多使用 Promise 和 thunk 这些异步元素来表示异步数据流的方法。记住，那里学到的任何内容都可以用于同构渲染。
 
-如果你使用了 [React Router](https://github.com/rackt/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。(Revision needed)
+如果你使用了 [React Router](https://github.com/rackt/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。
+

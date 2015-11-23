@@ -1,6 +1,6 @@
 # 实现撤销历史
 
-在应用中内建撤消和重做功能往往需要开发者有意识的做出一些努力。对于经典的 MVC 框架来说这不是一个简单的问题，因为你需要通过克隆所有相关的 model 来追踪每一个历史状态。此外，你需要关心整个撤消堆栈，因为用户初始化的更改也应该是可撤消。
+在应用中内建撤消和重做功能往往需要开发者有意识的做出一些努力。对于经典的 MVC 框架来说这不是一个简单的问题，因为你需要通过克隆所有相关的 model 来追踪每一个历史状态。此外，你需要关心整个撤消堆栈，因为用户初始化的更改也应该是可撤消的。
 
 这意味着在一个 MVC 应用中实现撤消和重做，通常迫使你用一些类似于 [Command](https://en.wikipedia.org/wiki/Command_pattern) 的特殊的数据修改模式来重写应用中的部分代码。
 
@@ -358,7 +358,7 @@ store.dispatch({
 
 还有一个重要注意点：你需要记住当你恢复一个 state 时，必须把 `.present` 追加到它上面。你也不能忘了需要通过检查 `.past.length` 和 `.future.length` 来决定撤销和重做按钮是否可用。
 
-你可能听说过 Redux 受 [Elm 架构](https://github.com/evancz/elm-architecture-tutorial/) 影响颇深。所以这个示例与 [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0) 也不会太令人吃惊。
+你可能听说过 Redux 受 [Elm 架构](https://github.com/evancz/elm-architecture-tutorial/) 影响颇深。所以这个示例与 [elm-undo-redo package](http://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0) 十分相似也不会太令人吃惊。
 
 ## 使用 Redux Undo
 
@@ -418,7 +418,8 @@ const todoApp = combineReducers({
 }
 ```
 
-这意味着你必须要通过 `state.todos.present` 操作 state，而不是原来的 `state.todos`：
+这意味着你必须要通过 `state.todos.present` 操作 state，而不是原来的
+ `state.todos`：
 
 #### `containers/App.js`
 
