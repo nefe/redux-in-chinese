@@ -2,7 +2,7 @@
 
 首先，让我们来给 action 下个定义。
 
-**Actions** 是把数据从应用（译者注：这里之所以不叫 view 是因为这些数据有可能是服务器响应，用户输入或其它非 view 的数据 ）传到 store 的有效载荷。它是 store 数据的**惟一**来源。用法是通过 [`store.dispatch()`](../api/Store.md#dispatch) 把 action 传到 store。
+**Action** 是把数据从应用（译者注：这里之所以不叫 view 是因为这些数据有可能是服务器响应，用户输入或其它非 view 的数据 ）传到 store 的有效载荷。它是 store 数据的**唯一**来源。一般来说你会通过 [`store.dispatch()`](../api/Store.md#dispatch) 将 action 传到 store。
 
 添加新 todo 任务的 action 是这样的：
 
@@ -17,7 +17,7 @@ const ADD_TODO = 'ADD_TODO';
 }
 ```
 
-Action 本质是 JavaScript 普通对象。我们约定，action 内使用一个字符串类型的 `type` 字段来表示将要执行的动作。多数情况下，`type` 会被定义成字符串常量。当应用规模越来越大时，建议使用单独的模块或文件来存放 action。
+Action 本质上是 JavaScript 普通对象。我们约定，action 内使用一个字符串类型的 `type` 字段来表示将要执行的动作。多数情况下，`type` 会被定义成字符串常量。当应用规模越来越大时，建议使用单独的模块或文件来存放 action。
 
 ```js
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
@@ -25,11 +25,11 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 >##### 样板文件使用提醒
 
->使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中最多把它们显式地定义成常量。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取保持代码干净的实践经验。
+>使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中把它们显式地定义成常量还是利大于弊的。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取保持代码干净的实践经验。
 
-除了 `type` 字段外，action 对象的结构完全取决于你。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取如何组织 action 的建议。
+除了 `type` 字段外，action 对象的结构完全由你自己决定。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取关于如何组织 action 的建议。
 
-这时，我们还需要再添加一个 action type 来标记任务完成。因为数据是存放在数组中的，我们通过 `index` 来标识任务。实际项目中一般会在新建内容的时候生成惟一的 ID 做标识。
+这时，我们还需要再添加一个 action type 来标记任务完成。因为数据是存放在数组中的，所以我们通过 `index` 来标识任务。实际项目中一般会在新建内容的时候生成唯一的 ID 作为标识。
 
 ```js
 {
@@ -38,7 +38,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 }
 ```
 
-**action 中传递的数据越少越好**。比如，这里传递 `index` 就比把整个任务对象传过去要好。
+**我们应该尽量减少在 action 中传递的数据**。比如上面的例子，传递 `index` 就比把整个任务对象传过去要好。
 
 最后，再添加一个 action 类型来表示当前展示的任务状态。
 
@@ -90,7 +90,7 @@ const boundAddTodo = (text) => dispatch(addTodo(text));
 const boundCompleteTodo = (index) => dispatch(CompleteTodo(index));
 ```
 
-可以这样调用：
+然后直接调用它们：
 
 ```
 boundAddTodo(text);

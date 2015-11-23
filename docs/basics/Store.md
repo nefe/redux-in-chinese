@@ -1,6 +1,6 @@
 # Store
 
-上面章节中，我们学会了使用 [action](Action.md) 来描述“发生了什么”，和使用 [reducers](Reducers.md) 来根据 action 更新 state 的用法。
+在前面的章节中，我们学会了使用 [action](Action.md) 来描述“发生了什么”，和使用 [reducers](Reducers.md) 来根据 action 更新 state 的用法。
 
 **Store** 就是把它们联系到一起的对象。Store 有以下职责：
 
@@ -11,23 +11,12 @@
 
 再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分处理数据的逻辑时，使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
 
-根据 reducer 创建 store 非常容易。例如，假如应用中只有一个 `todoApp` 的 reducer，可以这样写：
+根据已有的 reducer 来创建 store 是非常容易的。在[前一个章节](Reducers.md)中，我们使用 [`combineReducers()`](../api/combineReducers.md) 将多个 reducer 合并成为一个。现在我们将其导入，并传递 [`createStore()`](../api/createStore.md)。
 
 ```js
-import { createStore } from 'redux';
-import todoApp from './reducers';
-
-let store = createStore(todoApp);
-```
-
-为了提高可维护性，拆分成多个 reducer，这时需要使用 [`combineReducers()`](../api/combineReducers.md) 来把它们组合起来。
-
-```js
-import { combineReducers, createStore } from 'redux';
-import * as reducers from './reducers';
-
-let todoApp = combineReducers(reducers);
-let store = createStore(todoApp);
+import { createStore } from 'redux'
+import todoApp from './reducers'
+let store = createStore(todoApp)
 ```
 
 [`createStore()`](../api/createStore.md) 的第二个参数可以设置初始状态。
@@ -39,7 +28,7 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER);
 
 ## 发起 Actions
 
-创建好了 store 后，就可以验证程序是否工作。虽然还没有界面，我们已经可以测试更新逻辑了。
+现在我们已经创建好了 store ，让我们来验证一下！虽然还没有界面，我们已经可以测试更新逻辑了。
 
 ```js
 import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions';
@@ -75,11 +64,10 @@ unsubscribe();
 #### `index.js`
 
 ```js
-import { combineReducers, createStore } from 'redux';
-import * as reducers from './reducers';
+import { createStore } from 'redux'
+import todoApp from './reducers'
 
-let todoApp = combineReducers(reducers);
-let store = createStore(todoApp);
+let store = createStore(todoApp)
 ```
 
 ## 下一步
