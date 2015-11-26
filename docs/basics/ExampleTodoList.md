@@ -112,7 +112,7 @@ const todoApp = combineReducers({
 export default todoApp;
 ```
 
-## 智能组件
+## 容器组件
 
 #### `containers/App.js`
 
@@ -185,7 +185,7 @@ function select(state) {
 export default connect(select)(App);
 ```
 
-## 笨拙组件
+## 展示组件
 
 #### `components/AddTodo.js`
 

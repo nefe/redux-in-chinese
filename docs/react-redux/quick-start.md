@@ -1,6 +1,6 @@
 ## 快速开始
 
-本库深受 [分离“智能”组件和“笨拙”组件](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 思想启发。
+本库深受 [分离容器组件和展示组件](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 思想启发。
 
 在应用中，只有最顶层组件是对 Redux 可知（例如路由处理）这是很好的。所有它们的子组件都应该是“笨拙”的，并且是通过 props 获取数据。
 
@@ -9,8 +9,8 @@
     <thead>
         <tr>
             <th></th>
-            <th scope="col" style="text-align:left">“智能”组件</th>
-            <th scope="col" style="text-align:left">“笨拙”组件</th>
+            <th scope="col" style="text-align:left">容器组件</th>
+            <th scope="col" style="text-align:left">展示组件</th>
         </tr>
     </thead>
     <tbody>
@@ -37,9 +37,9 @@
     </tbody>
 </table>
 
-### 不使用 Redux 的“笨拙”组件
+### 不使用 Redux 的展示组件
 
-让我们看下，我们拥有一个 `<Counter />` 的“笨拙”组件，它有一个通过 props 传过来的值，和一个函数 `onIncrement`，当你点击 “Increment” 按钮时就会调用这个函数：
+让我们看下，我们拥有一个 `<Counter />` 的展示组件，它有一个通过 props 传过来的值，和一个函数 `onIncrement`，当你点击 “Increment” 按钮时就会调用这个函数：
 
 ```js
 import { Component } from 'react';
@@ -55,11 +55,11 @@ export default class Counter extends Component {
 }
 ```
 
-### “智能”组件使用 `connect()` 方法连接 Redux
+### 容器组件使用 `connect()` 方法连接 Redux
 
 以下为你说明如何连接到 Redux Store。
 
-我们用 `react-redux` 提供的 `connect()` 方法将“笨拙”的 `Counter` 转化成智能组件。`connect()` 允许你从 Redux store 中指定**准确**的 state 到你想要获取的组件中。这让你能获取到任何级别颗粒度的数据。
+我们用 `react-redux` 提供的 `connect()` 方法将“笨拙”的 `Counter` 转化成容器组件。`connect()` 允许你从 Redux store 中指定**准确**的 state 到你想要获取的组件中。这让你能获取到任何级别颗粒度的数据。
 
 ##### `containers/CounterContainer.js`
 
@@ -98,7 +98,7 @@ export default connect(
 // 想看到更多的方法，详细的 connect() 示例如下。
 ```
 
-作为一个“笨拙”组件，无论是在同一个文件中调用 `connect()`方法，还是分开调用，都取决于你。
+作为一个展示组件，无论是在同一个文件中调用 `connect()`方法，还是分开调用，都取决于你。
 你应该多考虑的是，是否重用这个组件来绑定不同数据。
 
 ### 嵌套

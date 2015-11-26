@@ -14,9 +14,9 @@ Redux 默认并不包含 [React 绑定库](https://github.com/gaearon/react-redu
 npm install --save react-redux
 ```
 
-## 智能组件（Smart Components）和笨拙组件（Dumb Components）
+## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
-Redux 的 React 绑定库拥抱了 [“智能”组件和“笨拙”组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
+Redux 的 React 绑定库拥抱了 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
 
 明智的做法是只在最顶层组件（如路由操作）里使用 Redux。内部组件应该像木偶一样保持“呆滞”，所有数据都通过 props 传入。
 
@@ -33,14 +33,14 @@ Redux 的 React 绑定库拥抱了 [“智能”组件和“笨拙”组件相�
     </thead>
     <tbody>
         <tr>
-          <td>“智能”组件</td>
+          <td>容器组件</td>
           <td>最顶层，路由处理</td>
           <td>是</th>
           <td>从 Redux 获取 state</td>
           <td>向 Redux 发起 actions</td>
         </tr>
         <tr>
-          <td>“笨拙”组件</td>
+          <td>展示组件</td>
           <td>中间和子组件</td>
           <td>否</th>
           <td>从 props 获取数据</td>
@@ -50,7 +50,7 @@ Redux 的 React 绑定库拥抱了 [“智能”组件和“笨拙”组件相�
 </table>
 </center>
 
-在这个 todo 应用中，只应有一个“智能”组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个智能组件。虽然你也可以嵌套使用“智能”组件，但应该尽可能的使用传递 props 的形式。
+在这个 todo 应用中，只应有一个容器组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个容器组件。虽然你也可以嵌套使用容器组件，但应该尽可能的使用传递 props 的形式。
 
 ## 设计组件层次结构
 
@@ -79,7 +79,7 @@ Redux 的 React 绑定库拥抱了 [“智能”组件和“笨拙”组件相�
 
 直接写就是了！我们已经不用绑定到 Redux。你可以在开发过程中给出一些实验数据，直到它们渲染对了。
 
-## 笨拙组件
+## 展示组件
 
 这就是普通的 React 组件，所以就不在详述。直接看代码：
 
