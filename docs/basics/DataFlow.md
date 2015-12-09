@@ -24,29 +24,31 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
 2. **Redux store 调用传入的 reducer 函数。**
 
-  Store 会把两个参数传入 reducer，当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
+  [Store](Store.md) 会把两个参数传入 [reducer](Reducers.md)，当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
 
     ```js
     // 当前应用的 state（todos 列表和选中的过滤器）
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
-      todos: [{
-        text: 'Read the docs.',
-        complete: false
-      }]
-    };
+      todos: [
+        {
+          text: 'Read the docs.',
+          complete: false
+        }
+      ]
+    }
 
     // 将要执行的 action（添加一个 todo）
     let action = {
       type: 'ADD_TODO',
       text: 'Understand the flow.'
-    };
+    }
 
     // render 返回处理后的应用状态
     let nextState = todoApp(previousState, action);
     ```
 
-    注意 reducer 是纯函数。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
+    注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
 3. **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
 
@@ -68,7 +70,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     let todoApp = combineReducers({
       todos,
       visibleTodoFilter
-    });
+    })
     ```
 
   当你触发 action 后，`combineReducers` 返回的 `todoApp` 会负责调用两个 reducer：

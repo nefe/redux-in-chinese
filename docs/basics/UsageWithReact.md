@@ -16,45 +16,47 @@ npm install --save react-redux
 
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
-Redux 的 React 绑定库拥抱了 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
+Redux 的 React 绑定库包含了 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。
 
-明智的做法是只在最顶层组件（如路由操作）里使用 Redux。内部组件应该像木偶一样保持“呆滞”，所有数据都通过 props 传入。
+明智的做法是只在最顶层组件（如路由操作）里使用 Redux。其余内部组件仅仅是展示性的，所有数据都通过 props 传入。
 
-<center>
 <table>
     <thead>
         <tr>
             <th></th>
-            <th>位置</th>
-            <th>使用 Redux</th>
-            <th>读取数据</th>
-            <th>修改数据</th>
+            <th scope="col" style="text-align:left">容器组件</th>
+            <th scope="col" style="text-align:left">展示组件</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-          <td>容器组件</td>
+          <th scope="row" style="text-align:right">Location</th>
           <td>最顶层，路由处理</td>
-          <td>是</th>
-          <td>从 Redux 获取 state</td>
-          <td>向 Redux 发起 actions</td>
+          <td>中间和子组件</td>
         </tr>
         <tr>
-          <td>展示组件</td>
-          <td>中间和子组件</td>
+          <th scope="row" style="text-align:right">Aware of Redux</th>
+          <td>是</th>
           <td>否</th>
+        </tr>
+        <tr>
+          <th scope="row" style="text-align:right">读取数据</th>
+          <td>从 Redux 获取 state</td>
           <td>从 props 获取数据</td>
+        </tr>
+        <tr>
+          <th scope="row" style="text-align:right">修改数据</th>
+          <td>向 Redux 派发 actions</td>
           <td>从 props 调用回调函数</td>
         </tr>
     </tbody>
 </table>
-</center>
 
 在这个 todo 应用中，只应有一个容器组件，它存在于组件的最顶层。在复杂的应用中，也有可能会有多个容器组件。虽然你也可以嵌套使用容器组件，但应该尽可能的使用传递 props 的形式。
 
 ## 设计组件层次结构
 
-还记得当初如何 [设计 reducer 结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
+还记得当初如何 [设计根 state 对象的结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 的相关工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
 
 我们的概要设计很简单。我们想要显示一个 todo 项的列表。一个 todo 项被点击后，会增加一条删除线并标记 completed。我们会显示用户新增一个 todo 字段。在 footer 里显示一个可切换的显示全部/只显示 completed 的/只显示 incompleted 的 todos。
 
@@ -73,9 +75,9 @@ Redux 的 React 绑定库拥抱了 [容器组件和展示组件相分离](https:
   - `filter: string` 当前的过滤器为： `'SHOW_ALL'`、 `'SHOW_COMPLETED'` 或 `'SHOW_ACTIVE'`。
   - `onFilterChange(nextFilter: string)`： 当用户选择不同的过滤器时调用的回调函数。
 
-这些全部都是“笨拙”的组件。它们不知道数据是**从**哪里来的，或者数据是**怎么**变化的。你传入什么，它们就渲染什么。
+这些全部都是展示组件。它们不知道数据是从**哪里**来的，或者数据是**怎么**变化的。你传入什么，它们就渲染什么。
 
-如果你要把 Redux 迁移到别的上，你应该要保持这些组件的一致性。因为它们不依赖 Redux。
+如果你要把 Redux 迁移到别的上，你应该要保持这些组件的一致性。因为它们不依赖于 Redux。
 
 直接写就是了！我们已经不用绑定到 Redux。你可以在开发过程中给出一些实验数据，直到它们渲染对了。
 
@@ -110,7 +112,7 @@ export default class AddTodo extends Component {
 
 AddTodo.propTypes = {
   onAddClick: PropTypes.func.isRequired
-};
+}
 ```
 
 #### `components/Todo.js`
@@ -156,7 +158,7 @@ export default class TodoList extends Component {
                 onClick={() => this.props.onTodoClick(index)} />
         )}
       </ul>
-    );
+    )
   }
 }
 
@@ -166,7 +168,7 @@ TodoList.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired
-};
+}
 ```
 
 #### `components/Footer.js`
@@ -187,7 +189,7 @@ export default class Footer extends Component {
       }}>
         {name}
       </a>
-    );
+    )
   }
 
   render() {
@@ -216,7 +218,7 @@ Footer.propTypes = {
 };
 ```
 
-就这些，现在开发一个笨拙型的组件 `App` 把它们渲染出来，验证下是否工作。
+就是这些，现在开发一个笨拙型的组件 `App` 把它们渲染出来，验证下是否工作。
 
 #### `containers/App.js`
 
@@ -271,32 +273,31 @@ export default class App extends Component {
 #### `index.js`
 
 ```js
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import App from './containers/App';
-import todoApp from './reducers';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './containers/App'
+import todoApp from './reducers'
 
 let store = createStore(todoApp);
 
-let rootElement = document.getElementById('root');
-React.render(
-  // 为了解决在 React 0.13 的一个问题
-  // 子标签必须包装成一个 function。
+let rootElement = document.getElementById('root')
+render(
   <Provider store={store}>
-    {() => <App />}
+    <App />
   </Provider>,
   rootElement
-);
+)
 ```
 
 这使得我们的 store 能为下面的组件所用。（在内部，这个是通过 React 的 ["context" 特性](http://facebook.github.io/react/docs/context.html)实现。）
 
-接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量要避免这么做，因为这个数据流很难追踪。
+接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量避免这么做，因为这个数据流很难追踪。
 
-**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个你的组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` ，但你可能希望它发生了变化。
+**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props，以及得到全局 state 中所需的任何内容。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` （例如，返回认证方法），但最好将其先进行转化。
 
-为了组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
+为了使组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 
 #### `containers/App.js`
 
@@ -310,8 +311,8 @@ import Footer from '../components/Footer';
 
 class App extends Component {
   render() {
-    // Injected by connect() call:
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    // 通过调用 connect() 注入:
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         <AddTodo
@@ -329,7 +330,7 @@ class App extends Component {
             dispatch(setVisibilityFilter(nextFilter))
           } />
       </div>
-    );
+    )
   }
 }
 
@@ -343,7 +344,7 @@ App.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 
 function selectTodos(todos, filter) {
   switch (filter) {
@@ -356,8 +357,8 @@ function selectTodos(todos, filter) {
   }
 }
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
+// 基于全局 state ，哪些是我们想注入的 props ?
+// 注意：使用 https://github.com/faassen/reselect 效果更佳。
 function select(state) {
   return {
     visibleTodos: selectTodos(state.todos, state.visibilityFilter),
@@ -365,8 +366,7 @@ function select(state) {
   };
 }
 
-// Wrap the component to inject dispatch and state into it
-export default connect(select)(App);
+// 包装 component ，注入 dispatch 和 state 到其默认的 connect(select)(App) 中；
 ```
 
 到此为止，迷你型的任务管理应用就开发完毕。
