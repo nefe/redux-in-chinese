@@ -56,7 +56,7 @@ Redux 的 React 绑定库包含了 [容器组件和展示组件相分离](https:
 
 ## 设计组件层次结构
 
-还记得当初如何 [设计根 state 对象的结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 的相关工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
+还记得当初如何 [设计 state 根对象的结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
 
 我们的概要设计很简单。我们想要显示一个 todo 项的列表。一个 todo 项被点击后，会增加一条删除线并标记 completed。我们会显示用户新增一个 todo 字段。在 footer 里显示一个可切换的显示全部/只显示 completed 的/只显示 incompleted 的 todos。
 
@@ -295,7 +295,7 @@ render(
 
 接着，我们**想要通过 [`react-redux`](http://github.com/gaearon/react-redux) 提供的 `connect()` 方法将包装好的组件连接到Redux**。尽量只做一个顶层的组件，或者 route 处理。从技术上来说你可以将应用中的任何一个组件 `connect()` 到 Redux store 中，但尽量避免这么做，因为这个数据流很难追踪。
 
-**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props，以及得到全局 state 中所需的任何内容。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回一个组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` （例如，返回认证方法），但最好将其先进行转化。
+**任何一个从 `connect()` 包装好的组件都可以得到一个 [`dispatch`](../api/Store.md#dispatch) 方法作为组件的 props，以及得到全局 state 中所需的任何内容。** `connect()` 的唯一参数是 **selector**。此方法可以从 Redux store 接收到全局的 state，然后返回组件中需要的 props。最简单的情况下，可以返回一个初始的 `state` （例如，返回认证方法），但最好先将其进行转化。
 
 为了使组合 selectors 更有效率，不妨看看  [reselect](https://github.com/faassen/reselect)。在这个例子中我们不会用到它，但它适合更大的应用。
 

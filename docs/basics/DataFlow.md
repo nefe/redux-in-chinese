@@ -24,7 +24,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
 2. **Redux store 调用传入的 reducer 函数。**
 
-  [Store](Store.md) 会把两个参数传入 [reducer](Reducers.md)，当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
+  [Store](Store.md) 会把两个参数传入 [reducer](Reducers.md) 当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
 
     ```js
     // 当前应用的 state（todos 列表和选中的过滤器）
