@@ -367,6 +367,7 @@ function select(state) {
 }
 
 // 包装 component ，注入 dispatch 和 state 到其默认的 connect(select)(App) 中；
+export default connect(select)(App);
 ```
 
 到此为止，迷你型的任务管理应用就开发完毕。
