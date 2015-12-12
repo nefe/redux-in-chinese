@@ -63,13 +63,10 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 * [redux-form](https://github.com/erikras/redux-form) — 在 Redux 中时时持有 React 表格的 state
 
-### Store 增效器
+### 增强器（Enhancer）
 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — 针对 store subscribers 的自定义批处理与防跳请求
 * [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — 基于独断的 action 的 history 库转换
-
-### Reducer 增效器
-
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — 乐观使用将被提交或还原的 action
 * [redux-undo](https://github.com/omnidan/redux-undo) —
 使 reducer 具有便捷的重做/撤销，以及 action 记录功能
