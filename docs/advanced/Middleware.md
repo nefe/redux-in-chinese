@@ -197,7 +197,7 @@ function logger(store) {
 
 如果 `applyMiddlewareByMonkeypatching` 方法中没有在第一个 middleware 执行时立即替换掉 `store.dispatch`，那么 `store.dispatch` 将会一直指向原始的 `dispatch` 方法。也就是说，第二个 middleware 依旧会作用在原始的 `dispatch` 方法。
 
-但是，还有另一种方式来实现这种链式调用的效果。可以让 middleware 以方法参数的形式接受一个 `next()` 方法，而不是通过 store 的实例去获取。
+但是，还有另一种方式来实现这种链式调用的效果。可以让 middleware 以方法参数的形式接收一个 `next()` 方法，而不是通过 store 的实例去获取。
 
 ```js
 function logger(store) {
