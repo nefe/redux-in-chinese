@@ -1,8 +1,8 @@
 # Middleware
 
-我们已经在[异步 Action ](../advanced/AsyncActions.md)一节的示例中看到了一些 middleware 的使用。如果你使用过 [Express](http://expressjs.com/) 或者 [Koa](http://koajs.com/) 等服务端框架, 那么应该对 *middleware* 的概念不会陌生。 在这类框架中，middleware 是指可以被嵌入在框架接收请求到产生响应过程之中的代码。例如，Express 或者 Koa 的 middleware 可以完成添加 CORS headers，记录日志，内容压缩等工作。middleware 最优秀的特性就是可以被链式组合。你可以在一个项目中使用多个独立的第三方 middleware。
+我们已经在[异步 Action ](../advanced/AsyncActions.md)一节的示例中看到了一些 middleware 的使用。如果你使用过 [Express](http://expressjs.com/) 或者 [Koa](http://koajs.com/) 等服务端框架, 那么应该对 *middleware* 的概念不会陌生。 在这类框架中，middleware 是指可以被嵌入在框架接收请求到产生响应过程之中的代码。例如，Express 或者 Koa 的 middleware 可以完成添加 CORS headers、记录日志、内容压缩等工作。middleware 最优秀的特性就是可以被链式组合。你可以在一个项目中使用多个独立的第三方 middleware。
 
-相对于 Express 或者 Koa 的 middleware，Redux middleware 被用于解决不同的问题，但其中的概念是相类似的。**它提供的是位于 action 被发起之后，到达 reducer 之前的扩展点。** 你可以利用 Redux middleware 来进行日志记录、创建崩溃报告、调用异步接口或者路由等等。
+相对于 Express 或者 Koa 的 middleware，Redux middleware 被用于解决不同的问题，但其中的概念是类似的。**它提供的是位于 action 被发起之后，到达 reducer 之前的扩展点。** 你可以利用 Redux middleware 来进行日志记录、创建崩溃报告、调用异步接口或者路由等等。
 
 这个章节分为两个部分，前面是帮助你理解相关概念的深度介绍，而后半部分则通过[一些实例](#seven-examples)来体现 middleware 的强大能力。对文章前后内容进行结合通读，会帮助你更好的理解枯燥的概念，并从中获得启发。
 
