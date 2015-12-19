@@ -183,8 +183,8 @@ function select(state) {
   }
 }
 
-// 包装 component ，注入 dispatch 和 state 到其
-默认的 connect(select)(App) 中；
+// 包装 component ，注入 dispatch 和 state 到其默认的 connect(select)(App) 中；
+export default connect(select)(App)
 ```
 
 ## 展示组件
