@@ -113,7 +113,7 @@ export function receivePosts(reddit, json) {
 
 ## 设计 state 结构
 
-就像在基础教程中，在功能开发前你需要 [设计应用的 state 结构](../basics/Reducers.md#designing-the-state-shape)。在写同步代码的时候，需要考虑更多的 state，所以我们要仔细考虑一下。
+就像在基础教程中，在功能开发前你需要 [设计应用的 state 结构](../basics/Reducers.md#designing-the-state-shape)。在写异步代码的时候，需要考虑更多的 state，所以我们要仔细考虑一下。
 
 这部分内容通常让初学者感到迷惑，因为选择哪些信息才能清晰地描述异步应用的 state 并不直观，还有怎么用一个树来把这些信息组织起来。
 
