@@ -20,7 +20,7 @@ type Action = Object
 
 *Action* 是一个普通对象，用来表示即将改变 state 的意图。它是将数据放入 store 的唯一途径。无论是从 UI 事件、网络回调，还是其他诸如 WebSocket 之类的数据源所获得的数据，最终都会被 dispatch 成 action。
 
-约定俗成，action 必须拥有一个 `type` 域，它指明了需要被执行的 action type。Type 可以被定义为常数，然后从其他 module 导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type`，使用 String 是更好的方法，因为 string 可以被序列化。
+约定俗成，action 必须拥有一个 `type` 域，它指明了需要被执行的 action type。Type 可以被定义为常量，然后从其他 module 导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type`，使用 String 是更好的方法，因为 string 可以被序列化。
 
 除了 `type` 之外，action 对象的结构其实完全取决于你自己。如果你感兴趣的话，请参考 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ，了解如何构建 action。
 

@@ -16,9 +16,9 @@ Action 一般长这样:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-一个约定俗成的做法是，actions 拥有一个定值 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可串行的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
+一个约定俗成的做法是，actions 拥有一个常量 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可串行的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
 
-在 Flux 中，传统的想法是将每个 action type 定义为 string 定值：
+在 Flux 中，传统的想法是将每个 action type 定义为 string 常量：
 
 ```js
 const ADD_TODO = 'ADD_TODO';
@@ -26,14 +26,14 @@ const REMOVE_TODO = 'REMOVE_TODO';
 const LOAD_ARTICLE = 'LOAD_ARTICLE';
 ```
 
-这么做的优势？**人们通常声称定值不是必要的。对于小项目也许正确。** 对于大的项目，将 action types 定义为定值有如下好处：
+这么做的优势？**人们通常声称常量不是必要的。对于小项目也许正确。** 对于大的项目，将 action types 定义为常量有如下好处：
 
 * 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
 * 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的action，而你并不知道。
 * Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
-* 如果你在导入一个 Action 定值的时候拼写错误，你会得到 `undefined` 。当你纳闷 action 被分发出去而什么也没发生的时候，一个拼写错误更容易被发现。
+* 如果你在导入一个 Action 常量的时候拼写错误，你会得到 `undefined` 。当你纳闷 action 被分发出去而什么也没发生的时候，一个拼写错误更容易被发现。
 
-你的项目的约定取决与你自己。开始时，可能用的是 inline string，之后转为定值，也许之后将他们归为一个独立文件。Redux 不会给予任何建议，选择你自己最喜欢的。
+你的项目的约定取决与你自己。开始时，可能用的是 inline string，之后转为常量，也许之后将他们归为一个独立文件。Redux 不会给予任何建议，选择你自己最喜欢的。
 
 ## Action Creators
 
@@ -101,7 +101,7 @@ export function addTodo(text) {
 
 ### 生成 Action Creators
 
-某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 定值。这个想法是说你不需要同时定义 `ADD_TODO` 定值和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 定值，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 定值。
+某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 常量。这个想法是说你不需要同时定义 `ADD_TODO` 常量和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 常量，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 常量。
 
 写简单的 action creator 很容易容易让人厌烦，且往往最终生成多余的样板代码：
 
