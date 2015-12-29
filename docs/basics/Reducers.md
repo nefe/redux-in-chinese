@@ -41,7 +41,8 @@
 之所以称作 reducer 是因为和 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 格式很像。保持 reducer 纯净非常重要。**永远不要**在 reducer 里做这些操作：
 
 * 修改传入参数；
-* 执行有副作用的操作，如 API 请求和路由跳转。
+* 执行有副作用的操作，如 API 请求和路由跳转；
+* 调用非纯函数，如 `Date.now()` 或 `Math.random()`。
 
 在[高级篇](../advanced/README.md)里会介绍如何执行有副作用的操作。现在只需要谨记 reducer 一定要保持纯净。**只要传入参数一样，返回必须一样。没有特殊情况、没有副作用，没有 API 请求、没有修改参数，单纯执行计算。**
 
