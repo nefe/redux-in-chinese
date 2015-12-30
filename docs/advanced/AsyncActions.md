@@ -38,7 +38,7 @@
 { type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
-究竟使用带有标记位的同一个 action，还是多个 action type 呢，完全取决于你。这应该是你的团队共同达成的约定。使用多个 type 会降低犯错误的机率，但是如果你使用像 [redux-actions](https://github.com/acdlite/redux-actions) 这类的辅助库来生成 action creator 和 reducer 的话，这完成就不是问题了。
+究竟使用带有标记位的同一个 action，还是多个 action type 呢，完全取决于你。这应该是你的团队共同达成的约定。使用多个 type 会降低犯错误的机率，但是如果你使用像 [redux-actions](https://github.com/acdlite/redux-actions) 这类的辅助库来生成 action creator 和 reducer 的话，这就完全不是问题了。
 
 无论使用哪种约定，一定要在整个应用中保持统一。  
 在本教程中，我们将使用不同的 type 来做。
