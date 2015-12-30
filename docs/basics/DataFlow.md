@@ -54,7 +54,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
   根 reducer 的结构完全由你决定。Redux 原生提供[`combineReducers()`](../api/combineReducers.md)辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
 
-  下面演示 [`combineReducers()`](../api/combineReducers.md) 如何使用。假如你有一个 todos 列表，使用当前的选择过滤器来追踪两个 reducers（原文：and the currently selected filter setting to keep track of with two reducers）：
+  下面演示 [`combineReducers()`](../api/combineReducers.md) 如何使用。假如你有两个 reducer：一个是 todo 列表，另一个是当前选择的过滤器设置：
 
     ```js
     function todos(state = [], action) {
