@@ -10,15 +10,16 @@
 import 'babel-core/polyfill'
 
 import React from 'react'
+import { render } from 'react-dom'
 import Root from './containers/Root'
 
-React.render(
+render(
   <Root />,
   document.getElementById('root')
 )
 ```
 
-## Action Creators and Constants
+## Action Creators 和 Constants
 
 #### `actions.js`
 
@@ -54,7 +55,7 @@ function requestPosts(reddit) {
 function receivePosts(reddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
@@ -64,7 +65,7 @@ function fetchPosts(reddit) {
   return dispatch => {
     dispatch(requestPosts(reddit))
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
-      .then(req => req.json())
+      .then(response => response.json())
       .then(json => dispatch(receivePosts(reddit, json)))
   }
 }
@@ -98,14 +99,14 @@ import { combineReducers } from 'redux'
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from '../actions'
+} from './actions'
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_REDDIT:
-    return action.reddit
-  default:
-    return state
+    case SELECT_REDDIT:
+      return action.reddit
+    default:
+      return state
   }
 }
 
@@ -162,10 +163,12 @@ export default rootReducer
 #### `configureStore.js`
 
 ```js
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import loggerMiddleware from 'redux-logger'
-import rootReducer from '../reducers'
+import createLogger from 'redux-logger'
+import rootReducer from './reducers'
+
+const loggerMiddleware = createLogger()
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
@@ -193,7 +196,7 @@ export default class Root extends Component {
   render() {
     return (
       <Provider store={store}>
-        {() => <AsyncApp />}
+        <AsyncApp />
       </Provider>
     )
   }
@@ -361,6 +364,8 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired).isRequired
 }
 ```
