@@ -37,6 +37,7 @@ import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '.
 console.log(store.getState());
 
 // 监听 state 更新时，打印日志
+// 注意 subscribe() 返回一个函数用来注销监听器
 let unsubscribe = store.subscribe(() =>
   console.log(store.getState())
 );
