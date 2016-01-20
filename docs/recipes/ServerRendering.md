@@ -15,7 +15,7 @@
 * 从 store 中取出 state；
 * 把 state 一同返回给客户端。
 
-在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。  
+在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。
 Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初始 state**。
 
 ## 安装
@@ -107,7 +107,7 @@ function renderFullPage(html, initialState) {
         <title>Redux Universal Example</title>
       </head>
       <body>
-        <div id="app">${html}</div>
+        <div id="root">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
@@ -233,7 +233,7 @@ export function fetchCounter(callback) {
 #### `server.js`
 
 ```js
-// 添加到 import 
+// 添加到 import
 import { fetchCounter } from './api/counter'
 import { renderToString } from 'react-dom/server'
 
