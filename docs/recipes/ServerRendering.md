@@ -15,7 +15,7 @@
 * 从 store 中取出 state；
 * 把 state 一同返回给客户端。
 
-在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。
+在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。  
 Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初始 state**。
 
 ## 安装
