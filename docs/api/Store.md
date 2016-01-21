@@ -21,7 +21,7 @@ Store 不是类。它只是有几个方法的对象。
 
 ### <a id='getState'></a>[`getState()`](#getState)
 
-返回应用当前的 state 树。
+返回应用当前的 state 树。  
 它与 store 的最后一个 reducer 返回值相同。
 
 #### 返回值
