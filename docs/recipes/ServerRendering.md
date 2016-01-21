@@ -107,7 +107,7 @@ function renderFullPage(html, initialState) {
         <title>Redux Universal Example</title>
       </head>
       <body>
-        <div id="app">${html}</div>
+        <div id="root">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
@@ -233,7 +233,7 @@ export function fetchCounter(callback) {
 #### `server.js`
 
 ```js
-// 添加到 import 
+// 添加到 import
 import { fetchCounter } from './api/counter'
 import { renderToString } from 'react-dom/server'
 

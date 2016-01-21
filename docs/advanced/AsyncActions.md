@@ -45,17 +45,17 @@
 
 ## 同步 Action Creator
 
-下面先定义几个同步的 action type 和 action creator。比如，用户可以选择要显示的 reddit：
+下面先定义几个同步的 action type 和 action creator。比如，用户可以选择要显示的 subreddit：
 
 #### `actions.js`
 
 ```js
-export const SELECT_REDDIT = 'SELECT_REDDIT'
+export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 
-export function selectReddit(reddit) {
+export function selectSubreddit(subreddit) {
   return {
-    type: SELECT_REDDIT,
-    reddit
+    type: SELECT_SUBREDDIT,
+    subreddit
   }
 }
 ```
@@ -63,42 +63,42 @@ export function selectReddit(reddit) {
 也可以按 "刷新" 按钮来更新它：
 
 ```js
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
-export function invalidateReddit(reddit) {
+export function invalidatesubreddit(subreddit) {
   return {
-    type: INVALIDATE_REDDIT,
-    reddit
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   }
 }
 ```
 
 这些是用户操作来控制的 action。也有另外一类 action，是由网络请求来控制。后面会介绍如何使用它们，现在，我们只是来定义它们。
 
-当需要获取指定 reddit 的帖子的时候，需要 dispatch `REQUEST_POSTS` action：
+当需要获取指定 subreddit 的帖子的时候，需要 dispatch `REQUEST_POSTS` action：
 
 ```js
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 
-export function requestPosts(reddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 ```
 
-把 `SELECT_REDDIT` 和 `INVALIDATE_REDDIT` 分开很重要。虽然它们的发生有先后顺序，但随着应用变得复杂，有些用户操作（比如，预加载最流行的 reddit，或者一段时间后自动刷新过期数据）后需要马上请求数据。路由变化时也可能需要请求数据，所以一开始如果把请求数据和特定的 UI 事件耦合到一起是不明智的。
+把 `SELECT_SUBREDDIT` 和 `INVALIDATE_SUBREDDIT` 分开很重要。虽然它们的发生有先后顺序，但随着应用变得复杂，有些用户操作（比如，预加载最流行的 subreddit，或者一段时间后自动刷新过期数据）后需要马上请求数据。路由变化时也可能需要请求数据，所以一开始如果把请求数据和特定的 UI 事件耦合到一起是不明智的。
 
 最后，当收到请求响应时，我们会 dispatch `RECEIVE_POSTS`：
 
 ```js
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 
-export function receivePosts(reddit, json) {
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
@@ -119,12 +119,12 @@ export function receivePosts(reddit, json) {
 
 我们以最通用的案例来打头：列表。Web 应用经常需要展示一些内容的列表。比如，帖子的列表，朋友的列表。首先要明确应用要显示哪些列表。然后把它们分开储存在 state 中，这样你才能对它们分别做缓存并且在需要的时候再次请求更新数据。
 
-"Reddit 头条" 应用会长这个样子：
+"subreddit 头条" 应用会长这个样子：
 
 ```js
 {
-  selectedReddit: 'frontend',
-  postsByReddit: {
+  selectedsubreddit: 'frontend',
+  postsBySubreddit: {
     frontend: {
       isFetching: true,
       didInvalidate: false,
@@ -151,7 +151,7 @@ export function receivePosts(reddit, json) {
 
 下面列出几个要点：
 
-* 分开存储 reddit 信息，是为了缓存所有 reddit。当用户来回切换 reddit 时，可以立即更新，同时在不需要的时候可以不请求数据。不要担心把所有帖子放到内存中（会浪费内存）：除非你需要处理成千上万条帖子，而且用户通常不会关闭标签，你不需要做任何清理。
+* 分开存储 subreddit 信息，是为了缓存所有 subreddit。当用户来回切换 subreddit 时，可以立即更新，同时在不需要的时候可以不请求数据。不要担心把所有帖子放到内存中（会浪费内存）：除非你需要处理成千上万条帖子，而且用户通常不会关闭标签，你不需要做任何清理。
 
 * 每个帖子的列表都需要使用 `isFetching` 来显示进度条，`didInvalidate` 来标记数据是否过期，`lastUpdated` 来存放数据最后更新时间，还有 `items` 存放列表信息本身。在实际应用中，你还需要存放 `fetchedPageCount` 和 `nextPageUrl` 这样分页相关的 state。
 
@@ -163,7 +163,7 @@ export function receivePosts(reddit, json) {
 
 >```js
 > {
->   selectedReddit: 'frontend',
+>   selectedsubreddit: 'frontend',
 >   entities: {
 >     users: {
 >       2: {
@@ -184,7 +184,7 @@ export function receivePosts(reddit, json) {
 >       }
 >     }
 >   },
->   postsByReddit: {
+>   postsBySubreddit: {
 >     frontend: {
 >       isFetching: true,
 >       didInvalidate: false,
@@ -215,14 +215,14 @@ export function receivePosts(reddit, json) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_REDDIT, INVALIDATE_REDDIT,
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from '../actions'
 
-function selectedReddit(state = 'reactjs', action) {
+function selectedsubreddit(state = 'reactjs', action) {
   switch (action.type) {
-    case SELECT_REDDIT:
-      return action.reddit
+    case SELECT_SUBREDDIT:
+      return action.subreddit
     default:
       return state
   }
@@ -234,7 +234,7 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
         didInvalidate: true
       })
@@ -255,13 +255,13 @@ function posts(state = {
   }
 }
 
-function postsByReddit(state = {}, action) {
+function postsBySubreddit(state = {}, action) {
   switch (action.type) {
-    case INVALIDATE_REDDIT:
+    case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
-        [action.reddit]: posts(state[action.reddit], action)
+        [action.subreddit]: posts(state[action.subreddit], action)
       })
     default:
       return state
@@ -269,8 +269,8 @@ function postsByReddit(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
-  postsByReddit,
-  selectedReddit
+  postsBySubreddit,
+  selectedsubreddit
 })
 
 export default rootReducer
@@ -278,18 +278,18 @@ export default rootReducer
 
 上面代码有两个有趣的点：
 
-* 使用 ES6 计算属性语法，使用 `Object.assign()` 来简洁高效地更新 `state[action.reddit]`。这个：
+* 使用 ES6 计算属性语法，使用 `Object.assign()` 来简洁高效地更新 `state[action.subreddit]`。这个：
 
   ```js
   return Object.assign({}, state, {
-    [action.reddit]: posts(state[action.reddit], action)
+    [action.subreddit]: posts(state[action.subreddit], action)
   })
   ```
   与下面代码等价：
 
   ```js
   let nextState = {}
-  nextState[action.reddit] = posts(state[action.reddit], action)
+  nextState[action.subreddit] = posts(state[action.subreddit], action)
   return Object.assign({}, state, nextState)
   ```
 
@@ -311,18 +311,18 @@ export default rootReducer
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
@@ -332,7 +332,7 @@ function receivePosts(reddit, json) {
 // 虽然内部操作不同，你可以像其它 action creator 一样使用它：
 // store.dispatch(fetchPosts('reactjs'))
 
-export function fetchPosts(reddit) {
+export function fetchPosts(subreddit) {
 
   // Thunk middleware 知道如何处理函数。
   // 这里把 dispatch 方法通过参数的形式传给函数，
@@ -343,7 +343,7 @@ export function fetchPosts(reddit) {
     // 首次 dispatch：更新应用的 state 来通知
     // API 请求发起了。
 
-    dispatch(requestPosts(reddit))
+    dispatch(requestPosts(subreddit))
 
     // thunk middleware 调用的函数可以有返回值，
     // 它会被当作 dispatch 方法的返回值传递。
@@ -351,14 +351,14 @@ export function fetchPosts(reddit) {
     // 这个案例中，我们返回一个等待处理的 promise。
     // 这并不是 redux middleware 所必须的，但这对于我们而言很方便。
 
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
+    return fetch(`http://www.subreddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json =>
 
         // 可以多次 dispatch！
         // 这里，使用 API 请求结果来更新应用的 state。
 
-        dispatch(receivePosts(reddit, json))
+        dispatch(receivePosts(subreddit, json))
       )
 
       // 在实际应用中，还需要
@@ -393,7 +393,7 @@ export function fetchPosts(reddit) {
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
-import { selectReddit, fetchPosts } from './actions'
+import { selectSubreddit, fetchPosts } from './actions'
 import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
@@ -405,7 +405,7 @@ const createStoreWithMiddleware = applyMiddleware(
 
 const store = createStoreWithMiddleware(rootReducer)
 
-store.dispatch(selectReddit('reactjs'))
+store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
   console.log(store.getState())
 )
@@ -419,34 +419,34 @@ thunk 的一个优点是它的结果可以再次被 dispatch：
 import fetch from 'isomorphic-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
 }
 
-function fetchPosts(reddit) {
+function fetchPosts(subreddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit))
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
+    dispatch(requestPosts(subreddit))
+    return fetch(`http://www.subreddit.com/r/${subreddit}.json`)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(reddit, json)))
+      .then(json => dispatch(receivePosts(subreddit, json)))
   }
 }
 
-function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit]
+function shouldFetchPosts(state, subreddit) {
+  const posts = state.postsBySubreddit[subreddit]
   if (!posts) {
     return true
   } else if (posts.isFetching) {
@@ -456,7 +456,7 @@ function shouldFetchPosts(state, reddit) {
   }
 }
 
-export function fetchPostsIfNeeded(reddit) {
+export function fetchPostsIfNeeded(subreddit) {
 
   // 注意这个函数也接收了 getState() 方法
   // 它让你选择接下来 dispatch 什么。
@@ -465,9 +465,9 @@ export function fetchPostsIfNeeded(reddit) {
   // 减少网络请求很有用。
 
   return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), reddit)) {
+    if (shouldFetchPosts(getState(), subreddit)) {
       // 在 thunk 里 dispatch 另一个 thunk！
-      return dispatch(fetchPosts(reddit))
+      return dispatch(fetchPosts(subreddit))
     } else {
       // 告诉调用代码不需要再等待。
       return Promise.resolve()
@@ -494,7 +494,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 ## 连接到 UI
 
-Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：Reddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
+Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：subreddit API](ExamplesubredditAPI.md) 来获取本例的完整代码。
 
 ## 下一步
 

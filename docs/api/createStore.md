@@ -1,6 +1,6 @@
 # `createStore(reducer, [initialState])`
 
-创建一个 Redux [store](Store.md) 来以存放应用中所有的 state。
+创建一个 Redux [store](Store.md) 来以存放应用中所有的 state。  
 应用中应有且仅有一个 store。
 
 #### 参数
@@ -8,7 +8,7 @@
 1. `reducer` *(Function)*: 接收两个参数，分别是当前的 state 树和要处理的 [action](../Glossary.md#action)，返回新的 [state 树](../Glossary.md#state)。
 
 2. [`initialState`] *(any)*: 初始时的 state。
-在同构应用中，你可以决定是否把服务端传来的 state 水合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 [`combineReducers`](combineReducers.md) 创建 `reducer`，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 `reducer` 可理解的内容。[TODO: Optimize]
+在同构应用中，你可以决定是否把服务端传来的 state 水合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 [`combineReducers`](combineReducers.md) 创建 `reducer`，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 `reducer` 可理解的内容。
 
 #### 返回值
 
@@ -17,26 +17,26 @@
 #### 示例
 
 ```js
-import { createStore } from 'redux';
+import { createStore } from 'redux'
 
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return state.concat([action.text]);
-  default:
-    return state;
+    case 'ADD_TODO':
+      return state.concat([ action.text ])
+    default:
+      return state
   }
 }
 
-let store = createStore(todos, ['Use Redux']);
+let store = createStore(todos, [ 'Use Redux' ])
 
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Read the docs'
-});
+})
 
-console.log(store.getState());
-// ['Use Redux', 'Read the docs']
+console.log(store.getState())
+// [ 'Use Redux', 'Read the docs' ]
 ```
 
 #### 小贴士

@@ -51,9 +51,9 @@ Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 
 function toObservable(store) {
   return {
     subscribe({ onNext }) {
-      let dispose = store.subscribe(() => onNext(store.getState()));
-      onNext(store.getState());
-      return { dispose };
+      let dispose = store.subscribe(() => onNext(store.getState()))
+      onNext(store.getState())
+      return { dispose }
     }
   }
 }

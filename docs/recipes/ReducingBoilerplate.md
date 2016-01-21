@@ -150,7 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-一些工具库也可以帮助生成 action creator ，例如 [redux-action-utils](https://github.com/insin/redux-action-utils) 和 [redux-actions](https://github.com/acdlite/redux-actions) 。这些库可以有效减少你的样板代码，并紧守例如 [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action) 一类的标准。
+一些工具库也可以帮助生成 action creator ，例如 [redux-act](https://github.com/pauldijou/redux-act) 和 [redux-actions](https://github.com/acdlite/redux-actions) 。这些库可以有效减少你的样板代码，并紧守例如 [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action) 一类的标准。
 
 ## 异步 Action Creators
 
@@ -202,7 +202,7 @@ class Posts extends Component {
       return;
     }
 
-    // Reducer 可以通过设置 `isFetching` 反应这个 action 
+    // Reducer 可以通过设置 `isFetching` 反应这个 action
     // 因此让我们显示一个 Spinner 控件。
     dispatch(loadPostsRequest(userId));
 
@@ -330,7 +330,7 @@ export default connect(state => ({
 ```js
 export function loadPosts(userId) {
   return {
-    // 要在之前和之后发送的 action types 
+    // 要在之前和之后发送的 action types
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // 检查缓存 (可选):
     shouldCallAPI: (state) => !state.users[userId],

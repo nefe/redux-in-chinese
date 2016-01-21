@@ -20,52 +20,52 @@ Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，
 #### 示例: 自定义 Logger Middleware
 
 ```js
-import { createStore, applyMiddleware } from 'redux';
-import todos from './reducers';
+import { createStore, applyMiddleware } from 'redux'
+import todos from './reducers'
 
 function logger({ getState }) {
   return (next) => (action) => {
-    console.log('will dispatch', action);
+    console.log('will dispatch', action)
 
     // 调用 middleware 链中下一个 middleware 的 dispatch。
-    let returnValue = next(action);
+    let returnValue = next(action)
 
-    console.log('state after dispatch', getState());
+    console.log('state after dispatch', getState())
 
     // 一般会是 action 本身，除非
     // 后面的 middleware 修改了它。
-    return returnValue;
-  };
+    return returnValue
+  }
 }
 
-let createStoreWithMiddleware = applyMiddleware(logger)(createStore);
-let store = createStoreWithMiddleware(todos, ['Use Redux']);
+let createStoreWithMiddleware = applyMiddleware(logger)(createStore)
+let store = createStoreWithMiddleware(todos, [ 'Use Redux' ])
 
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Understand the middleware'
-});
+})
 // (将打印如下信息:)
 // will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
-// state after dispatch: ['Use Redux', 'Understand the middleware']
+// state after dispatch: [ 'Use Redux', 'Understand the middleware' ]
 ```
 
 #### 示例: 使用 Thunk Middleware 来做异步 Action
 
 ```js
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import * as reducers from './reducers';
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import * as reducers from './reducers'
 
 // 调用 applyMiddleware，使用 middleware 增强 createStore：
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+let createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 
 // 像原生 createStore 一样使用。
-let reducer = combineReducers(reducers);
-let store = createStoreWithMiddleware(reducer);
+let reducer = combineReducers(reducers)
+let store = createStoreWithMiddleware(reducer)
 
 function fetchSecretSauce() {
-  return fetch('https://www.google.com/search?q=secret+sauce');
+  return fetch('https://www.google.com/search?q=secret+sauce')
 }
 
 // 这些是你已熟悉的普通 action creator。
@@ -77,7 +77,7 @@ function makeASandwich(forPerson, secretSauce) {
     type: 'MAKE_SANDWICH',
     forPerson,
     secretSauce
-  };
+  }
 }
 
 function apologize(fromPerson, toPerson, error) {
@@ -86,18 +86,18 @@ function apologize(fromPerson, toPerson, error) {
     fromPerson,
     toPerson,
     error
-  };
+  }
 }
 
 function withdrawMoney(amount) {
   return {
     type: 'WITHDRAW',
     amount
-  };
+  }
 }
 
 // 即使不使用 middleware，你也可以 dispatch action：
-store.dispatch(withdrawMoney(100));
+store.dispatch(withdrawMoney(100))
 
 // 但是怎样处理异步 action 呢，
 // 比如 API 调用，或者是路由跳转？
@@ -116,16 +116,16 @@ function makeASandwichWithSecretSauce(forPerson) {
     return fetchSecretSauce().then(
       sauce => dispatch(makeASandwich(forPerson, sauce)),
       error => dispatch(apologize('The Sandwich Shop', forPerson, error))
-    );
-  };
+    )
+  }
 }
 
-// Thunk middleware 可以让我们像 dispatch 普通 action 
+// Thunk middleware 可以让我们像 dispatch 普通 action
 // 一样 dispatch 异步的 thunk action。
 
 store.dispatch(
   makeASandwichWithSecretSauce('Me')
-);
+)
 
 // 它甚至负责回传 thunk 被 dispatch 后返回的值，
 // 所以可以继续串连 Promise，调用它的 .then() 方法。
@@ -133,8 +133,8 @@ store.dispatch(
 store.dispatch(
   makeASandwichWithSecretSauce('My wife')
 ).then(() => {
-  console.log('Done!');
-});
+  console.log('Done!')
+})
 
 // 实际上，可以写一个 dispatch 其它 action creator 里
 // 普通 action 和异步 action 的 action creator，
@@ -147,7 +147,7 @@ function makeSandwichesForEverybody() {
       // 返回 Promise 并不是必须的，但这是一个很好的约定，
       // 为了让调用者能够在异步的 dispatch 结果上直接调用 .then() 方法。
 
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     // 可以 dispatch 普通 action 对象和其它 thunk，
@@ -167,37 +167,39 @@ function makeSandwichesForEverybody() {
         withdrawMoney(42) :
         apologize('Me', 'The Sandwich Shop')
       )
-    );
-  };
+    )
+  }
 }
 
 // 这在服务端渲染时很有用，因为我可以等到数据
 // 准备好后，同步的渲染应用。
 
+import { renderToString } from 'react-dom/server'
+
 store.dispatch(
   makeSandwichesForEverybody()
 ).then(() =>
-  response.send(React.renderToString(<MyApp store={store} />))
-);
+  response.send(renderToString(<MyApp store={store} />))
+)
 
 // 也可以在任何导致组件的 props 变化的时刻
 // dispatch 一个异步 thunk action。
 
-import { connect } from 'react-redux';
-import { Component } from 'react';
+import { connect } from 'react-redux'
+import { Component } from 'react'
 
 class SandwichShop extends Component {
   componentDidMount() {
     this.props.dispatch(
       makeASandwichWithSecretSauce(this.props.forPerson)
-    );
+    )
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.forPerson !== this.props.forPerson) {
       this.props.dispatch(
         makeASandwichWithSecretSauce(nextProps.forPerson)
-      );
+      )
     }
   }
 
@@ -210,7 +212,7 @@ export default connect(
   state => ({
     sandwiches: state.sandwiches
   })
-)(SandwichShop);
+)(SandwichShop)
 ```
 
 #### 小贴士
@@ -222,13 +224,13 @@ export default connect(
 * 如果你想有条件地使用 middleware，记住只 import 需要的部分：
 
   ```js
-  let middleware = [a, b];
+  let middleware = [ a, b ]
   if (process.env.NODE_ENV !== 'production') {
-    let c = require('some-debug-middleware');
-    let d = require('another-debug-middleware');
-    middleware = [...middleware, c, d];
+    let c = require('some-debug-middleware')
+    let d = require('another-debug-middleware')
+    middleware = [ ...middleware, c, d ]
   }
-  const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+  const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore)
   ```
 
   这样做有利于打包时去掉不需要的模块，减小打包文件大小。

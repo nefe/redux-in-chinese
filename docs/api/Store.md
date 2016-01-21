@@ -1,9 +1,9 @@
 # Store
 
-Store 就是用来维持应用所有的 [state 树](../Glossary.md#state) 的一个对象。  
+Store 就是用来维持应用所有的 [state 树](../Glossary.md#state) 的一个对象。
 改变 store 内 state 的惟一途径是对它 dispatch 一个 [action](../Glossary.md#action)。
 
-Store 不是类。它只是有几个方法的对象。  
+Store 不是类。它只是有几个方法的对象。
 要创建它，只需要把根部的 [reducing 函数](../Glossary.md#reducer) 传递给 [`createStore`](createStore.md)。
 
 >##### Flux 用户使用注意
@@ -62,18 +62,18 @@ Middleware 是由社区创建，并不会同 Redux 一起发行。你需要手�
 #### 示例
 
 ```js
-import { createStore } from 'redux';
-let store = createStore(todos, ['Use Redux']);
+import { createStore } from 'redux'
+let store = createStore(todos, [ 'Use Redux' ])
 
 function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 
-store.dispatch(addTodo('Read the docs'));
-store.dispatch(addTodo('Read about the middleware'));
+store.dispatch(addTodo('Read the docs'))
+store.dispatch(addTodo('Read about the middleware'))
 ```
 
 <hr>
@@ -98,21 +98,21 @@ store.dispatch(addTodo('Read about the middleware'));
 
 ```js
 function select(state) {
-  return state.some.deep.property;
+  return state.some.deep.property
 }
 
-let currentValue;
+let currentValue
 function handleChange() {
-  let previousValue = currentValue;
-  currentValue = select(store.getState());
-  
+  let previousValue = currentValue
+  currentValue = select(store.getState())
+
   if (previousValue !== currentValue) {
-    console.log('Some deep nested property changed from', previousValue, 'to', currentValue);
+    console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
   }
 }
 
-let unsubscribe = store.subscribe(handleChange);
-handleChange();
+let unsubscribe = store.subscribe(handleChange)
+handleChange()
 ```
 
 <hr>

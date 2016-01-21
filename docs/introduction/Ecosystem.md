@@ -56,8 +56,8 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 ### 路由
 
-* [redux-router](https://github.com/rackt/redux-router) — 由 React Router 绑定到 Redux 的库
-* [redux-simple-router](https://github.com/jlongster/redux-simple-router) — 保持 React Router 和 Redux 同步
+* [redux-simple-router](https://github.com/rackt/redux-simple-router) — 保持 React Router 和 Redux 同步
+* [redux-router](https://github.com/acdlite/redux-router) — 由 React Router 绑定到 Redux 的库
 
 ### 组件
 

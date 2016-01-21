@@ -4,7 +4,20 @@
 
 `combineReducers` 辅助函数的作用是，把一个由多个不同 reducer 函数作为 value 的 object，合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 [`createStore`](createStore.md)。
 
-合并后的 reducer 可以调用各个子 reducer，并把它们的结果合并成一个 state 对象。state 对象的结构由传入的多个 reducer 的 key 决定。
+合并后的 reducer 可以调用各个子 reducer，并把它们的结果合并成一个 state 对象。**state 对象的结构由传入的多个 reducer 的 key 决定**。
+
+最终，state 对象的结构会是这样的：
+
+```
+{
+  reducer1: ...
+  reducer2: ...
+}
+```
+
+通过为传入对象的 reducer 命名不同来控制 state key 的命名。例如，你可以调用 `combineReducers({ todos: myTodosReducer, counter: myCounterReducer })` 将 state 结构变为 `{ todos, counter }`。
+
+通常的做法是命名 reducer，然后 state 再去分割那些信息，因此你可以使用 ES6 的简写方法：`combineReducers({ counter, todos })`。这与 `combineReducers({ counter: counter, todos: todos })` 一样。
 
 > ##### Flux 用户使用须知
 
@@ -18,7 +31,7 @@
 
 #### 返回值
 
-(*Function*): 一个调用 `reducers` 对象里所有 reducer 的 reducer，并且构造一个与 `reducers` 对象结构相同的 state 对象。
+(*Function*)：一个调用 `reducers` 对象里所有 reducer 的 reducer，并且构造一个与 `reducers` 对象结构相同的 state 对象。
 
 #### 注意
 
@@ -42,9 +55,9 @@
 export default function todos(state = [], action) {
   switch (action.type) {
   case 'ADD_TODO':
-    return state.concat([action.text]);
+    return state.concat([action.text])
   default:
-    return state;
+    return state
   }
 }
 ```
@@ -55,11 +68,11 @@ export default function todos(state = [], action) {
 export default function counter(state = 0, action) {
   switch (action.type) {
   case 'INCREMENT':
-    return state + 1;
+    return state + 1
   case 'DECREMENT':
-    return state - 1;
+    return state - 1
   default:
-    return state;
+    return state
   }
 }
 ```
@@ -67,24 +80,24 @@ export default function counter(state = 0, action) {
 #### `reducers/index.js`
 
 ```js
-import { combineReducers } from 'redux';
-import todos from './todos';
-import counter from './counter';
+import { combineReducers } from 'redux'
+import todos from './todos'
+import counter from './counter'
 
 export default combineReducers({
   todos,
   counter
-});
+})
 ```
 
 #### `App.js`
 
 ```js
-import { createStore } from 'redux';
-import reducer from './reducers/index';
+import { createStore } from 'redux'
+import reducer from './reducers/index'
 
-let store = createStore(reducer);
-console.log(store.getState());
+let store = createStore(reducer)
+console.log(store.getState())
 // {
 //   counter: 0,
 //   todos: []
@@ -93,11 +106,11 @@ console.log(store.getState());
 store.dispatch({
   type: 'ADD_TODO',
   text: 'Use Redux'
-});
-console.log(store.getState());
+})
+console.log(store.getState())
 // {
 //   counter: 0,
-//   todos: ['Use Redux']
+//   todos: [ 'Use Redux' ]
 // }
 ```
 
