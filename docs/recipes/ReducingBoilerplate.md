@@ -243,7 +243,7 @@ export default connect(state => ({
 
 然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
 
-**中间件让我们能写表达更清晰的、潜在的异步 action creators。 ** 它允许我们分发普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经分发的 Promises 并把他们变为一对请求和成功/失败的 action.
+**中间件让我们能写表达更清晰的、潜在的异步 action creators。** 它允许我们分发普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经分发的 Promises 并把他们变为一对请求和成功/失败的 action.
 
 中间件最简单的例子是 [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” 中间件让你可以把 action creators 写成 “thunks”，也就是返回函数的函数。** 这使得控制被反转了： 你会像一个参数一样取得 `dispatch` ，所以你也能写一个多次分发的 action creator 。
 
