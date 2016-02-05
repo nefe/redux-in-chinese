@@ -107,7 +107,7 @@ Store 维持着应用的 state tree 对象。
 - [`dispatch(action)`](api/Store.md#dispatch) 是上述的 base dispatch function。
 - [`getState()`](api/Store.md#getState) 返回当前 store 的 state。
 - [`subscribe(listener)`](api/Store.md#subscribe) 注册一个 state 发生变化时的回调函数。
-- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) 可用于热重载荷和代码分割。通常你不需要用到这个 API。
+- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) 可用于热重载和代码分割。通常你不需要用到这个 API。
 
 详见完整的 [store API reference](api/Store.md#dispatch)。
 
