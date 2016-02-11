@@ -208,7 +208,7 @@ export default class Root extends Component {
 ```js
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
+import { selectsubreddit, fetchPostsIfNeeded, invalidatesubreddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
