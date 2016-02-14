@@ -31,14 +31,14 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 export const INVALIDATE_SUBREDDIT  = 'INVALIDATE_SUBREDDIT '
 
-export function selectsubreddit(subreddit) {
+export function selectSubreddit(subreddit) {
   return {
     type: SELECT_SUBREDDIT,
     subreddit
   }
 }
 
-export function invalidatesubreddit(subreddit) {
+export function invalidateubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT ,
     subreddit
@@ -232,14 +232,14 @@ class AsyncApp extends Component {
   }
 
   handleChange(nextSubreddit) {
-    this.props.dispatch(selectsubreddit(nextSubreddit))
+    this.props.dispatch(selectSubreddit(nextSubreddit))
   }
 
   handleRefreshClick(e) {
     e.preventDefault()
 
     const { dispatch, selectedSubreddit } = this.props
-    dispatch(invalidatesubreddit(selectedSubreddit))
+    dispatch(invalidateSubreddit(selectedSubreddit))
     dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
