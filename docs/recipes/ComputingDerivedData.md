@@ -81,7 +81,7 @@ export default connect(select)(App);
 
 我们需要一个可记忆的 selector 来替代这个 `select`，只在 `state.todos` or `state.visibilityFilter` 变化时重新计算 `visibleTodos`，而在其它部分（非相关）变化时不做计算。
 
-Reselect 提供 `createSelector` 函数来创建可记忆的 selector。`createSelector` 接收一个 input-selectors 数组和一个转换函数作为参数。如果 state tree 的改变会引起 input-selector 值变化，那么 selector 会调用转换函数，传入 input-selectors 作为参数，并返回结果。如果 input-selectors 的值的前一次的一样，它将会直接返回前一次计算的数据，而不会再调用一次转换函数。
+Reselect 提供 `createSelector` 函数来创建可记忆的 selector。`createSelector` 接收一个 input-selectors 数组和一个转换函数作为参数。如果 state tree 的改变会引起 input-selector 值变化，那么 selector 会调用转换函数，传入 input-selectors 作为参数，并返回结果。如果 input-selectors 的值和前一次的一样，它将会直接返回前一次计算的数据，而不会再调用一次转换函数。
 
 定义一个可记忆的 selector `visibleTodosSelector` 来替代 `select`：
 
