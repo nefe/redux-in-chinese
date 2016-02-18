@@ -1,6 +1,6 @@
 # 排错
 
-这里会列出常见的问题和对应的解决方案。
+这里会列出常见的问题和对应的解决方案。  
 虽然使用 React 做示例，但是即使你使用了其它库，这些问题和解决方案仍然对你有所帮助。
 
 ### dispatch action 后什么也没有发生
@@ -20,18 +20,20 @@ Redux 假定你永远不会修改 reducer 里传入的对象。**任何时候，
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    // 错误！这会改变 state.actions。
-    state.push({
-      text: action.text,
-      completed: false
-    });
-  case 'COMPLETE_TODO':
-    // 错误！这会改变 state[action.index].
-    state[action.index].completed = true;
+    case 'ADD_TODO':
+      // 错误！这会改变 state.actions。
+      state.push({
+        text: action.text,
+        completed: false
+      })
+      return state
+    case 'COMPLETE_TODO':
+      // 错误！这会改变 state[action.index]。
+      state[action.index].completed = true
+      return state
+    default:
+      return state
   }
-
-  return state
 }
 ```
 
@@ -40,27 +42,27 @@ function todos(state = [], action) {
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    // 返回新数组
-    return [
-      ...state,
-      {
-        text: action.text,
-        completed: false
-      }
-    ];
-  case 'COMPLETE_TODO':
-    // 返回新数组
-    return [
-      ...state.slice(0, action.index),
-      // 修改之前复制数组
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case 'ADD_TODO':
+      // 返回新数组
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'COMPLETE_TODO':
+      // 返回新数组
+      return [
+        ...state.slice(0, action.index),
+        // 修改之前复制数组
+        Object.assign({}, state[action.index], {
+          completed: true
+        }),
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      return state
   }
 }
 ```
@@ -92,7 +94,7 @@ return update(state, {
 
 要注意 `Object.assign` 的使用方法。例如，在 reducer 里不要这样使用 `Object.assign(state, newData)`，应该用 `Object.assign({}, state, newData)`。这样它才不会覆盖以前的 `state`。
 
-你也可以通过使用 [Babel 阶段 1](http://babeljs.io/docs/usage/experimental/) 模式来开启 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread)：
+你也可以通过使用 [Babel transform-object-rest-spread 插件](http://babeljs.io/docs/plugins/transform-object-rest-spread/)来开启 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread)：
 
 ```js
 // 修改前：
@@ -122,7 +124,7 @@ return [
 
 ```js
 export function addTodo(text) {
-  return { type: 'ADD_TODO', text };
+  return { type: 'ADD_TODO', text }
 }
 ```
 
@@ -162,7 +164,7 @@ handleClick() {
 如果组件的层级非常深，把 store 一层层传下去很麻烦。因此 [react-redux](https://github.com/gaearon/react-redux) 提供了 `connect` 这个 [高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)，它除了可以帮你监听 Redux store，还会把 `dispatch` 注入到组件的 props 中。
 
 修复后的代码是这样的：
-
+#### `AddTodo.js`
 ```js
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -191,5 +193,5 @@ export default connect()(AddTodo)
 
 ## 其它问题
 
-在 Discord [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。
+在 Discord [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。  
 如果问题终于解决了，请把解法[写到文档里](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md)，以便别人遇到同样问题时参考。
