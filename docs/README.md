@@ -41,3 +41,4 @@
   * [快速入门](/docs/react-redux/quick-start.md)
   * [API](/docs/react-redux/api.md)
   * [排错](/docs/react-redux/troubleshooting.md)
+* [redux-tutorial](https://github.com/react-guide/redux-tutorial-cn)

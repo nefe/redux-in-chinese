@@ -2,11 +2,9 @@
 
 [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-在线 Gitbook 地址：http://camsong.github.io/redux-in-chinese/
-
-英文原版：http://rackt.github.io/redux/
-
-**我们正在进行 [React Router 中文文档](https://github.com/react-guide/react-router-cn) 翻译工作，欢迎[加入我们](https://github.com/react-guide/react-router-cn/issues)**
+> 在线 Gitbook 地址：http://cn.redux.js.org/  
+> 英文原版：http://redux.js.org/  
+> 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn)
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
