@@ -4,7 +4,7 @@
 
 > 在线 Gitbook 地址：http://cn.redux.js.org/  
 > 英文原版：http://redux.js.org/  
-> 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn)
+> 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn#redux-tutorial)
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
