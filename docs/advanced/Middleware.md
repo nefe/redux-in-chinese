@@ -237,7 +237,7 @@ const crashReporter = store => next => action => {
 }
 ```
 
-**这正是的 Redux middleware 的样子。**
+**这正是 Redux middleware 的样子。**
 
 Middleware 接收了一个 `next()` 的 dispatch 函数，并返回一个 dispatch 函数，返回的函数会被作为下一个 middleware 的 `next()`，以此类推。由于 store 中类似 `getState()` 的方法依旧非常有用，我们将 `store` 作为顶层的参数，使得它可以在所有 middleware 中被使用。
 
