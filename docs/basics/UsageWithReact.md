@@ -220,7 +220,7 @@ Footer.propTypes = {
 
 就是这些，现在开发一个笨拙型的组件 `App` 把它们渲染出来，验证下是否工作。
 
-#### `containers/App.js`
+#### `components/App.js`
 
 ```js
 import React, { Component } from 'react';
@@ -264,11 +264,156 @@ export default class App extends Component {
 
 单独来看，并没有什么特别，现在把它和 Redux 连起来。
 
-## 连接到 Redux
+## Container组件
 
-我们需要做出两个变化，将 `App` 组件连接到 Redux 并且让它能够 dispatch actions 以及从 Redux store 读取到 state。
+现在我们可以通过创建容器将组件连接到Redux。从技术上讲，一个容器也是一个组件，它通过store.subscribe()读取redux状态树的部分数据，并传递给组件进行渲染。你可以自己创建一个容器，但建议使用redux的connect()创建容器，redux对容器进行了优化。
 
-首先，我们需要获取从之前安装好的 [`react-redux`](http://github.com/gaearon/react-redux) 提供的  `Provider`，并且在渲染之前**将根组件包装进 `<Provider>`**。
+使用connect()，我们需要创建mapStateToProps函数，将store的state转换为组件渲染需要的props。举例，VisibleTodoList需要计算todos传递给ToDoList，所以我们定义一个函数依据state.visibilityFilter来筛选state.todos,并在mapStateToProps中使用该函数：
+
+```js
+const getVisibleTodos = (todos, filter) => {
+  switch (filter) {
+    case 'SHOW_ALL':
+      return todos
+    case 'SHOW_COMPLETED':
+      return todos.filter(t => t.completed)
+    case 'SHOW_ACTIVE':
+      return todos.filter(t => !t.completed)
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
+```
+除了读取状态，容器还会dispatch actions。我们定义mapDispatchToProps()，该函数接收 dispatch()方法，并返回组件渲染所需的props。举例，我们希望VisibleTodoList注入名为onTodoClick的属性到TodoList组件，并且希望onTodoClick触发TOGGLE_TODO action：
+
+```js
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTodoClick: (id) => {
+      dispatch(toggleTodo(id))
+    }
+  }
+}
+```
+
+最后我们调用connect函数，并传递两个这两个函数以创建VisibleTodoList。
+
+```js
+import { connect } from 'react-redux'
+
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+
+export default VisibleTodoList
+```
+
+其它容器实现如下：
+#### containers/FilterLink.js
+
+```js
+import { connect } from 'react-redux'
+import { setVisibilityFilter } from '../actions'
+import Link from '../components/Link'
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    active: ownProps.filter === state.visibilityFilter
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onClick: () => {
+      dispatch(setVisibilityFilter(ownProps.filter))
+    }
+  }
+}
+
+const FilterLink = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Link)
+
+export default FilterLink
+```
+
+#### containers/VisibleTodoList.js
+```js
+import { connect } from 'react-redux'
+import { toggleTodo } from '../actions'
+import TodoList from '../components/TodoList'
+
+const getVisibleTodos = (todos, filter) => {
+  switch (filter) {
+    case 'SHOW_ALL':
+      return todos
+    case 'SHOW_COMPLETED':
+      return todos.filter(t => t.completed)
+    case 'SHOW_ACTIVE':
+      return todos.filter(t => !t.completed)
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTodoClick: (id) => {
+      dispatch(toggleTodo(id))
+    }
+  }
+}
+
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+
+export default VisibleTodoList
+```
+
+## Other Components
+
+#### containers/AddTodo.js
+```js
+import React from 'react'
+import { connect } from 'react-redux'
+import { addTodo } from '../actions'
+
+let AddTodo = ({ dispatch }) => {
+  let input
+
+  return (
+    <div>
+      <input ref={node => {
+        input = node
+      }} />
+      <button onClick={() => {
+        dispatch(addTodo(input.value))
+        input.value = ''
+      }}>
+        Add Todo
+      </button>
+    </div>
+  )
+}
+AddTodo = connect()(AddTodo)
+
+export default AddTodo
+```
+
+## 传递给store
+我们可以使用<Provider>使所有容器都能访问store，而不需要每次传递。你只需在渲染根组件时设置一次即可。
 
 #### `index.js`
 
