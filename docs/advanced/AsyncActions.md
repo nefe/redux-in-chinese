@@ -382,7 +382,7 @@ export function fetchPosts(subreddit) {
 
 >```js
 >// 在应用中其它任何代码执行前调用一次
->import 'babel-core/polyfill'
+>import 'babel-polyfill'
 >```
 
 我们是如何在 dispatch 机制中引入 Redux Thunk middleware 的呢？我们使用了 [`applyMiddleware()`](../api/applyMiddleware.md)，如下：

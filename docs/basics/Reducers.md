@@ -302,7 +302,7 @@ export default todoApp;
 注意上面的写法和下面完全等价：
 
 ```js
-export default function todoApp(state, action) {
+export default function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
@@ -321,7 +321,7 @@ const reducer = combineReducers({
 ```
 
 ```js
-function reducer(state, action) {
+function reducer(state = {}, action) {
   return {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
