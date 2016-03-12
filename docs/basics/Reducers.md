@@ -38,7 +38,7 @@
 (previousState, action) => newState
 ```
 
-之所以称作 reducer 是因为和 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 格式很像。保持 reducer 纯净非常重要。**永远不要**在 reducer 里做这些操作：
+之所以称作 reducer 是因为它将被传递给 [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 方法。保持 reducer 纯净非常重要。**永远不要**在 reducer 里做这些操作：
 
 * 修改传入参数；
 * 执行有副作用的操作，如 API 请求和路由跳转；
