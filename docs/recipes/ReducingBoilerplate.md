@@ -6,7 +6,7 @@ Redux 很大部分 [受到 Flux 的启发](../introduction/PriorArt.md)，而最
 
 Actions 是用来描述在 app 中发生了什么的普通对象，是描述对象变异意图的唯一途径。很重要的一点是 **必须分发的 action 对象并非模板，而是 Redux 的一个[基本设计选项](../introduction/ThreePrinciples.md)**.
 
-不少框架声称自己和 Flux 很像，只不过缺少了 action 对象的概念。但可预测的是，这是从 Flux 或 Redux 的倒退。如果没有可串行的普通对象 action，便无法记录或重演用户会话，也无法实现 [带有时间旅行的热重载](https://www.youtube.com/watch?v=xsSnOQynTHs)。如果你更喜欢直接修改数据，那你并不需要使用 Redux 。
+不少框架声称自己和 Flux 很像，只不过缺少了 action 对象的概念。但可预测的是，这是从 Flux 或 Redux 的倒退。如果没有可序列化的普通对象 action，便无法记录或重演用户会话，也无法实现 [带有时间旅行的热重载](https://www.youtube.com/watch?v=xsSnOQynTHs)。如果你更喜欢直接修改数据，那你并不需要使用 Redux 。
 
 Action 一般长这样:
 
@@ -16,7 +16,7 @@ Action 一般长这样:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-一个约定俗成的做法是，actions 拥有一个常量 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可串行的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
+一个约定俗成的做法是，actions 拥有一个常量 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可序列化的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
 
 在 Flux 中，传统的想法是将每个 action type 定义为 string 常量：
 
