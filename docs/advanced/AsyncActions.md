@@ -494,7 +494,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 ## 连接到 UI
 
-Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：subreddit API](ExamplesubredditAPI.md) 来获取本例的完整代码。
+Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：subreddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
 
 ## 下一步
 
