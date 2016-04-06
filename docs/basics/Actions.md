@@ -65,7 +65,7 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-不同的是，Redux 中的 action 创建函数是 **纯函数**，它没有任何副作用，只是返回 action 对象而已。
+不同的是，Redux 中的 action 创建函数仅仅返回一个 action 对象。
 
 ```js
 function addTodo(text) {
