@@ -5,7 +5,8 @@
     "clean": "rimraf _book",
     "build": "gitbook build -g camsong/redux-in-chinese",
     "watch": "gitbook serve",
-    "publish": "npm run clean && npm run build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:camsong/redux-in-chinese gh-pages --force"
+    "publish": "npm run clean && npm run build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:camsong/redux-in-chinese gh-pages --force",
+    "offline": "gitbook pdf . offline/redux-in-chinese.pdf && gitbook epub . offline/redux-in-chinese.epub && gitbook mobi . offline/redux-in-chinese.mobi"
   },
   "repository": {
     "type": "git",
