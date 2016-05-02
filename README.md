@@ -6,6 +6,8 @@
 > 英文原版：http://redux.js.org/  
 > 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn#redux-tutorial)
 
+> :arrow_down: 离线下载：[pdf 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.pdf)，[epub 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.epub)，[mobi 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.mobi)
+
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
