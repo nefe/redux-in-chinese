@@ -2,7 +2,7 @@
 
 在[基础教程](../basics/README.md)中，我们创建了一个简单的 todo 应用。它只有同步操作。每当 dispatch action 时，state 会被立即更新。
 
-在本教程中，我们将开发一个不同的，异步的应用。它将使用 Reddit API 来获取并显示指定 reddit 下的帖子列表。那么 Redux 究竟是如何处理异步数据流的呢？
+在本教程中，我们将开发一个不同的，异步的应用。它将使用 Reddit API 来获取并显示指定 subreddit 下的帖子列表。那么 Redux 究竟是如何处理异步数据流的呢？
 
 ## Action
 
@@ -119,7 +119,7 @@ export function receivePosts(subreddit, json) {
 
 我们以最通用的案例来打头：列表。Web 应用经常需要展示一些内容的列表。比如，帖子的列表，朋友的列表。首先要明确应用要显示哪些列表。然后把它们分开储存在 state 中，这样你才能对它们分别做缓存并且在需要的时候再次请求更新数据。
 
-"subreddit 头条" 应用会长这个样子：
+"Reddit 头条" 应用会长这个样子：
 
 ```js
 {
@@ -398,12 +398,13 @@ import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // 允许我们 dispatch() 函数
-  loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
-)(createStore)
-
-const store = createStoreWithMiddleware(rootReducer)
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, // 允许我们 dispatch() 函数
+    loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
+  )
+)
 
 store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
@@ -439,7 +440,7 @@ function receivePosts(subreddit, json) {
 function fetchPosts(subreddit) {
   return dispatch => {
     dispatch(requestPosts(subreddit))
-    return fetch(`http://www.subreddit.com/r/${subreddit}.json`)
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json => dispatch(receivePosts(subreddit, json)))
   }
@@ -494,7 +495,7 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 
 ## 连接到 UI
 
-Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：subreddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
+Dispatch 同步 action 与异步 action 间并没有区别，所以就不展开讨论细节了。参照 [搭配 React](../basics/UsageWithReact.md) 获得 React 组件中使用 Redux 的介绍。参照 [示例：Reddit API](ExampleRedditAPI.md) 来获取本例的完整代码。
 
 ## 下一步
 
