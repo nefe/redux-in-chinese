@@ -7,9 +7,10 @@
 * 维持应用的 state；
 * 提供 [`getState()`](../api/Store.md#getState) 方法获取 state；
 * 提供 [`dispatch(action)`](../api/Store.md#dispatch) 方法更新 state；
-* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器。
+* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器;
+* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 返回的函数注销监听器。
 
-再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分处理数据的逻辑时，使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
+再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分数据处理逻辑时，你应该使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
 
 根据已有的 reducer 来创建 store 是非常容易的。在[前一个章节](Reducers.md)中，我们使用 [`combineReducers()`](../api/combineReducers.md) 将多个 reducer 合并成为一个。现在我们将其导入，并传递 [`createStore()`](../api/createStore.md)。
 
@@ -19,36 +20,35 @@ import todoApp from './reducers'
 let store = createStore(todoApp)
 ```
 
-[`createStore()`](../api/createStore.md) 的第二个参数可以设置初始状态。
-这对开发同构应用时非常有用，可以用于把服务器端生成的 state 转变后在浏览器端传给应用。
+[`createStore()`](../api/createStore.md) 的第二个参数是可选的, 用于设置 state 初始状态。这对开发同构应用时非常有用，服务器端 redux 应用的 state 结构可以与客户端保持一致, 那么客户端可以将从网络接收到的服务端 state 直接用于本地数据初始化。
 
 ```js
-let store = createStore(todoApp, window.STATE_FROM_SERVER);
+let store = createStore(todoApp, window.STATE_FROM_SERVER)
 ```
 
 ## 发起 Actions
 
-现在我们已经创建好了 store ，让我们来验证一下！虽然还没有界面，我们已经可以测试更新逻辑了。
+现在我们已经创建好了 store ，让我们来验证一下！虽然还没有界面，我们已经可以测试数据处理逻辑了。
 
 ```js
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions';
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions'
 
 // 打印初始状态
-console.log(store.getState());
+console.log(store.getState())
 
-// 监听 state 更新时，打印日志
+// 每次 state 更新时，打印日志
 // 注意 subscribe() 返回一个函数用来注销监听器
 let unsubscribe = store.subscribe(() =>
   console.log(store.getState())
-);
+)
 
 // 发起一系列 action
-store.dispatch(addTodo('Learn about actions'));
-store.dispatch(addTodo('Learn about reducers'));
-store.dispatch(addTodo('Learn about store'));
-store.dispatch(completeTodo(0));
-store.dispatch(completeTodo(1));
-store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
+store.dispatch(addTodo('Learn about actions'))
+store.dispatch(addTodo('Learn about reducers'))
+store.dispatch(addTodo('Learn about store'))
+store.dispatch(completeTodo(0))
+store.dispatch(completeTodo(1))
+store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
 
 // 停止监听 state 更新
 unsubscribe();
