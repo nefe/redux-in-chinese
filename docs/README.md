@@ -23,6 +23,7 @@
   * [下一步](/docs/advanced/NextSteps.md)
 * [技巧](/docs/recipes/README.md)
   * [迁移到 Redux](/docs/recipes/MigratingToRedux.md)
+  * [使用对象展开运算符](/docs/recipes/UsingObjectSpreadOperator.md)
   * [减少样板代码](/docs/recipes/ReducingBoilerplate.md)
   * [服务端渲染](/docs/recipes/ServerRendering.md)
   * [编写测试](/docs/recipes/WritingTests.md)
