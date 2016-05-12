@@ -4,7 +4,8 @@
 
 > 在线 Gitbook 地址：http://cn.redux.js.org/  
 > 英文原版：http://redux.js.org/  
-> 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn#redux-tutorial)
+> 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn#redux-tutorial)  
+> React 核心开发者写的 [React 设计思想](https://github.com/react-guide/react-basic)
 
 > :arrow_down: 离线下载：[pdf 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.pdf)，[epub 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.epub)，[mobi 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.mobi)
 
