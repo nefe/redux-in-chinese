@@ -142,7 +142,7 @@ function todoApp(state = initialState, action) {
 
 如上，不直接修改 `state` 中的字段，而是返回新对象。新的 `todos` 对象就相当于旧的 `todos` 在末尾加上新建的 todo。而这个新的 todo 又是基于 action 中的数据创建的。
 
-最后，`COMPLETE_TODO` 的实现也很好理解：
+最后，`TOGGLE_TODO` 的实现也很好理解：
 
 ```js
 case TOGGLE_TODO:
@@ -370,7 +370,7 @@ function reducer(state = {}, action) {
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -392,11 +392,11 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return state.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
-            completed: true
+            completed: !todo.completed
           })
         }
         return todo
