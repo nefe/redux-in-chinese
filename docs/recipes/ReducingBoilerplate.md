@@ -16,7 +16,7 @@ Action 一般长这样:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-一个约定俗成的做法是，actions 拥有一个常量 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议的你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可序列化的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
+一个约定俗成的做法是，actions 拥有一个常量 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议你使用 string 而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可序列化的，而使用 Symbols 会毫无必要地使记录和重演变得困难。
 
 在 Flux 中，传统的想法是将每个 action type 定义为 string 常量：
 
@@ -103,7 +103,7 @@ export function addTodo(text) {
 
 某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 常量。这个想法是说你不需要同时定义 `ADD_TODO` 常量和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 常量，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 常量。
 
-写简单的 action creator 很容易容易让人厌烦，且往往最终生成多余的样板代码：
+写简单的 action creator 很容易让人厌烦，且往往最终生成多余的样板代码：
 
 ```js
 export function addTodo(text) {
@@ -202,11 +202,11 @@ class Posts extends Component {
       return;
     }
 
-    // Reducer 可以通过设置 `isFetching` 反应这个 action
+    // Reducer 可以通过设置 `isFetching` 响应这个 action
     // 因此让我们显示一个 Spinner 控件。
     dispatch(loadPostsRequest(userId));
 
-    // Reducer 可以通过填写 `users` 反应这些 actions
+    // Reducer 可以通过填写 `users` 响应这些 actions
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response => dispatch(loadPostsSuccess(userId, response)),
       error => dispatch(loadPostsFailure(userId, error))
@@ -397,7 +397,7 @@ function callAPIMiddleware({ dispatch, getState }) {
 }
 ```
 
-在传给 [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md) 一次以后，你能用相同方式写你的 API-调用 action creators ：
+在传给 [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md) 一次以后，你能用相同方式写你的 API调用 action creators ：
 
 ```js
 export function loadPosts(userId) {
