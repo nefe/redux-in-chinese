@@ -1,6 +1,6 @@
-# [Redux 中文文档](http://github.com/camsong/redux-in-chinese)
+# [Redux 中文文档](http://github.com/camsong/redux-in-chinese) [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60'>
 
 > 在线 Gitbook 地址：http://cn.redux.js.org/  
 > 英文原版：http://redux.js.org/  
