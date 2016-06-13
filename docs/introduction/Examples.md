@@ -53,7 +53,7 @@ open http://localhost:3000/
 
 ## Todos with Undo
 
-运行 [odos-with-undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) 示例:
+运行 [Todos-with-undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) 示例:
 
 ```
 git clone https://github.com/reactjs/redux.git
@@ -133,7 +133,7 @@ npm start
 open http://localhost:3000/
 ```
 
-该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存过期失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步的附带作用。
+该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存过期失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步带来的附带作用。
 
 ## Universal
 
