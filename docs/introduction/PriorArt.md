@@ -13,13 +13,13 @@ Redux 的灵感来源于 Flux 的几个重要特性。和 Flux 一样，Redux �
 
 而不同于 Flux ，**Redux 并没有 dispatcher 的概念**。原因是它依赖纯函数来替代事件处理器。纯函数构建简单，也不需额外的实体来管理它们。你可以将这点看作这两个框架的差异或细节实现，取决于你怎么看 Flux。Flux 常常[被表述为 `(state, action) => state`](https://speakerdeck.com/jmorrell/jsconf-uy-flux-those-who-forget-the-past-dot-dot-dot)。从这个意义上说，Redux 无疑是 Flux 架构的实现，且得益于纯函数而更为简单。
 
-和 Flux 的另一个重要区别，是 **Redux 设想你永远不会变动你的数据**。你可以很好地使用普通对象和数组来管理 state ，而不是在多个 reducer 里变动数据，这会让你深感挫折。正确的方式是，你应该在 reducer 中返回一个新对象来更新 state， 同时配合 [ES7 所提议的 object spread 语法](https://github.com/sebmarkbage/ecmascript-rest-spread) 和 [Babel](http://babeljs.io)，或者一些库，如 [Immutable](https://facebook.github.io/immutable-js) ，这种做法简单易行。
+和 Flux 的另一个重要区别，是 **Redux 设想你永远不会变动你的数据**。你可以很好地使用普通对象和数组来管理 state ，而不是在多个 reducer 里变动数据。正确且简便的方式是，你应该在 reducer 中返回一个新对象来更新 state， 同时配合 [object spread 运算符提案](../recipes/UsingObjectSpreadOperator.md) 或一些库，如 [Immutable](https://facebook.github.io/immutable-js)。
 
 虽然出于性能方面的考虑，[写不纯的 reducer](https://github.com/gaearon/redux/issues/328#issuecomment-125035516) 来变动数据在技术上是**可行**的，但我们并不鼓励这么做。不纯的 reducer 会使一些开发特性，如时间旅行、记录/回放或热加载不可实现。此外，在大部分实际应用中，这种数据不可变动的特性并不会带来性能问题，就像 [Om](https://github.com/omcljs/om) 所表现的，即使对象分配失败，仍可以防止昂贵的重渲染和重计算。而得益于 reducer 的纯度，应用内的变化更是一目了然。
 
 ### Elm
 
-[Elm](http://elm-lang.org/) 是一种函数式编程语言，由 [Evan Czaplicki](https://twitter.com/czaplic) 受 Haskell 语言的启发开发。它执行一种 [“model view update” 的架构](http://elm-lang.org/guide/architecture) ，更新遵循 `(state, action) => state` 的规则。 从技术上说，Elm 的 “updater” 等同于 Redux 里的 reducer。
+[Elm](http://elm-lang.org/) 是一种函数式编程语言，由 [Evan Czaplicki](https://twitter.com/czaplic) 受 Haskell 语言的启发开发。它执行一种 [“model view update” 的架构](http://elm-lang.org/guide/architecture) ，更新遵循 `(state, action) => state` 的规则。 Elm 的 “updater” 与 Redux 里的 reducer 服务于相同的目的。
 
 不同于 Redux，Elm 是一门语言，因此它在执行纯度，静态类型，不可变动性，action 和模式匹配等方面更具优势。即使你不打算使用 Elm，也可以读一读 Elm 的架构，尝试一把。基于此，有一个有趣的[使用 JavaScript 库实现类似想法](https://github.com/paldepind/noname-functional-frontend-framework) 的项目。Redux 应该能从中获得更多的启发！ 为了更接近 Elm 的静态类型，[Redux 可以使用一个类似 Flow 的渐进类型解决方案](https://github.com/gaearon/redux/issues/290) 。
 
