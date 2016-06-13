@@ -2,8 +2,18 @@
 
 Redux [源码](https://github.com/gaearon/redux/tree/master/examples) 中同时包含了一些示例。
 
->##### 复制代码时注意
->如果你把 Redux 示例代码复制到其它目录，可以删除位于 `webpack.config.js` 文件尾部 “You can safely delete these lines in your project.” 注释后的代码。
+## Counter Vanilla
+
+运行 [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) 示例:
+
+```
+git clone https://github.com/reactjs/redux.git
+
+cd redux/examples/counter-vanilla
+open index.html
+```
+
+It does not require a build system or a view framework and exists to show the raw Redux API used with ES5. 该示例不需搭建系统或视图框架，展示了基于 ES5 的原生 Redux API 的使用。
 
 ## Counter
 
