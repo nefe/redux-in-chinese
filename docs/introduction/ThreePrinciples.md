@@ -9,18 +9,23 @@ Redux 可以用这三个基本原则来描述：
 这让同构应用开发变得非常容易。来自服务端的 state 可以在无需编写更多代码的情况下被序列化并注入到客户端中。由于是单一的 state tree ，调试也变得非常容易。在开发中，你可以把应用的 state 保存在本地，从而加快开发速度。此外，受益于单一的 state tree ，以前难以实现的如“撤销/重做”这类功能也变得轻而易举。
 
 ```js
-console.log(store.getState());
+console.log(store.getState())
 
+/* Prints
 {
   visibilityFilter: 'SHOW_ALL',
-  todos: [{
-    text: 'Consider using Redux',
-    completed: true,
-  }, {
-    text: 'Keep all state in a single tree',
-    completed: false
-  }]
+  todos: [
+    {
+      text: 'Consider using Redux',
+      completed: true,
+    },
+    {
+      text: 'Keep all state in a single tree',
+      completed: false
+    }
+  ]
 }
+*/
 ```
 
 ### State 是只读的
@@ -48,38 +53,43 @@ store.dispatch({
 Reducer 只是一些纯函数，它接收先前的 state 和 action，并返回新的 state。刚开始你可以只有一个 reducer，随着应用变大，你可以把它拆成多个小的 reducers，分别独立地操作 state tree 的不同部分，因为 reducer 只是函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来处理一些通用任务，如分页器。
 
 ```js
+
 function visibilityFilter(state = 'SHOW_ALL', action) {
   switch (action.type) {
-  case 'SET_VISIBILITY_FILTER':
-    return action.filter;
-  default:
-    return state;
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
+    default:
+      return state
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case 'COMPLETE_TODO':
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ]
-  default:
-    return state;
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'COMPLETE_TODO':
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
   }
 }
 
-import { combineReducers, createStore } from 'redux';
-let reducer = combineReducers({ visibilityFilter, todos });
-let store = createStore(reducer);
+import { combineReducers, createStore } from 'redux'
+let reducer = combineReducers({ visibilityFilter, todos })
+let store = createStore(reducer)
 ```
 
 就是这样，现在你应该明白 Redux 是怎么回事了。
