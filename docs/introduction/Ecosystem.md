@@ -141,6 +141,6 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 
 ## 更多
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) 是一个包含大量与 Redux 相关的库列表。
-[React-Redux Links](https://github.com/markerikson/react-redux-links) React、Redux、ES6 的高质量文章、教程、及相关内容列表
-[Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) Redux 相关库、插件、工具集的分类资源
+* [Awesome Redux](https://github.com/xgrommx/awesome-redux) 是一个包含大量与 Redux 相关的库列表。
+* [React-Redux Links](https://github.com/markerikson/react-redux-links) React、Redux、ES6 的高质量文章、教程、及相关内容列表。
+* [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) Redux 相关库、插件、工具集的分类资源。
