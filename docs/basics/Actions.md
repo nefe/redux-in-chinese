@@ -40,7 +40,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 
 **我们应该尽量减少在 action 中传递的数据**。比如上面的例子，传递 `index` 就比把整个任务对象传过去要好。
 
-最后，再添加一个 action type来表示当前的任务展示选项。
+最后，再添加一个 action type 来表示当前的任务展示选项。
 
 ```js
 {
