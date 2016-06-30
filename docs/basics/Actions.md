@@ -25,7 +25,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 
 >##### 样板文件使用提醒
 
->使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中把它们显式地定义成常量还是利大于弊的。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取更多保持代码干净的实践经验。
+>使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中把它们显式地定义成常量还是利大于弊的。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取更多保持代码简洁的实践经验。
 
 除了 `type` 字段外，action 对象的结构完全由你自己决定。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取关于如何构造 action 的建议。
 
@@ -40,7 +40,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 
 **我们应该尽量减少在 action 中传递的数据**。比如上面的例子，传递 `index` 就比把整个任务对象传过去要好。
 
-最后，再添加一个 action 类型来表示当前的任务展示选项。
+最后，再添加一个 action type 来表示当前的任务展示选项。
 
 ```js
 {
