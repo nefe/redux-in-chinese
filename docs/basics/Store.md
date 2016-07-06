@@ -31,7 +31,7 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER)
 现在我们已经创建好了 store ，让我们来验证一下！虽然还没有界面，我们已经可以测试数据处理逻辑了。
 
 ```js
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions'
+import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from './actions'
 
 // 打印初始状态
 console.log(store.getState())
@@ -46,8 +46,8 @@ let unsubscribe = store.subscribe(() =>
 store.dispatch(addTodo('Learn about actions'))
 store.dispatch(addTodo('Learn about reducers'))
 store.dispatch(addTodo('Learn about store'))
-store.dispatch(completeTodo(0))
-store.dispatch(completeTodo(1))
+store.dispatch(toggleTodo(0))
+store.dispatch(toggleTodo(1))
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
 
 // 停止监听 state 更新
