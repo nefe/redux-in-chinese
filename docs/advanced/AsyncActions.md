@@ -8,7 +8,7 @@
 
 当调用异步 API 时，有两个非常关键的时刻：发起请求的时刻，和接收到响应的时刻 （也可能是超时）。
 
-这两个时刻都可能会更改应用的 state；为此，你需要 dispatch 普通的同步 action。一般情况下，每个 API 请求你都有可能 dispatch 至少三种不同的 action：
+这两个时刻都可能会更改应用的 state；为此，你需要 dispatch 普通的同步 action。一般情况下，每个 API 请求你都有可能 dispatch 至少三种 action：
 
 * **一种通知 reducer 请求开始的 action。**
 
