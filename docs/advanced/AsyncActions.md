@@ -8,17 +8,17 @@
 
 当调用异步 API 时，有两个非常关键的时刻：发起请求的时刻，和接收到响应的时刻 （也可能是超时）。
 
-这两个时刻都可能会更改应用的 state；为此，你需要 dispatch 普通的同步 action。一般情况下，每个 API 请求都至少需要 dispatch 三个不同的 action：
+这两个时刻都可能会更改应用的 state；为此，你需要 dispatch 普通的同步 action。一般情况下，每个 API 请求都需要 dispatch 至少三种 action：
 
-* **一个通知 reducer 请求开始的 action。**
+* **一种通知 reducer 请求开始的 action。**
 
   对于这种 action，reducer 可能会切换一下 state 中的 `isFetching` 标记。以此来告诉 UI 来显示进度条。
 
-* **一个通知 reducer 请求成功结束的 action。**
+* **一种通知 reducer 请求成功结束的 action。**
 
   对于这种 action，reducer 可能会把接收到的新数据合并到 state 中，并重置 `isFetching`。UI 则会隐藏进度条，并显示接收到的数据。
 
-* **一个通知 reducer 请求失败的 action。**
+* **一种通知 reducer 请求失败的 action。**
 
   对于这种 action，reducer 可能会重置 `isFetching`。或者，有些 reducer 会保存这些失败信息，并在 UI 里显示出来。
 
