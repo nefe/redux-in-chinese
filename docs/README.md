@@ -29,6 +29,7 @@
   * [编写测试](/docs/recipes/WritingTests.md)
   * [计算衍生数据](/docs/recipes/ComputingDerivedData.md)
   * [实现撤销重做](/docs/recipes/ImplementingUndoHistory.md)
+* [常见问题](/docs/FAQ.md)
 * [排错](/docs/Troubleshooting.md)
 * [词汇表](/docs/Glossary.md)
 * [API 文档](/docs/api/README.md)
