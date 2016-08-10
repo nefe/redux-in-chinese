@@ -6,19 +6,19 @@
   - [何时使用 Redux ？](#general-when-to-use)
   - [Redux 只能搭配 React 使用？](#general-only-react)
   - [Redux 需要特殊的编译工具支持吗？](#general-build-tools)
-- **Reducers**
+- **Reducer**
   - [如何在 reducer 之间共享 state ？ combineReducers 是必须的吗？](#reducers-share-state)
   - [处理 action 必须用 switch 语句吗？](#reducers-use-switch)
 - **组织 State**
   - [必须将所有 state 都维护在 Redux 中吗？ 可以用 React 的 setState() 方法吗？](#organizing-state-only-redux-state)
-  - [可以将 store 的 state 设置为函数、promise或者其它非序列化值吗](#organizing-state-non-serializable)
+  - [可以将 store 的 state 设置为函数、promise或者其它非序列化值吗？](#organizing-state-non-serializable)
   - [如何在 state 中组织嵌套及重复数据？](#organizing-state-nested-data)
 - **创建 Store**
   - [可以创建多个 store 吗，应该这么做吗？能在组件中直接引用 store 并使用吗？](#store-setup-multiple-stores)
   - [在 store enhancer 中可以存在多个 middleware 链吗？ 在 middleware 方法中，next 和 dispatch 之间区别是什么？](#store-setup-middleware-chains)
   - [怎样只订阅 state 的一部分变更？如何将分发的 action 作为订阅的一部分？](#store-setup-subscriptions)
-- **Actions**
-  - [为何 type 必须是字符串，或者至少可序列化？ 为什么 action 类型应该作为常量？](#actions-string-constants)
+- **Action**
+  - [为何 type 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？](#actions-string-constants)
   - [是否存在 reducer 和 action 之间的一对一映射？](#actions-reducer-mappings)
   - [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？](#actions-side-effects)
   - [是否应该在 action 创建函数中连续分发多个 action？](#actions-multiple-actions)
@@ -35,8 +35,8 @@
   - [为何组件没有被重新渲染、或者 mapStateToProps 没有运行？](#react-not-rerendering)
   - [为何组件频繁的重新渲染？](#react-rendering-too-often)
   - [怎样使 mapStateToProps 执行更快？](#react-mapstate-speed)
-  - [为何不在被连接的组件中使用 this.props.dispatch？](#react-props-dispatch)
-  - [应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件？](#react-multiple-components)
+  - [为何不在被连接的组件中使用 this.props.dispatch ？](#react-props-dispatch)
+  - [应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件吗？](#react-multiple-components)
 - **其它**
   - [有 “真实存在” 且很庞大的 Redux 项目吗？](#miscellaneous-real-projects)
   - [如何在 Redux 中实现鉴权？](#miscellaneous-authentication)
@@ -49,18 +49,17 @@
 
 React 早起贡献者之一 Pete Hunt 说：
 
-> You'll know when you need Flux. If you aren't sure if you need it, you don't need it.
-> 你应当清楚何时需要 Flux。
+> 你应当清楚何时需要 Flux。如果你不确定是否需要它，那么其实你并不需要它。
 
 Redux 的创建者之一 Dan Abramov 也曾表达过类似的意思:
 
-> I would like to amend this: don't use Redux until you have problems with vanilla React.
+> 我想修正一个观点：当你在使用 React 遇到问题时，才使用 Redux。
 
 一般而言，Redux 的适应场景有以下几点特征：
 
 - 随着时间的推移，数据处于合理的变动之中；
 - 单一数据源
-- 在 React 顶层组件的 state 中维护所有内容的方法无法满足需求
+- 在 React 顶层组件 state 中维护所有内容的办法已经无法满足需求
 
 #### 补充资料
 
@@ -85,7 +84,7 @@ Redux 能作为任何 UI 层的 store。通常是与 React 或 React Native 搭�
 
 Redux 写法遵循 ES6 语法，但在发布时被 Webpack 和 Babel 编译成了 ES5，所以在使用时可以忽略 JavaScript 的编译过程。 Redux 也提供了 UMD 版本，可以直接使用而不需要任何编译过程。[counter-vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) 示例展示了 Redux 基本的 ES5 用法。正如相关 pull 请求中的说法：
 
-> Counter Vanilla 例子意图是消除 Redux 需要 Webpack、 React、 hot reloading、 sagas、 action creators、 constants、 Babel、 npm、 CSS modules、 decorators、 fluent Latin、 an Egghead subscription、 a PhD 或者 an Exceeds Expectations O.W.L. level 的荒谬观点。
+> Counter Vanilla 例子意图是消除 Redux 需要 Webpack、 React、 热重载、 sagas、 action 创建函数、 constants、 Babel、 npm、 CSS 模块化、 decorators、 fluent Latin、 Egghead subscription、 博士学位或者需要达到 Exceeds Expectations O.W.L. 这一级别的荒谬观点。
 
 > 仅仅是 HTML， 一些 `<script>`  标签，和简单的 DOM 操作而已。
 
@@ -100,10 +99,10 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层” 或�
 许多用户想在 reducer 之间共享数据，但是 `combineReducers` 不允许此种行为。有许多可用的办法：
 
 * 如果一个 reducer 想获取其它 state 层的数据，往往意味着 state 树需要重构，需要让单独的 reducer 处理更多的数据。
-* 你可能需要自定义方法去处理这些 action，用自定义的顶层 reducer 方法替换 `combineReducers`。你可以使用类似于 [reduce-reducers](https://github.com/acdlite/reduce-reducers) 的工具去运行 `combineReducers` 从而处理尽可能多的 action，但是需要考虑到对于存在交叉的 state 层，特定的 action 执行特定的 reducer。
+* 你可能需要自定义方法去处理这些 action，用自定义的顶层 reducer 方法替换 `combineReducers`。你可以使用类似于 [reduce-reducers](https://github.com/acdlite/reduce-reducers) 的工具运行 `combineReducers` 去处理尽可能多的 action，同时还要为存在 state 交叉部分的若干 action 执行更专用的 reducer。
 * 类似于 `redux-thunk` 的 [异步 action 创建函数](advanced/AsyncActions.md) 能通过 `getState()` 方法获取所有的 state。 action 创建函数能从 state 中检索到额外的数据并传入 action，所以 reducer 有足够的信息去更新所维护的 state 层。
 
-只需牢记 reducer 仅仅是函数，可以随心所欲的进行划分和组合，而且也推荐将其分解成更小、可复用的函数 (“reducer composition”)。按照这种做法，如果子 reducer 需要一些参数时，可以从父 reducer 传入即可。你只需要确保他们遵循 reducer 的基本准则： `(state, action) => newState`，并且以不可变的方式更新 state，而不是直接修改。
+只需牢记 reducer 仅仅是函数，可以随心所欲的进行划分和组合，而且也推荐将其分解成更小、可复用的函数 (“reducer 合成”)。按照这种做法，如果子 reducer 需要一些参数时，可以从父 reducer 传入。你只需要确保他们遵循 reducer 的基本准则： `(state, action) => newState`，并且以不可变的方式更新 state，而不是直接修改 state。
 
 #### 补充资料
 
@@ -120,7 +119,7 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层” 或�
 <a id="reducers-use-switch"></a>
 ### 处理 action 必须用 `switch` 语句吗？？
 
-不是。在 reducer 里面你可以使用任何方法响应 action。 `switch` 语句是最常用的方法，当然你也可以用 `if`、功能查找表、创建抽象函数等。
+不是。在 reducer 里面你可以使用任何方法响应 action。 `switch` 语句是最常用的方式，当然你也可以用 `if`、功能查找表、创建抽象函数等。
 
 #### 补充资料
 
@@ -137,9 +136,9 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层” 或�
 <a id="organizing-state-only-redux-state"></a>
 ### 必须将所有 state 都维护在 Redux 中吗？ 可以用 React 的 `setState()` 方法吗？
 
-没有 “准则”。有些用户选择将所有数据都在 Redux 中维护，那么在任何时刻，应用都是完全有序及可控的。也有人将类似于“下拉菜单是否打开”的非关键或者 UI 状态，在组件内部维护。适合自己的才是最好的。
+没有 “标准”。有些用户选择将所有数据都在 Redux 中维护，那么在任何时刻，应用都是完全有序及可控的。也有人将类似于“下拉菜单是否打开”的非关键或者 UI 状态，在组件内部维护。适合自己的才是最好的。
 
-有许多开源组件实现了各式各样在 Redux store 存储独立组件状态的代替方法，比如 [redux-ui](https://github.com/tonyhb/redux-ui)、 [redux-component](https://github.com/tomchentw/redux-component)、 [redux-react-local](https://github.com/threepointone/redux-react-local)等等。
+有许多开源组件实现了各式各样在 Redux store 存储独立组件状态的替代方法，比如 [redux-ui](https://github.com/tonyhb/redux-ui)、 [redux-component](https://github.com/tomchentw/redux-component)、 [redux-react-local](https://github.com/threepointone/redux-react-local)等等。
 
 #### 补充资料
 
@@ -155,7 +154,7 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层” 或�
 <a id="organizing-state-non-serializable"></a>
 ### 可以将 store 的 state 设置为函数、promise或者其它非序列化值吗？
 
-强烈推荐只将普通可序列化对象、数组以及基本数据在 store 中维护。虽然在 *技术* 层面将非序列化项保存在 store 中是可行的，但这样会破坏 store 内容持久化或深加工的能力。
+强烈推荐只在 store 中维护普通的可序列化对象、数组以及基本数据类型。虽然从 *技术* 层面上将非序列化项保存在 store 中是可行的，但这样会破坏 store 内容持久化和深加工的能力。
 
 #### 补充资料
 
@@ -189,18 +188,18 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层” 或�
 <a id="store-setup-multiple-stores"></a>
 ### 可以创建多个 store 吗，应该这么做吗？能在组件中直接引用 store 并使用吗？
 
-Flux 原始模型中描述了一个应用中有多个 “store”，每个都维护了不同维度的数据。这样导致了类似于一个 store “等待” 另一 store 操作的问题。Redux 中将 reducer 分解成多个 reducer，进而切分数据域，避免了这种情况的发生。
+Flux 原始模型中一个应用有多个 “store”，每个都维护了不同维度的数据。这样导致了类似于一个 store “等待” 另一 store 操作的问题。Redux 中将 reducer 分解成多个小而美的 reducer，进而切分数据域，避免了这种情况的发生。
 
-正如上述问题所述，“可能” 在一个页面中创建多个的独立 Redux store，但是预设模式中只会有一个 store。仅维持单个 store 可以使用 Redux DevTools、简化持久化以及数据深加工、精简订阅逻辑。
+正如上述问题所述，“可能” 在一个页面中创建多个独立的 Redux store，但是预设模式中只会有一个 store。仅维持单个 store 不仅可以使用 Redux DevTools，还能简化数据的持久化及深加工、精简订阅的逻辑处理。
 
-在 Redux 中使用多个 store 的正当理由可能包含：
+在 Redux 中使用多个 store 的理由可能包括：
 
-* 当对应用进行性能分析时，解决由于过于频繁更新部分 state 引起的性能问题。
-* 在更大的应用中，将 Redux 应用作为一个组件，这种情况下，你也许更倾向于为每个根组件创建单独的 store。
+* 对应用进行性能分析时，解决由于过于频繁更新部分 state 引起的性能问题。
+* 在更大的应用中 Redux 只是作为一个组件，这种情况下，你也许更倾向于为每个根组件创建单独的 store。
 
-然而，创建新的 store 不应成为你的第一反应，特别当你是从 Flux 背景迁移而来。首先尝试组合 reducer，只有当它无法解决你的问题时才使用多个 store。
+然而，创建新的 store 不应成为你的第一反应，特别是当你从 Flux 背景迁移而来。首先尝试组合 reducer，只有当它无法解决你的问题时才使用多个 store。
 
-类似的，即使你 *能* 通过导入获取 store 实例时，这也不是 Redux 的推荐方式。当你创建 store 实例并从组件导出，它将变成一个单例。这意味着很难将 Redux 应用封装成一个更大应用的一个组件，除非这是必要的，或者为了实现服务端渲染，因为在服务端你需要为每一个请求创建单独的 store 实例。
+类似的，虽然你 *能* 直接导入并获取 store 实例，但这并非 Redux 的推荐方式。当你创建 store 实例并从组件导出，它将变成一个单例。这意味着将很难把 Redux 应用封装成一个应用的子组件，除非这是必要的，或者为了实现服务端渲染，因为在服务端你需要为每一个请求创建单独的 store 实例。
 
 借助 [React Redux](https://github.com/rackt/react-redux)，由 `connect()` 生成的包装类实际上会检索存在的 `props.store`，但还是推荐将根组件包装在 `<Provider store={store}>` 中，这样传递 store 的任务都交由 React Redux 处理。这种方式，我们不用考虑 store 模块的导入、 Redux 应用的封装，后期支持服务器渲染也将变得更为简便。
 
@@ -218,9 +217,9 @@ Flux 原始模型中描述了一个应用中有多个 “store”，每个都维
 <a id="store-setup-middleware-chains"></a>
 ### 在 store enhancer 中可以存在多个 middleware 链吗？ 在 middleware 方法中，`next` 和 `dispatch` 之间区别是什么？
 
-Redux middleware 就像一个链表。每个 middleware 方法既能调用 `next(action)` 传递 action 到下一个 middleware、调用 `dispatch(action)` 重新开始处理、或者什么都不做而仅仅终止 action 的处理进程。
+Redux middleware 就像一个链表。每个 middleware 方法既能调用 `next(action)` 传递 action 到下一个 middleware，也可以调用 `dispatch(action)` 重新开始处理，或者什么都不做而仅仅终止 action 的处理进程。
 
-创建 store 时， `applyMiddleware` 方法的入参定义了 middleware 链。定义多个链将无法正常执行，因为它们的 `dispatch` 引用显示是不一样的，而且不同的链也无法有效连到一起。
+创建 store 时， `applyMiddleware` 方法的入参定义了 middleware 链。定义多个链将无法正常执行，因为它们的 `dispatch` 引用显然是不一样的，而且不同的链也无法有效连接到一起。
 
 #### 补充资料
 
@@ -236,9 +235,9 @@ Redux middleware 就像一个链表。每个 middleware 方法既能调用 `next
 <a id="store-setup-subscriptions"></a>
 ### 怎样只订阅 state 的一部分变更？如何将分发的 action 作为订阅的一部分？
 
-Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 已变更。监听器的回调方法没有把当前的 state 作为入参，它仅仅代表了 *有些数据* 被更新。订阅者的逻辑中调用 `getState()` 获取当前的 state 值。
+Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 的变更信息。监听器的回调方法并没有把当前的 state 作为入参，它仅仅代表了 *有些数据* 被更新。订阅者的逻辑中调用 `getState()` 获取当前的 state 值。
 
-这个 API 是没有依赖及副作用的底层接口，可以用于创建订阅者逻辑。类似 React Redux 的 UI 绑定能为所有连接的组件都创建订阅。也可以用于编写智能的新旧 state 比对方法，从而在某些内容变更时执行额外的逻辑处理。示例 [redux-watch](https://github.com/jprichardson/redux-watch) 和 [redux-subscribe](https://github.com/ashaffer/redux-subscribe) 提供不同的方式用于指定订阅及处理变更。
+这个 API 是没有依赖及副作用的底层接口，可以用于创建订阅者逻辑。类似 React Redux 的 UI 绑定能为所有连接的组件都创建订阅。也可以用于编写智能的新旧 state 比对方法，从而在某些内容变化时执行额外的逻辑处理。示例 [redux-watch](https://github.com/jprichardson/redux-watch) 和 [redux-subscribe](https://github.com/ashaffer/redux-subscribe) 提供不同的方式用于指定订阅及处理变更。
 
 新的 state 没有传递给监听者，目的是简化 store enhancer 的实现，比如 Redux DevTools。此外，订阅者旨在响应 state 值本身，而非 action。当 action 很重要且需要特殊处理时，使用 middleware 。
 
@@ -258,13 +257,13 @@ Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 已
 ## Actions
 
 <a id="actions-string-constants"></a>
-### 为何 `type` 必须是字符串，或者至少可序列化？ 为什么 action 类型应该作为常量？
+### 为何 `type` 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？
 
-和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 之类去定义 `type` 值，或者 `instanceof` 对 action 做检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 *可以* 的。 action 只有当它们正真到达 store 且被传递给 reducer 时才需要被序列化。
+和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 等去定义 `type` 值，或者用 `instanceof` 对 action 做自检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 *可以* 的。 action 只有当它们正真到达 store 且被传递给 reducer 时才需要被序列化。
 
 因为性能原因，我们无法强制序列化 action，所以 Redux 只会校验 action 是否是普通对象，以及 `type` 是否定义。其它的都交由你决定，但是确保数据是可序列化将对调试以及问题的重现有很大帮助。
 
-封装并集聚公共代码是程序规划时的核心概念。虽然可以在任何地方手动创建 action 对象、手动指定 `type` 值，定义常量的方式能使得代码维护起来更容易。如果将常量维护在单独的文件中，[在 `import` 时校验](https://www.npmjs.com/package/eslint-plugin-import)，能避免偶然的拼写错误。
+封装并集聚公共代码是程序规划时的核心概念。虽然可以在任何地方手动创建 action 对象、手动指定 `type` 值，定义常量的方式使得代码的维护更为方便。如果将常量维护在单独的文件中，[在 `import` 时校验](https://www.npmjs.com/package/eslint-plugin-import)，能避免偶然的拼写错误。
 
 #### 补充资料
 
@@ -282,7 +281,7 @@ Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 已
 <a id="actions-reducer-mappings"></a>
 ### 是否存在 reducer 和 action 之间的一对一映射？
 
-没有。建议的方式是编写独立且很小的 reducer 方法去更新指定的 state 部分，这种模式被称为 “reducer 合成”。一个指定的 action 也许被它们中的所有、部分、甚至没有一个处理到。这种方式把组件从实际的数据变更中解耦，一个 action 可能影响到 state 树的不同部分，对组件而言再也不必知道这些了。有些用户选择将它们紧密绑定在一起，就像 “ducks” 文件结构，显然是没有默认的一对一映射。所以当你像在许多 reducer 中处理同一个 action 时，应当避免此类结构。
+没有。建议的方式是编写独立且很小的 reducer 方法去更新指定的 state 部分，这种模式被称为 “reducer 合成”。一个指定的 action 也许被它们中的全部、部分、甚至没有一个处理到。这种方式把组件从实际的数据变更中解耦，一个 action 可能影响到 state 树的不同部分，对组件而言再也不必知道这些了。有些用户选择将它们紧密绑定在一起，就像 “ducks” 文件结构，显然是没有默认的一对一映射。所以当你想在多个 reducer 中处理同一个 action 时，应当避免此类结构。
 
 #### 补充资料
 
@@ -298,15 +297,15 @@ Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 已
 <a id="actions-side-effects"></a>
 ### 怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？
 
-这是一个持久且复杂的话题，针对如何组织代码以及采用何种办法有很多的观点。
+这是一个持久且复杂的话题，针对如何组织代码以及采用何种方式有很多的观点。
 
-任何有价值的 web 应用都必然要执行复杂的逻辑，通常包括 AJAX 请求等异步工作。这类代码不再是针对输入的纯粹函数，与第三方的交互被认为是 [“副作用”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)
+任何有价值的 web 应用都必然要执行复杂的逻辑，通常包括 AJAX 请求等异步工作。这类代码不再是针对输入的纯函数，与第三方的交互被认为是 [“副作用”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)。
 
-Redux 深受函数式编程的影响，创造性的不支持有副作用的执行。尤其是 reducer， *必须* 是符合  `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，有副作用也是如此。
+Redux 深受函数式编程的影响，创造性的不支持副作用的执行。尤其是 reducer， *必须* 是符合  `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，有副作用时也是如此。
 
 Redux 建议将带副作用的代码作为 action 创建过程的一部分。因为该逻辑 *能* 在 UI 组件内执行，那么通常抽取此类逻辑作为可重用的方法都是有意义的，因此同样的逻辑能被多个地方调用，也就是所谓的 action 创建函数。
 
-最简单也是最常用的方法就是添加 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛应用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 *许多* 其它开源的库和理念，都有各自针对副作用的管理方法。
+最简单也是最常用的方法就是添加 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛使用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 *许多* 其它开源的库和理念，都有各自针对副作用的管理方法。
 
 #### 补充资料
 **文档**
@@ -336,9 +335,9 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 
 关于如何构建 action 并没有统一的规范。使用类似 Redux Thunk 的异步 middleware 支持了更多的场景，比如分发连续多个独立且相关联的 action、 分发 action 指示 AJAX 请求的阶段、 根据 state 有条件的分发 action、甚至分发 action 并随后校验更新的 state。
 
-通常，判断这些 action 是关联还是独立，是否应当作为一个 action。判断什么会对当前场景产生影响，并且根据 action 日志权衡 reducer 的可读性。例如，一个包含新 state 树的 action 会使你的 reducer 只有单行，副作用是你没有任何历史表明 *为什么* 发生了变更，就导致调试异常困难。另一方面，如果为了维持它们的粒状结构（granular），在循环中分发 action，这表明也许需要引入新的 acton 类型并以不同的方式去处理它。
+通常，明确这些 action 是关联还是独立，是否应当作为一个 action。评判当前场景影响因素的同时，还需根据 action 日志权衡 reducer 的可读性。例如，一个包含新 state 树的 action 会使你的 reducer 只有一行，副作用是没有任何历史表明 *为什么* 发生了变更，进而导致调试异常困难。另一方面，如果为了维持它们的粒状结构（granular），在循环中分发 action，这表明也许需要引入新的 acton 类型并以不同的方式去处理它。
 
-避免连续多次以同步方式分发，这里的性能问题是值得担忧的。如果使用 React，将多个同步分发包装在 `ReactDOM.unstable_batchedUpdates()` 方法中能改善性能，但是这个 API 是实验性质的，也许在哪个 React 版本中就被移除了，所以不要过度依赖。可以参考 [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)，分发多个 action 就像一个这么简单，并且会在 reducer 中将它们 “解包”。[redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) 让你为多次分发分别调用订阅者。
+避免在同一地方连续多次以同步的方式进行分发，其性能问题是值得担忧的。如果使用 React，将多个同步分发包装在 `ReactDOM.unstable_batchedUpdates()` 方法中能改善性能，但是这个 API 是实验性质的，也许在某个 React 版本中就被移除了，所以不要过度依赖它。可以参考 [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)，分发多个 action 就如分发一个这么简单，并且会在 reducer 中将它们 “解包”。[redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) 让你为多次分发分别调用订阅者。
 
 #### 补充资料
 
@@ -357,11 +356,11 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 
 因为 Redux 只是数据存储的库，它没有关于工程应该被如何组织的直接主张。然后，有一些被大多数 Redux 开发者所推荐的模式：
 
-- Rails-style：actions”、“constants”、“reducers”、“containers” 以及 “components” 分属不同的文件夹
-- Domain-style：为每个功能或者域创建单独的文件夹，可能会为每中文件类型创建子文件夹
-- “Ducks”：类似于 Domain-style，但是明确将 action、 reducer 绑定在一起，常常将它们定义在同一文件内。
+- Rails-style：“actions”、“constants”、“reducers”、“containers” 以及 “components” 分属不同的文件夹
+- Domain-style：为每个功能或者域创建单独的文件夹，可能会为某些文件类型创建子文件夹
+- “Ducks”：类似于 Domain-style，但是明确地将 action、 reducer 绑定在一起，通常将它们定义在同一文件内。
 
-推荐做法是将 selector 与 reducer 定义在一起并输出，并搭配在 reducer 文件中知道 state 树真实形状的所有代码一起重用（例如在 `mapStateToProps` 方法、异步 action 创建函数，或者 sagas）。
+推荐做法是将 selector 与 reducer 定义在一起并输出，并在 reducer 文件中与知道 state 树真实形状的代码一起被重用（例如在 `mapStateToProps` 方法、异步 action 创建函数，或者 sagas）。
 
 #### 补充资料
 
@@ -383,10 +382,10 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 
 下面的评论恰如其分的概括了这两种分歧：
 
-> 问题是什么在 action 创建函数中、什么在 reducer 中，就是关于 fat 和 thin action 创建函数的选择。如果你将逻辑都放在 action 创建函数中，最终的用于更新 state 的 action 对象就会变得 fat，相应的 reducer 就变得纯净、简洁。因为只涉及很少的业务逻辑，将非常有利于组合。
+> 问题是什么在 action 创建函数中、什么在 reducer 中，就是关于 fat 和 thin action 创建函数的选择。如果你将逻辑都放在 action 创建函数中，最终用于更新 state 的 action 对象就会变得 fat，相应的 reducer 就变得纯净、简洁。因为只涉及很少的业务逻辑，将非常有利于组合。
 > 如果你将大部门逻辑置于 reducer 之中，action 将变得精简、美观，大部分数据逻辑都在一个地方维护，但是 reducer 由于引用了其它分支的信息，将很难组合。最终的 reducer 会很庞大，而且需要从更高层的 state 获取额外信息。
 
-当你从这两种极端情况下找到一个平衡时，就意味着你已经掌握了 Redux。
+当你从这两种极端情况中找到一个平衡时，就意味着你已经掌握了 Redux。
 
 #### 补充资料
 
@@ -424,7 +423,7 @@ Redux 所做的工作可以分为以下几部分：在 middleware 和 reducer �
 
 我们应当清楚的认识到 Redux store 只有一个 reducer 方法。 store 将当前的 state 和分发的 action 传递给这个 reducer 方法，剩下的就让 reducer 去处理。
 
-显然，在单独的方法里处理所有的 action 仅从方法大小及可读性方面考虑，就很不利于扩展，所以将实际工作分割成独立的方法并在顶层的 reducer 中调用就变得很有意义。尤其是目前的建议模式即单独的子 reducer 只负责更新特定 state 部分的更新。 `combineReducers()` 和 Redux 搭配的方案只是许多实现方式中的一种。强烈建议尽可能保持 store 中的 state 的扁平化和范式化。即使你可以随心所欲的组织你的 reducer 逻辑。
+显然，在单独的方法里处理所有的 action 仅从方法大小及可读性方面考虑，就已经很不利于扩展了，所以将实际工作分割成独立的方法并在顶层的 reducer 中调用就变得很有意义。尤其是目前的建议模式中推荐让单独的子 reducer 只负责更新特定的 state 部分。 `combineReducers()` 和 Redux 搭配的方案只是许多实现方式中的一种。强烈建议尽可能保持 store 中 state 的扁平化和范式化，至少你可以随心所欲的组织你的 reducer 逻辑。
 
 即使你在不经意间已经维护了许多独立的子 reducer，甚至 state 也是深度嵌套，reducer 的速度也并不构成任何问题。JavaScript 引擎有足够的能力在每秒运行大量的函数调用，而且大部门的子 reducer 只是使用 `switch` 语句，并且针对大部分 action 返回的都是默认的 state。
 
@@ -443,9 +442,9 @@ Redux 所做的工作可以分为以下几部分：在 middleware 和 reducer �
 
 以不可变的方式更新 state 意味着浅拷贝，而非深拷贝。
 
-相比于深拷贝，浅拷贝更快，因为只需复制很少的字段和对象，而且实际上底层实现只是移动若干指针。
+相比于深拷贝，浅拷贝更快，因为只需复制很少的字段和对象，实际的底层实现中也只是移动了若干指针而已。
 
-然而，你只需要创建一个副本，并且更新受影响的各个嵌套的对象层级即可。尽管上述动作代价不会很大，但这也是为什么需要维护范式化及扁平化 state 的又一充分理由。
+因此，你需要创建一个副本，并且更新受影响的各个嵌套的对象层级即可。尽管上述动作代价不会很大，但这也是为什么需要维护范式化及扁平化 state 的又一充分理由。
 
 > Redux 常见的误解： 需要深拷贝 state。实际情况是：如果内部的某些数据没有改变，继续保持统一引用即可。
 
@@ -461,7 +460,7 @@ Redux 所做的工作可以分为以下几部分：在 middleware 和 reducer �
 <a id="performance-update-events"></a>
 ### 怎样减少 store 更新事件的数量？
 
-Redux 在 action 分发成功（例如，action 到达 store 被 reducer 处理）后通知订阅者。在有些情况下，减少订阅者被调用的次数会很有用，特别在当 action 创建函数分发了一系列不同 action 时。有很多开源的组件提供了在多个 action 分发时，批量订阅通知的扩展，比如 [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) 以及 [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)。
+Redux 在 action 分发成功（例如，action 到达 store 被 reducer 处理）后通知订阅者。在有些情况下，减少订阅者被调用的次数会很有用，特别在当 action 创建函数分发了一系列不同的 action 时。有很多开源的组件提供了在多个 action 分发时，批量订阅通知的扩展，比如 [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) 和 [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)。
 
 #### 补充资料
 
@@ -474,7 +473,7 @@ Redux 在 action 分发成功（例如，action 到达 store 被 reducer 处理�
 <a id="performance-state-memory"></a>
 ### 仅有 “一个 state 树” 会引发内存问题吗？分发多个 action 会占用内存空间吗？
 
-首先，在原始内存使用方面，Redux 和其它的 JavaScript 库并没有什么不同。唯一的区别就是所有的对象引用都嵌套在同一棵树中，而不是像 Backbone 之类的那样保存在不同的模型实例中。第二，与同样的 Backbone 应用相比，典型的 Redux 应用可能使用 *更少* 的内存，因为 Redux 推荐使用普通的 JavaScript 对象和数组，而不是创建模型和集合实例。最后，Redux 仅维护一棵 state 树。不再被引用的 state 树通常都会被垃圾回收。
+首先，在原始内存使用方面，Redux 和其它的 JavaScript 库并没有什么不同。唯一的区别就是所有的对象引用都嵌套在同一棵树中，而不是像类似于 Backbone 那样保存在不同的模型实例中。第二，与同样的 Backbone 应用相比，典型的 Redux 应用可能使用 *更少* 的内存，因为 Redux 推荐使用普通的 JavaScript 对象和数组，而不是创建模型和集合实例。最后，Redux 仅维护一棵 state 树。不再被引用的 state 树通常都会被垃圾回收。
 
 Redux 本身不存储 action 的历史。然而，Redux DevTools 会记录这些 action 以便支持重放，而且也仅在开发环境被允许，生产环境则不会使用。
 
@@ -492,14 +491,14 @@ Redux 本身不存储 action 的历史。然而，Redux DevTools 会记录这些
 <a id="react-not-rerendering"></a>
 ### 为何组件没有被重新渲染、或者 mapStateToProps 没有运行？
 
-目前来看，导致组件在 action 分发后却没有被重新渲染，直接改变 state 是最常见的原因。Redux 期望 reducer 以 “不可变的方式” 更新 state，实际使用中则意味着复制数据，然后更新数据副本。如果直接返回同一对象，Redux 会认为没有变化，即使你改变了数据内容。类似的，React Redux 会在 `shouldComponentUpdate` 中对新的 props 进行浅层的判等检查，以期提升性能。如果所有的引用都是相同的，则返回 `false` 从而跳过此次对组件的更新。
+目前来看，导致组件在 action 分发后却没有被重新渲染，最常见的原因是对 state 进行了直接修改。Redux 期望 reducer 以 “不可变的方式” 更新 state，实际使用中则意味着复制数据，然后更新数据副本。如果直接返回同一对象，即使你改变了数据内容，Redux 也会认为没有变化。类似的，React Redux 会在 `shouldComponentUpdate` 中对新的 props 进行浅层的判等检查，以期提升性能。如果所有的引用都是相同的，则返回 `false` 从而跳过此次对组件的更新。
 
-需要注意的是，不管何时更新了一个嵌套的值，都必须同时返回上层的任何数据副本给 state 树。如果数据是 `state.a.b.c.d`，你想更新 `d`，你也必须返回 `c`、`b`、`a` 以及 `state` 的拷贝。[state 树变化图](http://arqex.com/wp-content/uploads/2015/02/trees.png) 展示了树的深层变化为何也需要改变途径的路径。
+需要注意的是，不管何时更新了一个嵌套的值，都必须同时返回上层的任何数据副本给 state 树。如果数据是 `state.a.b.c.d`，你想更新 `d`，你也必须返回 `c`、`b`、`a` 以及 `state` 的拷贝。[state 树变化图](http://arqex.com/wp-content/uploads/2015/02/trees.png) 展示了树的深层变化为何需要改变途经的结点。
 
 “以不可变的方式更新数据” 并 *不* 代表你必须使用 [Immutable.js](https://facebook.github.io/immutable-js/), 虽然是很好的选择。你可以使用多种方法，达到对普通 JS 对象进行不可变更新的目的：
 
 - 使用类似于 `Object.assign()` 或者 `_.extend()` 的方法复制对象， `slice()` 和 `concat()` 方法复制数组。
-- ES6 数组的 spread sperator（展开运算符），JavaScript 新版本提案中类似的对象扩展运算符。
+- ES6 数组的 spread sperator（展开运算符），JavaScript 新版本提案中类似的对象展开运算符。
 - 将不可变更新逻辑包装成简单方法的工具库。
 
 #### 补充资料
@@ -520,7 +519,7 @@ Redux 本身不存储 action 的历史。然而，Redux DevTools 会记录这些
 <a id="react-rendering-too-often"></a>
 ### 为何组件频繁的重新渲染？
 
-React Redux 采取了很多的优化手段，保证组件直到必要时才执行重新渲染。一种是对 `mapStateToProps` 和 `mapDispatchToProps` 生成后传入 `connect` 的 props 对象进行浅层的判等检查。遗憾的是，如果当 `mapStateToProps` 调用时都生成新的数组或对象实例的话，此种情况下的浅层的判等不会起任何作用。一个典型的示例就是通过 ID 数组返回映射的对象引用，如下所示：
+React Redux 采取了很多的优化手段，保证组件直到必要时才执行重新渲染。一种是对 `mapStateToProps` 和 `mapDispatchToProps` 生成后传入 `connect` 的 props 对象进行浅层的判等检查。遗憾的是，如果当 `mapStateToProps` 调用时都生成新的数组或对象实例的话，此种情况下的浅层判等不会起任何作用。一个典型的示例就是通过 ID 数组返回映射的对象引用，如下所示：
 
 ```js
 const mapStateToProps = (state) => {
@@ -530,7 +529,7 @@ const mapStateToProps = (state) => {
 }
 ```
 
-尽管每次数组内都包含了同样的对象引用，数组本身却指向不同的引用，所以浅层的判等检查结果导致 React Redux 重新渲染包装的组件。
+尽管每次数组内都包含了同样的对象引用，数组本身却指向不同的引用，所以浅层判等的检查结果会导致 React Redux 重新渲染包装的组件。
 
 这种额外的重新渲染也可以避免，使用 reducer 将对象数组保存到 state，利用 [Reselect](https://github.com/reactjs/reselect) 缓存映射的数组，或者在组件的 `shouldComponentUpdate` 方法中，采用 `_.isEqual` 等对 props 进行更深层次的比较。注意在自定义的 `shouldComponentUpdate()` 方法中不要采用了比重新渲染本身更为昂贵的实现。可以使用分析器评估方案的性能。
 
@@ -560,7 +559,7 @@ const mapStateToProps = (state) => {
 <a id="react-props-dispatch"></a>
 ### 为何不在被连接的组件中使用 `this.props.dispatch`？
 
-`connect()` 方法有两个主要的参数，而且都是可选的。第一个参数 `mapStateToProps` 是个函数，让你在数据变化时从 store 获取数据，并作为 props 传到组件中。第二个参数 `mapDispatchToProps` 依然是函数，让你可以使用 store 的 `dispatch` 方法，通常都是创建 action 创建函数并预先绑定，那么在调用时就直接分发 action。
+`connect()` 方法有两个主要的参数，而且都是可选的。第一个参数 `mapStateToProps` 是个函数，让你在数据变化时从 store 获取数据，并作为 props 传到组件中。第二个参数 `mapDispatchToProps` 依然是函数，让你可以使用 store 的 `dispatch` 方法，通常都是创建 action 创建函数并预先绑定，那么在调用时就能直接分发 action。
 
 如果在执行 `connect()` 时没有指定 `mapDispatchToProps` 方法，React Redux 默认将 `dispatch` 作为 prop 传入。所以当你指定方法时， `dispatch` 将 *不* 会自动注入。如果你还想让其作为 prop，需要在 `mapDispatchToProps` 实现的返回值中明确指出。
 
@@ -576,13 +575,13 @@ const mapStateToProps = (state) => {
 - [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux？](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
 <a id="react-multiple-components"></a>
-### 应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件？
+### 应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件吗？
 
-早期的 Redux 文档中建议只在组件树顶层附件连接若干组件。然而，时间和经验都表明，这需要让这些组件非常了解它们子孙组件的数据需求，还导致它们会向下传递一些令人困惑的 props。
+早期的 Redux 文档中建议只在组件树顶层附近连接若干组件。然而，时间和经验都表明，这需要让这些组件非常了解它们子孙组件的数据需求，还导致它们会向下传递一些令人困惑的 props。
 
-现在的最佳实践是将组件按照 “展现层（presentational）” 或者 “容器（container）” 分类，并在合理的地方抽象出一个连接的容器组件：
+目前的最佳实践是将组件按照 “展现层（presentational）” 或者 “容器（container）” 分类，并在合理的地方抽象出一个连接的容器组件：
 
-> 在 Redux 示例中强调 “在顶层保持一个容器组件” 是错误的。不要把这个当做准则。让你的展现层组件保持独立。然后创建容器组件并在合适时进行连接。当你感觉到你是在父组件里通过复制代码为某些子组件提供数据时，就是时候抽取出一个容器了。只要你认为父组件过多了解子组件的数据或者 action，就可以抽取容器。
+> Redux 示例中强调的 “在顶层保持一个容器组件” 是错误的。不要把这个当做准则。让你的展现层组件保持独立。然后创建容器组件并在合适时进行连接。当你感觉到你是在父组件里通过复制代码为某些子组件提供数据时，就是时候抽取出一个容器了。只要你认为父组件过多了解子组件的数据或者 action，就可以抽取容器。
 
 总之，试着在数据流和组件职责间找到平衡。
 
@@ -599,7 +598,7 @@ const mapStateToProps = (state) => {
 - [#1176: Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
 - [Stack Overflow: can a dumb component use a Redux container？](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
 
-## Miscellaneous
+## 其它
 
 <a id="miscellaneous-real-projects"></a>
 ### 有 “真实存在” 且很庞大的 Redux 项目吗？
@@ -618,7 +617,7 @@ Redux 的 “examples” 目录下有几个复杂度不一的工程，包括一�
 <a id="miscellaneous-authentication"></a>
 ### 如何在 Redux 中实现鉴权？
 
-在任何真正的应用中，鉴权都必不可少。当考虑鉴权时必须谨记，不管你怎样组织应用，什么都不会改变，你应当像实现其它功能一样实现鉴权。这实际上很简单：
+在任何真正的应用中，鉴权都必不可少。当考虑鉴权时须谨记：不管你怎样组织应用，都并不会改变什么，你应当像实现其它功能一样实现鉴权。这实际上很简单：
 
 1. 为 `LOGIN_SUCCESS`、`LOGIN_FAILURE` 等定义 action 常量。
 
@@ -626,7 +625,7 @@ Redux 的 “examples” 目录下有几个复杂度不一的工程，包括一�
 
 3. 使用 Redux Thunk middleware 或者其它适合于触发网络请求（请求 API，如果是合法鉴权则返回令牌）的 middleware 创建一个异步的 action 创建函数。之后在本地存储中保存令牌或者给用户一个非法提示。可以通过执行上一步的 action 创建函数达到此效果。
 
-4. 为每个可能出现的鉴权场景（`LOGIN_SUCCESS`、`LOGIN_FAILURE`等）编写单独的 reducer。
+4. 为每个可能出现的鉴权场景（`LOGIN_SUCCESS`、`LOGIN_FAILURE`等）编写独立的 reducer。
 
 #### 补充资料
 
