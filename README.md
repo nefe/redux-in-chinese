@@ -115,6 +115,7 @@ store.dispatch({ type: 'DECREMENT' });
 * [基础](http://camsong.github.io/redux-in-chinese//docs/basics/index.html)
 * [高级](http://camsong.github.io/redux-in-chinese//docs/advanced/index.html)
 * [技巧](http://camsong.github.io/redux-in-chinese//docs/recipes/index.html)
+* [常见问题](http://camsong.github.io/redux-in-chinese//docs/FAQ.html)
 * [排错](http://camsong.github.io/redux-in-chinese//docs/Troubleshooting.html)
 * [词汇表](http://camsong.github.io/redux-in-chinese//docs/Glossary.html)
 * [API 文档](http://camsong.github.io/redux-in-chinese//docs/api/index.html)
