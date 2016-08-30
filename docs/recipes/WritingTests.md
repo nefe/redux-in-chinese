@@ -57,7 +57,7 @@ describe('actions', () => {
     };
     expect(actions.addTodo(text)).toEqual(expectedAction);
   });
-}
+});
 ```
 
 ### 异步 Action Creators
