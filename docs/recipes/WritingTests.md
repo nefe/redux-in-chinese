@@ -38,26 +38,26 @@ export function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 ```
 可以这样测试：
 
 ```js
-import expect from 'expect';
-import * as actions from '../../actions/TodoActions';
-import * as types from '../../constants/ActionTypes';
+import expect from 'expect'
+import * as actions from '../../actions/TodoActions'
+import * as types from '../../constants/ActionTypes'
 
 describe('actions', () => {
   it('should create an action to add a todo', () => {
-    const text = 'Finish docs';
+    const text = 'Finish docs'
     const expectedAction = {
       type: types.ADD_TODO,
       text
-    };
-    expect(actions.addTodo(text)).toEqual(expectedAction);
-  });
-});
+    }
+    expect(actions.addTodo(text)).toEqual(expectedAction)
+  })
+})
 ```
 
 ### 异步 Action Creators
