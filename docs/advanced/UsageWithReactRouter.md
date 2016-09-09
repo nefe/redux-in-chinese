@@ -129,7 +129,7 @@ export default Root;
 
 ## 通过 React Router 导航
 
-React Router 提供了一个组件 [\\<Link \/\\>](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) 来让你在你的应用中实现导航功能。
+React Router 提供了一个组件 [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) 来让你在你的应用中实现导航功能。
 我们将在我们的例子中展示如何使用这个。现在，修改我们的容器组件 `<FilterLink />` ，这样我们就可以使用 `<FilterLink />` 来改变URL。
 属性 `activeStyle{}` 可以让你改变激活的 state 样式。
 
