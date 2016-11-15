@@ -2,6 +2,9 @@
 
 <img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60'>
 
+> :tada: :tada: :tada:
+ 本文档从建立之初，帮助了非常多的小伙伴学习 Redux，也收到了 Redux 作者 Dan 的多次点赞。目前每天浏览量大概在一万左右。但由于几位作者工作都比较忙，很多文档已经过期，却也没有时间更新。如何你有时间，希望你和我们一起翻译，帮助更多人，欢迎提交 PR。不知何处下手不用怕？我们为你准备好了完善的 [ETC 翻译文档](https://github.com/react-guide/etc)。:point_right: 回复 issue 认领 https://github.com/camsong/redux-in-chinese/issues :heart: :heart: :heart:
+
 > 在线 Gitbook 地址：http://cn.redux.js.org/  
 > 英文原版：http://redux.js.org/  
 > 学了这个还不尽兴？推荐极精简的 [Redux Tutorial 教程](https://github.com/react-guide/redux-tutorial-cn#redux-tutorial)  
