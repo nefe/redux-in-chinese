@@ -40,7 +40,6 @@
   * [bindActionCreators](/docs/api/bindActionCreators.md)
   * [compose](/docs/api/compose.md)
 * [react-redux 文档](/docs/react-redux/README.md)
-  * [快速入门](/docs/react-redux/quick-start.md)
   * [API](/docs/react-redux/api.md)
   * [排错](/docs/react-redux/troubleshooting.md)
 * [redux-tutorial](https://github.com/react-guide/redux-tutorial-cn)
