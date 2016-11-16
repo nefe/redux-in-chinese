@@ -3,7 +3,7 @@
   "structure": {
     "summary": "docs/README.md"
   },
-  "plugins": ["edit-link", "prism", "ga"],
+  "plugins": ["edit-link", "prism", "ga", "advanced-emoji"],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/camsong/redux-in-chinese/tree/master",

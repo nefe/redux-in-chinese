@@ -34,6 +34,7 @@
   "devDependencies": {
     "ebook-convert": "^1.0.0",
     "gitbook-cli": "^0.3.4",
+    "gitbook-plugin-advanced-emoji": "^0.2.1",
     "gitbook-plugin-edit-link": "^1.4.1",
     "gitbook-plugin-ga": "^0.2.1",
     "gitbook-plugin-prism": "^0.1.1",
