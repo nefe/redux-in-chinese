@@ -4,34 +4,22 @@
 
 ### 设置
 
-我们建议用 [Jest](http://facebook.github.io/jest/) 作为测试引擎。  
+我们建议用 [Mocha](http://mochajs.org/) 作为测试引擎。  
 注意因为是在 node 环境下运行，所以你不能访问 DOM。
 
 ```
-npm install --save-dev jest
+npm install --save-dev mocha
 ```
 
-若想结合 [Babel](http://babeljs.io) 使用，你需要安装 `babel-jest` ：
-
-```
-npm install --save-dev babel-jest
-```
-并且在 `.babelrc` 中启用 ES2015 的功能 ：
-
-```js
-{
-  "presets": ["es2015"]
-}
-```
-然后，在 `package.json` 的 `scripts` 里加入这一段：
+若想结合 [Babel](http://babeljs.io) 使用，在 `package.json` 的 `scripts` 里加入这一段：
 
 ```js
 {
   ...
   "scripts": {
     ...
-    "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test": "mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
   },
   ...
 }
@@ -39,9 +27,9 @@ npm install --save-dev babel-jest
 
 然后运行 `npm test` 就能单次运行了，或者也可以使用 `npm run test:watch` 在每次有文件改变时自动执行测试。
 
-### Action 创建函数 (Action Creators)
+### Action Creators
 
-Redux 里的 action 创建函数是会返回普通对象的函数。在测试 action 创建函数的时候我们想要测试是否调用了正确的 action 创建函数，还有是否返回了正确的 action。
+Redux 里的 action creators 是会返回普通对象的函数。在测试 action creators 的时候我们想要测试不仅是调用了正确的 action creator，还有是否返回了正确的 action。
 
 #### 示例
 
@@ -56,6 +44,7 @@ export function addTodo(text) {
 可以这样测试：
 
 ```js
+import expect from 'expect'
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 
@@ -71,15 +60,13 @@ describe('actions', () => {
 })
 ```
 
-### 异步 Action 创建函数
+### 异步 Action Creators
 
-对于使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 或其它中间件的异步 action 创建函数，最好完全模拟 Redux store 来测试。 你可以使用 [`applyMiddleware()`](../api/applyMiddleware.md) 和一个模拟的 store , 如下所示 (可在 [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) 中找到以下代码). 也可以使用 [nock](https://github.com/pgte/nock) 来模拟 HTTP 请求.
+对于使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 或其它中间件的异步 action creator，最好完全模拟 Redux store 来测试。 你可以使用 [`applyMiddleware()`](../api/applyMiddleware.md) 和一个模拟的 store , 如下所示 (可在 [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) 中找到以下代码). 也可以使用 [nock](https://github.com/pgte/nock) 来模拟 HTTP 请求.
 
 #### 示例
 
 ```js
-import fetch from 'isomorphic-fetch';
-
 function fetchTodosRequest() {
   return {
     type: FETCH_TODOS_REQUEST
@@ -114,16 +101,56 @@ export function fetchTodos() {
 可以这样测试:
 
 ```js
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import expect from 'expect'
 import { applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 import * as actions from '../../actions/counter'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
-import expect from 'expect' //你可以使用任何测试库
 
 const middlewares = [ thunk ]
-const mockStore = configureMockStore(middlewares)
+
+/**
+ * 使用中间件模拟 Redux store。
+ */
+function mockStore(getState, expectedActions, done) {
+  if (!Array.isArray(expectedActions)) {
+    throw new Error('expectedActions should be an array of expected actions.')
+  }
+  if (typeof done !== 'undefined' && typeof done !== 'function') {
+    throw new Error('done should either be undefined or function.')
+  }
+
+  function mockStoreWithoutMiddleware() {
+    return {
+      getState() {
+        return typeof getState === 'function' ?
+          getState() :
+          getState
+      },
+
+      dispatch(action) {
+        const expectedAction = expectedActions.shift()
+
+        try {
+          expect(action).toEqual(expectedAction)
+          if (done && !expectedActions.length) {
+            done()
+          }
+          return action
+        } catch (e) {
+          done(e)
+        }
+      }
+    }
+  }
+
+  const mockStoreWithMiddleware = applyMiddleware(
+    ...middlewares
+  )(mockStoreWithoutMiddleware)
+
+  return mockStoreWithMiddleware()
+}
 
 describe('async actions', () => {
   afterEach(() => {
@@ -139,12 +166,8 @@ describe('async actions', () => {
       { type: types.FETCH_TODOS_REQUEST },
       { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something']  } }
     ]
-    const store = mockStore({ todos: [] })
-
-    return store.dispatch(actions.fetchTodos())
-      .then(() => { // 异步 actions 的返回
-        expect(store.getActions()).toEqual(expectedActions)
-      })
+    const store = mockStore({ todos: [] }, expectedActions, done)
+    store.dispatch(actions.fetchTodos())
   })
 })
 ```
@@ -186,6 +209,7 @@ export default function todos(state = initialState, action) {
 可以这样测试:
 
 ```js
+import expect from 'expect'
 import reducer from '../../reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
@@ -254,10 +278,10 @@ describe('todos reducer', () => {
 
 React components 的优点是，一般都很小且依赖于 props 。因此测试起来很简便。
 
-首先，安装 [Enzyme](http://airbnb.io/enzyme/) 。 Enzyme 底层使用了 [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html) ，但是更方便、更易读，而且更强大。
+首先，安装 [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html):
 
 ```
-npm install --save-dev enzyme
+npm install --save-dev react-addons-test-utils
 ```
 
 要测 components ，我们要创建一个叫 `setup()` 的辅助方法，用来把模拟过的（stubbed）回调函数当作 props 传入，然后使用 [React 浅渲染](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) 来渲染组件。这样就可以依据 “是否调用了回调函数” 的断言来写独立的测试。
@@ -297,47 +321,87 @@ export default Header
 可以这样测试:
 
 ```js
+import expect from 'expect'
 import React from 'react'
-import { shallow } from 'enzyme'
+import TestUtils from 'react-addons-test-utils'
 import Header from '../../components/Header'
+import TodoTextInput from '../../components/TodoTextInput'
 
 function setup() {
   let props = {
-    addTodo: jest.fn()
+    addTodo: expect.createSpy()
   }
 
-  const enzymeWrapper = shallow(<Header {...props} />)
+  let renderer = TestUtils.createRenderer()
+  renderer.render(<Header {...props} />)
+  let output = renderer.getRenderOutput()
 
   return {
     props,
-    enzymeWrapper
+    output,
+    renderer
   }
 }
 
 describe('components', () => {
   describe('Header', () => {
-    it('should render self and subcomponents', () => {
-      const { enzymeWrapper } = setup()
+    it('should render correctly', () => {
+      const { output } = setup()
 
-      expect(enzymeWrapper.find('header').hasClass('header')).toBe(true)
+      expect(output.type).toBe('header')
+      expect(output.props.className).toBe('header')
 
-      expect(enzymeWrapper.find('h1').text()).toBe('todos')
+      let [ h1, input ] = output.props.children
 
-      const todoInputProps = enzymeWrapper.find('TodoTextInput').props()
-      expect(todoInputProps.newTodo).toBe(true)
-      expect(todoInputProps.placeholder).toEqual('What needs to be done?')
+      expect(h1.type).toBe('h1')
+      expect(h1.props.children).toBe('todos')
+
+      expect(input.type).toBe(TodoTextInput)
+      expect(input.props.newTodo).toBe(true)
+      expect(input.props.placeholder).toBe('What needs to be done?')
     })
 
     it('should call addTodo if length of text is greater than 0', () => {
-      const { enzymeWrapper, props } = setup()
-      const input = enzymeWrapper.find('TodoTextInput')
-      input.props().onSave('')
-      expect(props.addTodo.mock.calls.length).toBe(0)
-      input.props().onSave('Use Redux')
-      expect(props.addTodo.mock.calls.length).toBe(1)
+      const { output, props } = setup()
+      let input = output.props.children[1]
+      input.props.onSave('')
+      expect(props.addTodo.calls.length).toBe(0)
+      input.props.onSave('Use Redux')
+      expect(props.addTodo.calls.length).toBe(1)
     })
   })
 })
+```
+
+#### `setState()` 异常修复
+
+浅渲染目前的问题是 [如果调用 `setState` 便抛异常](https://github.com/facebook/react/issues/4019). React 貌似想要的是，如果想要使用 `setState`，DOM 就一定要存在（但测试运行在 node 环境下，是没有 DOM 的）。要解决这个问题，我们用了 jsdom，为了在 DOM 无效的时候，React 也不抛异常。按下面方法 [设置它](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
+
+```
+npm install --save-dev jsdom
+```
+
+然后，在测试目录中创建 `setup.js` 文件：
+
+```js
+import { jsdom } from 'jsdom'
+
+global.document = jsdom('<!doctype html><html><body></body></html>')
+global.window = document.defaultView
+global.navigator = global.window.navigator
+```
+
+重要的一点，在引入 React 之前，这段代码应被评估。因此，要在 `package.json` 中加入 `--require ./test/setup.js`，以更改 `mocha` 命令。
+
+```js
+{
+  ...
+  "scripts": {
+    ...
+    "test": "mocha --compilers js:babel/register --recursive --require ./test/setup.js",
+  },
+  ...
+}
 ```
 
 ### 连接组件
@@ -406,6 +470,7 @@ import App from './App'
 #### 示例
 
 ```js
+import expect from 'expect'
 import * as types from '../../constants/ActionTypes'
 import singleDispatch from '../../middleware/singleDispatch'
 
@@ -449,8 +514,8 @@ describe('middleware', () => {
 
 ### 词汇表
 
-- [Enzyme](http://airbnb.io/enzyme/)：Enzyme 是一个 React 的 JavaScript 测试工具，能够让断言、操作以及遍历你的 React 组件的输出变得更简单。
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): React 测试工具。
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html)： React 测试工具。被 Enzyme 所使用。
+- [jsdom](https://github.com/tmpvar/jsdom): 一个 JavaScript 的内建 DOM 。Jsdom 不使用浏览器也能跑测试。
 
-- [浅渲染（shallow renderer）](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering)： 浅渲染的中心思想是，初始化一个组件然后得到它的 `渲染` 方法作为结果，渲染深度仅一层，而非递归渲染整个 DOM 。浅渲染对单元测试很有用， 你只要测试某个特定的组件，而不包括它的子组件。这也意味着，更改一个子组件不会影响到其父组件的测试。如果要测试一个组件和它所有的子组件，可以用 [Enzyme's mount() method](http://airbnb.io/enzyme/docs/api/mount.html) ，也就是完全 DOM 渲染来实现。
+- [浅渲染（shallow renderer）](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): 浅渲染的中心思想是，初始化一个组件然后得到它的 `渲染` 方法作为结果，渲染深度仅一层，而非递归渲染整个 DOM 。浅渲染的结果是一个 [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements) ，意味着我们可以访问它的 children 和 props ，且测试它本身是否工作正常。同时也意味着，更改一个子组件不会影响到其父组件的测试。
