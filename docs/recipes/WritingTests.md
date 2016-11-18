@@ -73,7 +73,7 @@ describe('actions', () => {
 
 ### 异步 Action 创建函数
 
-对于使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 或其它中间件的异步 action 创建函数，最好完全模拟 Redux store 来测试。 你可以使用 [`applyMiddleware()`](../api/applyMiddleware.md) 和一个模拟的 store , 如下所示 (可在 [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) 中找到以下代码). 也可以使用 [nock](https://github.com/pgte/nock) 来模拟 HTTP 请求.
+对于使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 或其它中间件的异步 action 创建函数，最好完全模拟 Redux store 来测试。 你可以使用 [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) 把 middleware 应用到模拟的 store。也可以使用 [nock](https://github.com/pgte/nock) 来模拟 HTTP 请求。
 
 #### 示例
 
@@ -116,11 +116,10 @@ export function fetchTodos() {
 ```js
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import { applyMiddleware } from 'redux'
-import * as actions from '../../actions/counter'
+import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 import nock from 'nock'
-import expect from 'expect' //你可以使用任何测试库
+import expect from 'expect' // 你可以使用任何测试库
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
@@ -130,10 +129,10 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
-  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', (done) => {
+  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
     nock('http://example.com/')
       .get('/todos')
-      .reply(200, { todos: ['do something'] })
+      .reply(200, { body: { todos: ['do something'] }})
 
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
@@ -174,7 +173,7 @@ export default function todos(state = initialState, action) {
           id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
           completed: false,
           text: action.text
-        }, 
+        },
         ...state
       ]
 
@@ -226,7 +225,7 @@ describe('todos reducer', () => {
             completed: false,
             id: 0
           }
-        ], 
+        ],
         {
           type: types.ADD_TODO,
           text: 'Run the tests'
@@ -238,7 +237,7 @@ describe('todos reducer', () => {
           text: 'Run the tests',
           completed: false,
           id: 1
-        }, 
+        },
         {
           text: 'Use Redux',
           completed: false,
@@ -302,7 +301,7 @@ import { shallow } from 'enzyme'
 import Header from '../../components/Header'
 
 function setup() {
-  let props = {
+  const props = {
     addTodo: jest.fn()
   }
 
@@ -420,7 +419,7 @@ const dispatchWithStoreOf = (storeData, action) => {
   const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt)
   dispatch(action)
   return dispatched
-};
+}
 
 describe('middleware', () => {
   it('should dispatch if store is empty', () => {
