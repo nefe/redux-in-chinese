@@ -31,6 +31,11 @@ Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支
 >[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)  
 >André Staltz，Cycle 作者
 
+### 开始之前
+
+> 也推荐阅读你可能并不需要Redux：  
+> [“You Might Not Need Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
+
 ### 开发经历
 
 Redux 的开发最早开始于我在准备 React Europe 演讲[热加载与时间旅行](https://www.youtube.com/watch?v=xsSnOQynTHs)的时候，当初的目标是创建一个状态管理库，来提供最简化 API，但同时做到行为的完全可预测，因此才得以实现日志打印，热加载，时间旅行，同构应用，录制和重放，而不需要任何开发参与。
@@ -48,12 +53,26 @@ Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](ht
 npm install --save redux
 ```
 
+以上基于使用 [npm](https://www.npmjs.com/) 来做包管理工具的情况下。
+
+否则你可以直接在 [unpkg 上访问这些文件](https://unpkg.com/redux/)，下载下来，或者把让你的包管理工具指向它。
+
+一般情况下人们认为 Redux 就是一些 [CommonJS](http://webpack.github.io/docs/commonjs.html) 模块的集合。这些模块就是你在使用 [Webpack](http://webpack.github.io/)、[Browserify](http://browserify.org/)、或者 Node 环境时引入的。如果你想追求时髦并使用 [Rollup](http://rollupjs.org/)，也是支持的。
+
+你也可以不使用模块打包工具。`redux` 的 npm 包里 [`dist` 目录](https://unpkg.com/redux/dist/)包含了预编译好的生产环境和开发环境下的 [UMD](https://github.com/umdjs/umd) 文件。可以直接使用，而且支持大部分流行的 JavaScript 包加载器和环境。比如，你可以直接在页面上的 `<script>` 标签 中引入 UMD 文件，也可以[让 `Bower` 来安装](https://github.com/reactjs/redux/pull/1181#issuecomment-167361975)。UMD 文件可以让你使用 `window.Redux` 全局变量来访问 Redux。
+
+Redux 源文件由 ES2015 编写，但是会预编译到 CommonJS 和 UMD 规范的 ES5，所以它可以支持 [任何现代浏览器](http://caniuse.com/#feat=es5)。你不必非得使用 Babel 或模块打包器来使用 Redux。
+
+#### 附加包
+
 多数情况下，你还需要使用 [React 绑定库](http://github.com/gaearon/react-redux)和[开发者工具](http://github.com/gaearon/redux-devtools)。
 
 ```
 npm install --save react-redux
 npm install --save-dev redux-devtools
 ```
+
+需要提醒的是，和 Redux 不同，很多 Redux 生态下的包并不提供 UMD 文件，所以为了提升开发体验，我们建议使用像 [Webpack](http://webpack.github.io/) 和 [Browserify](http://browserify.org/) 这样的 CommonJS 模块打包器。
 
 ### 要点
 
@@ -112,6 +131,14 @@ store.dispatch({ type: 'DECREMENT' });
 
 用这个架构开发计数器有点杀鸡用牛刀，但它的美在于做复杂应用和庞大系统时优秀的扩展能力。由于它可以用 action 追溯应用的每一次修改，因此才有强大的开发工具。如录制用户会话并回放所有 action 来重现它。
 
+### Redux 作者教你学
+
+[Redux 入门](https://egghead.io/series/getting-started-with-redux) 是由 Redux 作者 Dan Abramov 讲述的包含 30 个视频的课程。它涵盖了本文档的“基础”部分，同时还有不可变（immutability）、测试、Redux 最佳实践、搭配 React 使用的讲解。**这个课程将永久免费。**
+
+还等什么？
+
+#### [开始观看 30 个免费视频！](https://egghead.io/series/getting-started-with-redux)
+
 ### 文档
 
 * [介绍](http://camsong.github.io/redux-in-chinese//docs/introduction/index.html)
@@ -125,10 +152,16 @@ store.dispatch({ type: 'DECREMENT' });
 
 ### 示例
 
-* [Counter](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
-* [TodoMVC](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
-* [Async](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
-* [Real World](http://camsong.github.io/redux-in-chinese//docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
+* [原生 Counter](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/rackt/redux/tree/master/examples/counter-vanilla))
+* [Counter](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
+* [Todos](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#todos) ([source](https://github.com/rackt/redux/tree/master/examples/todos))
+* [可撤销的 Todos](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#todos-with-undo) ([source](https://github.com/rackt/redux/tree/master/examples/todos-with-undo))
+* [TodoMVC](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#todomvc) ([source](https://github.com/rackt/redux/tree/master/examples/todomvc))
+* [购物车](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#shopping-cart) ([source](https://github.com/rackt/redux/tree/master/examples/shopping-cart))
+* [Tree View](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#tree-view) ([source](https://github.com/rackt/redux/tree/master/examples/tree-view))
+* [异步](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#async) ([source](https://github.com/rackt/redux/tree/master/examples/async))
+* [Universal](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#universal) ([source](https://github.com/rackt/redux/tree/master/examples/universal))
+* [Real World](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#real-world) ([source](https://github.com/rackt/redux/tree/master/examples/real-world))
 
 如果你是 NPM 新手，创建和运行一个新的项目有难度，或者不知道上面的代码应该放到哪里使用，请下载 [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) 这个示例，它是一个集成了 React、Browserify 和 Redux 的最简化的示例项目。
 
@@ -149,7 +182,7 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cycle](https://github.com/staltz/cycle) 介绍了 function 是如何在很多场景都是最好的工具；
 * [React](https://github.com/facebook/react) 实践启迪。
 
-### 贡献者
+### 作者列表
 
 > 定期更新，谢谢各位辛勤贡献
 
@@ -157,9 +190,15 @@ store.dispatch({ type: 'DECREMENT' });
 * [Jovey Zheng@jovey-zheng](https://github.com/jovey-zheng)
 * [Pandazki@pandazki](https://github.com/pandazki)
 * [Yuwei Wang@yuweiw823](https://github.com/yuweiw823)
-* [Desen Meng@demohi](https://github.com/demohi)
+* [Yudong@hashtree](https://github.com/hashtree)
 * [Arcthur@arcthur](https://github.com/arcthur)
 * [Doray Hong@dorayx](https://github.com/dorayx)
+* [Desen Meng@demohi](https://github.com/demohi)
+* [Zhe Zhang@zhe](https://github.com/zhe)
+* [alcat2008](https://github.com/alcat2008)
+* [Frozenme](https://github.com/Frozenme)
+* [姜杨军@Yogi-Jiang](https://github.com/Yogi-Jiang)
+* [Byron Bai@happybai](https://github.com/happybai)
 * [Guo Cheng@guocheng](https://github.com/guocheng)
 * [omytea](https://github.com/omytea)
 * [Fred Wang](https://github.com/namelos)
