@@ -15,7 +15,7 @@ Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，
 
 #### 返回值
 
-(*Function*) 一个应用了 middleware 后的 store enhancer。这个 store enhancer 就是一个函数，并且需要应用到 `createStore`。它会返回一个应用了 middleware 的新的 `createStore`。
+(*Function*) 一个应用了 middleware 后的 store enhancer。这个 store enhancer 的签名是 `createStore => createStore`，但是最简单的使用方法就是直接作为最后一个 `enhancer` 参数传递给 [`createStore()`](createStore.md) 函数。
 
 #### 示例: 自定义 Logger Middleware
 
@@ -38,8 +38,11 @@ function logger({ getState }) {
   }
 }
 
-let createStoreWithMiddleware = applyMiddleware(logger)(createStore)
-let store = createStoreWithMiddleware(todos, [ 'Use Redux' ])
+let store = createStore(
+  todos,
+  [ 'Use Redux' ],
+  applyMiddleware(logger)
+)
 
 store.dispatch({
   type: 'ADD_TODO',
@@ -57,12 +60,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
-// 调用 applyMiddleware，使用 middleware 增强 createStore：
-let createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-
-// 像原生 createStore 一样使用。
 let reducer = combineReducers(reducers)
-let store = createStoreWithMiddleware(reducer)
+// applyMiddleware 为 createStore 注入了 middleware:
+let store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
@@ -230,11 +230,18 @@ export default connect(
     let d = require('another-debug-middleware')
     middleware = [ ...middleware, c, d ]
   }
-  const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore)
+
+  const store = createStore(
+    reducer,
+    preloadedState,
+    applyMiddleware(...middleware)
+  )
   ```
 
   这样做有利于打包时去掉不需要的模块，减小打包文件大小。
 
-* 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancers](../Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/gaearon/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
+* 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancer](../Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/gaearon/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
 
 * Middleware 听起来比实际难一些。真正理解 middleware 的唯一办法是了解现有的 middleware 是如何工作的，并尝试自己实现。需要的功能可能错综复杂，但是你会发现大部分 middleware 实际上很小，只有 10 行左右，是通过对它们的组合使用来达到最终的目的。
+
+* 想要使用多个 store enhancer，可以使用 [`compose()`](./compose.md) 方法。
