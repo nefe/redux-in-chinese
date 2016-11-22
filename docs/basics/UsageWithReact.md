@@ -374,4 +374,4 @@ export default connect(select)(App);
 
 ## 下一步
 
-参照 [本示例完整](ExampleTodoList.md) 来深化理解。然后就可以跳到 [高级教程](../advanced/README.md) 学习网络请求处理和路由。
+参照 [本完整示例](ExampleTodoList.md) 来深化理解。然后就可以跳到 [高级教程](../advanced/README.md) 学习网络请求处理和路由。
