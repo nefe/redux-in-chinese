@@ -12,7 +12,7 @@
 
 ### React Router 0.13 的 route 变化中，view 不更新
 
-如果你正在使用 React Router 0.13，你可能会[碰到这样的问题](https://github.com/rackt/react-redux/issues/43)。解决方法很简单：当使用 `<RouteHandler>` 或者 `Router.run` 提供的 `Handler` 时，不要忘记传递 router state。
+如果你正在使用 React Router 0.13，你可能会[碰到这样的问题](https://github.com/reactjs/react-redux/issues/43)。解决方法很简单：当使用 `<RouteHandler>` 或者 `Router.run` 提供的 `Handler` 时，不要忘记传递 router state。
 
 根 View：
 
@@ -24,8 +24,8 @@ Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // 注意
       <Handler routerState={routerState} />
     </Provider>,
     document.getElementById('root')
-  );
-});
+  )
+})
 ```
 
 嵌套 view：
@@ -33,7 +33,7 @@ Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // 注意
 ```js
 render() {
   // 保持这样传递下去
-  return <RouteHandler routerState={this.props.routerState} />;
+  return <RouteHandler routerState={this.props.routerState} />
 }
 ```
 
@@ -52,12 +52,12 @@ render() {
 
 ```
 function mapStateToProps(state) {
-  return { todos: state.todos };
+  return { todos: state.todos }
 }
 
 export default connect(mapStateToProps, null, null, {
   pure: false
-})(TodoApp);
+})(TodoApp)
 ```
 
 这样就表示你的 `TodoApp` 不是纯净的，只要父组件渲染，自身都会重新渲染。注意，这会降低应用的性能，所以只有在别无他法的情况下才使用它。
