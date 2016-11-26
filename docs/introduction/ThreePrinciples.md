@@ -11,7 +11,7 @@ Redux 可以用这三个基本原则来描述：
 ```js
 console.log(store.getState())
 
-/* Prints
+/* 输出
 {
   visibilityFilter: 'SHOW_ALL',
   todos: [
@@ -25,7 +25,6 @@ console.log(store.getState())
     }
   ]
 }
-*/
 ```
 
 ### State 是只读的
@@ -38,12 +37,12 @@ console.log(store.getState())
 store.dispatch({
   type: 'COMPLETE_TODO',
   index: 1
-});
+})
 
 store.dispatch({
   type: 'SET_VISIBILITY_FILTER',
   filter: 'SHOW_COMPLETED'
-});
+})
 ```
 
 ### 使用纯函数来执行修改
