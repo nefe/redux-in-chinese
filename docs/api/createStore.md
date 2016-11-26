@@ -1,4 +1,4 @@
-# `createStore(reducer, [initialState], enhancer)`
+# `createStore(reducer, [preloadedState], enhancer)`
 
 创建一个 Redux [store](Store.md) 来以存放应用中所有的 state。  
 应用中应有且仅有一个 store。
@@ -47,8 +47,10 @@ console.log(store.getState())
 
 * 你可以决定 state 的格式。你可以使用普通对象或者 [Immutable](http://facebook.github.io/immutable-js/) 这类的实现。如果你不知道如何做，刚开始可以使用普通对象。
 
-* 如果 state 是普通对象，永远不要修改它！比如，reducer 里不要使用 `Object.assign(state, newData)`，应该使用 `Object.assign({}, state, newData)`。这样才不会覆盖旧的 `state`。也可以使用 [Babel 阶段 1](http://babeljs.io/docs/usage/experimental/) 中的 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread) 特性中的 `return { ...state, ...newData }`。
+* 如果 state 是普通对象，永远不要修改它！比如，reducer 里不要使用 `Object.assign(state, newData)`，应该使用 `Object.assign({}, state, newData)`。这样才不会覆盖旧的 `state`。如果可以的话，也可以使用 [对象拓展操作符（object spread spread operator](https://github.com/sebmarkbage/ecmascript-rest-spread) 特性中的 `return { ...state, ...newData }`。
 
 * 对于服务端运行的同构应用，为每一个请求创建一个 store 实例，以此让 store 相隔离。dispatch 一系列请求数据的 action 到 store 实例上，等待请求完成后再在服务端渲染应用。
 
 * 当 store 创建后，Redux 会 dispatch 一个 action 到 reducer 上，来用初始的 state 来填充 store。你不需要处理这个 action。但要记住，如果第一个参数也就是传入的 state 如果是 `undefined` 的话，reducer 应该返回初始的 state 值。
+
+* 要使用多个 store 增强器的时候，你可能需要使用 [compose](./compose.md)
