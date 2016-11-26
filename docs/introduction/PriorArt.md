@@ -45,7 +45,7 @@ Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 
 
 [Reactive Extensions](https://github.com/Reactive-Extensions/RxJS) (和它们正在进行的 [现代化重写](https://github.com/ReactiveX/RxJS)) 是管理复杂异步应用非常优秀的方案。[以外，还有致力于构建将人机交互作模拟为相互依赖的可观测变量的库](http://cycle.js.org)。
 
-同时使用它和 Redux 有意义么？ 当然！ 它们配合得很好。将 Redux store 视作可观察变量非常简便，例如：
+同时使用它和 Redux 有意义么？当然！它们配合得很好。将 Redux store 视作可观察变量非常简便，例如：
 
 ```js
 function toObservable(store) {
