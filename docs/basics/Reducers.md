@@ -158,7 +158,7 @@ case TOGGLE_TODO:
   })
 ```
 
-我们需要修改数组中指定的数据项而又不希望导致**突变**, 因此我们的做法是在创建一个新的数组后, 将那些无需修改的项原封不动移入, 接着对需修改的项用新生成的对象替换。(译者注:Javascript中的对象存储时均是由值和指向值的引用两个部分构成。此处**突变**指直接修改引用所指向的值, 而引用本身保持不变。) 如果经常需要这类的操作，可以选择使用帮助类 [React-addons-update](https://facebook.github.io/react/docs/update.html)，[updeep](https://github.com/substantial/updeep)，或者使用原生支持深度更新的库 [Immutable](http://facebook.github.io/immutable-js/)。最后，时刻谨记永远不要在克隆 `state` 前修改它。
+我们需要修改数组中指定的数据项而又不希望导致**突变**, 因此我们的做法是在创建一个新的数组后, 将那些无需修改的项原封不动移入, 接着对需修改的项用新生成的对象替换。(译者注：Javascript中的对象存储时均是由值和指向值的引用两个部分构成。此处**突变**指直接修改引用所指向的值, 而引用本身保持不变。) 如果经常需要这类的操作，可以选择使用帮助类 [React-addons-update](https://facebook.github.io/react/docs/update.html)，[updeep](https://github.com/substantial/updeep)，或者使用原生支持深度更新的库 [Immutable](http://facebook.github.io/immutable-js/)。最后，时刻谨记永远不要在克隆 `state` 前修改它。
 
 ## 拆分 Reducer
 

@@ -2,7 +2,7 @@
 
 Redux [源码](https://github.com/reactjs/redux/tree/master/examples) 中同时包含了一些示例。
 
-## Counter Vanilla
+## 原生版 Counter
 
 运行 [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) 示例:
 
@@ -51,7 +51,7 @@ open http://localhost:3000/
 
 该示例包含测试代码。
 
-## Todos with Undo
+## 支持撤销的 Todos
 
 运行 [Todos-with-undo](https://github.com/reactjs/redux/tree/master/examples/todos-with-undo) 示例:
 
@@ -85,7 +85,7 @@ open http://localhost:3000/
 
 该示例包含测试代码。
 
-## Shopping Cart
+## 购物车
 
 运行 [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart) 示例：
 
@@ -101,7 +101,7 @@ open http://localhost:3000/
 
 该示例展示了随着应用升级变得愈发重要的常用的 Redux 模式。尤其展示了，如何使用 ID 来标准化存储数据实体，如何在不同层级将多个 reducer 组合使用，如何利用 reducer 定义选择器以封装 state 的相关内容。该示例也展示了使用 [Redux Logger](https://github.com/fcomb/redux-logger) 生成日志，以及使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件进行 action 的条件性分发。
 
-## Tree View
+## 树状视图
 
 运行 [Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view) 示例:
 
@@ -119,7 +119,7 @@ open http://localhost:3000/
 
 该示例包含测试代码。
 
-## Async
+## 异步
 
 运行 [Async](https://github.com/reactjs/redux/tree/master/examples/async) 示例：
 
@@ -135,7 +135,7 @@ open http://localhost:3000/
 
 该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存过期失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步带来的附带作用。
 
-## Universal
+## 同构
 
 运行 [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) 示例:
 
@@ -151,7 +151,7 @@ open http://localhost:3000/
 
 展示了基于 Redux 和 React 的 [server rendering](../recipes/ServerRendering.md)。怎样在服务器端准备 store 中的初始 state 并传递到客户端，使客户端中的 store 可以从现有的 state 启动。
 
-## Real World
+## 真实场景
 
 运行 [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world) 示例：
 

@@ -18,6 +18,7 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 * [官方示例](Examples.md) — 一些官方示例，涵盖了多种 Redux 技术
 * [SoundRedux](https://github.com/andrewngu/sound-redux) — 用 Redux 构建的 SoundCloud 客户端
 * [grafgiti](https://github.com/mohebifar/grafgiti) — 在你的 Github 的 Contributor 页上创建 graffiti
+* [React-lego](https://github.com/peter-mouland/react-lego) — 如何像积木一样，一块块地扩展你的 Redux 技术栈
 
 ### 教程与文章
 
@@ -55,12 +56,14 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 * [backbone-redux](https://github.com/redbooth/backbone-redux) — Backbone
 * [redux-falcor](https://github.com/ekosz/redux-falcor) — Falcor
 * [deku-redux](https://github.com/troch/deku-redux) — Deku
+* [polymer-redux](https://github.com/tur-nr/polymer-redux) - Polymer
+* [ember-redux](https://github.com/toranb/ember-redux) - Ember.js
 
 ### 中间件
 
 * [redux-thunk](http://github.com/gaearon/redux-thunk) — 用最简单的方式搭建异步 action 构造器
 * [redux-promise](https://github.com/acdlite/redux-promise) — 遵从 [FSA](https://github.com/acdlite/flux-standard-action) 标准的 promise 中间件
-* [redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware) — 使用 axios HTTP 客户端获取数据的 Redux 中间件 
+* [redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware) — 使用 axios HTTP 客户端获取数据的 Redux 中间件
 * [redux-observable](https://github.com/blesh/redux-observable/) — Redux 的 RxJS 中间件
 * [redux-rx](https://github.com/acdlite/redux-rx) — 给 Redux 用的 RxJS 工具，包括观察变量的中间件
 * [redux-logger](https://github.com/fcomb/redux-logger) — 记录所有 Redux action 和下一次 state 的日志
@@ -87,14 +90,14 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — 针对 store subscribers 的自定义批处理与防跳请求
 * [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — 基于独断的 action 的 history 库转换
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — 使 action 可稍后提交或撤销
-* [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A reducer enhancer to enable type-agnostic optimistic updates 允许对未知类型进行更新的 reducer 增强器 
+* [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A reducer enhancer to enable type-agnostic optimistic updates 允许对未知类型进行更新的 reducer 增强器
 * [redux-undo](https://github.com/omnidan/redux-undo) — 使 reducer 便捷的重做/撤销，以及 action 记录功能
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — 通过数组或过滤功能忽略 redux action
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — 在确定的 action 上重置 redux 的 state
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — 单用户通知去 dispatch 多个 action
 * [redux-search](https://github.com/treasure-data/redux-search) — 自动 index 站点资源并实现即时搜索
-* [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store 增强器， 可同步不同 Electron 进程上的多个 Redux store 
-* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers 
+* [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store 增强器， 可同步不同 Electron 进程上的多个 Redux store
+* [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
 * [redux-side-effects](https://github.com/salsita/redux-side-effects) — Utilize Generators for declarative yielding of side effects from your pure reducers
 
 ### 工具集
@@ -117,8 +120,8 @@ Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细
 ### 开发者工具监听器
 
 * [Log Monitor](https://github.com/gaearon/redux-devtools-log-monitor) — Redux DevTools 默认监听器，提供树状视图
-* [Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor) — A resizable and movable dock for Redux DevTools monitors 
-* [Slider Monitor](https://github.com/calesce/redux-slider-monitor) — Redux DevTools 自定义监听器，可回放被记录的 Redux action 
+* [Dock Monitor](https://github.com/gaearon/redux-devtools-dock-monitor) — A resizable and movable dock for Redux DevTools monitors
+* [Slider Monitor](https://github.com/calesce/redux-slider-monitor) — Redux DevTools 自定义监听器，可回放被记录的 Redux action
 * [Inspector](https://github.com/alexkuz/redux-devtools-inspector) — Redux DevTools 自定义监听器，可筛选、区分 action，深入 state 并监测变化
 * [Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor) — 区分不同 action 的 store 变动的 Redux Devtools 监听器
 * [Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/) — 树状可筛选视图的 Redux DevTools 监听器
