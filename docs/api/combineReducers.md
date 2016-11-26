@@ -45,7 +45,7 @@
 
 * 如果传入的 `state` 就是 `undefined`，一定要返回对应 reducer 的初始 state。根据上一条规则，初始 state 禁止使用 `undefined`。使用 ES6 的默认参数值语法来设置初始 state 很容易，但你也可以手动检查第一个参数是否为 `undefined`。
 
-虽然 `combineReducers` 自动帮你检查 reducer 是否符合以上规则，但你也应该牢记，并尽量遵守。
+虽然 `combineReducers` 自动帮你检查 reducer 是否符合以上规则，但你也应该牢记，并尽量遵守。即使你通过 `Redux.createStore(combineReducers(...), initialState)` 指定初始 state，`combineReducers` 也会尝试通过传递 `undefined` 的 `state` 来检测你的 reducer 是否符合规则。因此，即使你在代码中不打算实际接收值为 `undefined` 的 `state`，也必须保证你的 reducer 在接收到 `undefined` 时能够正常工作。
 
 #### 示例
 
