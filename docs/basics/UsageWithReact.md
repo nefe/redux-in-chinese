@@ -87,9 +87,9 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
 
 ### 容器组件
 
-还需要一些容器组件来把展示组件连接到 Redux。例如，展示型的 `TodoList` 组件需要一个类似 `VisibleToboList` 的容器来监听 Redux store 变化并处理如何过滤出要显示的数据。为了实现状态过滤，需要实现 `FilterLink` 的容器组件来渲染 `Link` 并在点击时触发对应的 action：
+还需要一些容器组件来把展示组件连接到 Redux。例如，展示型的 `TodoList` 组件需要一个类似 `VisibleTodoList` 的容器来监听 Redux store 变化并处理如何过滤出要显示的数据。为了实现状态过滤，需要实现 `FilterLink` 的容器组件来渲染 `Link` 并在点击时触发对应的 action：
 
-* **`VisibleToboList`** 根据当前显示的状态来对 todo 列表进行过滤，并渲染 `TodoList`。
+* **`VisibleTodoList`** 根据当前显示的状态来对 todo 列表进行过滤，并渲染 `TodoList`。
 * **`FilterLink`** 得到当前过滤器并渲染 `Link`。
   - `filter: string` 就是当前过滤的状态
 
