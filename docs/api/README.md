@@ -6,7 +6,7 @@ Redux 的 API 非常少。Redux 定义了一系列的约定（contract）来让�
 
 ### 顶级暴露的方法
 
-* [createStore(reducer, [initialState])](createStore.md)
+* [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
 * [combineReducers(reducers)](combineReducers.md)
 * [applyMiddleware(...middlewares)](applyMiddleware.md)
 * [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)

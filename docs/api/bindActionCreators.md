@@ -2,7 +2,7 @@
 
 把 [action creators](../Glossary.md#action-creator) 转成拥有同名 keys 的对象，但使用 [`dispatch`](Store.md#dispatch) 把每个 action creator 包围起来，这样可以直接调用它们。
 
-一般情况下你可以直接在 [`Store`](Store.md) 实例上调用 [`dispatch`](Store.md#dispatch)。如果你在 React 中使用 Redux，[react-redux](https://github.com/gaearon/react-redux) 会提供 [`dispatch`](Store.md#dispatch) 。
+一般情况下你可以直接在 [`Store`](Store.md) 实例上调用 [`dispatch`](Store.md#dispatch)。如果你在 React 中使用 Redux，[react-redux](https://github.com/gaearon/react-redux) 会提供 [`dispatch`](Store.md#dispatch) 函数让你直接调用它 。
 
 惟一使用 `bindActionCreators` 的场景是当你需要把 action creator 往下传到一个组件上，却不想让这个组件觉察到 Redux 的存在，而且不希望把 Redux store 或 [`dispatch`](Store.md#dispatch) 传给它。
 
@@ -16,7 +16,7 @@
 
 #### 返回值
 
-(*Function* or *Object*): 一个与原对象类似的对象，只不过这个对象中的的每个函数值都可以直接 dispatch action。如果传入的是一个函数，返回的也是一个函数。
+(*Function* or *Object*): 一个与原对象类似的对象，只不过这个对象中的的每个函数值都可以直接 dispatch action。如果传入的是一个函数作为 actionCreators，返回的也是一个函数。
 
 #### 示例
 
