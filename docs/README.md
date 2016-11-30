@@ -30,6 +30,7 @@
   * [计算衍生数据](/docs/recipes/ComputingDerivedData.md)
   * [实现撤销重做](/docs/recipes/ImplementingUndoHistory.md)
   * [组织 Reducer](/docs/recipes/StructuringReducers.md)
+    * [必要的 Reducer 概念](/docs/recipes/reducers/PrerequisiteConcepts.md)
     * [初始化 State](/docs/recipes/reducers/InitializingState.md)
 * [常见问题](/docs/FAQ.md)
 * [排错](/docs/Troubleshooting.md)
