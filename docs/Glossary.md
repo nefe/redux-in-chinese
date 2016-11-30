@@ -77,7 +77,7 @@ type AsyncAction = any
 
 *异步 action* 是一个发给 dispatching 函数的值，但是这个值还不能被 reducer 消费。在发往 base [`dispatch()`](api/Store.md#dispatch) function 之前，[middleware](#middleware) 会把异步 action 转换成一个或一组 action。异步 action 可以有多种 type，这取决于你所使用的 middleware。它通常是 Promise 或者 thunk 之类的异步原生数据类型，虽然不会立即把数据传递给 reducer，但是一旦操作完成就会触发 action 的分发事件。
 
-##  Middleware 
+##  Middleware
 
 ```js
 type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
@@ -98,7 +98,7 @@ type Store = {
   getState: () => State
   subscribe: (listener: () => void) => () => void
   replaceReducer: (reducer: Reducer) => void
-};
+}
 ```
 
 Store 维持着应用的 state tree 对象。
