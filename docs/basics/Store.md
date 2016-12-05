@@ -8,7 +8,7 @@
 * 提供 [`getState()`](../api/Store.md#getState) 方法获取 state；
 * 提供 [`dispatch(action)`](../api/Store.md#dispatch) 方法更新 state；
 * 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器;
-* 通过 [`replaceReducer(nextReducer)`](../api/Store.md#replaceReducer) 返回的函数注销监听器。
+* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 返回的函数注销监听器。
 
 再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分数据处理逻辑时，你应该使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
 
