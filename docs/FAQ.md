@@ -47,7 +47,7 @@
 <a id="general-when-to-use"></a>
 ### 何时使用 Redux？
 
-React 早起贡献者之一 Pete Hunt 说：
+React 早期贡献者之一 Pete Hunt 说：
 
 > 你应当清楚何时需要 Flux。如果你不确定是否需要它，那么其实你并不需要它。
 
