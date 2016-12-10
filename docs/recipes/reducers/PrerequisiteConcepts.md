@@ -1,4 +1,4 @@
-# 必要的 Reducer 概念
+# Reducer 基础概念
 
 
 就像 [Reducers](../../basics/Reducers.md) 中描述的一样，一个 Redux reducer 函数需要具备：
@@ -29,12 +29,12 @@
 
 **阅读列表**：
 
-- [Redux 文档: Reducer](../../basics/Reducers.md) 
+- [Redux 文档: Reducer](../../basics/Reducers.md)
 - [Redux 文档: Reducer 样板代码](../ReducingBoilerplate.md)
 - [Redux 文档: 实现撤销历史](../ImplementingUndoHistory.md)
 - [Redux 文档: `combineReducers`](../../api/combineReducers.md)
 - [高阶 Reducer 的力量](http://slides.com/omnidan/hor#/)
-- [Stack Overflow: Store 初始化 state 和 `combineReducers`](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer) 
+- [Stack Overflow: Store 初始化 state 和 `combineReducers`](http://stackoverflow.com/questions/33749759/read-stores-initial-state-in-redux-reducer)
 - [Stack Overflow: State 键的名称与 `combineReducers`](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer)
 
 #### 纯函数和副作用
