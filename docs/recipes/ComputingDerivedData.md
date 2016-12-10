@@ -8,7 +8,7 @@
 
 #### `containers/VisibleTodoList.js`
 
-```javascript
+```js
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
@@ -58,7 +58,7 @@ Reselect 提供 `createSelector` 函数来创建可记忆的 selector。`createS
 
 #### `selectors/index.js`
 
-```javascript
+```js
 import { createSelector } from 'reselect'
 
 const getVisibilityFilter = (state) => state.visibilityFilter
@@ -85,7 +85,7 @@ export const getVisibleTodos = createSelector(
 
 可记忆的 selector 自身可以作为其它可记忆的 selector 的 input-selector。下面的 `getVisibleTodos` 被当作另一个 selector 的 input-selector，来进一步通过关键字（keyword）过滤 todos。
 
-```javascript
+```js
 const getKeyword = (state) => state.keyword
 
 const getVisibleTodosFilteredByKeyword = createSelector(
@@ -102,7 +102,7 @@ const getVisibleTodosFilteredByKeyword = createSelector(
 
 #### `containers/VisibleTodoList.js`
 
-```javascript
+```js
 iimport { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
@@ -132,15 +132,15 @@ export default VisibleTodoList
 
 ### 在 selectors 中访问 React Props
 
-> 本节介绍一个对于假想内容的拓展，我们的应用程序支持多个 Todo 列表。需要注意的是，为了简洁起见，省略了实现这个工程的时候会遇到的与本节不相关的内容（reducers 的变化、组件、Actions 等）
+> 现在假使我们要支持一个新功能：支持多个 Todo 列表新功能。为了简洁起见，省略了实现这个工程会遇到的与本节不相关的内容（reducers 的变化、组件、Actions 等）
 
-到目前为止，我们只看到 selectors  接收 Redux store state 作为参数，然而，selectors 也可以接收 props。
+到目前为止，我们只看到 selector 接收 Redux store state 作为参数，然而，selector 也可以接收 props。
 
 这儿有一个 `App` 的组件，它渲染了三个叫做 `VisibleTodoList` 的子组件，每个组件都带一个 `listId` 的 prop;
 
 #### components/App.js
 
-``` javascript
+```js
 import React from 'react'
 import Footer from './Footer'
 import AddTodo from '../containers/AddTodo'
@@ -158,7 +158,7 @@ const App = () => (
 
 #### selectors/todoSelectors.js
 
-``` javascript
+```js
 import { createSelector } from 'reselect'
 
 const getVisibilityFilter = (state, props) =>
@@ -186,7 +186,7 @@ export default getVisibleTodos
 
 `props` 可以通过 `mapStateToProps` 传递给 `getVisibleTodos`:
 
-``` javascript
+```js
 const mapStateToProps = (state, props) => {
   return {
     todos: getVisibleTodos(state, props)
@@ -198,11 +198,11 @@ const mapStateToProps = (state, props) => {
 
 **但是这儿有一个问题！**
 
-使用带有多个 `visibleTodoList` 容器实例的 `getVisible` selector 无法正确记忆。
+使用带有多个 `visibleTodoList` 容器实例的 `getVisibleTodos` selector 不能使用函数记忆功能。
 
 #### containers/VisibleTodoList.js
 
-``` javascript
+```js
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
@@ -231,17 +231,17 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-用 `createSelector` 创建的 selector 只有在参数集与之前的参数集相同时才会返回缓存的值。如果我们交替的渲染 `VisibleTodoList listId="1" />` 和 `VisibleTodoList listId="2" />`，共享的 selectors 将交替的接收 `listId: 1` 和 `listId: 2`。这会导致每次调用时传入的参数不同，因此 selector 将始终重新计算而不是返回缓存的值。我们将在下一节了解如何解决这个限制。
+用 `createSelector` 创建的 selector 只有在参数集与之前的参数集相同时才会返回缓存的值。如果我们交替的渲染 `VisibleTodoList listId="1" />` 和 `VisibleTodoList listId="2" />`，共享的 selector 将交替的接收 `listId: 1` 和 `listId: 2`。这会导致每次调用时传入的参数不同，因此 selector 将始终重新计算而不是返回缓存的值。我们将在下一节了解如何解决这个限制。
 
-### 跨多组件的共享 Selectors
-> 这节中的例子需要 React Readux v4.3.0 或者更高的版本
+### 跨多组件的共享 Selector
+> 这节中的例子需要 React Redux v4.3.0 或者更高的版本
 
 为了跨越多个 `VisibleTodoList` 组件共享 selector，**于此同时**正确记忆。每个组件的实例需要有拷贝 selector 的私有版本。
 
 我们创建一个 `makeGetVisibleTodos` 的函数，在每个调用的时候返回一个 `getVisibleTodos` selector 的新拷贝。
 
 ####selectors/todoSelectors.js
-``` javascript
+```js
 import { createSelector } from 'reselect'
 
 const getVisibilityFilter = (state, props) =>
@@ -273,7 +273,7 @@ const makeGetVisibleTodos = () => {
 
 下面例子中的 `makeMapStateToProps` 创建一个新的 `getVisibleTodos` selectors，返回一个独占新 selector 的权限的 `mapStateToProps` 函数。
 
-``` javascript
+```js
 const makeMapStateToProps = () => {
   const getVisibleTodos = makeGetVisibleTodos()
   const mapStateToProps = (state, props) => {
@@ -289,7 +289,7 @@ const makeMapStateToProps = () => {
 
 #### container/VisibleTodosList.js
 
-``` javascript
+```js
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
