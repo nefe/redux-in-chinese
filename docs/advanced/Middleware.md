@@ -270,6 +270,8 @@ function applyMiddleware(store, middlewares) {
 
 * 为了保证你只能应用 middleware 一次，它作用在 `createStore()` 上而不是 `store` 本身。因此它的签名不是 `(store, middlewares) => store`， 而是 `(...middlewares) => (createStore) => createStore`。
 
+由于在使用之前需要先应用方法到 `createStore()` 之上有些麻烦，`createStore()` 也接受将希望被应用的函数作为最后一个可选参数传入。
+
 ### 最终的方法
 
 这是我们刚刚所写的 middleware：
@@ -303,13 +305,12 @@ const crashReporter = store => next => action => {
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-// applyMiddleware 接收 createStore()
-// 并返回一个包含兼容 API 的函数。
-let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore)
-
-// 像使用 createStore() 一样使用它。
 let todoApp = combineReducers(reducers)
-let store = createStoreWithMiddleware(todoApp)
+let store = createStore(
+  todoApp,
+  // applyMiddleware() 告诉 createStore() 如何处理中间件
+  applyMiddleware(logger, crashReporter)
+)
 ```
 
 就是这样！现在任何被发送到 store 的 action 都会经过 `logger` 和 `crashReporter`：
@@ -466,15 +467,17 @@ const thunk = store => next => action =>
     next(action)
 
 // 你可以使用以上全部的 middleware！（当然，这不意味着你必须全都使用。）
-let createStoreWithMiddleware = applyMiddleware(
-  rafScheduler,
-  timeoutScheduler,
-  thunk,
-  vanillaPromise,
-  readyStatePromise,
-  logger,
-  crashReporter
-)(createStore)
 let todoApp = combineReducers(reducers)
-let store = createStoreWithMiddleware(todoApp)
+let store = createStore(
+  todoApp,
+  applyMiddleware(
+    rafScheduler,
+    timeoutScheduler,
+    thunk,
+    vanillaPromise,
+    readyStatePromise,
+    logger,
+    crashReporter
+  )
+)
 ```
