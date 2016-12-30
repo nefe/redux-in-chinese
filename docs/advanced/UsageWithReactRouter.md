@@ -87,7 +87,7 @@ const Root = ({ store }) => (
 <Route path="/(:filter)" component={App} />
 ```
 
-也许你想将 '#' 从 URL 中移除（例如：http://localhost:3000/#/?_k=4sbb0i）。
+也许你想将 '#' 从 URL 中移除（例如：`http://localhost:3000/#/?_k=4sbb0i`）。
 你需要从 React Router 导入 `browserHistory` 来实现：
 
 ```js
@@ -153,7 +153,7 @@ const FilterLink = ({ filter, children }) => (
 export default FilterLink;
 ```
 
-### `containers/Footer.js`
+### `components/Footer.js`
 
 ```js
 import React from 'react'
@@ -189,12 +189,12 @@ export default Footer
 这个目前仍然是和 `state` 绑定，而不是和 URL 绑定。
 `mapStateToProps` 的第二可选参数 `ownProps`，这个是一个传递给 `<VisibleTodoList />` 所有属性的对象。
 
-### `components/App.js`
+### `containers/VisibleTodoList.js`
 
 ```js
 const mapStateToProps = (state, ownProps) => {
   return {
-    todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, ownProps.filter) // 以前是 getVisibleTodos(state.todos, state.visibilityFilter)
   };
 };
 ```
