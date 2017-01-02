@@ -2,10 +2,9 @@
 
 ## 目录
 
-- **综合**
-  - [何时使用 Redux ？](#general-when-to-use)
-  - [Redux 只能搭配 React 使用？](#general-only-react)
-  - [Redux 需要特殊的编译工具支持吗？](#general-build-tools)
+- [何时使用 Redux ？](#general-when-to-use)
+- [Redux 只能搭配 React 使用？](#general-only-react)
+- [Redux 需要特殊的编译工具支持吗？](#general-build-tools)
 
 ## 综合
 
