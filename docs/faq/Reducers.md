@@ -2,9 +2,8 @@
 
 ## 目录
 
-- **Reducers**
-  - [如何在 reducer 之间共享 state? combineReducers 是必须的吗？](#reducers-share-state)
-  - [处理 action 必须用 switch 语句吗？](#reducers-use-switch)
+- [如何在 reducer 之间共享 state? combineReducers 是必须的吗？](#reducers-share-state)
+- [处理 action 必须用 switch 语句吗？](#reducers-use-switch)
 
 ## Reducers
 
