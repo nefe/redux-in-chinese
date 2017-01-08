@@ -7,7 +7,7 @@
 #### `index.js`
 
 ```js
-import 'babel-core/polyfill'
+import 'babel-polyfill'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -29,7 +29,7 @@ import fetch from 'isomorphic-fetch'
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
-export const INVALIDATE_SUBREDDIT  = 'INVALIDATE_SUBREDDIT '
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
 export function selectSubreddit(subreddit) {
   return {
@@ -40,7 +40,7 @@ export function selectSubreddit(subreddit) {
 
 export function invalidateSubreddit(subreddit) {
   return {
-    type: INVALIDATE_SUBREDDIT ,
+    type: INVALIDATE_SUBREDDIT,
     subreddit
   }
 }
@@ -64,7 +64,7 @@ function receivePosts(subreddit, json) {
 function fetchPosts(subreddit) {
   return dispatch => {
     dispatch(requestPosts(subreddit))
-    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
+    return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json => dispatch(receivePosts(subreddit, json)))
   }
@@ -97,16 +97,16 @@ export function fetchPostsIfNeeded(subreddit) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT ,
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from './actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-    case SELECT_SUBREDDIT:
-      return action.subreddit
-    default:
-      return state
+  case SELECT_SUBREDDIT:
+    return action.subreddit
+  default:
+    return state
   }
 }
 
@@ -116,7 +116,7 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-    case INVALIDATE_SUBREDDIT :
+    case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
         didInvalidate: true
       })
@@ -139,7 +139,7 @@ function posts(state = {
 
 function postsBySubreddit(state = { }, action) {
   switch (action.type) {
-    case INVALIDATE_SUBREDDIT :
+    case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
       return Object.assign({}, state, {
@@ -170,13 +170,15 @@ import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware
-)(createStore)
-
-export default function configureStore(initialState) {
-  return createStoreWithMiddleware(rootReducer, initialState)
+export default function configureStore(preloadedState) {
+  return createStore(
+    rootReducer,
+    preloadedState,
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
+  )
 }
 ```
 
@@ -243,7 +245,7 @@ class AsyncApp extends Component {
     dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
-  render () {
+  render() {
     const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
@@ -364,8 +366,6 @@ export default class Posts extends Component {
 }
 
 Posts.propTypes = {
-  posts: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired
-  }).isRequired).isRequired
+  posts: PropTypes.array.isRequired
 }
 ```

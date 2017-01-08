@@ -1,6 +1,6 @@
 # 排错
 
-这里会列出常见的问题和对应的解决方案。  
+这里会列出常见的问题和对应的解决方案。
 虽然使用 React 做示例，但是即使你使用了其它库，这些问题和解决方案仍然对你有所帮助。
 
 ### dispatch action 后什么也没有发生
@@ -53,14 +53,15 @@ function todos(state = [], action) {
       ]
     case 'COMPLETE_TODO':
       // 返回新数组
-      return [
-        ...state.slice(0, action.index),
-        // 修改之前复制数组
-        Object.assign({}, state[action.index], {
-          completed: true
-        }),
-        ...state.slice(action.index + 1)
-      ]
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          // 修改之前复制数组
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
     default:
       return state
   }
@@ -72,13 +73,14 @@ function todos(state = [], action) {
 
 ```js
 // 修改前
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // 修改后
 return update(state, {
@@ -94,27 +96,31 @@ return update(state, {
 
 要注意 `Object.assign` 的使用方法。例如，在 reducer 里不要这样使用 `Object.assign(state, newData)`，应该用 `Object.assign({}, state, newData)`。这样它才不会覆盖以前的 `state`。
 
-你也可以通过使用 [Babel transform-object-rest-spread 插件](http://babeljs.io/docs/plugins/transform-object-rest-spread/)来开启 [ES7 对象的 spread 操作](https://github.com/sebmarkbage/ecmascript-rest-spread)：
+你也可以通过 [对象操作符](recipes/UsingObjectSpreadOperator.md)　所述的使用更多简洁的语法：
 
 ```js
 // 修改前：
-return [
-  ...state.slice(0, action.index),
-  Object.assign({}, state[action.index], {
-    completed: true
-  }),
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return Object.assign({}, todo, {
+      completed: true
+    })
+  }
+  return todo
+})
 
 // 修改后：
-return [
-  ...state.slice(0, action.index),
-  { ...state[action.index], completed: true },
-  ...state.slice(action.index + 1)
-]
+return state.map((todo, index) => {
+  if (index === action.index) {
+    return { ...todo, completed: true }
+  }
+  return todo
+})
 ```
 
-注意还在实验阶段的特性注定经常改变，最好不要在大的项目里过多依赖它们。
+注意还在实验阶段的特性会经常改变。
+
+同时要注意那些需要复制的深层嵌套的　state 对象。而　`_.extend` 和 `Object.assign`　只能提供浅层的　state 复制。在　[更新嵌套的对象](recipes/reducers/ImmutableUpdatePatterns.md#updating-nested-objects) 章节中会教会你如何处理嵌套的　state　对象。
 
 #### 不要忘记调用 [`dispatch(action)`](api/Store.md#dispatch)
 
@@ -131,12 +137,12 @@ export function addTodo(text) {
 #### `AddTodo.js`
 
 ```js
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { addTodo } from './TodoActions'
 
 class AddTodo extends Component {
   handleClick() {
-    // 不起作用！
+    // 不起作用!
     addTodo('Fix the issue')
   }
 
@@ -191,7 +197,11 @@ export default connect()(AddTodo)
 
 如果你想的话也可以把 `dispatch` 手动传给其它组件。
 
+####　确保　mapStateToProps　是正确的
+
+你可能正确地　diaptching 一个 action　并且将它提到了　reducer　中，但是对应的　state　却没有通过　props　正确地传输。
+
 ## 其它问题
 
-在 Discord [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/rackt/redux/issues)。  
-如果问题终于解决了，请把解法[写到文档里](https://github.com/rackt/redux/edit/master/docs/Troubleshooting.md)，以便别人遇到同样问题时参考。
+在 Discord [Reactiflux](http://reactiflux.com/) 里的 **redux** 频道里提问，或者[提交一个 issue](https://github.com/reactjs/redux/issues)。
+如果问题终于解决了，请把解法[写到文档里](https://github.com/reactjs/redux/edit/master/docs/Troubleshooting.md)，以便别人遇到同样问题时参考。
