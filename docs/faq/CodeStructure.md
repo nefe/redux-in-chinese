@@ -16,9 +16,9 @@
 - Domain-style：为每个功能或者域创建单独的文件夹，可能会为某些文件类型创建子文件夹
 - “Ducks”：类似于 Domain-style，但是明确地将 action、 reducer 绑定在一起，通常将它们定义在同一文件内。
 
-推荐做法是将 selector 与 reducer 定义在一起并输出，并在 reducer 文件中与知道 state 树真实形状的代码一起被重用（例如在 `mapStateToProps` 方法、异步 action 创建函数，或者 sagas）。
+推荐做法是将 selector 与 reducer 定义在一起并输出，并在 reducer 文件中与知道 state 树真实形状的代码一起被重用（例如在 `mapStateToProps` 方法、异步 action 创建函数，或者 saga）。
 
-不管代码在你的磁盘上是如何存放的，必须记住的是 actions 和 reducers 不应该单独考虑。在一个文件夹中定义的 reducer 可以响应另一个文件夹中定义的 action 是非常常见的（甚至是鼓励的）。
+不管代码在你的磁盘上是如何存放的，必须记住的是 action 和 reducer 不应该单独考虑。在一个文件夹中定义的 reducer 可以响应另一个文件夹中定义的 action 是非常常见的（甚至是鼓励的）。
 
 #### 补充资料
 
@@ -56,7 +56,7 @@
 下面的评论恰如其分的概括了这两种分歧：
 
 > 问题是什么在 action 创建函数中、什么在 reducer 中，就是关于 fat 和 thin action 创建函数的选择。如果你将逻辑都放在 action 创建函数中，最终用于更新 state 的 action 对象就会变得 fat，相应的 reducer 就变得纯净、简洁。因为只涉及很少的业务逻辑，将非常有利于组合。
-> 如果你将大部门逻辑置于 reducer 之中，action 将变得精简、美观，大部分数据逻辑都在一个地方维护，但是 reducer 由于引用了其它分支的信息，将很难组合。最终的 reducer 会很庞大，而且需要从更高层的 state 获取额外信息。
+> 如果你将大部分逻辑置于 reducer 之中，action 将变得精简、美观，大部分数据逻辑都在一个地方维护，但是 reducer 由于引用了其它分支的信息，将很难组合。最终的 reducer 会很庞大，而且需要从更高层的 state 获取额外信息。
 
 当你从这两种极端情况中找到一个平衡时，就意味着你已经掌握了 Redux。
 
@@ -72,5 +72,3 @@
 - [#1165: Where to put business logic / validation？](https://github.com/reactjs/redux/issues/1165)
 - [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171 )
 - [Stack Overflow: Accessing Redux state in an action creator？](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
-
-

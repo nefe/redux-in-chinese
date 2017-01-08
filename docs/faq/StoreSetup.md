@@ -66,7 +66,7 @@ Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 的
 
 这个 API 是没有依赖及副作用的底层接口，可以用于创建高阶订阅者逻辑。类似 React Redux 的 UI 绑定能为所有连接的组件都创建订阅。也可以用于编写智能的新旧 state 比对方法，从而在某些内容变化时执行额外的逻辑处理。示例 [redux-watch](https://github.com/jprichardson/redux-watch) 和 [redux-subscribe](https://github.com/ashaffer/redux-subscribe) 提供不同的方式用于指定订阅及处理变更。
 
-新的 state 没有传递给监听者，目的是简化 store enhancer 的实现，比如 Redux DevTools。此外，订阅者旨在响应 state 值本身，而非 action。当 action 很重要且需要特殊处理时，使用 middleware 。
+新的 state 没有传递给监听者，目的是简化 store enhancer 的实现，比如 Redux DevTools。此外，订阅者旨在响应 state 值本身，而非 action。当 action 很重要且需要特殊处理时，使用 middleware。
 
 #### 补充资料
 
@@ -86,4 +86,3 @@ Redux 提供了独立的 `store.subscribe` 方法用于通知监听器 store 的
 **库**
 
 - [Redux Addons Catalog: Store Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
-

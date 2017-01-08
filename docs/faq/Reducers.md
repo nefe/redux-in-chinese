@@ -1,16 +1,16 @@
-# Redux 常见问题：Reducers
+# Redux 常见问题：Reducer
 
 ## 目录
 
 - [如何在 reducer 之间共享 state? combineReducers 是必须的吗？](#reducers-share-state)
 - [处理 action 必须用 switch 语句吗？](#reducers-use-switch)
 
-## Reducers
+## Reducer
 
 <a id="reducers-share-state"></a>
-### 如何在 reducer 之间共享 state? combineReducers 是必须的吗？
+### 如何在 reducer 之间共享 state? `combineReducers` 是必须的吗？
 
-Redux store 推荐的结构是将 state 对象按键值切分成 “层”（slices） 或者 “域”（domains），并提供独立的 reducer 方法管理各自的数据层。就像 Flux 模式中的多个独立 store 一样， Redux 为此还提供了 [`combineReducers`](/docs/api/combineReducers.md) 工具来简化该模型。应当注意的是， `combineReducers` **不是** 必须的，它仅仅是通过简单的 JavaScript 对象作为数据，让 state 层能与 reducer 一一关联的函数而已。
+Redux store 推荐的结构是将 state 对象按键值切分成 “层”（slice） 或者 “域”（domain），并提供独立的 reducer 方法管理各自的数据层。就像 Flux 模式中的多个独立 store 一样， Redux 为此还提供了 [`combineReducers`](/docs/api/combineReducers.md) 工具来简化该模型。应当注意的是， `combineReducers` **不是** 必须的，它仅仅是通过简单的 JavaScript 对象作为数据，让 state 层能与 reducer 一一关联的函数而已。
 
 许多用户想在 reducer 之间共享数据，但是 `combineReducers` 不允许此种行为。有许多可用的办法：
 
@@ -50,4 +50,3 @@ Redux store 推荐的结构是将 state 对象按键值切分成 “层”（sli
 
 - [#883: take away the huge switch block](https://github.com/reactjs/redux/issues/883)
 - [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
-

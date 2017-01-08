@@ -1,10 +1,10 @@
-# Redux 常见问题：Actions
+# Redux 常见问题：Action
 
 ## 目录
 
 - [为何 type 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？](#actions-string-constants)
 - [是否存在 reducer 和 action 之间的一对一映射？](#actions-reducer-mappings)
-- [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？](#actions-side-effects)
+- [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunk” 以及 “middleware” 类似的东西去处理异步行为？](#actions-side-effects)
 - [是否应该在 action 创建函数中连续分发多个 action？](#actions-multiple-actions)
 
 ## Actions
@@ -59,11 +59,11 @@
 
 任何有价值的 web 应用都必然要执行复杂的逻辑，通常包括 AJAX 请求等异步工作。这类代码不再是针对输入的纯函数，与第三方的交互被认为是 [“副作用”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)。
 
-Redux 深受函数式编程的影响，创造性的不支持副作用的执行。尤其是 reducer， *必须* 是符合  `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，有副作用时也是如此。
+Redux 深受函数式编程的影响，创造性的不支持副作用的执行。尤其是 reducer， *必须* 是符合  `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，还可以添加副作用。
 
 Redux 建议将带副作用的代码作为 action 创建过程的一部分。因为该逻辑 *能* 在 UI 组件内执行，那么通常抽取此类逻辑作为可重用的方法都是有意义的，因此同样的逻辑能被多个地方调用，也就是所谓的 action 创建函数。
 
-最简单也是最常用的方法就是添加 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛使用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 *许多* 其它开源的库和理念，都有各自针对副作用的管理方法。
+最简单也是最常用的方法就是使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛使用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 *许多* 其它开源的库和理念，都有各自针对副作用的管理方法。
 
 #### 补充资料
 **文档**
