@@ -1,16 +1,16 @@
-# 突破 `combineReducers`
+# `combineReducers` 进阶
 
-Redux 引入了非常实用的 `combineReducers` 辅助函数，但我们却粗暴地将它限制于单一的应用场景：把不同片段的 state 的更新工作委托给一个特定的 reducer，以此更新由简单的 JavaScript 对象构成的 state 树。它不解决 Immutable.js Maps 所构建的 state tree，也不会把其余部分的 state 作为额外参数传递给 reducer 或者排列 reducer 的调用顺序，它同样不关心 reducer 如何工作。
+Redux 引入了非常实用的 `combineReducers` 工具函数，但我们却粗暴地将它限制于单一的应用场景：把不同片段的 state 的更新工作委托给一个特定的 reducer，以此更新由原生 JavaScript 对象构成的 state 树。它不解决 Immutable.js Maps 所构建的 state tree，也不会把其余部分的 state 作为额外参数传递给 reducer 或者排列 reducer 的调用顺序，它同样不关心 reducer 如何工作。
 
 于是一个常见问题出现了，“`combineReducers` 如何处理这些应用场景呢？”通常给出的回答只是“你不能这么做，你可能需要通过其他方式解决”。**一旦你突破 `combineReducers` 的这种限制，就是创建各色各样的“自定义” reducer 的时候了**，不管是为了解决一次性场景的特殊 reducer，还是能够被广泛复用的 reducer。本文为几种典型的应用场景提供了建议，但你也可以自由发挥。
 
 ## 结合 Immutable.js 对象使用 reducers
 
-由于目前 `combineReducers` 只能处理简单的 JavaScript 对象，对于把 Immutable.js Map 对象作为顶层 state 树的应用程序来说，可能无法使用 `combineReducers` 管理应用状态。因为很多开发者采用了 Immutable.js，所以涌现了大量提供类似功能的工具，例如 [redux-immutable](https://github.com/gajus/redux-immutable)。这个第三方包实现了一个能够处理 Immutable Map 数据而非简单的 JavaScript 对象的 `combineReducers`。
+由于目前 `combineReducers` 只能处理原生 JavaScript 对象，对于把 Immutable.js Map 对象作为顶层 state 树的应用程序来说，可能无法使用 `combineReducers` 管理应用状态。因为很多开发者采用了 Immutable.js，所以涌现了大量提供类似功能的工具，例如 [redux-immutable](https://github.com/gajus/redux-immutable)。这个第三方包实现了一个能够处理 Immutable Map 数据而非原生 JavaScript 对象的 `combineReducers`。
 
 ## 不同 reducers 之间共享数据
 
-类似地，如果 `sliceReducerA` 为了处理特殊的 action 正好需要来自 `sliceReducerB` 的部分 state 数据，或者 `sliceReducerB` 正好需要全部的 state 作为参数，单单就 `combineReducers` 是无法解决这种问题的。也许可以通过这种方式解决，自定义一个能够把所需数据当额外参数进行数据传递的函数，例如：
+类似地，如果 `sliceReducerA` 为了处理特殊的 action 正好需要来自 `sliceReducerB` 的部分 state 数据，或者 `sliceReducerB` 正好需要全部的 state 作为参数，单单就 `combineReducers` 是无法解决这种问题的。可以这样来解决：把所需数据当额外参数的形式传递给自定义函数，例如：
 
 ```js
 function combinedReducer(state, action) {
@@ -23,7 +23,7 @@ function combinedReducer(state, action) {
         }
         case "SOME_SPECIAL_ACTION" : {
             return {
-                // 明确地把 state.b 作为额外参数进行传递 
+                // 明确地把 state.b 作为额外参数进行传递
                 a : sliceReducerA(state.a, action, state.b),
                 b : sliceReducerB(state.b, action)
             }        
@@ -40,14 +40,14 @@ function combinedReducer(state, action) {
 }
 ```
 
-另外一种解决“更新共享片段数据” (shared-slice updates) 的问题可能是简单地传递额外的数据给 action。这个可以通过 thunk 函数或者类似的方法轻松实现，例如这个例子：
+另一种解决“共享片段数据更新” (shared-slice updates) 问题的简单方法是，给 action 添加额外数据。可以通过 thunk 函数或者类似的方法轻松实现，如下：
 
 ```js
 function someSpecialActionCreator() {
     return (dispatch, getState) => {
         const state = getState();
         const dataFromB = selectImportantDataFromB(state);
-        
+
         dispatch({
             type : "SOME_SPECIAL_ACTION",
             payload : {
@@ -60,13 +60,13 @@ function someSpecialActionCreator() {
 
 因为 B 的数据已经存在于 action 中，所以它的父级 reducer 不需要做任何特殊的处理就能把数据暴露给 `sliceReducerA`。
 
-第三种方法可能是了利用 `combineReducers` 产生的 reducer 来解决这种“简单”的应用场景：每个 reducer 不仅独立地更新自己的数据，而且会通过其他 reducer 处理跨 reducer 数据共享的特殊场景，然后由一个函数依次调用这两个 reducer 来产生最后的结果：
+第三种方法是：使用 `combineReducers` 组合 reducer 来处理“简单”的场景，每个 reducer 依旧只更新自己的数据；同时新加一个 reducer 来处理多块数据交叉的“复杂”场景；最后写一个包裹函数依次调用这两类 reducer 并得到最终结果：
 
 ```js
 const combinedReducer = combineReducers({
     a : sliceReducerA,
     b : sliceReducerB
-}); 
+});
 
 function crossSliceReducer(state, action) {
     switch(action.type) {
@@ -88,7 +88,7 @@ function rootReducer(state, action) {
 }
 ```
 
-后来发现一个实用工具 [reduce-reducers](https://github.com/acdlite/reduce-reducers)，它可以简化操作流程。这个工具接收多个 reducers 然后对他们执行 `reduce()` 操作，它会把 reducers 之间产生的中间值依次传递给下一个 reducer：
+已经有一个库 [reduce-reducers](https://github.com/acdlite/reduce-reducers) 可以简化以上操作流程。它接收多个 reducer 然后对它们依次执行 `reduce()` 操作，并把产生的中间值依次传递给下一个 reducer：
 
 ```js
 // 与上述手动编写的 `rootReducer` 一样
@@ -99,7 +99,7 @@ const rootReducer = reduceReducers(combinedReducers, crossSliceReducer);
 
 ## 更多建议
 
-再次强调，理解 Redux reducers *只是*函数的概念非常重要。`combineReducers` 虽然实用也只是冰山一角。除了用 switch 语句编写函数，还可以用条件逻辑；函数不仅可以彼此组合，也可以调用其他函数。也许你可能需要这样的一个 reducer，它既能够重置 state，也能够响应特定的 actions。你可以这样做：
+再次强调，Reducer *只是*普通的函数，明确这一概念非常重要。`combineReducers` 虽然实用也只是冰山一角。除了用 switch 语句编写函数，还可以用条件逻辑；函数不仅可以彼此组合，也可以调用其他函数。也许你可能需要这样的一个 reducer，它既能够重置 state，也能够响应特定的 action。你可以这样做：
 
 ```js
 const undoableFilteredSliceA = compose(undoReducer, filterReducer("ACTION_1", "ACTION_2"), sliceReducerA);
