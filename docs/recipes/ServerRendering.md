@@ -34,6 +34,8 @@ npm install --save express react-redux
 
 下面是服务端代码大概的样子。使用 [app.use](http://expressjs.com/api.html#app.use) 挂载 [Express middleware](http://expressjs.com/guide/using-middleware.html) 处理所有请求。如果你还不熟悉 Express 或者 middleware，只需要了解每次服务器收到请求时都会调用 handleRender 函数。
 
+另外，如果有使用 ES6 和 JSX 语法，需要使用 [Babel](https://babeljs.io/) (对应示例[this example of a Node Server with Babel](https://github.com/babel/example-node-server)) 和 [React preset](https://babeljs.io/docs/plugins/preset-react/)。
+
 ##### `server.js`
 
 ```js
@@ -53,7 +55,7 @@ app.use(handleRender);
 
 // 接下来会补充这部分代码
 function handleRender(req, res) { /* ... */ }
-function renderFullPage(html, initialState) { /* ... */ }
+function renderFullPage(html, preloadedState) { /* ... */ }
 
 app.listen(port);
 ```
@@ -83,23 +85,23 @@ function handleRender(req, res) {
   )
 
   // 从 store 中获得初始 state
-  const initialState = store.getState();
+  const preloadedState = store.getState();
 
   // 把渲染后的页面内容发送给客户端
-  res.send(renderFullPage(html, initialState));
+  res.send(renderFullPage(html, preloadedState));
 }
 ```
 
 ### 注入初始组件的 HTML 和 State
 
-服务端最后一步就是把初始组件的 HTML 和初始 state 注入到客户端能够渲染的模板中。如何传递 state 呢，我们添加一个 `<script>` 标签来把 `initialState` 赋给 `window.__INITIAL_STATE__`。
+服务端最后一步就是把初始组件的 HTML 和初始 state 注入到客户端能够渲染的模板中。如何传递 state 呢，我们添加一个 `<script>` 标签来把 `preloadedState` 赋给 `window.__INITIAL_STATE__`。
 
-客户端可以通过 `window.__INITIAL_STATE__` 获取 `initialState`。
+客户端可以通过 `window.__INITIAL_STATE__` 获取 `preloadedState`。
 
-同时使用 script 标签来引入打包后的 js bundle 文件。之前引入的 `serve-static` middleware 会处理它的请求。下面是代码。
+同时使用 script 标签来引入打包后的 js bundle 文件。这是打包工具输出的客户端入口文件，以静态文件或者 URL 的方式实现服务端开发中的热加载。下面是代码。
 
 ```js
-function renderFullPage(html, initialState) {
+function renderFullPage(html, preloadedState) {
   return `
     <!doctype html>
     <html>
@@ -109,7 +111,7 @@ function renderFullPage(html, initialState) {
       <body>
         <div id="root">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+          window.__INITIAL_STATE__ = ${JSON.stringify(preloadedState)}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -117,10 +119,6 @@ function renderFullPage(html, initialState) {
     `
 }
 ```
-
->##### 字符串插值语法须知
-
->上面的示例使用了 ES6 的[模板字符串](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings)语法。它支持多行字符串和字符串插补特性，但需要支持 ES6。如果要在 Node 端使用 ES6，参考 [Babel require hook](https://babeljs.io/docs/usage/require/) 文档。你也可以继续使用 ES5。
 
 ## 客户端开发
 
@@ -139,10 +137,10 @@ import App from './containers/App'
 import counterApp from './reducers'
 
 // 通过服务端注入的全局变量得到初始 state
-const initialState = window.__INITIAL_STATE__
+const preloadedState = window.__INITIAL_STATE__
 
 // 使用初始 state 创建 Redux store
-const store = createStore(counterApp, initialState)
+const store = createStore(counterApp, preloadedState)
 
 render(
   <Provider store={store}>
@@ -182,10 +180,10 @@ function handleRender(req, res) {
   const counter = parseInt(params.counter) || 0
 
   // 得到初始 state
-  let initialState = { counter }
+  let preloadedState = { counter }
 
   // 创建新的 Redux store 实例
-  const store = createStore(counterApp, initialState)
+  const store = createStore(counterApp, preloadedState)
 
   // 把组件渲染成字符串
   const html = renderToString(
@@ -226,7 +224,7 @@ export function fetchCounter(callback) {
 }
 ```
 
-再次说明一下，这只是一个模拟的 API，我们使用 `setTimeout` 模拟一个需要 500 毫秒的请求（实现项目中 API 请求一般会更快）。传入一个回调函数，它异步返回一个随机数字。如果你使用了基于 Promise 的 API 工具，那么要把回调函数放到 `then` 中。
+再次说明一下，这只是一个模拟的 API，我们使用 `setTimeout` 模拟一个需要 500 毫秒的请求（实际项目中 API 请求一般会更快）。传入一个回调函数，它异步返回一个随机数字。如果你使用了基于 Promise 的 API 工具，那么要把回调函数放到 `then` 中。
 
 在服务端，把代码使用 `fetchCounter` 包起来，在回调函数里拿到结果：
 
@@ -245,10 +243,10 @@ function handleRender(req, res) {
     const counter = parseInt(params.counter) || apiResult || 0
 
     // 得到初始 state
-    let initialState = { counter }
+    let preloadedState = { counter }
 
     // 创建新的 Redux store 实例
-    const store = createStore(counterApp, initialState)
+    const store = createStore(counterApp, preloadedState)
 
     // 把组件渲染成字符串
     const html = renderToString(
