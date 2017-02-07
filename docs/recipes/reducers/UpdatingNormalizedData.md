@@ -27,7 +27,7 @@ function commentsById(state = {}, action) {
 
 ### reducer 切片组合
 
-如果我们有一个切片 reducer 嵌套数据，每个切片 reducer 都需要知道如何响应这个  action。因为我们需要让 action 囊括所有相关的数据。譬如更新相应的 Post 对象需要生成一个 comment 的 id，然后使用 id 作为 key 创建一个新的 comment 对象，并且让这个 comment 的 id 包括在所有的 comment id 列表中。下面是一个如何组合这样数据的例子：
+如果我们有一个由切片 reducer 组成的嵌套数据，每个切片 reducer 都需要知道如何响应这个 action。因为我们需要让 action 囊括所有相关的数据。譬如更新相应的 Post 对象需要生成一个 comment 的 id，然后使用 id 作为 key 创建一个新的 comment 对象，并且让这个 comment 的 id 包括在所有的 comment id 列表中。下面是一个如何组合这样数据的例子：
 
 > 译者注：结合上章节中范式化之后的 state 阅读
 
@@ -153,13 +153,13 @@ function addComment(state, action) {
 
     // State here is the entire combined state
     const updatedWithPostState = dotProp.set(
-        state, 
-        `posts.byId.${postId}.comments`, 
+        state,
+        `posts.byId.${postId}.comments`,
         comments => comments.concat(commentId)
     );
 
     const updatedWithCommentsTable = dotProp.set(
-        updatedWithPostState, 
+        updatedWithPostState,
         `comments.byId.${commentId}`,
         {id : commentId, text : commentText}
     );
@@ -200,7 +200,7 @@ export class Post extends Model {
     return {
       // 定义一个多边关系 - 一个 Post 可以有多个 Comments，
       // 字段名是 “comments”
-      comments : many("Comment") 
+      comments : many("Comment")
     };
   }
 
@@ -268,7 +268,7 @@ store.dispatch({
   type : "CREATE_POST",
   payload : {
     id : 1,
-    name : "Test Post Please Ignore" 
+    name : "Test Post Please Ignore"
   }
 });
 
@@ -290,7 +290,7 @@ Redux-ORM 库维护要应用的内部更新队列。这些更新是不可变更�
 ``` javascript
 import {schema} from "./models";
 
-// 假设这个 case reducer 正在我们的 “entities” 切片 reducer 使用， 
+// 假设这个 case reducer 正在我们的 “entities” 切片 reducer 使用，
 // 并且我们在 Redux-ORM 的 Model 子类上没有定义 reducer
 function addComment(entitiesState, action) {
     const session = schema.from(entitiesState);
