@@ -1,4 +1,4 @@
-# 使用 `combineReducers`
+# `combineReducers` 用法
 
 ## 核心概念
 
