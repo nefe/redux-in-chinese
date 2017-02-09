@@ -15,7 +15,7 @@ Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 超爽的开发体验，比如有一个[时间旅行调试器可以编辑后实时预览](https://github.com/gaearon/redux-devtools)。
 
 Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。  
-它体小精悍（只有2kB）且没有任何依赖。
+它体小精悍（只有2kB，包括依赖）。
 
 ### 评价
 
