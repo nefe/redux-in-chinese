@@ -266,7 +266,7 @@ function applyMiddleware(store, middlewares) {
 
 * 它只暴露一个 [store API](../api/Store.md) 的子集给 middleware：[`dispatch(action)`](../api/Store.md#dispatch) 和 [`getState()`](../api/Store.md#getState)。
 
-* 它用了一个非常巧妙的方式来保证你的 middleware 调用的是 `store.dispatch(action)` 而不是 `next(action)`，从而使这个 action 会在包括当前 middleware 在内的整个 middleware 链中被正确的传递。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。
+* 它用了一个非常巧妙的方式，以确保如果你在 middleware 中调用的是 `store.dispatch(action)` 而不是 `next(action)`，那么这个操作会再次遍历包含当前 middleware 在内的整个 middleware 链。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。
 
 * 为了保证你只能应用 middleware 一次，它作用在 `createStore()` 上而不是 `store` 本身。因此它的签名不是 `(store, middlewares) => store`， 而是 `(...middlewares) => (createStore) => createStore`。
 
