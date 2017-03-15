@@ -44,7 +44,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
       text: 'Understand the flow.'
     }
 
-    // render 返回处理后的应用状态
+    // reducer 返回处理后的应用状态
     let nextState = todoApp(previousState, action);
     ```
 
