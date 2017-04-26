@@ -10,6 +10,7 @@
 > :arrow_down: 离线下载：[pdf 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.pdf)，[epub 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.epub)，[mobi 格式](https://github.com/camsong/redux-in-chinese/raw/master/offline/redux-in-chinese.mobi)
 
 Redux 是 JavaScript 状态容器，提供可预测化的状态管理。  
+(如果你需要一个 WordPress 框架，请查看 [Redux Framework](https://reduxframework.com/)。)
 
 可以让你构建一致化的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供
 超爽的开发体验，比如有一个[时间旅行调试器可以编辑后实时预览](https://github.com/gaearon/redux-devtools)。
@@ -164,7 +165,7 @@ store.dispatch({ type: 'DECREMENT' });
 
 ### 交流
 
-打开 Slack，加入 [Reactiflux](http://reactiflux.com/) 中的 **#redux** 频道。
+打开 Discord，加入 [Reactiflux](http://reactiflux.com/) 中的 **#redux** 频道。
 
 ### 感谢
 
