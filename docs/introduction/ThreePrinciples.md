@@ -25,6 +25,7 @@ console.log(store.getState())
     }
   ]
 }
+*／
 ```
 
 ### State 是只读的
