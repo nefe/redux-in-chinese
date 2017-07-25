@@ -51,7 +51,7 @@ ReactDOM.render(
 
 * [`mapStateToProps(state, [ownProps]): stateProps`] \(*Function*): 如果定义该参数，组件将会监听 Redux store 的变化。任何时候，只要 Redux store 发生改变，`mapStateToProps` 函数就会被调用。该回调函数必须返回一个纯对象，这个对象会与组件的 props 合并。如果你省略了这个参数，你的组件将不会监听 Redux store。如果指定了该回调函数中的第二个参数 `ownProps`，则该参数的值为传递到组件的 props，而且只要组件接收到新的 props，`mapStateToProps` 也会被调用（例如，当 props 接收到来自父组件一个小小的改动，那么你所使用的 ownProps 参数，mapStateToProps 都会被重新计算）。
 
-  > 注意：在高级章节中，你需要更好地去控制渲染的性能，所用到的 `mapStateToProps()` 会返回一个函数。但在这个例子中，**这个**函数将被 `mapStateToProps()` 在独有的组件实例中调用。这样就允许你在每一个实例中去记录。你可以参考 [#279](https://github.com/reactjs/react-redux/pull/279) 去测试和了解其中的详细内容。但在绝大多数的应用中不会用到。
+  > 注意：在高级章节中，你需要更好地去控制渲染的性能，所用到的 `mapStateToProps()` 会返回一个函数。在这种情况下，**那个**函数将被作为 `mapStateToProps()` 在独有的组件实例中调用。这样就允许你在每一个实例中去记录。你可以参考 [#279](https://github.com/reactjs/react-redux/pull/279) 去测试和了解其中的详细内容。但在绝大多数的应用中不会用到。
 
 * [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): 如果传递的是一个对象，那么每个定义在该对象的函数都将被当作 Redux action creator，对象所定义的方法名将作为属性名；每个方法将返回一个新的函数，函数中`dispatch`方法会将action creator的返回值作为参数执行。这些属性会被合并到组件的 props 中。
 
