@@ -103,7 +103,7 @@ const getVisibleTodosFilteredByKeyword = createSelector(
 #### `containers/VisibleTodoList.js`
 
 ```js
-iimport { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 import { getVisibleTodos } from '../selectors'
