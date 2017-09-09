@@ -35,7 +35,7 @@ render(
  */
 
 export const ADD_TODO = 'ADD_TODO';
-export const COMPLETE_TODO = 'COMPLETE_TODO';
+export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 
 /*
@@ -56,8 +56,8 @@ export function addTodo(text) {
   return { type: ADD_TODO, text }
 }
 
-export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index }
+export function toggleTodo(index) {
+  return { type: TOGGLE_TODO, index }
 }
 
 export function setVisibilityFilter(filter) {
@@ -71,7 +71,7 @@ export function setVisibilityFilter(filter) {
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -93,7 +93,7 @@ function todos(state = [], action) {
           completed: false
         }
       ]
-    case COMPLETE_TODO:
+    case TOGGLE_TODO:
       return [
         ...state.slice(0, action.index),
         Object.assign({}, state[action.index], {
@@ -121,7 +121,7 @@ export default todoApp
 ```js
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
+import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
 import AddTodo from '../components/AddTodo'
 import TodoList from '../components/TodoList'
 import Footer from '../components/Footer'
@@ -139,7 +139,7 @@ class App extends Component {
         <TodoList
           todos={visibleTodos}
           onTodoClick={index =>
-            dispatch(completeTodo(index))
+            dispatch(toggleTodo(index))
           } />
         <Footer
           filter={visibilityFilter}
