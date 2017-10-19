@@ -125,7 +125,7 @@ const rootReducer = combineReducers({
     counterB : createFilteredReducer(counter, action => action.name === 'B'),
     // 响应所有的 'INCREMENT' action，但不响应 'DECREMENT'
     counterC : createFilteredReducer(counter, action => action.type === 'INCREMENT')
-};
+});
 ```
 
 这些基本的模式可以让你在 UI 内处理一个智能连接的 component 的多个实例。对于像分页或者排序这些通用的功能，可以复用相同的逻辑。
