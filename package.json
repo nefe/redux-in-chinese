@@ -25,20 +25,18 @@
     "edit",
     "webpack"
   ],
-  "author": "Cam Song <neosoyn@gmail.com> (http://github.com/camsong)",
+  "author": "Cam Song <neosoyn@gmail.com> (http://github.com/camsong) & Community members",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/camsong/redux-in-chinese/issues"
   },
   "homepage": "https://github.com/camsong/redux-in-chinese",
   "devDependencies": {
-    "ebook-convert": "^1.0.0",
-    "gitbook-cli": "^0.3.4",
-    "gitbook-plugin-advanced-emoji": "^0.2.1",
-    "gitbook-plugin-edit-link": "^1.4.1",
-    "gitbook-plugin-ga": "^0.2.1",
-    "gitbook-plugin-prism": "^0.1.1",
-    "rimraf": "^2.3.4",
-    "svgexport": "^0.3.0"
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-advanced-emoji": "^0.2.2",
+    "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-ga": "^1.0.0",
+    "gitbook-plugin-prism": "^2.3.0",
+    "rimraf": "^2.6.2"
   }
 }
