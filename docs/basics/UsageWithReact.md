@@ -2,7 +2,7 @@
 
 这里需要再强调一下：Redux 和 React 之间没有关系。Redux 支持 React、Angular、Ember、jQuery 甚至纯 JavaScript。
 
-尽管如此，Redux 还是和 [React](http://facebook.github.io/react/) 和 [Deku](https://github.com/dekujs/deku) 这类框架搭配起来用最好，因为这类框架允许你以 state 函数的形式来描述界面，Redux 通过 action 的形式来发起 state 变化。
+尽管如此，Redux 还是和 [React](http://facebook.github.io/react/) 和 [Deku](https://github.com/dekujs/deku) 这类库搭配起来用最好，因为这类库允许你以 state 函数的形式来描述界面，Redux 通过 action 的形式来发起 state 变化。
 
 下面使用 React 来开发一个 todo 任务管理应用。
 
@@ -13,10 +13,10 @@ Redux 默认并不包含 [React 绑定库](https://github.com/reactjs/react-redu
 ```
 npm install --save react-redux
 ```
-
+如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你用`<script>`标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
-Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。所以建议先读完这篇文章再回来继续学习。
+Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。所以建议先读完这篇文章再回来继续学习。这个思想非常重要。
 
 已经读完了？那让我们再总结一下不同点：
 
@@ -57,7 +57,7 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
     </tbody>
 </table>
 
-大部分的组件都应该是展示型的，但一般需要少数的几个容器组件把它们和 Redux store 连接起来。
+大部分的组件都应该是展示型的，但一般需要少数的几个容器组件把它们和 Redux store 连接起来。这和下面的设计简介并不意味着容器组件必须位于组件树的最顶层。如果一个容器组件变得太复杂（例如，它有大量的嵌套组件以及传递数不尽的回调函数），那么在组件树中引入另一个容器，就像FAQ中提到的那样
 
 技术上讲你可以直接使用 `store.subscribe()` 来编写容器组件。但不建议这么做因为就无法使用 React Redux 带来的性能优化。也因此，不要手写容器组件，都是使用 React Redux 的 `connect()` 方法来生成，后面会详细介绍。
 
