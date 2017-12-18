@@ -14,7 +14,7 @@ Redux 默认并不包含 [React 绑定库](https://github.com/reactjs/react-redu
 npm install --save react-redux
 ```
 
-如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你`<script>`标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
+如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你用 `<script>` 标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
 
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
@@ -393,7 +393,7 @@ AddTodo = connect()(AddTodo)
 export default AddTodo
 ```
 
-如果你不熟悉ref属性, 请阅读这篇 [文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)以熟悉这个属性的推荐用法。
+如果你不熟悉ref属性, 请阅读这篇[文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)以熟悉这个属性的推荐用法。
 
 ### 将容器放到一个组件
 #### `components/App.js`
