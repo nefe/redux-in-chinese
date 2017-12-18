@@ -13,7 +13,9 @@ Redux 默认并不包含 [React 绑定库](https://github.com/reactjs/react-redu
 ```
 npm install --save react-redux
 ```
+
 如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你`<script>`标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
+
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
 Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。所以建议先读完这篇文章再回来继续学习。这个思想非常重要。
@@ -223,7 +225,8 @@ const Footer = () => (
 
 export default Footer
 ```
-### 容器组件
+
+### 实现容器组件
 
 现在来创建一些容器组件把这些展示组件和 Redux 关联起来。技术上讲，容器组件就是使用 [`store.subscribe()`](../api/Store.md#subscribe) 从 Redux state 树中读取部分数据，并通过 props 来把这些数据提供给要渲染的组件。你可以手工来开发容器组件，但建议使用 React Redux 库的 [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) 方法来生成，这个方法做了性能优化来避免很多不必要的重复渲染。（这样你就不必为了性能而手动实现 [React 性能优化建议](https://facebook.github.io/react/docs/advanced-performance.html) 中的 `shouldComponentUpdate` 方法。）
 
@@ -232,16 +235,17 @@ export default Footer
 ```js
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
-    case 'SHOW_ALL':
-      return todos
     case 'SHOW_COMPLETED':
       return todos.filter(t => t.completed)
     case 'SHOW_ACTIVE':
       return todos.filter(t => !t.completed)
+    case 'SHOW_ALL':
+    default:
+      return todos
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
@@ -251,9 +255,9 @@ const mapStateToProps = (state) => {
 除了读取 state，容器组件还能分发 action。类似的方式，可以定义 `mapDispatchToProps()` 方法接收 [`dispatch()`](../api/Store.md#dispatch) 方法并返回期望注入到展示组件的 props 中的回调方法。例如，我们希望 `VisibleTodoList` 向 `TodoList` 组件中注入一个叫 `onTodoClick` 的 props 中，还希望 `onTodoClick` 能分发 `TOGGLE_TODO` 这个 action：
 
 ```js
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -324,15 +328,15 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -349,6 +353,8 @@ export default VisibleTodoList
 ### 其它组件
 
 #### `containers/AddTodo.js`
+ 
+回想一下[前面提到的](#其它组件)， `AddTodo` 组件的视图和逻辑混合在一个单独的定义之中。
 
 ```js
 import React from 'react'
@@ -360,17 +366,21 @@ let AddTodo = ({ dispatch }) => {
 
   return (
     <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        if (!input.value.trim()) {
-          return
-        }
-        dispatch(addTodo(input.value))
-        input.value = ''
-      }}>
-        <input ref={node => {
-          input = node
-        }} />
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+          if (!input.value.trim()) {
+            return
+          }
+          dispatch(addTodo(input.value))
+          input.value = ''
+        }}
+      >
+        <input
+          ref={node => {
+            input = node
+          }}
+        />
         <button type="submit">
           Add Todo
         </button>
@@ -381,6 +391,28 @@ let AddTodo = ({ dispatch }) => {
 AddTodo = connect()(AddTodo)
 
 export default AddTodo
+```
+
+如果你不熟悉ref属性, 请阅读这篇 [文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)以熟悉这个属性的推荐用法。
+
+### 将容器放到一个组件
+#### `components/App.js`
+
+```js
+import React from 'react'
+import Footer from './Footer'
+import AddTodo from '../containers/AddTodo'
+import VisibleTodoList from '../containers/VisibleTodoList'
+
+const App = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </div>
+)
+
+export default App
 ```
 
 ## 传入 Store
