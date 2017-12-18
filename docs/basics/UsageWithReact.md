@@ -13,7 +13,7 @@ Redux 默认并不包含 [React 绑定库](https://github.com/reactjs/react-redu
 ```
 npm install --save react-redux
 ```
-如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你用`<script>`标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
+如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你`<script>`标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
 Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 的开发思想。所以建议先读完这篇文章再回来继续学习。这个思想非常重要。
@@ -57,9 +57,9 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
     </tbody>
 </table>
 
-大部分的组件都应该是展示型的，但一般需要少数的几个容器组件把它们和 Redux store 连接起来。这和下面的设计简介并不意味着容器组件必须位于组件树的最顶层。如果一个容器组件变得太复杂（例如，它有大量的嵌套组件以及传递数不尽的回调函数），那么在组件树中引入另一个容器，就像FAQ中提到的那样
+大部分的组件都应该是展示型的，但一般需要少数的几个容器组件把它们和 Redux store 连接起来。这和下面的设计简介并不意味着容器组件必须位于组件树的最顶层。如果一个容器组件变得太复杂（例如，它有大量的嵌套组件以及传递数不尽的回调函数），那么在组件树中引入另一个容器，就像[FAQ](../faq/ReactRedux.md#react-multiple-components)中提到的那样
 
-技术上讲你可以直接使用 `store.subscribe()` 来编写容器组件。但不建议这么做因为就无法使用 React Redux 带来的性能优化。也因此，不要手写容器组件，都是使用 React Redux 的 `connect()` 方法来生成，后面会详细介绍。
+技术上讲你可以直接使用 `store.subscribe()` 来编写容器组件。但不建议这么做的原因是无法使用 React Redux 带来的性能优化。也因此，不要手写容器组件，而使用 React Redux 的 `connect()` 方法来生成，后面会详细介绍。
 
 ## 设计组件层次结构
 
@@ -105,19 +105,20 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
 
 终于开始开发组件了！先做展示组件，这样可以先不考虑 Redux。
 
-### 展示组件
+### 实现展示组件
 
 它们只是普通的 React 组件，所以不会详细解释。我们会使用函数式无状态组件除非需要本地 state 或生命周期函数的场景。这并不是说展示组件必须是函数 -- 只是因为这样做容易些。如果你需要使用本地 state，生命周期方法，或者性能优化，可以将它们转成 class。
 
 #### `components/Todo.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
-    style={{
+    style={ {
       textDecoration: completed ? 'line-through' : 'none'
     }}
   >
@@ -137,27 +138,26 @@ export default Todo
 #### `components/TodoList.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Todo from './Todo'
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
+    {todos.map((todo, index) => (
+      <Todo key={index} {...todo} onClick={() => onTodoClick(index)} />
+    ))}
   </ul>
 )
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
   onTodoClick: PropTypes.func.isRequired
 }
 
@@ -167,7 +167,8 @@ export default TodoList
 #### `components/Link.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
@@ -175,11 +176,12 @@ const Link = ({ active, children, onClick }) => {
   }
 
   return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
+    <a
+      href=""
+      onClick={e => {
+        e.preventDefault()
+        onClick()
+      }}
     >
       {children}
     </a>
@@ -204,15 +206,15 @@ import FilterLink from '../containers/FilterLink'
 const Footer = () => (
   <p>
     Show:
-    {" "}
+    {' '}
     <FilterLink filter="SHOW_ALL">
       All
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_ACTIVE">
       Active
     </FilterLink>
-    {", "}
+    {', '}
     <FilterLink filter="SHOW_COMPLETED">
       Completed
     </FilterLink>
@@ -221,26 +223,6 @@ const Footer = () => (
 
 export default Footer
 ```
-
-#### `components/App.js`
-
-```js
-import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
-import VisibleTodoList from '../containers/VisibleTodoList'
-
-const App = () => (
-  <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
-  </div>
-)
-
-export default App
-```
-
 ### 容器组件
 
 现在来创建一些容器组件把这些展示组件和 Redux 关联起来。技术上讲，容器组件就是使用 [`store.subscribe()`](../api/Store.md#subscribe) 从 Redux state 树中读取部分数据，并通过 props 来把这些数据提供给要渲染的组件。你可以手工来开发容器组件，但建议使用 React Redux 库的 [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) 方法来生成，这个方法做了性能优化来避免很多不必要的重复渲染。（这样你就不必为了性能而手动实现 [React 性能优化建议](https://facebook.github.io/react/docs/advanced-performance.html) 中的 `shouldComponentUpdate` 方法。）
