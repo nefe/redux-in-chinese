@@ -31,14 +31,19 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER)
 现在我们已经创建好了 store ，让我们来验证一下！虽然还没有界面，我们已经可以测试数据处理逻辑了。
 
 ```js
-import { addTodo, toggleTodo, setVisibilityFilter, VisibilityFilters } from './actions'
+import {
+  addTodo,
+  toggleTodo,
+  setVisibilityFilter,
+  VisibilityFilters
+} from './actions'
 
 // 打印初始状态
 console.log(store.getState())
 
 // 每次 state 更新时，打印日志
 // 注意 subscribe() 返回一个函数用来注销监听器
-let unsubscribe = store.subscribe(() =>
+const unsubscribe = store.subscribe(() =>
   console.log(store.getState())
 )
 
@@ -58,7 +63,7 @@ unsubscribe();
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
 
-可以看到，在还没有开发界面的时候，我们就可以定义程序的行为。而且这时候已经可以写 reducer 和 action 创建函数的测试。不需要模拟任何东西，因为它们都是纯函数。只需调用一下，对返回值做断言，写测试就是这么简单。
+可以看到，在还没有开发界面的时候，我们就可以定义程序的行为。而且这时候已经可以写 reducer 和 action 创建函数的测试。不需要模拟任何东西，因为它们都是[纯函数](../introduction/ThreePrinciples.md#使用纯函数来执行修改)。只需调用一下，对返回值做断言，写测试就是这么简单。
 
 ## 源码
 
