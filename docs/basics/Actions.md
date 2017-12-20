@@ -88,8 +88,8 @@ dispatch(completeTodo(index))
 或者创建一个 **被绑定的 action 创建函数** 来自动 dispatch：
 
 ```js
-const boundAddTodo = (text) => dispatch(addTodo(text))
-const boundCompleteTodo = (index) => dispatch(completeTodo(index))
+const boundAddTodo = text => dispatch(addTodo(text))
+const boundCompleteTodo = index => dispatch(completeTodo(index))
 ```
 
 然后直接调用它们：
