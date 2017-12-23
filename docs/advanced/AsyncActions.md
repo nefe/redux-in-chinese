@@ -215,8 +215,10 @@ export function receivePosts(subreddit, json) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
+  SELECT_SUBREDDIT,
+  INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS,
+  RECEIVE_POSTS
 } from '../actions'
 
 function selectedsubreddit(state = 'reactjs', action) {
@@ -228,11 +230,14 @@ function selectedsubreddit(state = 'reactjs', action) {
   }
 }
 
-function posts(state = {
-  isFetching: false,
-  didInvalidate: false,
-  items: []
-}, action) {
+function posts(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    items: []
+  },
+  action
+) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
@@ -293,7 +298,7 @@ export default rootReducer
   return Object.assign({}, state, nextState)
   ```
 
-* 我们提取出 `posts(state, action)` 来管理指定帖子列表的 state。这仅仅使用 [reducer 组合](../basics/Reducers.md#splitting-reducers) 而已！我们还可以借此机会把 reducer 分拆成更小的 reducer，这种情况下，我们把对象内列表的更新代理到了 `posts` reducer 上。在 [真实场景的案例](../introduction/Examples.md#real-world) 中甚至更进一步，里面介绍了如何做一个 reducer 工厂来生成参数化的分页 reducer。
+* 我们提取出 `posts(state, action)` 来管理指定帖子列表的 state。这就是 [reducer 组合](../basics/Reducers.md#splitting-reducers) ！我们还可以借此机会把 reducer 分拆成更小的 reducer，这种情况下，我们把对象内列表的更新代理到了 `posts` reducer 上。在 [真实场景的案例](../introduction/Examples.md#real-world) 中甚至更进一步，里面介绍了如何做一个 reducer 工厂来生成参数化的分页 reducer。
 
 记住 reducer 只是函数而已，所以你可以尽情使用函数组合和高阶函数这些特性。
 
@@ -308,7 +313,7 @@ export default rootReducer
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch'
+import fetch from 'cross-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
@@ -327,6 +332,14 @@ function receivePosts(subreddit, json) {
     receivedAt: Date.now()
   }
 }
+
+ export const INVALIDATE_SUBREDDIT = ‘INVALIDATE_SUBREDDIT’
+ export function invalidateSubreddit(subreddit) {
+   return {
+     type: INVALIDATE_SUBREDDIT,
+     subreddit
+   }
+ }
 
 // 来看一下我们写的第一个 thunk action 创建函数！
 // 虽然内部操作不同，你可以像其它 action 创建函数 一样使用它：
@@ -352,28 +365,31 @@ export function fetchPosts(subreddit) {
     // 这并不是 redux middleware 所必须的，但这对于我们而言很方便。
 
     return fetch(`http://www.subreddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
+      .then(
+        response => response.json(),
+        // 不要使用 catch，因为会捕获
+        // 在 dispatch 和渲染中出现的任何错误，
+        // 导致 'Unexpected batch number' 错误。
+        // https://github.com/facebook/react/issues/6895
+         error => console.log('An error occurred.', error)
+      )
       .then(json =>
-
         // 可以多次 dispatch！
         // 这里，使用 API 请求结果来更新应用的 state。
 
         dispatch(receivePosts(subreddit, json))
       )
-
-      // 在实际应用中，还需要
-      // 捕获网络请求的异常。
   }
 }
 ```
 
 >##### `fetch` 使用须知
 
->本示例使用了 [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。它是替代 `XMLHttpRequest` 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) 库：
+>本示例使用了 [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。它是替代 `XMLHttpRequest` 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 [`cross_fetch`](https://github.com/lquixada/cross-fetch) 库：
 
 >```js
-// 每次使用 `fetch` 前都这样调用一下
->import fetch from 'isomorphic-fetch'
+>// 每次使用 `fetch` 前都这样调用一下
+>import fetch from 'cross_fetch'
 >```
 
 >在底层，它在浏览器端使用 [`whatwg-fetch` polyfill](https://github.com/github/fetch)，在服务器端使用 [`node-fetch`](https://github.com/bitinn/node-fetch)，所以如果当你把应用改成 [同构](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) 时，并不需要改变 API 请求。
@@ -391,7 +407,7 @@ export function fetchPosts(subreddit) {
 
 ```js
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
 import { selectSubreddit, fetchPosts } from './actions'
 import rootReducer from './reducers'
@@ -407,8 +423,9 @@ const store = createStore(
 )
 
 store.dispatch(selectSubreddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() =>
-  console.log(store.getState())
+store
+  .dispatch(fetchPosts('reactjs'))
+  .then(() => console.log(store.getState())
 )
 ```
 
@@ -417,7 +434,7 @@ thunk 的一个优点是它的结果可以再次被 dispatch：
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch'
+import fetch from 'cross-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
@@ -434,6 +451,14 @@ function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
+  }
+}
+
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
+export function invalidateSubreddit(subreddit) {
+  return {
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   }
 }
 
@@ -482,8 +507,9 @@ export function fetchPostsIfNeeded(subreddit) {
 #### `index.js`
 
 ```js
-store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
-  console.log(store.getState())
+store
+  .dispatch(fetchPostsIfNeeded('reactjs'))
+  .then(() => console.log(store.getState())
 )
 ```
 
