@@ -39,7 +39,7 @@ Immutable 及类似的库都可以与 Redux 对接良好。尽可随意捆绑使
 
 Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 Redux 更新数据的唯一方法是分发一个 action 。可见，两者用不同方法，解决的却是同样的问题，相互并无增益。
 
-不同于 Immutable ，Baobab 在引擎下还不能现实任何特别有效的数据结构，同时使用 Baobab 和 Redux 并无裨益。这种情形下，使用普通对象会更简便。
+不同于 Immutable ，Baobab 在引擎下还不能实现任何特别有效的数据结构，同时使用 Baobab 和 Redux 并无裨益。这种情形下，使用普通对象会更简便。
 
 ### Rx
 
@@ -50,10 +50,10 @@ Baobab 所提供的大部分功能都与使用 cursors 更新数据相关，而 
 ```js
 function toObservable(store) {
   return {
-    subscribe({ onNext }) {
-      let dispose = store.subscribe(() => onNext(store.getState()))
-      onNext(store.getState())
-      return { dispose }
+    subscribe({ next }) {
+      const unsubscribe = store.subscribe(() => next(store.getState()))
+      next(store.getState())
+      return { unsubscribe }
     }
   }
 }
