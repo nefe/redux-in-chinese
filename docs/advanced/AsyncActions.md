@@ -388,7 +388,7 @@ export function fetchPosts(subreddit) {
 >本示例使用了 [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。它是替代 `XMLHttpRequest` 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 [`cross_fetch`](https://github.com/lquixada/cross-fetch) 库：
 
 >```js
-// 每次使用 `fetch` 前都这样调用一下
+>// 每次使用 `fetch` 前都这样调用一下
 >import fetch from 'cross_fetch'
 >```
 
