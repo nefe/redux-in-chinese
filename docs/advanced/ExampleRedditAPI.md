@@ -24,7 +24,7 @@ render(
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch'
+import fetch from 'cross-fetch'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -165,7 +165,7 @@ export default rootReducer
 ```js
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
@@ -208,7 +208,8 @@ export default class Root extends Component {
 #### `containers/AsyncApp.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
@@ -317,7 +318,8 @@ export default connect(mapStateToProps)(AsyncApp)
 #### `components/Picker.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Picker extends Component {
   render() {
@@ -351,7 +353,8 @@ Picker.propTypes = {
 #### `components/Posts.js`
 
 ```js
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Posts extends Component {
   render() {
