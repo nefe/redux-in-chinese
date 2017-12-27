@@ -13,9 +13,9 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
   [Action](Actions.md) 就是一个描述“发生了什么”的普通对象。比如：
 
     ```js
-    { type: 'LIKE_ARTICLE', articleId: 42 };
-    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Mary' } };
-    { type: 'ADD_TODO', text: 'Read the Redux docs.'};
+    { type: 'LIKE_ARTICLE', articleId: 42 }
+    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Mary' } }
+    { type: 'ADD_TODO', text: 'Read the Redux docs.' }
     ```
 
   可以把 action 理解成新闻的摘要。如 “玛丽喜欢42号文章。” 或者 “任务列表里添加了'学习 Redux 文档'”。
@@ -48,7 +48,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     let nextState = todoApp(previousState, action);
     ```
 
-    注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
+  注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
 3. **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
 
@@ -76,8 +76,8 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
   当你触发 action 后，`combineReducers` 返回的 `todoApp` 会负责调用两个 reducer：
 
     ```js
-    let nextTodos = todos(state.todos, action);
-    let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action);
+    let nextTodos = todos(state.todos, action)
+    let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action)
     ```
 
   然后会把两个结果集合并成一个 state 树：
