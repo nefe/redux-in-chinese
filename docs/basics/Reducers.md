@@ -1,6 +1,6 @@
 # Reducer
 
-[Action](./Actions.md) 只是描述了**有事情发生了**这一事实，并没有指明应用如何更新 state。而这正是 reducer 要做的事情。
+**Reducers** 指定了应用状态的变化如何响应 [actions](./Actions.md) 并发送到 store 的，记住 actions 只是描述了*有事情发生了*这一事实，并没有描述应用如何更新 state。
 
 ## 设计 State 结构
 
@@ -115,9 +115,18 @@ function todoApp(state = initialState, action) {
 
 ## 处理多个 action
 
-还有两个 action 需要处理。让我们先处理 `ADD_TODO`。
+还有两个 action 需要处理。就像我们处理 `SET_VISIBILITY_FILTER` 一样，我们引入 `ADD_TODO` 和 `TOGGLE_TODO` 两个actions 并且扩展我们的 reducer 去处理 `ADD_TODO`.
 
 ```js
+import {
+  ADD_TODO,
+  TOGGLE_TODO,
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
+
+...
+
 function todoApp(state = initialState, action) {
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
@@ -184,7 +193,7 @@ function todoApp(state = initialState, action) {
     case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: state.todos.map((todo, index) => {
-          if(index === action.index) {
+          if (index === action.index) {
             return Object.assign({}, todo, {
               completed: !todo.completed
             })
@@ -232,6 +241,9 @@ function todoApp(state = initialState, action) {
         visibilityFilter: action.filter
       })
     case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: todos(state.todos, action)
+      })
     case TOGGLE_TODO:
       return Object.assign({}, state, {
         todos: todos(state.todos, action)
@@ -246,13 +258,20 @@ function todoApp(state = initialState, action) {
 
 下面深入探讨一下如何做 reducer 合成。能否抽出一个 reducer 来专门管理 `visibilityFilter`？当然可以：
 
+首先引用, 让我们使用 [ES6 对象结构](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) 去声明 `SHOW_ALL`:
+
+```js
+const { SHOW_ALL } = VisibilityFilters
+```
+
+接下来：
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter
-  default:
-    return state
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
   }
 }
 ```
@@ -308,14 +327,14 @@ function todoApp(state = {}, action) {
 最后，Redux 提供了 [`combineReducers()`](../api/combineReducers.md) 工具类来做上面 `todoApp` 做的事情，这样就能消灭一些样板代码了。有了它，可以这样重构 `todoApp`：
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos
 })
 
-export default todoApp;
+export default todoApp
 ```
 
 注意上面的写法和下面完全等价：
@@ -370,7 +389,12 @@ function reducer(state = {}, action) {
 
 ```js
 import { combineReducers } from 'redux'
-import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+import {
+  ADD_TODO,
+  TOGGLE_TODO,
+  SET_VISIBILITY_FILTER,
+  VisibilityFilters
+} from './actions'
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
