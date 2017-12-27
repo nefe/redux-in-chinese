@@ -97,8 +97,10 @@ export function fetchPostsIfNeeded(subreddit) {
 ```js
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
+  SELECT_SUBREDDIT,
+  INVALIDATE_SUBREDDIT,
+  REQUEST_POSTS,
+  RECEIVE_POSTS
 } from './actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
@@ -110,11 +112,14 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
-function posts(state = {
-  isFetching: false,
-  didInvalidate: false,
-  items: []
-}, action) {
+function posts(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    items: []
+  },
+  action
+) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
@@ -137,7 +142,7 @@ function posts(state = {
   }
 }
 
-function postsBySubreddit(state = { }, action) {
+function postsBySubreddit(state = {}, action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
@@ -165,7 +170,7 @@ export default rootReducer
 ```js
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
@@ -208,9 +213,14 @@ export default class Root extends Component {
 #### `containers/AsyncApp.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
+import {
+  selectSubreddit,
+  fetchPostsIfNeeded,
+  invalidateSubreddit
+} from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -317,7 +327,8 @@ export default connect(mapStateToProps)(AsyncApp)
 #### `components/Picker.js`
 
 ```js
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Picker extends Component {
   render() {
@@ -351,7 +362,8 @@ Picker.propTypes = {
 #### `components/Posts.js`
 
 ```js
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Posts extends Component {
   render() {
