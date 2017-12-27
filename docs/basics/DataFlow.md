@@ -45,7 +45,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     }
 
     // reducer 返回处理后的应用状态
-    let nextState = todoApp(previousState, action);
+    let nextState = todoApp(previousState, action)
     ```
 
   注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
@@ -59,12 +59,12 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     ```js
     function todos(state = [], action) {
       // 省略处理逻辑...
-      return nextState;
+      return nextState
     }
 
     function visibleTodoFilter(state = 'SHOW_ALL', action) {
       // 省略处理逻辑...
-      return nextState;
+      return nextState
     }
 
     let todoApp = combineReducers({
@@ -86,7 +86,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
     return {
       todos: nextTodos,
       visibleTodoFilter: nextVisibleTodoFilter
-    };
+    }
     ```
 
   虽然 [`combineReducers()`](../api/combineReducers.md) 是一个很方便的辅助工具，你也可以选择不用；你可以自行实现自己的根 reducer！
