@@ -27,8 +27,8 @@ Redux 本身很简单。
 { type: 'SET_VISIBILITY_FILTER', filter: 'SHOW_ALL' }
 ```
 
-强制使用 action 来描述所有变化带来的好处是可以清晰地知道应用中到底发生了什么。如果一些东西改变了，就可以知道为什么变。action 就像是描述发生了什么的面包屑。最终，为了把 action 和 state 串起来，开发一些函数，这就是 reducer。再次地，没有任何魔法，reducer 只是一个接收 state 和 action，并返回新的 state 的函数。
-对于大的应用来说，可能很难开发这样的函数，所以我们编写很多小函数来分别管理 state 的一部分：
+强制使用 action 来描述所有变化带来的好处是可以清晰地知道应用中到底发生了什么。如果一些东西改变了，就可以知道为什么变。action 就像是描述发生了什么的指示器。最终，为了把 action 和 state 串起来，开发一些函数，这就是 reducer。再次地，没有任何魔法，reducer 只是一个接收 state 和 action，并返回新的 state 的函数。
+对于大的应用来说，不大可能仅仅只写一个这样的函数，所以我们编写很多小函数来分别管理 state 的一部分：
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
