@@ -1,23 +1,29 @@
 # `combineReducers(reducers)`
 
-随着应用变得复杂，需要对 [reducer 函数](../Glossary.md#reducer) 进行拆分，拆分后的每一块独立负责管理 [state](../Glossary.md#state) 的一部分。
+随着应用变得越来越复杂，可以考虑将 [reducer 函数](../Glossary.md#reducer) 拆分成多个单独的函数，拆分后的每个函数负责独立管理 [state](../Glossary.md#state) 的一部分。
 
-`combineReducers` 辅助函数的作用是，把一个由多个不同 reducer 函数作为 value 的 object，合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 [`createStore`](createStore.md)。
+`combineReducers` 辅助函数的作用是，把一个由多个不同 reducer 函数作为 value 的 object，合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 [`createStore`](createStore.md) 方法。
 
-合并后的 reducer 可以调用各个子 reducer，并把它们的结果合并成一个 state 对象。**state 对象的结构由传入的多个 reducer 的 key 决定**。
+合并后的 reducer 可以调用各个子 reducer，并把它们返回的结果合并成一个 state 对象。
+**由 `combineReducers()` 返回的 state 对象，会将传入的每个 reducer 返回的 state 按其传递给 `combineReducers()` 时对应的 key 进行命名**。
 
-最终，state 对象的结构会是这样的：
-
+示例：
 ```
+rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
+// rootReducer 将返回如下的 state 对象
 {
-  reducer1: ...
-  reducer2: ...
+  potato: {
+    // ... potatoes, 和一些其他由 potatoReducer 管理的 state 对象 ... 
+  },
+  tomato: {
+    // ... tomatoes, 和一些其他由 tomatoReducer 管理的 state 对象，比如说 sauce 属性 ...
+  }
 }
 ```
 
-通过为传入对象的 reducer 命名不同来控制 state key 的命名。例如，你可以调用 `combineReducers({ todos: myTodosReducer, counter: myCounterReducer })` 将 state 结构变为 `{ todos, counter }`。
+通过为传入对象的 reducer 命名不同的 key 来控制返回 state key 的命名。例如，你可以调用 `combineReducers({ todos: myTodosReducer, counter: myCounterReducer })` 将 state 结构变为 `{ todos, counter }`。
 
-通常的做法是命名 reducer，然后 state 再去分割那些信息，因此你可以使用 ES6 的简写方法：`combineReducers({ counter, todos })`。这与 `combineReducers({ counter: counter, todos: todos })` 一样。
+通常的做法是命名 reducer，然后 state 再去分割那些信息，这样你可以使用 ES6 的简写方法：`combineReducers({ counter, todos })`。这与 `combineReducers({ counter: counter, todos: todos })` 是等价的。
 
 > ##### Flux 用户使用须知
 
@@ -25,7 +31,7 @@
 
 #### 参数
 
-1. `reducers` (*Object*): 一个对象，它的值（value） 对应不同的 reducer 函数，这些 reducer 函数后面会被合并成一个。下面会介绍传入 reducer 函数需要满足的规则。
+1. `reducers` (*Object*): 一个对象，它的值（value）对应不同的 reducer 函数，这些 reducer 函数后面会被合并成一个。下面会介绍传入 reducer 函数需要满足的规则。
 
 > 之前的文档曾建议使用 ES6 的 `import * as reducers` 语法来获得 reducer 对象。这一点造成了很多疑问，因此现在建议在 `reducers/index.js` 里使用 `combineReducers()` 来对外输出一个 reducer。下面有示例说明。
 
