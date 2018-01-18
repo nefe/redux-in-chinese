@@ -16,7 +16,7 @@
 ## 定义 State 结构
 这里有两种方式来定义 Store state 的初始结构和内容。首先，`createStore` 函数可以将 `preloadedState` 作为第二个参数。这主要用于初始化那些在其他地方有持久化存储的 state，例如浏览器的 localStorage，另外一种方式是当 state 是 `undefined` 的时候返回 initial state。这两种方法在 [初始化 state 章节](./InitializingState.md) 中有着更加详细的描述，但是在使用 `combineReducers` 的时候需要注意其他的一些问题。
 
-`combineReducers` 接收拆分之后的 reducer 函数组成的对象，并且创建出具有相同键对应状态对象的函数。这意味着如果没有给 `createStore` 提供预加载 state，输出 state 对象的 key 将由输入的拆分之后 reducer 组成对象的 key 决定。这些名称之间的相关性并不总是显而易见的，尤其是在使用 ES6 的时候（如默认模块搭配出和对象字面量的简写方向时）。
+`combineReducers` 接收拆分之后的 reducer 函数组成的对象，并且创建出具有相同键对应状态对象的函数。这意味着如果没有给 `createStore` 提供预加载 state，输出 state 对象的 key 将由输入的拆分之后 reducer 组成对象的 key 决定。这些名称之间的相关性并不总是显而易见的，尤其是在使用 ES6 的时候（如模块的默认导出和对象字面量的简写时）。
 
 这儿有一些如何用 ES6 中对象字面量简写方式使用 `combineReducers` 的例子。
 
