@@ -252,7 +252,7 @@ const mapStateToProps = state => {
 }
 ```
 
-除了读取 state，容器组件还能分发 action。类似的方式，可以定义 `mapDispatchToProps()` 方法接收 [`dispatch()`](../api/Store.md#dispatch) 方法并返回期望注入到展示组件的 props 中的回调方法。例如，我们希望 `VisibleTodoList` 向 `TodoList` 组件中注入一个叫 `onTodoClick` 的 props 中，还希望 `onTodoClick` 能分发 `TOGGLE_TODO` 这个 action：
+除了读取 state，容器组件还能分发 action。类似的方式，可以定义 `mapDispatchToProps()` 方法接收 [`dispatch()`](../api/Store.md#dispatch) 方法并返回期望注入到展示组件的 props 中的回调方法。例如，我们希望 `VisibleTodoList` 向 `TodoList` 组件中注入一个叫 `onTodoClick` 的 props ，还希望 `onTodoClick` 能分发 `TOGGLE_TODO` 这个 action：
 
 ```js
 const mapDispatchToProps = dispatch => {
