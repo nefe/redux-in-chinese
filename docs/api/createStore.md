@@ -24,13 +24,13 @@ import { createStore } from 'redux'
 function todos(state = [], action) {
   switch (action.type) {
     case 'ADD_TODO':
-      return state.concat([ action.text ])
+      return state.concat([action.text])
     default:
       return state
   }
 }
 
-let store = createStore(todos, [ 'Use Redux' ])
+let store = createStore(todos, ['Use Redux'])
 
 store.dispatch({
   type: 'ADD_TODO',
@@ -51,6 +51,6 @@ console.log(store.getState())
 
 * 对于服务端运行的同构应用，为每一个请求创建一个 store 实例，以此让 store 相隔离。dispatch 一系列请求数据的 action 到 store 实例上，等待请求完成后再在服务端渲染应用。
 
-* 当 store 创建后，Redux 会 dispatch 一个 action 到 reducer 上，来用初始的 state 来填充 store。你不需要处理这个 action。但要记住，如果第一个参数也就是传入的 state 如果是 `undefined` 的话，reducer 应该返回初始的 state 值。
+* 当 store 创建后，Redux 会 dispatch 一个 action 到 reducer 上，来用初始的 state 来填充 store。你不需要处理这个 action。但要记住，如果第一个参数也就是传入的 state 是 `undefined` 的话，reducer 应该返回初始的 state 值。
 
 * 要使用多个 store 增强器的时候，你可能需要使用 [compose](./compose.md)
