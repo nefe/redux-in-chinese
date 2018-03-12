@@ -3,6 +3,7 @@
 ## 目录
 
 - **综合**
+  - [何时学习 Redux ？](/docs/faq/General.md#general-when-to-learn)
   - [何时使用 Redux ？](/faq/General#general-when-to-use)
   - [Redux 只能搭配 React 使用？](/faq/General#general-only-react)
   - [Redux 需要特殊的编译工具支持吗？](/faq/General#general-build-tools)
@@ -25,12 +26,29 @@
 - **代码结构**  
   - [文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？](/faq/CodeStructure#structure-file-structure)
   - [如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？](/faq/CodeStructure#structure-business-logic)
+  - [为何应该使用 action 创建函数?](/docs/faq/CodeStructure.md#structure-action-creators)
+- **不可变数据**
+  - [Immutability（数据不可变性）的好处是什么？](/docs/faq/ImmutableData.md#benefits-of-immutability)
+  - [为什么 Redux 要求数据不可变？](/docs/faq/ImmutableData.md#why-is-immutability-required)
+  - [我一定要用 Immutable.JS 吗？](/docs/faq/ImmutableData.md#do-i-have-to-use-immutable-js)
+  - [用 ES6 实现数据不可变的一些问题](/docs/faq/ImmutableData.md#issues-with-es6-for-immutable-ops)
+- **在 Redux 中使用 Immutable.JS**
+  - [为什么需要使用像 Immutable.JS 这种用于实现数据不可变的库？](/docs/recipes/UsingImmutableJS.md#why-use-immutable-library)
+  - [为什么要选择 Immutable.JS 作为实现数据不可变的库?](/docs/recipes/UsingImmutableJS.md#why-choose-immutable-js)
+  - [使用 Immutable.JS 的一些问题](/docs/recipes/UsingImmutableJS.md#issues-with-immutable-js)
+  - [Immutable.JS 是否值得一用？](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
+  - [在 Redux 中使用 Immutable.JS 的一些最佳实践](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
+- **代码结构**  
+  - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [如何分离 reducer 与 action 创建函数之间的逻辑？业务逻辑应该放在哪里？](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [为什么需要使用 action 创建函数？](/docs/faq/CodeStructure.md#structure-action-creators)
 - **性能**
   - [考虑到性能和架构， Redux “可扩展性” 如何？](/faq/Performance#performance-scaling)
   - [每个 action 都调用 “所有的 reducer” 会不会很慢？](/faq/Performance#performance-all-reducers)
   - [在 reducer 中必须对 state 进行深拷贝吗？拷贝 state 不会很慢吗？](/faq/Performance#performance-clone-state)
   - [怎样减少 store 更新事件的数量？](/faq/Performance#performance-update-events)
   - [仅有 “一个 state 树” 会引发内存问题吗？分发多个 action 会占用内存空间吗？](/faq/Performance#performance-state-memory)
+  - [缓存远程数据会导致内存问题吗?](/docs/faq/Performance.md#performance-cache-memory)
 - **React Redux**
   - [为何组件没有被重新渲染、或者 mapStateToProps 没有运行？](/faq/ReactRedux#react-not-rerendering)
   - [为何组件频繁的重新渲染？](/faq/ReactRedux#react-rendering-too-often)
