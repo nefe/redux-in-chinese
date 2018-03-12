@@ -18,10 +18,10 @@
 下面示例演示了如何使用 `compose` 增强 [store](Store.md)，这个 store 与 [`applyMiddleware`](applyMiddleware.md) 和 [redux-devtools](https://github.com/gaearon/redux-devtools) 一起使用。
 
 ```js
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import DevTools from './containers/DevTools'
-import reducer from '../reducers/index'
+import reducer from '../reducers'
 
 const store = createStore(
   reducer,
