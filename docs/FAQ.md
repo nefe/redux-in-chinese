@@ -39,7 +39,7 @@
   - [Immutable.JS 是否值得一用？](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
   - [在 Redux 中使用 Immutable.JS 的一些最佳实践](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
 - **代码结构**  
-  - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器（selector）应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [如何分离 reducer 与 action 创建函数之间的逻辑？业务逻辑应该放在哪里？](/docs/faq/CodeStructure.md#structure-business-logic)
   - [为什么需要使用 action 创建函数？](/docs/faq/CodeStructure.md#structure-action-creators)
 - **性能**
