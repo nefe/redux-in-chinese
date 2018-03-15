@@ -1,273 +1,273 @@
-# Using Immutable.JS with Redux
-## Table of Contents
-- [Why should I use an immutable-focused library such as Immutable.JS?](#why-use-immutable-library)
-- [Why should I choose Immutable.JS as an immutable library?](#why-choose-immutable-js)
-- [What are the issues with using Immutable.JS?](#issues-with-immutable-js)
-- [Is Immutable.JS worth the effort?](#is-immutable-js-worth-effort)
-- [What are some opinionated Best Practices for using Immutable.JS with Redux?](#immutable-js-best-practices)
+# 结合 Immutable.JS 使用 Redux
+## 目录
+- [为什么应该使用 Immutable.JS 等不可变的库？](#why-use-immutable-library)
+- [为什么应该选择 Immutable.JS 作为不可变的库？](#why-choose-immutable-js)
+- [使用 Immutable.JS 有什么问题？](#issues-with-immutable-js)
+- [Immutable.JS 是否值得使用？](#is-immutable-js-worth-effort)
+- [在 Redux 中使用 Immutable.JS 有哪些最佳实践？](#immutable-js-best-practices)
 
 <a id="why-use-immutable-library"></a>
-## Why should I use an immutable-focused library such as Immutable.JS?
+## 为什么应该使用 Immutable.JS 等不可变的库？
 
-Immutable-focused libraries such as Immutable.JS have been designed to overcome the issues with immutability inherent within JavaScript, providing all the benefits of immutability with the performance your app requires.
+Immutable.JS 不可变的库被设计旨在解决 JavaScript 中固有的不可变（Immutability）问题，为应用程序提供不可变带来的所有好处。
 
-Whether you choose to use such a library, or stick with plain JavaScript, depends on how comfortable you are with adding another dependency to your app, or how sure you are that you can avoid the pitfalls inherent within JavaScript’s approach to immutability.
+你是选择使用这样的库，还是坚持使用简单的 JavaScript，完全取决于你对向应用程序中添加另一个依赖是满意程度，或者取决于你是否确信使用它可以避免 JavaScript 处理不可变的方法中固有的缺陷。
 
-Whichever option you choose, make sure you’re familiar with the concepts of [immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation). In particular, ensure you have a deep understanding of what JavaScript does when updating and copying values in order to guard against accidental mutations that will degrade your app’s performance, or break it altogether.
+无论你做何选择，请确保你熟悉[不可变，副作用和突变](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)的概念。尤其要确保你深入了解 JavaScript 在更新和复制值时所做的操作，以防止意外的突变（mutation）导致应用程序性能的降低，甚至完全破坏应用程序的性能。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Recipes: immutability, side effects and mutation](http://redux.js.org/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+**文档**
+- [技巧：不可变，副作用和突变](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
 
-**Articles**
-- [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
-- [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+**文章**
+- [Immutable.js 和函数式编程概念介绍](https://auth0.com/blog/intro-to-immutable-js/)
+- [React.js 使用不可变的优点和缺点](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
 <a id="why-choose-immutable-js"></a>
-## Why should I choose Immutable.JS as an immutable library?
+## 为什么应该选择 Immutable.JS 作为不可变的库？
 
-Immutable.JS was designed to provide immutability in a performant manner in an effort to overcome the limitations of immutability with JavaScript. Its principle advantages include:
+Immutable.JS 旨在以一种高性能的方式提供不可变，以克服 JavaScript 不可变的局限性。其主要优点包括：
 
-#### Guaranteed immutability
+#### 保证不可变
 
-Data encapsulated in an Immutable.JS object is never mutated. A new copy is always returned. This contrasts with JavaScript, in which some operations do not mutate your data (e.g. some Array methods, including map, filter, concat, forEach, etc.), but some do (Array’s pop, push, splice, etc.).
+封装在 Immutable.JS 对象中的数据永远不会发生变换（mutate）。总是会返回一个新的拷贝对象。这与 JavaScript 相反，其中一些操作不会改变数据（例如，一些数组方法，包括 map，filter，concat，forEach 等），但有一些操作会改变数据（Array 的 pop，push，splice 等）。
 
-#### Rich API
+#### 拥有 API
 
-Immutable.JS provides a rich set of immutable objects to encapsulate your data (e.g. Maps, Lists, Sets, Records, etc.), and an extensive set of methods to manipulate it, including methods to sort, filter, and group the data, reverse it, flatten it, and create subsets.
+Immutable.JS 提供了一组丰富的不可变对象来封装数据（例如，Maps，Lists，Sets，Records等），以及一系列操作它们的方法，包括 sort，filter，数据分组，reverse，flatten 以及创建子集等方法。
 
-#### Performance
+#### 性能
 
-Immutable.JS does a lot of work behind the scenes to optimize performance. This is the key to its power, as using immutable data structures can involve a lot of expensive copying. In particular, immutably manipulating large, complex data sets, such as a nested Redux state tree, can generate many intermediate copies of objects, which consume memory and slow down performance as the browser’s garbage collector fights to clean things up.
+Immutable.JS 在实现过程中针对性能优化做了很多工作。这是非常关键的功能，因为使用不可变的数据结构可能需要进行大量昂贵的复制。尤其是对大型复杂数据集（如嵌套的 Redux state tree(状态树)）进行不可变操作时，中间可能会产生很多拷贝对象，当浏览器的垃圾回收器清理对象时，这些拷贝对象会消耗内存并降低性能。
 
-Immutable.JS avoids this by [cleverly sharing data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) under the surface, minimizing the need to copy data. It also enables complex chains of operations to be carried out without creating unnecessary (and costly) cloned intermediate data that will quickly be thrown away.
+Immutable.JS 内部通过[巧妙共享数据结构](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi)避免了这种情况，最大限度地减少了拷贝数据的情况。它还能执行复杂的操作链，而不会产生不必要的（且昂贵的）中间数据克隆，这些数据很快就会被丢弃。
 
-You never see this, of course - the data you give to an Immutable.JS object is never mutated. Rather, it’s the *intermediate* data generated within Immutable.JS from a chained sequence of method calls that is free to be mutated. You therefore get all the benefits of immutable data structures with none (or very little) of the potential performance hits.
+你决不会看到这些，当然 - 你给 Immutable.JS 对象的数据永远不会发生变化。但是，它从 Immutable.JS 中生成的 *intermediate* 数据，可以通过链式调用序列中的数据进行自由的变换。因此，你可以拥有不可变数据结构的所有优势，并且不会产生任何潜在的（或很少）性能问题。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.6nwctunlc)
-- [PDF: JavaScript Immutability - Don’t go changing](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
+**文章**
+- [Immutable.js，持续化数据结构与结构共享](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.6nwctunlc)
+- [PDF： JavaScript Immutability - 不要更改](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
 
-**Libraries**
+**库**
 - [Immutable.js](https://facebook.github.io/immutable-js/)
 
 
 <a id="issues-with-immutable-js"></a>
-## What are the issues with using Immutable.JS?
+## 使用 Immutable.JS 有什么问题？
 
-Although powerful, Immutable.JS needs to be used carefully, as it comes with issues of its own. Note, however, that all of these issues can be overcome quite easily with careful coding.
+尽管功能强大，但 Immutable.JS 还是需要谨慎使用，因为它存在它自己的问题。注意，所有这些问题都可以通过谨慎编码轻松解决。
 
-#### Difficult to interoperate with
+#### 交互操作困难
 
-JavaScript does not provide immutable data structures. As such, for Immutable.JS to provide its immutable guarantees, your data must be encapsulated within an Immutable.JS object (such as a `Map` or a `List`, etc.). Once it’s contained in this way, it’s hard for that data to then interoperate with other, plain JavaScript objects.
+JavaScript 没有提供不可变的数据结构。因此，要保证 Immutable.JS 其不可变，你的数据就必须封装在 Immutable.JS 对象（例如：`Map` 或 `List` 等）中。一旦使用这种方式包裹数据，这些数据就很难与其他普通的 JavaScript 对象进行交互操作。
 
-For example, you will no longer be able to reference an object’s properties through standard JavaScript dot or bracket notation. Instead, you must reference them via Immutable.JS’s `get()` or `getIn()` methods, which use an awkward syntax that accesses properties via an array of strings, each of which represents a property key.
+例如，你将不再能够通过标准 JavaScript 中的点语法或中括号引用对象的属性。相反，你必须通过 Immutable.JS 提供的 `get()` 或 `getIn()` 方法来引用它们，这些方法使用了一种笨拙的语法，通过一个字符串字符串数组访问属性，每个字符串代表一个属性的 key。
 
-For example, instead of `myObj.prop1.prop2.prop3`, you would use `myImmutableMap.getIn([‘prop1’, ‘prop2’, ‘prop3’])`.
+例如，你将使用 `myImmutableMap.getIn(['prop1', 'prop2', 'prop3'])` 替代 `myObj.prop1.prop2.prop3`。
 
-This makes it awkward to interoperate not just with your own code, but also with other libraries, such as lodash or ramda, that expect plain JavaScript objects.
+这不仅使得与你自己的代码进行交互操作变得尴尬，而且还与其他库（如 lodash 或 ramda）的交互也会很尴尬，这些库都需要普通的 JavaScript 对象。
 
-Note that Immutable.JS objects do have a `toJS()` method, which returns the data as a plain JavaScript data structure, but this method is extremely slow, and using it extensively will negate the performance benefits that Immutable.JS provides
+注意，Immutable.JS 对象确实包含 `toJS()` 方法，该方法会返回普通 JavaScript 数据结构形式的对象，但这种方法非常慢，广泛使用将会失去 Immutable.JS 提供的性能优势。
 
-### Once used, Immutable.JS will spread throughout your codebase
+### 一旦使用，Immutable.JS 将遍布整个代码库
 
-Once you encapsulate your data with Immutable.JS, you have to use Immutable.JS’s `get()` or `getIn()` property accessors to access it.
+一旦使用 Immutable.JS 封装数据，你必须使用 Immutable.JS 的 `get()` 和 `getIn()` 属性访问器来访问它。
 
-This has the effect of spreading Immutable.JS across your entire codebase, including potentially your components, where you may prefer not to have such external dependencies. Your entire codebase must know what is, and what is not, an Immutable.JS object. It also makes removing Immutable.JS from your app difficult in the future, should you ever need to.
+这将会在整个代码库中传播 Immutable.JS，包括潜在组件，你可能不喜欢拥有这种外部依赖关系。你的整个代码库必须知道哪些应该是 Immutable.JS 对象，哪些不是。这也会使得当你想从应用程序中移除 Immutable.JS 变得非常困难。
 
-This issue can be avoided by [uncoupling your application logic from your data structures](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi), as outlined in the [best practices section](#immutable-js-best-practices) below.
+如下面[最佳实践部分](#immutable-js-best-practices)所述，可以通过将[应用程序逻辑与数据结构解耦](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi)来避免此问题。
 
-### No Destructuring or Spread Operators
+### 没有解构或展开运算符(Spread Operators)
 
-Because you must access your data via Immutable.JS’s own `get()` and `getIn()` methods, you can no longer use JavaScript’s destructuring operator (or the proposed Object spread operator), making your code more verbose.
+因为你必须通过 Immutable.JS 本身的 `get()` 和 `getIn()` 方法来访问你的数据，所以你不能再使用 JavaScript 的解构运算符（或者提案中的 Object 扩展运算符），这使得你的代码更加冗余。
 
-### Not suitable for small values that change often
+### 不适用于经常改变的小数值
 
-Immutable.JS works best for collections of data, and the larger the better. It can be slow when your data comprises lots of small, simple JavaScript objects, with each comprising a few keys of primitive values.
+Immutable.JS 最适用于数据集合，越大越好。当你的数据包含大量小而简单的 JavaScript 对象时，速度会很慢，每个对象都包含几个基本数据类型的 key。
 
-Note, however, that this does not apply to the Redux state tree, which is (usually) represented as a large collection of data.
+注意：无论如何，这都不适用于 Redux state tree，该树通常为大量数据的集合。
 
-### Difficult to Debug
+### 难以调试
 
-Immutable.JS objects, such as `Map`, `List`, etc., can be difficult to debug, as inspecting such an object will reveal an entire nested hierarchy of Immutable.JS-specific properties that you don’t care about, while your actual data that you do care about is encapsulated several layers deep.
+Immutable.JS 对象，如 `Map`，`List` 等可能很难调试，因为检查这样的对象会看到整个嵌套层级结构，这些层级是你不关心的 Immutable.JS 特定的属性，而且你真正关心的是实际数据被封装了几层。
 
-To resolve this issue, use a browser extension such as the [Immutable.js Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog), which surfaces your data in Chrome Dev Tools, and hides Immutable.JS’s properties when inspecting your data.
+要解决此问题，请使用浏览器扩展程序，如 [Immutable.js 对象格式化扩展](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)，它在 Chrome 开发工具中显示数据，并在检查数据时隐藏 Immutable.JS 的属性。
 
-### Breaks object references, causing poor performance
+### 破坏对象引用，导致性能较差
 
-One of the key advantages of immutability is that it enables shallow equality checking, which dramatically improves performance.
+不可变的一个主要优点是它可以浅层平等检查，大大提高了性能。
 
-If two different variables reference the same immutable object, then a simple equality check of the two variables is enough to determine that they are equal, and that the object they both reference is unchanged. The equality check never has to check the values of any of the object’s properties, as it is, of course, immutable.
+如果两个不同的变量引用同一个不可变对象，那么对这两个变量进行简单的相等检查就足以确定它们是否相等，并且它们所引用的对象是不可变的。等式检查从不必检查任何对象属性的值，因为它是不可变的。
 
-However, shallow checking will not work if your data encapsulated within an Immutable.JS object is itself an object. This is because Immutable.JS’s `toJS()` method, which returns the data contained within an Immutable.JS object as a JavaScript value, will create a new object every time it’s called, and so break the reference with the encapsulated data.
+然而，如果封装在 Immutable.JS 对象中的数据本身就是一个对象，渐层检查起不到任何作用。这是因为 Immutable.JS 的 `toJS()` 方法会将 Immutable.JS 对象中的数据作为 JavaScript 值并返回，每次调用它时都会创建一个新对象，并且使用封装数据来分解引用。
 
-Accordingly, calling `toJS()` twice, for example, and assigning the result to two different variables will cause an equality check on those two variables to fail, even though the object values themselves haven’t changed.
+因此，如果调用 `toJS()` 两次，并将结果赋值给两个不同的变量将导致这两个变量的等式检查失败，即时对象值本身没有改变。
 
-This is a particular issue if you use `toJS()` in a wrapped component’s `mapStateToProps` function, as React-Redux shallowly compares each value in the returned props object.  For example, the value referenced by the `todos` prop returned from `mapStateToProps` below will always be a different object, and so will fail a shallow equality check.
+如果在包装组件的 `mapStateToProps` 函数中使用 `toJS()`，这就是一个特殊的问题了，因为 React-Redux 对返回的 props 对象中的每个值都进行了简单的比较。例如，下面代码中的 `mapStateToProps` 返回的 `todos` prop 所引用的值将始终是不同的对象，因此无法通过渐层等式检查。
 
 ```js
-// AVOID .toJS() in mapStateToProps
+// 避免在 mapStateToProps 中使用 .toJS() 
 function mapStateToProps(state) {
   return {
-    todos: state.get('todos').toJS() // Always a new object
+    todos: state.get('todos').toJS() // 总为新对象
   }
 }
 ```
 
-When the shallow check fails, React-Redux will cause the component to re-render. Using `toJS()` in `mapStateToProps` in this way, therefore, will always cause the component to re-render, even if the value never changes, impacting heavily on performance.
+当浅层检查失败时，React-Redux 将导致组件重新渲染。因此，在 `mapStateToProps` 中使用 `toJS()` 的方式，将导致组件重新渲染，即时值未发生变化，也会严重影响性能。
 
-This can be prevented by using `toJS()` in a Higher Order Component, as discussed in the [Best Practices section](#immutable-js-best-practices) below.
+该问题可以通过在高阶组件中使用 `toJS()` 来避免，如下面[最佳实践部分](#immutable-js-best-practices)所述。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.hzgz7ghbe)
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
-- [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.9ucv6hwk4)
-- [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
+**文章**
+- [Immutable.js，持续化数据结构与结构共享](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.hzgz7ghbe)
+- [不可变的数据结构与 JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [React.js 纯粹渲染性能反面模式（anti-pattern）](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.9ucv6hwk4)
+- [使用 React 和 Redux 构建高效的用户界面](https://www.toptal.com/react/react-redux-and-immutablejs)
 
-**Chrome Extension**
-- [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
+**Chrome 扩展程序**
+- [Immutable 对象格式化扩展](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
 
 
 <a id="is-immutable-js-worth-effort"></a>
-## Is Using Immutable.JS worth the effort?
+## Immutable.JS 是否值得使用？
 
-Frequently, yes. There are various tradeoffs and opinions to consider, but there are many good reasons to use Immutable.JS. Do not underestimate the difficulty of trying to track down a property of your state tree that has been inadvertently mutated.
+通常来说，是的。有各种各样的权衡和意见参考，但有很多很好的理由推荐使用。不要低估尝试追踪无意间突变的 state tree 中的属性的难度。
 
-Components will both re-render when they shouldn’t, and refuse to render when they should, and tracking down the bug causing the rendering issue is hard, as the component rendering incorrectly is not necessarily the one whose properties are being accidentally mutated.
+组件在不必要时重新渲染，在它必要时拒绝渲染，以及追踪致使出现渲染问题的错误都是非常困难的，因为渲染不正确的组件不一定是属性突变的组件。
 
-This problem is caused predominantly by returning a mutated state object from a Redux reducer. With Immutable.JS, this problem simply does not exist, thereby removing a whole class of bugs from your app.
+这个问题主要是由 Redux 的 reducer 返回一个突变的 state 对象引起的。使用 Immutable.JS，此类问题根本不会出现，因此，你的应用程序中就排除了这类错误。
 
-This, together with its performance and rich API for data manipulation, is why Immutable.JS is worth the effort.
+以上这些与它的性能以及丰富的数据操作 API 组合在一起，就是为什么值得使用 Immutable.JS 的原因了。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Troubleshooting: Nothing happens when I dispatch an action](http://redux.js.org/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
+**文档**
+- [排错：dispatch action 后什么也没有发生](https://cn.redux.js.org/docs/Troubleshooting.html#nothing-happens-when-i-dispatch-an-action)
 
 
 <a id="immutable-js-best-practices"></a>
-## What are some opinionated Best Practices for using Immutable.JS with Redux?
+## 在 Redux 中使用 Immutable.JS 有哪些最佳实践？
 
-Immutable.JS can provide significant reliability and performance improvements to your app, but it must be used correctly. If you choose to use Immutable.JS (and remember, you are not required to, and there are other immutable libraries you can use), follow these opinionated best practices, and you’ll be able to get the most out of it, without tripping up on any of the issues it can potentially cause.
+Immutable.JS 可以为你的应用程序提供可靠性和显著的性能优化，但必须正确使用。如果你选择使用 Immutable.JS（记住，并不是必须使用它，还有其他不可变库可以使用），请遵循这些有见地的最佳实践，你将能充分利用它，从而不会被它可能导致的任何问题绊倒。
 
-### Never mix plain JavaScript objects with Immutable.JS  
+### 永远不要将普通的 JavaScript 对象与 Immutable.JS 混合使用
 
-Never let a plain JavaScript object contain Immutable.JS properties. Equally, never let an Immutable.JS object contain a plain JavaScript object.
+永远不要让一个普通的 JavaScript 对象包含 Immutable.JS 属性。同样，永远不要让 Immutable.JS 对象包含一个普通的 JavaScript 对象。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+**文章**
+- [不可变的数据结构与 JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
 
-### Make your entire Redux state tree an Immutable.JS object
+### 使整个 Redux state tree 成为 Immutable.JS 对象
 
-For a Redux app, your entire state tree should be an Immutable.JS object, with no plain JavaScript objects used at all.
+对于使用 Redux 的应用程序来说，你的整个 state tree 应该是 Immutable.JS 对象，根本不需要使用普通的 JavaScript 对象。
 
-* Create the tree using Immutable.JS’s `fromJS()` function.
+* 使用 Immutable.JS 的 `fromJS()` 函数创建树。
 
-* Use an Immutable.JS-aware version of the `combineReducers` function, such as the one in [redux-immutable](https://www.npmjs.com/package/redux-immutable), as Redux itself expects the state tree to be a plain JavaScript object.
+* 使用 `combineReducers` 函数的 Immutable.JS 的感知版本，比如 [redux-immutable](https://www.npmjs.com/package/redux-immutable) 中的版本，因为 Redux 本身会将 state tree 变成一个普通的 JavaScript 对象。
 
-* When adding JavaScript objects to an Immutable.JS Map or List using Immutable.JS’s `update`, `merge` or `set` methods, ensure that the object being added is first converted to an Immutable object using `fromJS()`.
+* 当使用 Immutable.JS 的 `update`，`merge` 或 `set` 方法将一个 JavaScript 对象添加到一个 Immutable.JS 的 Map 或者 List 中时，要确保被添加的对象事先使用了 `fromJS()` 转为一个 Immutable 的对象。
 
-**Example**
+**示例**
 
 ```js
-// avoid
+// 避免
 const newObj = { key: value }
 const newState = state.setIn(['prop1'], newObj)
-// newObj has been added as a plain JavaScript object, NOT as an Immutable.JS Map
+// newObj 作为普通的 JavaScript 对象，而不是 Immutable.JS 的 Map 类型。
 
-// recommended
+// 推荐
 const newObj = { key: value }
 const newState = state.setIn(['prop1'], fromJS(newObj))
-// newObj is now an Immutable.JS Map
+// newObj 现在是 Immutable.JS 的 Map 类型。
 ```
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+**文章**
+- [不可变的数据结构与 JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
 
-**Libraries**
+**库**
 - [redux-immutable](https://www.npmjs.com/package/redux-immutable)
 
 
-### Use Immutable.JS everywhere except your dumb components
+### 在除了 Dumb 组件外的组件使用 Immutable.JS 
 
-Using Immutable.JS everywhere keeps your code performant. Use it in your smart components, your selectors, your sagas or thunks, action creators, and especially your reducers.
+在任何地方使用 Immutable.JS 都可以保证代码的高性能。在你的 smart 组件中，选择器中，saga 或 thunk中，action 创建函数 中，特别是你的 reducer 中都可以使用它。
 
-Do not, however, use Immutable.JS in your dumb components.
+但是，请不要在你的 Dumb 组件中使用 Immutable.JS。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
-- [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
+**文章**
+- [不可变的数据结构与 JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [React 中的 Smart 和 Dumb 组件](http://jaketrent.com/post/smart-dumb-components-react/)
 
-### Limit your use of `toJS()`
+### 限制对 `toJS()` 的使用
 
-`toJS()` is an expensive function and negates the purpose of using Immutable.JS. Avoid its use.
+`toJS()` 是一个昂贵(性能)的函数，并且与使用 Immutable.JS 的目的相违背。避免使用它。
 
-#### Further Information
+#### 更多信息
 
-** Discussions**
-- [Lee Byron on Twitter: “Perf tip for #immutablejs…”](https://twitter.com/leeb/status/746733697093668864)
+**议题**
+- [Lee Byron 的 Twitter: "Perf tip for #immutablejs…"](https://twitter.com/leeb/status/746733697093668864)
 
-### Your selectors should return Immutable.JS objects
+### 你的选择器应该返回 Immutable.JS 对象
 
-Always.
+总是返回 Immutable.JS 对象。
 
-### Use Immutable.JS objects in your Smart Components
+### 在 Smart 组件中使用 Immutable.JS 对象
 
-Smart components that access the store via React Redux’s `connect` function must use the Immutable.JS values returned by your selectors.  Make sure you avoid the potential issues this can cause with unnecessary component re-rendering. Memoize your selectors using a library such as reselect if necessary.
+通过 React Redux 的 `connect` 函数访问 store 的 Smart 组件必须使用 Immutable.JS 作为选择器的返回值。以确保你避免了由于不必要的组件重新渲染而导致的潜在问题。必要时使用库来记忆选择器（例如：reselect）。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Recipes: Computing Derived Data](http://redux.js.org/recipes/ComputingDerivedData.html)
-- [FAQ: Immutable Data](/faq/ImmutableData.html#immutability-issues-with-react-redux)
-- [Reselect Documentation: How do I use Reselect with Immutable.js?](https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
+**文档**
+- [技巧：计算衍生数据](http://cn.redux.js.org/docs/recipes/ComputingDerivedData.html)
+- [FAQ：Immutable 数据](/faq/ImmutableData.html#immutability-issues-with-react-redux)
+- [Reselect 文档：如何使用 Reselect 结合 Immutable.js？](https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
-**Articles**
-- [Redux Patterns and Anti-Patterns](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy)
+**文章**
+- [Redux 模式和反面模式](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy)
 
-**Libraries**
-- [Reselect: Selector library for Redux](https://github.com/reactjs/reselect)
+**库**
+- [Reselect: Redux 的选择器库](https://github.com/reactjs/reselect)
 
-### Never use `toJS()` in `mapStateToProps`
+### 绝对不要在 `mapStateToProps` 中使用 `toJS()`
 
-Converting an Immutable.JS object to a JavaScript object using `toJS()` will return a new object every time. If you do this in `mapStateToProps`, you will cause the component to believe that the object has changed every time the state tree changes, and so trigger an unnecessary re-render.
+使用 `toJS()` 将 Immutable.JS 对象转换为 JavaScript 对象时，每次都会返回一个新的对象。如果在 `mapStateToProps` 中执行此操作，则会导致组件在每次 state tree 更改时都认为该对象已更改，因此会触发不必要的重新渲染。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [FAQ: Immutable Data](http://redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
+**文档**
+- [FAQ: Immutable 数据](http://cn.redux.js.org/docs/faq/ImmutableData.html#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
 
-### Never use Immutable.JS in your Dumb Components
+### 永远不要在你的 Dumb 组件中使用 Immutable.JS
 
-Your dumb components should be pure; that is, they should produce the same output given the same input, and have no external dependencies. If you pass such a component an Immutable.JS object as a prop, you make it dependent upon Immutable.JS to extract the prop’s value and otherwise manipulate it.
+你的 dumb 组件应该是纯粹的；也就是说，它们应该在给定相同的输入的情况下产生相同的输出，并不具有外部依赖性。如果你将这一一个组件作为 props 传递给一个 Immutable.JS 对象，那么你需要依赖 Immutable.JS 来提取 props 的值，并以其他的方式操纵它。
 
-Such a dependency renders the component impure, makes testing the component more difficult, and makes reusing and refactoring the component unnecessarily difficult.
+这种依赖性会导致组件不纯，使组件测试更加困难，并且使组件复用和重构变得非常困难。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
-- [Immutable Data Structures and JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
-- [Smart and Dumb Components in React](http://jaketrent.com/post/smart-dumb-components-react/)
-- [Tips For a Better Redux Architecture: Lessons for Enterprise Scale](https://hashnode.com/post/tips-for-a-better-redux-architecture-lessons-for-enterprise-scale-civrlqhuy0keqc6539boivk2f)
+**文章**
+- [不可变的数据结构与 JavaScript](http://jlongster.com/Using-Immutable-Data-Structures-in-JavaScript)
+- [React 中的 Smart 和 Dumb 组件](http://jaketrent.com/post/smart-dumb-components-react/)
+- [更好的 Redux 体系结构的小贴士：企业规模的经验教训](https://hashnode.com/post/tips-for-a-better-redux-architecture-lessons-for-enterprise-scale-civrlqhuy0keqc6539boivk2f)
 
-### Use a Higher Order Component to convert your Smart Component’s Immutable.JS props to your Dumb Component’s JavaScript props
+### 使用高阶组件来转换从 Smart 组件的 Immutable.JS props 到 Dumb 组件的 JavaScript props
 
-Something needs to map the Immutable.JS props in your Smart Component to the pure JavaScript props used in your Dumb Component. That something is a Higher Order Component (HOC) that simply takes the Immutable.JS props from your Smart Component, and converts them using `toJS()` to plain JavaScript props, which are then passed to  your Dumb Component.
+有些东西需要将 Smart 组件中的 Immutable.JS props 映射到 Dumb 组件中的纯 JavaScript props。这里的有些东西是指高阶组件（HOC），它只需从 Smart 组件中获取 Immutable.JS props，然后使用 `toJS()` 将它们转换为普通 JavaScript props，然后传递给你的 Dumb 组件。
 
-Here is an example of such a HOC:
+这是一个关于 HOC 的例子：
 
 ```js
 import React from 'react'
@@ -292,7 +292,7 @@ export const toJS = WrappedComponent => wrappedComponentProps => {
 }
 ```
 
-And this is how you would use it in your Smart Component:
+以下为如何在 Smart 组件中使用它：
 
 ```js
 import { connect } from 'react-redux'
@@ -302,40 +302,40 @@ import DumbComponent from './dumb.component'
 
 const mapStateToProps = state => {
   return {
-    // obj is an Immutable object in Smart Component, but it’s converted to a plain
-    // JavaScript object by toJS, and so passed to DumbComponent as a pure JavaScript
-    // object. Because it’s still an Immutable.JS object here in mapStateToProps, though,
-    // there is no issue with errant re-renderings.
+    // obj 是一个 Smart 组件中的不可变对象，
+    // 但它通过 toJS 被转换为普通 JavaScript 对象，并以纯 JavaScript 的形式传递给 Dumb 组件对象。
+    // 因为它在 mapStateToProps 中仍然是 Immutable.JS 对象，
+    // 虽然，这是无疑是错误重新渲染。
     obj: getImmutableObjectFromStateTree(state)
   }
 }
 export default connect(mapStateToProps)(toJS(DumbComponent))
 ```
-By converting Immutable.JS objects to plain JavaScript values within a HOC, we achieve Dumb Component portability, but without the performance hits of using `toJS()` in the Smart Component.
+通过在 HOC 中将 Immutable.JS 对象转换为纯 JavaScript 值，我们实现了 Dumb 的可移植性，也没在 Smart 组件中使用 `toJS()` 影响性能。
 
-_Note: if your app requires high performance, you may need to avoid `toJS()` altogether, and so will have to use Immutable.JS in your dumb components. However, for most apps this will not be the case, and the benefits of keeping Immutable.JS out of your dumb components (maintainability, portability and easier testing) will far outweigh any perceived performance improvements of keeping it in._
+_注意: 如果你的应用程序需要高性能，你可能需要完全避免使用 `toJS()`，所以必须在你的 Dumb 组件中使用 Immutable.JS。但是，对于大多数应用程序来说并非如此，将 Immutable 保留在 Dumb 组件（可维护性，可移植性和更简单的测试）等方面的好处远远超过了保持它任何方面性能优化。_
 
-_In addition, using `toJS` in a Higher Order Component should not cause much, if any, performance degradation, as the component will only be called when the connected component’s props change. As with any performance issue, conduct performance checks first before deciding what to optimize._
+_另外，在高阶组件中使用 `toJS` 应该不会引起任何性能的下降，因为只有在 connect 组件的 props 改变时才会调用组件。与任何性能问题一样，在决定优化什么之前先进行性能检测。_
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [React: Higher-Order Components](https://facebook.github.io/react/docs/higher-order-components.html)
+**文档**
+- [React：高阶组件](https://facebook.github.io/react/docs/higher-order-components.html)
 
-**Articles**
-- [React Higher Order Components in depth](https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e#.dw2qd1o1g)
+**文章**
+- [深入了解 React 的高阶组件](https://medium.com/@franleplant/react-higher-order-components-in-depth-cf9032ee6c3e#.dw2qd1o1g)
 
-**Discussions**
-- [Reddit: acemarke and cpsubrian comments on Dan Abramov: Redux is not an architecture or design pattern, it is just a library.](https://www.reddit.com/r/javascript/comments/4rcqpx/dan_abramov_redux_is_not_an_architecture_or/d5rw0p9/?context=3)
+**议题**
+- [Reddit: acemarke 和 cpsubrian 对 Dan Abramov 的评论：Redux 不是一种架构或设计模式，它只是一个库。](https://www.reddit.com/r/javascript/comments/4rcqpx/dan_abramov_redux_is_not_an_architecture_or/d5rw0p9/?context=3)
 
 **Gists**
 - [cpsubrian: React decorators for redux/react-router/immutable ‘smart’ components](https://gist.github.com/cpsubrian/79e97b6116ab68bd189eb4917203242c#file-tojs-js)
 
-### Use the Immutable Object Formatter Chrome Extension to Aid Debugging
+### 使用不可变对象格式化 Chrome 扩展来辅助调试
 
-Install the [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog) , and inspect your Immutable.JS data without seeing the noise of Immutable.JS's own object properties.
+安装 [Immutable 对象格式化扩展](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)，并检查你的 Immutable.JS 数据，而不会看到 Immutable.JS 本身的对象属性混淆视听。
 
-#### Further Information
+#### 更多信息
 
-**Chrome Extension**
-- [Immutable Object Formatter](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
+**Chrome 扩展**
+- [Immutable 对象格式化扩展](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
