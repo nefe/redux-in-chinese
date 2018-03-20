@@ -2,11 +2,16 @@
 
 ## 目录
 
+- [何时学习 Redux ？](#general-when-to-learn)
 - [何时使用 Redux ？](#general-when-to-use)
 - [Redux 只能搭配 React 使用？](#general-only-react)
 - [Redux 需要特殊的编译工具支持吗？](#general-build-tools)
 
 ## 综合
+<a id="general-when-to-learn"></a>
+### 何时学习 Redux？
+
+对于 Javascript 开发者来说，学什么是一个很大的问题。因为每次在你学习一项技术或着手于工作中遇到的问题时，你所学的会帮助你缩小可选择的范围。Redux 是一个管理应用状态的模式。如果你没有遇到应用状态管理方面的问题，你就很难理解 Redux 的益处何在。某些 UI 库（例如 React）有着它们自己的状态管理系统。如果你正在使用这样的库，特别是你刚刚开始学习这样的库，我们鼓励你优先学着用原生的系统来解决问题，因为这对于构建你的应用来说已经足够了。当你的应用已经达到相当的复杂程度，以至“状态储存到哪了”、“状态怎么变化的”这样的问题开始困扰你，这就是学习 Redux 的大好时机。感受一下 Redux 对复杂事物的抽象过程，将有助于你将这种抽象应用到工作中去。
 
 <a id="general-when-to-use"></a>
 ### 何时使用 Redux？
