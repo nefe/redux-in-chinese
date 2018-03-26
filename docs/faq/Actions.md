@@ -12,7 +12,7 @@
 <a id="actions-string-constants"></a>
 ### 为何 `type` 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？
 
-和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 等去定义 `type` 值，或者用 `instanceof` 对 action 做自检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 *可以* 的。 action 只有当它们正真到达 store 且被传递给 reducer 时才需要被序列化。
+和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 等去定义 `type` 值，或者用 `instanceof` 对 action 做自检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 *可以* 的。 action 只有当它们真正到达 store 且被传递给 reducer 时才需要被序列化。
 
 因为性能原因，我们无法强制序列化 action，所以 Redux 只会校验 action 是否是普通对象，以及 `type` 是否定义。其它的都交由你决定，但是确保数据是可序列化将对调试以及问题的重现有很大帮助。
 
