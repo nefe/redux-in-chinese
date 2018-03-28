@@ -48,7 +48,7 @@
 #### 更多信息
 
 **文档**
-- [Recipes: Prerequisite Reducer Concepts](http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html)
+- [技巧: Reducer 基础概念](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html)
 
 **讨论**
 - [Reddit: Why Redux Needs Reducers To Be Pure Functions](https://www.reddit.com/r/reactjs/comments/5ecqqv/why_redux_need_reducers_to_be_pure_functions/dacmmjh/?context=3)
@@ -79,7 +79,7 @@ Redux 在 `combineReducers` 函数中使用浅层检查来返回根 state 对象
 #### 更多信息
 
 **文档**
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
+- [API 文档: combineReducers](http://cn.redux.js.org/docs/api/combineReducers.html)
 
 
 <a id="how-combine-reducers-uses-shallow-checking"></a>
@@ -113,8 +113,8 @@ combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
 #### 更多信息
 
 **文档**
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
-- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state)
+- [API 文档: combineReducers](http://cn.redux.js.org/docs/api/combineReducers.html)
+- [常见问题 - 如何在 reducer 之间共享 state? `combineReducers` 是必须的吗？](http://cn.redux.js.org/docs/faq/Reducers.html#reducers-share-state)
 
 **视频**
 - [Egghead.io: Redux: Implementing combineReducers() from Scratch](https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch)
@@ -135,7 +135,7 @@ React-Redux 使用浅对比来决定它包裹的组件是否需要重新渲染�
 #### 更多信息
 
 **文档**
-- [React-Redux Bindings](http://redux.js.org/docs/basics/UsageWithReact.html)
+- [搭配 React](http://cn.redux.js.org/docs/basics/UsageWithReact.html)
 
 **文章**
 - [API: React-Redux’s connect function and `mapStateToProps`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
@@ -261,8 +261,8 @@ store 仍会根据新的根 state 对象进行更新，但由于根 state 对象
 #### 更多信息
 
 **文档**
-- [Recipes: Immutable Update Patterns](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
-- [Troubleshooting: Never mutate reducer arguments](http://redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
+- [技巧: 不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
+- [排错: 永远不要直接修改 reducer 的参数](http://cn.redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
 
 
 <a id="shallow-checking-problems-with-react-redux"></a>
@@ -432,7 +432,7 @@ JavaSctipt 从不是为了确保不可变性而设计的。所以，有几点事
 ### 不小心直接修改了对象
 使用 JavaScript 时，你很容易一不小心直接修改了一个对象（比如 Redux 中的 state 树），甚至自己都没意识到。比如说，更新了多层嵌套中的属性、给一个对象创建了一个**引用**而不是创建一个新的对象、或者用了浅拷贝而不是深拷贝，这些都会导致非故意的对象修改，甚至经验丰富的 JavaScript 程序员都会犯此错误。
 
-为了避免这些问题，请确保你遵守了推荐的 [ES6 不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)。
+为了避免这些问题，请确保你遵守了推荐的 [不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)。
 
 ### 重复代码
 更新复杂的多级嵌套的 state 树会导致重复代码的出现，这样的代码不但写起来无趣，维护起来也很困难。
@@ -449,7 +449,7 @@ JavaSctipt 从不是为了确保不可变性而设计的。所以，有几点事
 #### 更多信息
 
 **文档**
-- [Immutable Update Patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
+- [不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
 
 **文章**
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.a2jimoiaf)
