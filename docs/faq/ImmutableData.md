@@ -1,34 +1,34 @@
-# Redux FAQ: Immutable Data
+# Redux 常见问题：不可变对象
 
-## Table of Contents
-- [What are the benefits of immutability?](#benefits-of-immutability)
-- [Why is immutability required by Redux?](#why-is-immutability-required)
-- [Why does Redux’s use of shallow equality checking require immutability?](#redux-shallow-checking-requires-immutability)
-	- [How do Shallow and Deep Equality Checking differ?](#shallow-and-deep-equality-checking)
-	- [How does Redux use shallow equality checking?](#how-redux-uses-shallow-checking)
-	- [How does `combineReducers` use shallow equality checking?](#how-combine-reducers-uses-shallow-checking)
-	- [How does React-Redux use shallow equality checking?](#how-react-redux-uses-shallow-checking)
-	- [How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?](#how-react-redux-determines-need-for-re-rendering)
-	- [Why will shallow equality checking not work with mutable objects?](#no-shallow-equality-checking-with-mutable-objects)
-	- [Does shallow equality checking with a mutable object cause problems with Redux?](#shallow-checking-problems-with-redux)
-	- [Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-problems-with-react-redux)
-	- [Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?](#shallow-checking-stops-component-re-rendering)
-	- [How does immutability enable a shallow check to detect object mutations?](#immutability-enables-shallow-checking)
-- [How can immutability in your reducers cause components to render unnecessarily?](#immutability-issues-with-redux)
-- [How can immutability in mapStateToProps cause components to render unnecessarily?](#immutability-issues-with-react-redux)
-- [What approaches are there for handling data immutability? Do I have to use Immutable.JS?](#do-i-have-to-use-immutable-js)
-- [What are the issues with using JavaScript for immutable operations?](#issues-with-es6-for-immutable-ops)
+## 目录
+- [不变性（immutability）的好处有哪些？](#benefits-of-immutability)
+- [为什么 Redux 需要不变性？](#why-is-immutability-required)
+- [为什么 Redux 对浅比较的使用要求不变性？](#redux-shallow-checking-requires-immutability)
+	- [浅比较和深比较有何区别？](#shallow-and-deep-equality-checking)
+	- [Redux 是如何使用浅比较的？](#how-redux-uses-shallow-checking)
+	- [`combineReducers` 是如何进行浅比较的？](#how-combine-reducers-uses-shallow-checking)
+	- [React-Redux 是如何使用浅比较拗的？](#how-react-redux-uses-shallow-checking)
+	- [React-Redux 是如何使用浅比较来决定组件是否需要重新渲染的？](#how-react-redux-determines-need-for-re-rendering)
+	- [为什么在使用可变对象时不能用浅比较？](#no-shallow-equality-checking-with-mutable-objects)
+	- [使用浅比较检查一个可变对象对 Redux 会造成问题吗？](#shallow-checking-problems-with-redux)
+  - [为什么 reducer 直接修改 state 会导致 React-Redux 不重新渲染包装的组件？](#shallow-checking-problems-with-react-redux)
+	- [为什么 `mapStateToProps` 的 selector 直接修改并返回一个对象时，React-Redux 包装的组件不会重新渲染？](#shallow-checking-stops-component-re-rendering)
+	- [“不变性”如何使得浅比较检测到对象变化的？](#immutability-enables-shallow-checking)
+- [reducer 中的不变性是如何导致组件非必要渲染的？](#immutability-issues-with-redux)
+- [mapStateToProps 中的不变性是如何导致组件非必要渲染的？](#immutability-issues-with-react-redux)
+- [处理不可变数据都有哪些途径？一定要用 Immutable.JS吗？](#do-i-have-to-use-immutable-js)
+- [原生 JavaScript 进行不可变操作会遇到哪些问题？](#issues-with-es6-for-immutable-ops)
 
 
 <a id="benefits-of-immutability"></a>
-## What are the benefits of immutability?
-Immutability can bring increased performance to your app, and leads to simpler programming and debugging, as data that never changes is easier to reason about than data that is free to be changed arbitrarily throughout your app.
+## 不变性的好处有哪些
+不变性可以给你的应用带来性能提升，也可以带来更简单的编程和调试体验。这是因为，与那些在整个应用中可被随意篡改的数据相比，永远不变的数据更容易追踪，推导。
 
-In particular, immutability in the context of a Web app enables sophisticated change detection techniques to be implemented simply and cheaply, ensuring the computationally expensive process of updating the DOM occurs only when it absolutely has to (a cornerstone of React’s performance improvements over other libraries).
+特别来说，在 Web 应用中对于不变性的使用，可以让复杂的变化检测机制得以简单快速的实现。从而确保代价高昂的 DOM 更新过程只在真正需要的时候进行（这也是 React 性能方面优于其他类库的基石）。
 
-#### Further information
+#### 更多信息
 
-**Articles**
+**文章**
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 - [JavaScript Immutability presentation (PDF - see slide 12 for benefits)](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
 - [Immutable.js - Immutable Collections for JavaScript](https://facebook.github.io/immutable-js/#the-case-for-immutability)
@@ -37,116 +37,116 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 
 <a id="why-is-immutability-required"></a>
-## Why is immutability required by Redux?
-- Both Redux and React-Redux employ [shallow equality checking](#shallow-and-deep-equality-checking). In particular:
-	- Redux's `combineReducers` utility [shallowly checks for reference changes](#how-redux-uses-shallow-checking)  caused by the reducers that it calls.
-	- React-Redux's `connect` method generates components that [shallowly check reference changes to the root state](#how-react-redux-uses-shallow-checking), and the return values from the `mapStateToProps` function to see if the wrapped components actually need to re-render.
-Such [shallow checking requires immutability](#redux-shallow-checking-requires-immutability) to function correctly.
-- Immutable data management ultimately makes data handling safer.
-- Time-travel debugging requires that reducers be pure functions with no side effects, so that you can correctly jump between different states.
+## 为什么 Redux 需要不变性？
+- Redux 和 React-Redux 都使用了[浅比较](#shallow-and-deep-equality-checking)。具体来说：
+  - Redux 的 `combineReducers` 方法 [浅比较](#how-redux-uses-shallow-checking) 它调用的 reducer 的引用是否发生变化。
+  - React-Redux 的 `connect` 方法生成的组件通过 [浅比较根 state 的引用变化](#how-react-redux-uses-shallow-checking) 与 `mapStateToProps` 函数的返回值，来判断包装的组件是否需要重新渲染。 
+以上[浅比较需要不变性](#redux-shallow-checking-requires-immutability)才能正常工作
+- 不可变数据的管理极大地提升了数据处理的安全性。
+- 进行时间旅行调试要求 reducer 是一个没有副作用的纯函数，以此在不同 state 之间正确的移动。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Recipes: Prerequisite Reducer Concepts](http://redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html)
+**文档**
+- [技巧: Reducer 基础概念](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html)
 
-**Discussions**
+**讨论**
 - [Reddit: Why Redux Needs Reducers To Be Pure Functions](https://www.reddit.com/r/reactjs/comments/5ecqqv/why_redux_need_reducers_to_be_pure_functions/dacmmjh/?context=3)
 
 
 <a id="redux-shallow-checking-requires-immutability"></a>
-## Why does Redux’s use of shallow equality checking require immutability?
-Redux's use of shallow equality checking requires immutability if any connected components are to be updated correctly. To see why, we need to understand the difference between shallow and deep equality checking in JavaScript.
+## 为什么 Redux 对浅比较的使用要求不变性？
+Redux 对浅比较的使用要求不变性，以保证任何连接的组件能被正确渲染。要了解原因，我们需要理解 Javascript 中浅比较和深比较的区别。
 
 
 <a id="shallow-and-deep-equality-checking"></a>
-### How do shallow and deep equality checking differ?
-Shallow equality checking (or _reference equality_) simply checks that two different _variables_ reference the same object; in contrast, deep equality checking (or _value equality_) must check every _value_ of two objects' properties.
+### 浅比较和深比较有何区别？
+浅比较（也被称为 **引用相等**）只检查两个不同 **变量** 是否为同一对象的引用；与之相反，深比较（也被称为 **原值相等**）必须检查两个对象所有属性的 **值** 是否相等。
 
-A shallow equality check is therefore as simple (and as fast) as `a === b`, whereas a deep equality check involves a recursive traversal through the properties of two objects, comparing the value of each property at each step.
+所以，浅比较就是简单的（且快速的）`a === b`，而深比较需要以递归的方式遍历两个对象的所有属性，在每一个循环中对比各个属性的值。
 
-It's for this improvement in performance that Redux uses shallow equality checking.
+正是因为性能考虑，Redux 使用浅比较。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
-
 <a id="how-redux-uses-shallow-checking"></a>
-### How does Redux use shallow equality checking?
-Redux uses shallow equality checking in its `combineReducers` function to return either a new mutated copy of the root state object, or, if no mutations have been made, the current root state object.  
+### Redux 是如何使用浅比较的？
+Redux 在 `combineReducers` 函数中使用浅比较来检查根 state 对象（root state object）是否发生变化，有修改时，返回经过修改的根 state 对象的拷贝，没有修改时，返回当前的根 state 对象。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
+**文档**
+- [API 文档: combineReducers](http://cn.redux.js.org/docs/api/combineReducers.html)
 
 
 <a id="how-combine-reducers-uses-shallow-checking"></a>
-#### How does `combineReducers` use shallow equality checking?
-The [suggested structure](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
+#### `combineReducers` 是如何进行浅比较的？
+Redux 中 store [推荐的结构](http://cn.redux.js.org/docs/faq/Reducers.html#reducers-share-state) 是将 state 对象按键值切分成 “层”（slice） 或者 “域”（domain），并提供独立的 reducer 方法管理各自的数据层。
 
-`combineReducers` makes working with this style of structure easier by taking a  `reducers` argument that’s defined as a hash table comprising a set of key/value pairs, where each key is the name of a state slice, and the corresponding value is the reducer function that will act on it.
+`combineReducers` 接受 `reducers` 参数简化了该模型。`reducers` 参数是一组键值对组成的哈希表，其中键是每个数据层的名字，而相应的值是响应该数据层的 reducer 函数。
 
-So, for example, if your state shape is `{ todos, counter }`, the call to `combineReducers` would be:
+举例说明，如果你的 state 结构是 `{ todos, counter }`，调用 `combineReducers` 即：
 ```js
 combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
 ```
 
-where:
-- the keys  `todos` and `counter` each refer to a separate state slice;
-- the values `myTodosReducer` and `myCounterReducer` are reducer functions, with each acting on the state slice identified by the respective key.
+其中：
+- `todos` 和 `counter` 两个键各自是不同的 state 层。
+- `myTodosReducer` 和 `myCounterReducer` 两个值是 reducer 函数，各自负责处理它们的键所对应的 state 层。
 
-`combineReducers` iterates through each of these key/value pairs. For each iteration, it:
-- creates a reference to the current state slice referred to by each key;
-- calls the  appropriate reducer and passes it the slice;
-- creates a reference to the possibly-mutated state slice that's returned by the reducer.
+`combineReducers` 遍历所有这些键值对，对于每一次循环：
+- 为每一个键代表的当前 state 层创建一个引用；
+- 调用相应的 reducer 并把该数据层传递给它
+- 为 reducer 返回的可能发生了变化的 state 层创建一个引用。
 
-As  it continues through the iterations, `combineReducers` will construct a new state object with the state slices returned from each reducer. This new state object may or may not be different from the current state object. It is here that `combineReducers` uses shallow equality checking to determine whether the state has changed.
+在循环过程中，对于每一个 reducer 返回的 state 层，`combineReducers` 都会根据其创建一个新的 state 对象。这个新的 state 对象与当前 state 对象可能有区别，也可能没有区别。于是在这里 `combineReducers` 使用浅比较来判断 state 到底有没有发生变化。
 
-Specifically, at each stage of the iteration, `combineReducers` performs a shallow equality check on the current state slice and the state slice returned from the reducer. If the reducer returns a new object, the shallow equality check will fail, and `combineReducers` will set a `hasChanged` flag to true.
+特别来说，在循环的每一阶段，`combineReducers` 会浅比较当前 state 层与 reducer 返回的 state 层。如果 reducer 返回了新的对象，它们就不是浅相等的，而且 `combineReducers` 会把 `hasChanged` 设置为 true。
 
-After the iterations have completed, `combineReducers` will check the state of the `hasChanged` flag. If it’s true, the newly-constructed state object will be returned. If it’s false, the _current_ state object is returned.
+循环结束后，`combineReducers` 会检查 `hasChanged` 的值，如果为 true，就会返回新构建的 state 对象。如果为 false，就会返回**当前**state 对象。
 
-This is worth emphasizing: *If the reducers all return the same `state` object passed to them, then `combineReducers` will return the _current_ root state object, not the newly updated one.*
+需要强调的一点是：**如果所有 reducer 返回的 `state` 对象都与传入时一致，那么 `combineReducers` 将返回当前的根 state 对象，而不是新构建的。**
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [API: combineReducers](http://redux.js.org/docs/api/combineReducers.html)
-- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state)
+**文档**
+- [API 文档: combineReducers](http://cn.redux.js.org/docs/api/combineReducers.html)
+- [常见问题 - 如何在 reducer 之间共享 state? `combineReducers` 是必须的吗？](http://cn.redux.js.org/docs/faq/Reducers.html#reducers-share-state)
 
-**Video**
+**视频**
 - [Egghead.io: Redux: Implementing combineReducers() from Scratch](https://egghead.io/lessons/javascript-redux-implementing-combinereducers-from-scratch)
 
 
 <a id="how-react-redux-uses-shallow-checking"></a>
-### How does React-Redux use shallow equality checking?
-React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
+### React-Redux 是如何使用浅比较的？
+React-Redux 使用浅比较来决定它包装的组件是否需要重新渲染。
 
-To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux).
+首先 React-Redux 假设包装的组件是一个“纯”（pure）组件，即[给定相同的 props 和 state，这个组件会返回相同的结果](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)。
 
-By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from `mapStateToProps` have changed. If they haven’t, the wrapped component does not need re-rendering.
+做出这样的假设后，React-Redux 就只需检查根 state 对象或 `mapStateToProps` 的返回值是否改变。如果没变，包装的组件就无需重新渲染。
 
-It detects a change by keeping a reference to the root state object, and a reference to _each value_ in the props object that's returned from the `mapStateToProps` function.
+为了检测改变是否发生，React-Redux 会保留一个对根 state 对象的引用，还会保留 `mapStateToProps` 返回的 props 对象的**每个值**的引用。
 
-It then runs a shallow equality check on its reference to the root state object and the state object passed to it, and a separate series of shallow checks on each reference to the props object’s values and those that are returned from running the `mapStateToProps` function again.
+最后 React-Redux 会对根 state 对象的引用与传递给它的 state 对象进行浅比较，还会对每个 props 对象的每个值的引用与 `mapStateToProps` 返回的那些值进行一系列浅比较。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [React-Redux Bindings](http://redux.js.org/docs/basics/UsageWithReact.html)
+**文档**
+- [搭配 React](http://cn.redux.js.org/docs/basics/UsageWithReact.html)
 
-**Articles**
+**文章**
 - [API: React-Redux’s connect function and `mapStateToProps`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 - [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
 
 
-### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
-React-Redux performs a shallow equality check on each _value_ within the props object, not on the props object itself.
 
-It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
+### 为什么 React-Redux 对 `mapStateToProps` 返回的 props 对象的每个值进行浅比较？
+对 props 对象来说，React-Redux 会对其中的每个**值**进行浅比较，而不是 props 对象本身。
+
+它这样做的原因是：props 对象实际上是一组由属性名和其值（或用于取值或生成值的 selector 函数）的键值对组成的。请看下例：
 
 ```js
 function mapStateToProps(state) {
@@ -159,25 +159,23 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(TodoApp)
 ```
 
-As such, a shallow equality check of the props object returned from repeated calls to `mapStateToProps` would always fail, as a new object would be returned each time.
+像这样，重复调用 `mapStateToProps` 每次返回的 props 对象都不是浅层相等的，因为 `mapStateToProps` 总是会返回新的对象。
 
-React-Redux therefore maintains separate references to each _value_ in the returned props object.
+#### 更多信息
 
-#### Further Information
-
-**Articles**
+**文章**
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.gh07cm24f)
 
 
 <a id="how-react-redux-determines-need-for-re-rendering"></a>
-### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
-Each time React-Redux’s `connect` function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
+### React-Redux 是如何使用浅比较来决定组件是否需要重新渲染的？
+每次调用 React-Redux 提供的 `connect` 函数时，它储存的根 state 对象的引用，与当前传递给 store 的根 state 对象之间，会进行浅比较。如果相等，说明根 state 对象没有变化，也就无需重新渲染组件，甚至无需调用 `mapStateToProps`。
 
-If the check fails, however, the root state object _has_ been updated, and so `connect` will call `mapStateToProps`to see if the props for the wrapped component have been updated.
+如果发现其不相等，说明根 state 对象**已经**被更新了，这时 `connect` 会调用 `mapStateToProps` 来查看传给包装的组件的 props 是否被更新。
 
-It does this by performing a shallow equality check on each value within the object individually, and will only trigger a re-render if one of those checks fails.
+它会对该对象的每一个值各自进行浅比较，如果发现其中有不相等的才会触发重新渲染。
 
-In the example below, if `state.todos` and the value returned from `getVisibleTodos()` do not change on successive calls to `connect`, then the component will not re-render .
+在下例中，调用 `connect` 后，如果 `state.todos` 以及 `getVisibleTodos()` 的返回值没有改变，组件就不会重新渲染。
 
 ```js
 function mapStateToProps(state) {
@@ -190,7 +188,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(TodoApp)
 ```
 
-Conversely,  in this next example (below), the component will _always_ re-render, as the value of `todos` is always a new object, regardless of whether or not its values change:
+与之相反，在下例中，组件**总是**重新渲染，因为不管 `todos` 的值有没有改变，`todos` 本身总是一个新的对象。
 
 ```js
 // AVOID - will always cause a re-render
@@ -207,26 +205,25 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(TodoApp)
 ```
 
-If the shallow equality check fails between the new values returned from  `mapStateToProps` and the previous values that React-Redux kept a reference to, then a re-rendering of the component will be triggered.
+`mapStateToProps` 返回的新值，与 React-Redux 保留的旧值的引用如果不是浅层相等的，组件就会被重新渲染。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [Practical Redux, Part 6: Connected Lists, Forms, and Performance](http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 - [React.js Pure Render Performance Anti-Pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.sb708slq6)
 - [High Performance Redux Apps](http://somebody32.github.io/high-performance-redux/)
 
-**Discussions**
+**讨论**
 - [#1816: Component connected to state with `mapStateToProps`](https://github.com/reactjs/redux/issues/1816)
 - [#300: Potential connect() optimization](https://github.com/reactjs/react-redux/issues/300)
 
 
 <a id="no-shallow-equality-checking-with-mutable-objects"></a>
-### Why will shallow equality checking not work with mutable objects?
-Shallow equality checking cannot be used to detect if a function mutates an object passed into it if that object is mutable.
+### 为什么在使用可变对象时不能用浅比较？
+如果一个函数改变了传给它的可变对象的值，这时就不能使用浅比较。
 
-This is because two variables that reference the same object will _always_ be equal, regardless of whether the object’s values changes or not, as they're both referencing the same object. Thus, the following will always return true:
-
+这是因为对同一个对象的两个引用**总是**相同的，不管此对象的值有没有改变，它们都是同一个对象的引用。因此，以下这段代码总会返回 true：
 
 ```js
 function mutateObj(obj) {
@@ -241,56 +238,55 @@ param === returnVal
 //> true
 ```
 
+`param` 与 `returnValue` 的浅比较只是检查了这两个对象是否为相同对象的引用，而这段代码中总是（相同的对象的引用）。`mutateObj()` 也许会改变 `obj`，但它仍是传入的对象的引用。浅比较根本无法判断 `mutateObj` 改变了它的值。
 
-The shallow check of `param` and `returnValue` simply checks whether both variables reference the same object, which they do.`mutateObj()` may return a mutated version of `obj`, but it's still the same object as that passed in. The fact that its values have been changed within `mutateObj` matters not at all to a shallow check.
+#### 更多信息
 
-#### Further Information
-
-**Articles**
+**文章**
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
 <a id="shallow-checking-problems-with-redux"></a>
-### Does shallow equality checking with a mutable object cause problems with Redux?
-Shallow equality checking with a mutable object will not cause problems with Redux, but [it will cause problems with libraries that depend on the store, such as React-Redux](#shallow-checking-problems-with-react-redux).
+### 使用浅比较检查一个可变对象对 Redux 会造成问题吗？
+对于 Redux 来说，使用浅比较来检查可变对象不会造成问题，但[当你使用依赖于 store 的类库时（例如 React-Redux），就会造成问题](#shallow-checking-problems-with-react-redux)。
 
-Specifically, if the state slice passed to a reducer by `combineReducers` is a mutable object, the reducer can modify it directly and return it.
+特别是，如果 `combineReducers` 传给某个 reducer 的 state 层是一个可变对象，reducer 就可以直接修改数据并返回。
 
-If it does, the shallow equality check that `combineReducers` performs will always pass, as the values of the state slice returned by the reducer may have been mutated, but the object itself has not - it’s still the same object that was passed to the reducer.
+这样一来，浅比较判断 `combineReducers` 总会相等。因为尽管 reducer 返回的 state 层可能被修改了，但这个对象本身没有，它仍是传给 reducer 的那个对象。
 
-Accordingly, `combineReducers` will not set its `hasChanged` flag, even though the state has changed. If none of the other reducers return a new, updated state slice, the `hasChanged` flag will remain set to false, causing `combineReducers` to return the _existing_ root state object.
+从而，尽管 state 发生了变化，`combineReducers` 不会改变 `hasChanged` 的值。如果所有 reducer 都没有返回新的 state 层，`hasChange` 就会始终是 false，于是 `combineReducers` 就返回**现有的**根 state 对象。
 
-The store will still be updated with the new values for the root state, but because the root state object itself is still the same object, libraries that bind to Redux, such as React-Redux, will not be aware of the state’s mutation, and so will not trigger a wrapped component’s re-rendering.
+store 仍会根据新的根 state 对象进行更新，但由于根 state 对象仍然是同一个对象，绑定于 Redux 的类库（例如 React-Redux）不会觉察到 state 的变化，于是不会触发包装组件的重新渲染。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Recipes: Immutable Update Patterns](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
-- [Troubleshooting: Never mutate reducer arguments](http://redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
+**文档**
+- [技巧: 不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
+- [排错: 永远不要直接修改 reducer 的参数](http://cn.redux.js.org/docs/Troubleshooting.html#never-mutate-reducer-arguments)
 
 
 <a id="shallow-checking-problems-with-react-redux"></a>
-### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
-If a Redux reducer directly mutates, and returns, the state object passed into it, the values of the root state object will change, but the object itself will not.
+### 为什么 reducer 直接修改 state 会导致 React-Redux 不重新渲染包装的组件？
+如果某个 Redux 的 reducer 直接修改并返回了传给它的 state 对象，那么根 state 对象的值的确会改变，但这个对象自身的引用没有变化。
 
-Because React-Redux performs a shallow check on the root state object to determine if its wrapped components need re-rendering or not, it will not be able to detect the state mutation, and so will not trigger a re-rendering.
+React-Redux 对根 state 对象进行浅比较，来决定是否要重新渲染包装的组件，因此它不会检测到 state 的变化，也就不会触发重新渲染。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
+**文档**
 - [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)
 
 
 <a id="shallow-checking-stops-component-re-rendering"></a>
-### Why does a selector mutating and returning a persistent object  to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?
-If one of the values of the props object returned from `mapStateToProps` is an object that persists across calls to `connect` (such as, potentially, the root state object), yet is directly mutated and returned by a selector function,  React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.
+### 为什么 `mapStateToProps` 的 selector 直接修改并返回一个对象时，React-Redux 包装的组件不会重新渲染？
+如果 `mapStateToProps` 返回的 props 对象的值当中，有一个每次调用 `connect` 时都不会发生改变的对象（比如，有可能是根 state 对象），同时还是一个 selector 函数直接改变并返回的对象，那么 React-Redux 就不会检测到这次改变，也就不会触发包装的组件的重新渲染。
 
-As we’ve seen, the values in the mutable object returned by the selector function may have changed, but the object itself has not, and shallow equality checking only compares the objects themselves, not their values.
+我们已经知道了，selector 函数返回的可变对象中的值也许改变了，但这个对象本身没有。浅比较只会检查两个对象自身，而不会对比它们的值。
 
-For example, the following `mapStateToProps` function will  never trigger a re-render:
+比如说，下例中 `mapStateToProps` 函数永远不会触发重新渲染：
 
 ```js
-// State object held in the Redux store
+// store 中的 state 对象
 const state = {
   user: {
     accessCount: 0,
@@ -298,7 +294,7 @@ const state = {
   }
 }
 
-// Selector function
+// selector 函数
 const getUser = state => {
   ++state.user.accessCount // mutate the state object
   return state
@@ -306,10 +302,9 @@ const getUser = state => {
 
 // mapStateToProps
 const mapStateToProps = state => ({
-  // The object returned from getUser() is always
-  // the same object, so this wrapped
-  // component will never re-render, even though it's been
-  // mutated
+  // getUser() 返回的对象总是同一个对象，
+  // 所以这个包装的组件永远不会重新渲染，
+  // 尽管它已经被改变了
   userRecord: getUser(state)
 })
 
@@ -320,60 +315,57 @@ a.userRecord === b.userRecord
 //> true
 ```
 
-Note that, conversely, if an _immutable_ object is used, the [component may re-render when it should not](#immutability-issues-with-react-redux).
+注意，与之相反，如果使用了一个**不可变**对象，组件可能会在不该渲染时重新渲染。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [Practical Redux, Part 6: Connected Lists, Forms, and Performance](http://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 
-**Discussions**
+**讨论**
 - [#1948: Is getMappedItems an anti-pattern in mapStateToProps?](https://github.com/reactjs/redux/issues/1948)
 
 
 <a id="immutability-enables-shallow-checking"></a>
-### How does immutability enable a shallow check to detect object mutations?
-If an object is immutable, any changes that need to be made to it within a function must be made to a _copy_ of the object.
+### “不变性”如何使得浅比较检测到对象变化的？
+如果某个对象是不可变的，那么一个函数需要对它进行改变时，就只能改变它的 **拷贝**。
 
-This mutated copy is a _separate_ object from that passed into the function, and so when it is returned, a shallow check will identify it as being a different object from that passed in, and so will fail.
+这个被改变了的拷贝与原先传入该函数的对象**不是同一个对象**，于是当它被返回时，浅比较检查就会知道它与传入的对象不同，于是就判断为不相等。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 
 <a id="immutability-issues-with-redux"></a>
-### How can immutability in your reducers cause components to render unnecessarily?
-You cannot mutate an immutable object; instead, you must mutate a copy of it, leaving the original intact.
+### reducer 中的不变性是如何导致组件非必要渲染的？
+你不能直接修改某个对象，你只能修改它的拷贝，并保持原对象不变。
 
-That’s perfectly OK when you mutate the copy, but in the context of a reducer, if you return a copy that _hasn’t_ been mutated, Redux’s `combineReducers` function will still think that the state needs to be updated, as you're returning an entirely different object from the state slice object that was passed in.
+修改拷贝完全不会造成问题。但在一个 reducer 里，如果你返回了一个**没有进行**任何修改、与原对象一模一样的拷贝，Redux 的 `combineReducers` 函数仍会认为 state 需要更新，因为你返回了一个与传入的 state 对象完全不同的对象。
 
-`combineReducers` will then return this new root state object to the store. The new object will have the same values as the current root state object, but because it's a different object, it will cause the store to be updated, which will ultimately cause all connected components to be re-rendered unnecessarily.
+`combineReducers` 会把这个新的根 state 对象返回给 store。新的对象与原有的根 state 对象的值是相同的，但由于对象本身不同，会导致 store 更新，从而所有已连接的组件都进行了毫无必要的重新渲染。
 
-To prevent this from happening, you must *always return the state slice object that’s passed into a reducer if the reducer does not mutate the state.*
+为了防止这种现象的发生，**当 reducer 没有改变 state 时，你必须直接返回的传入的 state 层。**
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.5hmnwygsy)
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 
 
 <a id="immutability-issues-with-react-redux"></a>
-###  How can immutability in `mapStateToProps` cause components to render unnecessarily?
-Certain immutable operations, such as an Array filter, will always return a new object, even if the values themselves have not changed.
+### mapStateToProps 中的不变性是如何导致组件非必要渲染的？
+某些特定的不可变操作，比如数组的 filter，总会返回一个新的对象，即使这些值没有改变。
 
-If such an operation is used as a selector function in `mapStateToProps`, the shallow equality check that React-Redux performs on each value
-in the props object that’s returned will always fail, as the selector is returning a new object each time.
+如果在 `mapStateToProps` 的 selector 函数中使用了这样的操作，那么 React-Redux 使用浅比较检查返回的 props 的值时就会认为不相等，因为 selector 每次都返回了一个新的对象。
 
-As such, even though the values of that new object have not changed, the wrapped component will always be re-rendered,
-
-For example, the following  will always trigger a re-render:
+这样一来，即使新的对象的所有值都没有改变，包装的组件也会重新渲染。
 
 ```js
-// A JavaScript array's 'filter' method treats the array as immutable,
-// and returns a filtered copy of the array.
+// JavaScript 数组的“filter”方法认为该数组是不可变的
+// 于是返回数组被 filter 后的拷贝
 const getVisibleTodos = todos => todos.filter(t => !t.completed)
 
 const state = {
@@ -390,15 +382,14 @@ const state = {
 }
 
 const mapStateToProps = state => ({
-  // getVisibleTodos() always returns a new array, and so the
-  // 'visibleToDos' prop will always reference a different array,
-  // causing the wrapped component to re-render, even if the array's
-  // values haven't changed
+  // getVisibleTodos() 总会返回新的数组，所以
+  // “visibleToDos” 属性一直会指向不同的数组，
+  // 结果是即使数组的值没有改变，包装的组件也会重新渲染
   visibleToDos: getVisibleTodos(state.todos)
 })
 
 const a = mapStateToProps(state)
-//  Call mapStateToProps(state) again with exactly the same arguments
+// 用完全相同的参数再次调用 mapStateToProps(state)
 const b = mapStateToProps(state)
 
 a.visibleToDos
@@ -412,56 +403,55 @@ a.visibleToDos === b.visibleToDos
 ```
 
 
-Note that, conversely, if the values in your props object refer to mutable objects, [your component may not render when it should](#shallow-checking-stops-component-re-rendering).
+注意，与之相反，如果你的 props 对象中的值是可变对象，[组件可能在需要渲染时也不渲染](#shallow-checking-stops-component-re-rendering)。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.b8bpx1ncj)
 - [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
 - [ImmutableJS: worth the price?](https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4#.a3alci2g8)
 
 
 <a id="do-i-have-to-use-immutable-js"></a>
-## What approaches are there for handling data immutability? Do I have to use Immutable.JS?
-You do not need to use Immutable.JS with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
+## 处理不可变数据都有哪些途径？一定要用 Immutable.JS吗？
+你不一定要与 Redux 一起使用 Immutable.JS。原生 JavaScript，如果书写得当，是足以达到所需的不变性，不需要使用强制不可变的类库。
 
-However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immutable.JS can significantly improve the reliability of your app, and make your app’s development much easier.
+但是，在 JavaScript 中保证不变性是很难的。不小心直接修改了一个对象反而很简单，这就会导致你的应用中出现极难以调试的 bug。因此，使用一个提供不可变性的类库（比如 Immutable.JS）会显著提高你的应用的可靠性，而且让你的开发更为便捷
 
-#### Further Information
+#### 更多信息
 
-**Discussions**
+**讨论**
 - [#1185: Question: Should I use immutable data structures?](https://github.com/reactjs/redux/issues/1422)
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
 
-
 <a id="issues-with-es6-for-immutable-ops"></a>
-## What are the issues with using plain JavaScript for immutable operations?
-JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.
+## 原生 JavaScript 进行不可变操作会遇到哪些问题？
+JavaSctipt 从不是为了确保不可变性而设计的。所以，有几点事项是你需要特别留意的，如果你准备在 Redux 应用中使用不可变操作的话。
 
-### Accidental Object Mutation
-With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new *reference* to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
+### 不小心直接修改了对象
+使用 JavaScript 时，你很容易一不小心直接修改了一个对象（比如 Redux 中的 state 树），甚至自己都没意识到。比如说，更新了多层嵌套中的属性、给一个对象创建了一个**引用**而不是创建一个新的对象、或者用了浅拷贝而不是深拷贝，这些都会导致非故意的对象修改，甚至经验丰富的 JavaScript 程序员都会犯此错误。
 
-To avoid these issues, ensure you follow the recommended [immutable update patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html).
+为了避免这些问题，请确保你遵守了推荐的 [不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)。
 
-### Verbose Code
-Updating complex nested state trees can lead to verbose code that is tedious to write and difficult to debug.
+### 重复代码
+更新复杂的多级嵌套的 state 树会导致重复代码的出现，这样的代码不但写起来无趣，维护起来也很困难。
 
-### Poor Performance
-Operating on JavaScript objects and arrays in an immutable way can be slow, particularly as your state tree grows larger.
+### 性能问题
+用不可变的方式操作 JavaScript 的对象和数组可能会很慢，特别是你的 state 树很大的时候。
 
-Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
+记住，想要改变一个不可变对象，你必须只修改其**拷贝**，而拷贝庞大的对象可能会很慢，因为每一个属性都需要拷贝。
 
-In contrast, immutable libraries such as Immutable.JS can employ sophisticated optimization techniques such as [structural sharing](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015) , which effectively returns a new object that reuses much of the existing object being copied from.
+不过，像 Immutable.JS 这样提供不可变性的类库会进行复杂精妙的优化，比如 [结构共享](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)），它能够在返回新对象的同时复用原有对象的结构，从而更加高效地实现拷贝。
 
-For copying very large objects, [plain JavaScript can be over 100 times slower](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi) than an optimized immutable library.
+对于非常庞大的对象，原生 JavaScript 比经过优化的不可变类库 [慢 100 倍](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.z1g1ofrsi)。
 
-#### Further Information
+#### 更多信息
 
-**Documentation**
-- [Immutable Update Patterns for ES6](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
+**文档**
+- [不可变更新模式](http://cn.redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
 
-**Articles**
+**文章**
 - [Immutable.js, persistent data structures and structural sharing](https://medium.com/@dtinth/immutable-js-persistent-data-structures-and-structural-sharing-6d163fbd73d2#.a2jimoiaf)
 - [A deep dive into Clojure’s data structures](http://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
 - [Introduction to Immutable.js and Functional Programming Concepts](https://auth0.com/blog/intro-to-immutable-js/)
