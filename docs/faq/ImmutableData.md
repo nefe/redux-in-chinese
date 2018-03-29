@@ -3,17 +3,17 @@
 ## 目录
 - [不变性（immutability）的好处有哪些？](#benefits-of-immutability)
 - [为什么 Redux 需要不变性？](#why-is-immutability-required)
-- [为什么 Redux 对浅层比较的使用要求不变性？](#redux-shallow-checking-requires-immutability)
-	- [浅层比较和深层比较有何区别？](#shallow-and-deep-equality-checking)
-	- [Redux 是如何使用浅对比的？](#how-redux-uses-shallow-checking)
-	- [`combineReducers` 是如何进行浅层检查的？](#how-combine-reducers-uses-shallow-checking)
-	- [React-Redux 是如何使用浅层检查的？](#how-react-redux-uses-shallow-checking)
-	- [React-Redux 是如何使用浅对比来决定组件是否需要重新渲染的？](#how-react-redux-determines-need-for-re-rendering)
-	- [为什么在使用可变对象时不能用浅对比？](#no-shallow-equality-checking-with-mutable-objects)
-	- [使用浅对比检查一个可变对象对 Redux 会造成问题吗？](#shallow-checking-problems-with-redux)
+- [为什么 Redux 对浅比较的使用要求不变性？](#redux-shallow-checking-requires-immutability)
+	- [浅比较和深比较有何区别？](#shallow-and-deep-equality-checking)
+	- [Redux 是如何使用浅比较的？](#how-redux-uses-shallow-checking)
+	- [`combineReducers` 是如何进行浅比较的？](#how-combine-reducers-uses-shallow-checking)
+	- [React-Redux 是如何使用浅比较拗的？](#how-react-redux-uses-shallow-checking)
+	- [React-Redux 是如何使用浅比较来决定组件是否需要重新渲染的？](#how-react-redux-determines-need-for-re-rendering)
+	- [为什么在使用可变对象时不能用浅比较？](#no-shallow-equality-checking-with-mutable-objects)
+	- [使用浅比较检查一个可变对象对 Redux 会造成问题吗？](#shallow-checking-problems-with-redux)
   - [为什么 reducer 直接修改 state 会导致 React-Redux 不重新渲染包装的组件？](#shallow-checking-problems-with-react-redux)
 	- [为什么 `mapStateToProps` 的 selector 直接修改并返回一个对象时，React-Redux 包装的组件不会重新渲染？](#shallow-checking-stops-component-re-rendering)
-	- [“不变性”如何使得浅对比检测到对象变化的？](#immutability-enables-shallow-checking)
+	- [“不变性”如何使得浅比较检测到对象变化的？](#immutability-enables-shallow-checking)
 - [reducer 中的不变性是如何导致组件非必要渲染的？](#immutability-issues-with-redux)
 - [mapStateToProps 中的不变性是如何导致组件非必要渲染的？](#immutability-issues-with-react-redux)
 - [处理不可变数据都有哪些途径？一定要用 Immutable.JS吗？](#do-i-have-to-use-immutable-js)
@@ -24,7 +24,7 @@
 ## 不变性的好处有哪些
 不变性可以给你的应用带来性能提升，也可以带来更简单的编程和调试体验。这是因为，与那些在整个应用中可被随意篡改的数据相比，永远不变的数据更容易追踪，推导。
 
-特别来说，在 Web 应用中对于不变性的使用，可以让成熟的变化检测机制得以简单快速的实现。这保证了代价高昂的 DOM 更新过程只在真正需要的时候进行（这也是 React 性能方面优于其他类库的基石）。
+特别来说，在 Web 应用中对于不变性的使用，可以让复杂的变化检测机制得以简单快速的实现。从而确保代价高昂的 DOM 更新过程只在真正需要的时候进行（这也是 React 性能方面优于其他类库的基石）。
 
 #### 更多信息
 
@@ -38,10 +38,10 @@
 
 <a id="why-is-immutability-required"></a>
 ## 为什么 Redux 需要不变性？
-- Redux 和 React-Redux 都使用了[浅对比](#shallow-and-deep-equality-checking)。具体来说：
-  - Redux 的 `combineReducers` 调用 reducer 造成引用发生变化时，[进行浅对比](#how-redux-uses-shallow-checking)
-  - React-Redux 的 `connect` 方法生成的组件[与根 state 进行浅对比](#how-react-redux-uses-shallow-checking)，以及 `mapStateToProps` 函数的返回值，来判断被包裹的组件是否需要重新渲染。 
-以上[浅对比需要不变性](#redux-shallow-checking-requires-immutability)才能正常工作
+- Redux 和 React-Redux 都使用了[浅比较](#shallow-and-deep-equality-checking)。具体来说：
+  - Redux 的 `combineReducers` 方法 [浅比较](#how-redux-uses-shallow-checking) 它调用的 reducer 的引用是否发生变化。
+  - React-Redux 的 `connect` 方法生成的组件通过 [浅比较根 state 的引用变化](#how-react-redux-uses-shallow-checking) 与 `mapStateToProps` 函数的返回值，来判断包装的组件是否需要重新渲染。 
+以上[浅比较需要不变性](#redux-shallow-checking-requires-immutability)才能正常工作
 - 不可变数据的管理极大地提升了数据处理的安全性。
 - 进行时间旅行调试要求 reducer 是一个没有副作用的纯函数，以此在不同 state 之间正确的移动。
 
@@ -55,17 +55,17 @@
 
 
 <a id="redux-shallow-checking-requires-immutability"></a>
-## 为什么 Redux 对浅对比的使用要求不变性？
-Redux 对浅对比的使用要求不变性，以保证任何连接的组件能被正确渲染。要了解原因，我们需要理解 Javascript 中浅比较和深比较的区别。
+## 为什么 Redux 对浅比较的使用要求不变性？
+Redux 对浅比较的使用要求不变性，以保证任何连接的组件能被正确渲染。要了解原因，我们需要理解 Javascript 中浅比较和深比较的区别。
 
 
 <a id="shallow-and-deep-equality-checking"></a>
-### 浅对比和深对比有何区别？
-浅对比（也被称为 **引用相等**）只检查两个不同 **变量** 是否为同一对象的引用；与之相反，深对比（也被称为 **原值相等**）必须检查两个对象所有属性的 **值** 是否相等。
+### 浅比较和深比较有何区别？
+浅比较（也被称为 **引用相等**）只检查两个不同 **变量** 是否为同一对象的引用；与之相反，深比较（也被称为 **原值相等**）必须检查两个对象所有属性的 **值** 是否相等。
 
-所以，浅对比就是简单的（且快速的）`a === b`，而深对比需要以递归的方式遍历两个对象的所有属性，每一个循环中对比各个属性的值。
+所以，浅比较就是简单的（且快速的）`a === b`，而深比较需要以递归的方式遍历两个对象的所有属性，在每一个循环中对比各个属性的值。
 
-正是因为性能考虑，Redux 使用浅对比。
+正是因为性能考虑，Redux 使用浅比较。
 
 #### 更多信息
 
@@ -73,8 +73,8 @@ Redux 对浅对比的使用要求不变性，以保证任何连接的组件能�
 - [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 
 <a id="how-redux-uses-shallow-checking"></a>
-### Redux 是如何使用浅对比的？
-Redux 在 `combineReducers` 函数中使用浅层检查来返回根 state 对象（root state object）经过修改的拷贝，在没有修改时，返回当前根 state 对象。
+### Redux 是如何使用浅比较的？
+Redux 在 `combineReducers` 函数中使用浅比较来检查根 state 对象（root state object）是否发生变化，有修改时，返回经过修改的根 state 对象的拷贝，没有修改时，返回当前的根 state 对象。
 
 #### 更多信息
 
@@ -83,7 +83,7 @@ Redux 在 `combineReducers` 函数中使用浅层检查来返回根 state 对象
 
 
 <a id="how-combine-reducers-uses-shallow-checking"></a>
-#### `combineReducers` 是如何进行浅层检查的？
+#### `combineReducers` 是如何进行浅比较的？
 Redux 中 store [推荐的结构](http://cn.redux.js.org/docs/faq/Reducers.html#reducers-share-state) 是将 state 对象按键值切分成 “层”（slice） 或者 “域”（domain），并提供独立的 reducer 方法管理各自的数据层。
 
 `combineReducers` 接受 `reducers` 参数简化了该模型。`reducers` 参数是一组键值对组成的哈希表，其中键是每个数据层的名字，而相应的值是响应该数据层的 reducer 函数。
@@ -102,9 +102,9 @@ combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
 - 调用相应的 reducer 并把该数据层传递给它
 - 为 reducer 返回的可能发生了变化的 state 层创建一个引用。
 
-在循环过程中，对于每一个 reducer 返回的 state 层，`combineReducers` 都会根据其创建一个新的 state 对象。这个新的 state 对象与当前 state 对象可能有区别，也可能没有区别。于是在这里 `combineReducers` 使用浅层检查来判断 state 到底有没有发生变化。
+在循环过程中，对于每一个 reducer 返回的 state 层，`combineReducers` 都会根据其创建一个新的 state 对象。这个新的 state 对象与当前 state 对象可能有区别，也可能没有区别。于是在这里 `combineReducers` 使用浅比较来判断 state 到底有没有发生变化。
 
-特别来说，在循环的每一阶段，`combineReducers` 会浅对比当前 state 层与 reducer 返回的 state 层。如果 reducer 返回了新的对象，它们就不是浅相等的，而且 `combineReducers` 会把 `hasChanged` 设置为 true。
+特别来说，在循环的每一阶段，`combineReducers` 会浅比较当前 state 层与 reducer 返回的 state 层。如果 reducer 返回了新的对象，它们就不是浅相等的，而且 `combineReducers` 会把 `hasChanged` 设置为 true。
 
 循环结束后，`combineReducers` 会检查 `hasChanged` 的值，如果为 true，就会返回新构建的 state 对象。如果为 false，就会返回**当前**state 对象。
 
@@ -121,16 +121,16 @@ combineReducers({ todos: myTodosReducer, counter: myCounterReducer })
 
 
 <a id="how-react-redux-uses-shallow-checking"></a>
-### React-Redux 是如何使用浅对比的？
-React-Redux 使用浅对比来决定它包裹的组件是否需要重新渲染。
+### React-Redux 是如何使用浅比较的？
+React-Redux 使用浅比较来决定它包装的组件是否需要重新渲染。
 
-首先 React-Redux 假设被包裹的组件是一个“纯”（pure）组件，即[给定相同的 props 和 state，这个组件会返回相同的结果](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)。
+首先 React-Redux 假设包装的组件是一个“纯”（pure）组件，即[给定相同的 props 和 state，这个组件会返回相同的结果](https://github.com/reactjs/react-redux/blob/f4d55840a14601c3a5bdc0c3d741fc5753e87f66/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux)。
 
-做出这样的假设后，React-Redux 就只需检查根 state 对象或 `mapStateToProps` 的返回值是否改变。如果没变，被包裹的组件就无需重新渲染。
+做出这样的假设后，React-Redux 就只需检查根 state 对象或 `mapStateToProps` 的返回值是否改变。如果没变，包装的组件就无需重新渲染。
 
 为了检测改变是否发生，React-Redux 会保留一个对根 state 对象的引用，还会保留 `mapStateToProps` 返回的 props 对象的**每个值**的引用。
 
-最后 React-Redux 会对根 state 对象的引用与传递给它的 state 对象进行浅对比，还会对每个 props 对象的每个值的引用与 `mapStateToProps` 返回的那些值进行一系列浅对比。
+最后 React-Redux 会对根 state 对象的引用与传递给它的 state 对象进行浅比较，还会对每个 props 对象的每个值的引用与 `mapStateToProps` 返回的那些值进行一系列浅比较。
 
 #### 更多信息
 
@@ -143,8 +143,8 @@ React-Redux 使用浅对比来决定它包裹的组件是否需要重新渲染�
 
 
 
-### 为什么 React-Redux 对 `mapStateToProps` 返回的 props 对象的每个值进行浅对比？
-对 props 对象来说，React-Redux 会对其中的每个**值**进行浅对比，而不是 props 对象本身。
+### 为什么 React-Redux 对 `mapStateToProps` 返回的 props 对象的每个值进行浅比较？
+对 props 对象来说，React-Redux 会对其中的每个**值**进行浅比较，而不是 props 对象本身。
 
 它这样做的原因是：props 对象实际上是一组由属性名和其值（或用于取值或生成值的 selector 函数）的键值对组成的。请看下例：
 
@@ -168,12 +168,12 @@ export default connect(mapStateToProps)(TodoApp)
 
 
 <a id="how-react-redux-determines-need-for-re-rendering"></a>
-### React-Redux 是如何使用浅对比来决定组件是否需要重新渲染的？
-每次调用 React-Redux 提供的 `connect` 函数时，它储存的根 state 对象的引用，与当前传递给 store 的根 state 对象之间，会进行浅对比。如果相等，说明根 state 对象没有变化，也就无需重新渲染组件，甚至无需调用 `mapStateToProps`。
+### React-Redux 是如何使用浅比较来决定组件是否需要重新渲染的？
+每次调用 React-Redux 提供的 `connect` 函数时，它储存的根 state 对象的引用，与当前传递给 store 的根 state 对象之间，会进行浅比较。如果相等，说明根 state 对象没有变化，也就无需重新渲染组件，甚至无需调用 `mapStateToProps`。
 
-如果发现其不相等，说明根 state 对象**已经**被更新了，这时 `connect` 会调用 `mapStateToProps` 来查看传给被包裹的组件的 props 是否被更新。
+如果发现其不相等，说明根 state 对象**已经**被更新了，这时 `connect` 会调用 `mapStateToProps` 来查看传给包装的组件的 props 是否被更新。
 
-它会对该对象的每一个值各自进行浅对比，如果发现其中有不相等的才会触发重新渲染。
+它会对该对象的每一个值各自进行浅比较，如果发现其中有不相等的才会触发重新渲染。
 
 在下例中，调用 `connect` 后，如果 `state.todos` 以及 `getVisibleTodos()` 的返回值没有改变，组件就不会重新渲染。
 
@@ -220,8 +220,8 @@ export default connect(mapStateToProps)(TodoApp)
 
 
 <a id="no-shallow-equality-checking-with-mutable-objects"></a>
-### 为什么在使用可变对象时不能用浅对比？
-如果一个函数改变了传给它的可变对象的值，这时就不能使用浅对比。
+### 为什么在使用可变对象时不能用浅比较？
+如果一个函数改变了传给它的可变对象的值，这时就不能使用浅比较。
 
 这是因为对同一个对象的两个引用**总是**相同的，不管此对象的值有没有改变，它们都是同一个对象的引用。因此，以下这段代码总会返回 true：
 
@@ -238,7 +238,7 @@ param === returnVal
 //> true
 ```
 
-`param` 与 `returnValue` 的浅对比只是检查了这两个对象是否为相同对象的引用，而这段代码中总是（相同的对象的引用）。`mutateObj()` 也许会改变 `obj`，但它仍是传入的对象的引用。浅对比根本无法判断 `mutateObj` 改变了它的值。
+`param` 与 `returnValue` 的浅比较只是检查了这两个对象是否为相同对象的引用，而这段代码中总是（相同的对象的引用）。`mutateObj()` 也许会改变 `obj`，但它仍是传入的对象的引用。浅比较根本无法判断 `mutateObj` 改变了它的值。
 
 #### 更多信息
 
@@ -247,16 +247,16 @@ param === returnVal
 
 
 <a id="shallow-checking-problems-with-redux"></a>
-### 使用浅对比检查一个可变对象对 Redux 会造成问题吗？
-对于 Redux 来说，使用浅对比来检查可变对象不会造成问题，但[当你使用依赖于 store 的类库时（例如 React-Redux），就会造成问题](#shallow-checking-problems-with-react-redux)。
+### 使用浅比较检查一个可变对象对 Redux 会造成问题吗？
+对于 Redux 来说，使用浅比较来检查可变对象不会造成问题，但[当你使用依赖于 store 的类库时（例如 React-Redux），就会造成问题](#shallow-checking-problems-with-react-redux)。
 
 特别是，如果 `combineReducers` 传给某个 reducer 的 state 层是一个可变对象，reducer 就可以直接修改数据并返回。
 
-这样一来，浅对比判断 `combineReducers` 总会相等。因为尽管 reducer 返回的 state 层可能被修改了，但这个对象本身没有，它仍是传给 reducer 的那个对象。
+这样一来，浅比较判断 `combineReducers` 总会相等。因为尽管 reducer 返回的 state 层可能被修改了，但这个对象本身没有，它仍是传给 reducer 的那个对象。
 
 从而，尽管 state 发生了变化，`combineReducers` 不会改变 `hasChanged` 的值。如果所有 reducer 都没有返回新的 state 层，`hasChange` 就会始终是 false，于是 `combineReducers` 就返回**现有的**根 state 对象。
 
-store 仍会根据新的根 state 对象进行更新，但由于根 state 对象仍然是同一个对象，绑定于 Redux 的类库（例如 React-Redux）不会觉察到 state 的变化，于是不会触发被包裹组件的重新渲染。
+store 仍会根据新的根 state 对象进行更新，但由于根 state 对象仍然是同一个对象，绑定于 Redux 的类库（例如 React-Redux）不会觉察到 state 的变化，于是不会触发包装组件的重新渲染。
 
 #### 更多信息
 
@@ -267,9 +267,9 @@ store 仍会根据新的根 state 对象进行更新，但由于根 state 对象
 
 <a id="shallow-checking-problems-with-react-redux"></a>
 ### 为什么 reducer 直接修改 state 会导致 React-Redux 不重新渲染包装的组件？
-如果某个 Redux 的 reducer 直接修改并返回了传给它的 state 对象，那么根 state 对象的值改变了，但对象本身没有。
+如果某个 Redux 的 reducer 直接修改并返回了传给它的 state 对象，那么根 state 对象的值的确会改变，但这个对象自身的引用没有变化。
 
-React-Redux 对根 state 对象进行浅对比，来决定是否要重新渲染包装的组件，因此它不会检测到 state 的变化，也就不会触发重新渲染。
+React-Redux 对根 state 对象进行浅比较，来决定是否要重新渲染包装的组件，因此它不会检测到 state 的变化，也就不会触发重新渲染。
 
 #### 更多信息
 
@@ -281,7 +281,7 @@ React-Redux 对根 state 对象进行浅对比，来决定是否要重新渲染�
 ### 为什么 `mapStateToProps` 的 selector 直接修改并返回一个对象时，React-Redux 包装的组件不会重新渲染？
 如果 `mapStateToProps` 返回的 props 对象的值当中，有一个每次调用 `connect` 时都不会发生改变的对象（比如，有可能是根 state 对象），同时还是一个 selector 函数直接改变并返回的对象，那么 React-Redux 就不会检测到这次改变，也就不会触发包装的组件的重新渲染。
 
-我们已经知道了，selector 函数返回的可变对象中的值也许改变了，但这个对象本身没有。浅对比只会检查两个对象自身，而不会对比它们的值。
+我们已经知道了，selector 函数返回的可变对象中的值也许改变了，但这个对象本身没有。浅比较只会检查两个对象自身，而不会对比它们的值。
 
 比如说，下例中 `mapStateToProps` 函数永远不会触发重新渲染：
 
@@ -327,10 +327,10 @@ a.userRecord === b.userRecord
 
 
 <a id="immutability-enables-shallow-checking"></a>
-### “不变性”如何使得浅对比检测到对象变化的？
+### “不变性”如何使得浅比较检测到对象变化的？
 如果某个对象是不可变的，那么一个函数需要对它进行改变时，就只能改变它的 **拷贝**。
 
-这个被改变了的拷贝与原先传入该函数的对象**不是同一个对象**，于是当它被返回时，浅对比检查就会知道它与传入的对象不同，于是就判断为不相等。
+这个被改变了的拷贝与原先传入该函数的对象**不是同一个对象**，于是当它被返回时，浅比较检查就会知道它与传入的对象不同，于是就判断为不相等。
 
 #### 更多信息
 
@@ -359,7 +359,7 @@ a.userRecord === b.userRecord
 ### mapStateToProps 中的不变性是如何导致组件非必要渲染的？
 某些特定的不可变操作，比如数组的 filter，总会返回一个新的对象，即使这些值没有改变。
 
-如果在 `mapStateToProps` 的 selector 函数中使用了这样的操作，那么 React-Redux 使用浅对比检查返回的 props 的值时就会认为不相等，因为 selector 每次都返回了一个新的对象。
+如果在 `mapStateToProps` 的 selector 函数中使用了这样的操作，那么 React-Redux 使用浅比较检查返回的 props 的值时就会认为不相等，因为 selector 每次都返回了一个新的对象。
 
 这样一来，即使新的对象的所有值都没有改变，包装的组件也会重新渲染。
 
