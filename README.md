@@ -1,4 +1,4 @@
-# [Redux 中文文档](http://github.com/camsong/redux-in-chinese) [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# [Redux 中文文档](http://github.com/camsong/redux-in-chinese) [![Backers on Open Collective](https://opencollective.com/redux-in-chinese/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/redux-in-chinese/sponsors/badge.svg)](#sponsors) [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60'>
 
@@ -215,3 +215,33 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cai Huanyu](https://github.com/Darmody)
 
 **本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)，欢迎你来一起完善**
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/redux-in-chinese/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/redux-in-chinese#backer)]
+
+<a href="https://opencollective.com/redux-in-chinese#backers" target="_blank"><img src="https://opencollective.com/redux-in-chinese/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/redux-in-chinese#sponsor)]
+
+<a href="https://opencollective.com/redux-in-chinese/sponsor/0/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/1/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/2/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/3/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/4/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/5/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/6/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/7/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/8/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/redux-in-chinese/sponsor/9/website" target="_blank"><img src="https://opencollective.com/redux-in-chinese/sponsor/9/avatar.svg"></a>
+
+

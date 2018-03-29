@@ -6,7 +6,8 @@
     "build": "gitbook build -g camsong/redux-in-chinese",
     "watch": "gitbook serve",
     "publish": "npm run clean && npm run build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:camsong/redux-in-chinese gh-pages --force",
-    "offline": "gitbook pdf . offline/redux-in-chinese.pdf && gitbook epub . offline/redux-in-chinese.epub && gitbook mobi . offline/redux-in-chinese.mobi"
+    "offline": "gitbook pdf . offline/redux-in-chinese.pdf && gitbook epub . offline/redux-in-chinese.epub && gitbook mobi . offline/redux-in-chinese.mobi",
+    "postinstall": "opencollective postinstall"
   },
   "repository": {
     "type": "git",
@@ -38,5 +39,12 @@
     "gitbook-plugin-ga": "^1.0.0",
     "gitbook-plugin-prism": "^2.3.0",
     "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/redux-in-chinese"
   }
 }
