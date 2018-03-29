@@ -1,6 +1,6 @@
 # 使用对象展开运算符（Object Spread Operator）
 
-从不直接修改 state 是 Redux 的核心理念之一, 所以你会发现自己总是在使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 创建对象拷贝, 而拷贝中会包含新创建或更新过的属性值。在下面的 `todoApp` 示例中, `Object.assign()` 将会返回一个新的
+因为不直接修改 state 是 Redux 的核心理念之一, 所以你会发现自己总是在使用 [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 创建对象拷贝, 而拷贝中会包含新创建或更新过的属性值。在下面的 `todoApp` 示例中, `Object.assign()` 将会返回一个新的
 `state` 对象, 而其中的 `visibilityFilter` 属性被更新了:
 
 ``` javascript
