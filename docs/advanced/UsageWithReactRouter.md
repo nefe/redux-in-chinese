@@ -5,9 +5,9 @@ Redux 和 React Router 将分别成为你数据和 URL 的事实来源（the sou
 在大多数情况下， **最好** 将他们分开，除非你需要时光旅行和回放 action 来触发 URL 改变。
 
 ## 安装 React Router
-可以使用 npm 来安装 `React Router`。本教程基于 `react-router@^2.7.0` 。
+可以使用 npm 来安装 `react-router-dom`。本教程基于 `react-router-dom@^4.1.1` 。
 
-`npm install --save react-router`
+`npm install --save react-router-dom`
 
 ## 配置后备(fallback) URL
 在集成 React Router 之前，我们需要配置一下我们的开发服务器。
@@ -43,7 +43,7 @@ devServer: {
 首先，我们需要从 React Router 中导入 `<Router />` 和 `<Route />`。代码如下：
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 ```
 
 在 React 应用中，通常你会用 `<Router />` 包裹 `<Route />`。
@@ -68,7 +68,7 @@ const Root = () => (
 import { Provider } from 'react-redux';
 ```
 
-我们将用 `<Provider />` 包裹 `<Router />`，以便于路由处理器可以[访问 `store`](../basics/UsageWithReact.html#passing-the-store)（暂时未找到相关中文翻译，译者注）。
+我们将用 `<Provider />` 包裹 `<Router />`，以便于路由处理器可以[访问 `store`](../basics/UsageWithReact.html#passing-the-store)。
 
 ```js
 const Root = ({ store }) => (
@@ -80,11 +80,11 @@ const Root = ({ store }) => (
 );
 ```
 
-现在，如果 URL 匹配到 '/'，将会渲染 `<App />` 组件。此外，我们将在 '/' 后面增加参数 `(:filter)`,
-当我们尝试从 URL 中读取参数 `(:filter)`，需要以下代码：
+现在，如果 URL 匹配到 '/'，将会渲染 `<App />` 组件。此外，我们将在 '/' 后面增加参数 `:filter?`,
+以便以后我们从 URL 中读取参数 `:filter`。
 
 ```js
-<Route path="/(:filter)" component={App} />
+<Route path="/:filter?" component={App} />
 ```
 
 也许你想将 '#' 从 URL 中移除（例如：`http://localhost:3000/#/?_k=4sbb0i`）。
@@ -94,63 +94,72 @@ const Root = ({ store }) => (
 import { Router, Route, browserHistory } from 'react-router';
 ```
 
-然后将它传给 `<Router />` 来移除 URL 中的 '#'：
-
-```js
-<Router history={browserHistory}>
-  <Route path="/(:filter)" component={App} />
-</Router>
-```
-
-只要你不需要兼容古老的浏览器，比如IE9，你都可以使用 `browserHistory`。
-
 #### `components/Root.js`
 
 ```js
-import React, { PropTypes } from 'react';
-import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
-import App from './App';
-
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import App from './App'
+ 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/(:filter)" component={App} />
+    <Router>
+      <Route path="/:filter?" component={App} />
     </Router>
   </Provider>
-);
-
+)
+ 
 Root.propTypes = {
-  store: PropTypes.object.isRequired,
-};
+  store: PropTypes.object.isRequired
+}
+ 
+export default Root
+```
 
-export default Root;
+我们需要重构 `index.js`  来把 `<Root />` 组件渲染到 DOM 上。
+#### `index.js`
+```js
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import todoApp from './reducers'
+import Root from './components/Root'
+
+const store = createStore(todoApp)
+
+render(
+  <Root store={store} />,
+  document.getElementById('root')
+)
 ```
 
 ## 通过 React Router 导航
 
-React Router 提供了 [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) 来实现导航功能。
-下面将举例演示。现在，修改我们的容器组件 `<FilterLink />` ，这样我们就可以使用 `<FilterLink />` 来改变 URL。你可以通过 `activeStyle` 属性来指定激活状态的样式。
+React Router 提供了 [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) 来实现导航功能。 如果你需要自定义样式，`react-router-dom` 提供了另一个可以自定义样式的特殊 `<Link />` 叫做 [`<NavLink />`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md)。 例如你可以通过 `activeStyle` 属性来指定激活状态的样式。
+
+在我们的示例中，我们可以在一个新的容器组件 `<FilterLink/>` 中 使用 `<NavLink/>` ，以便动态地更改URL。
 
 ### `containers/FilterLink.js`
 
 ```js
-import React from 'react';
-import { Link } from 'react-router';
-
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+ 
 const FilterLink = ({ filter, children }) => (
-  <Link
-    to={filter === 'all' ? '' : filter}
-    activeStyle={{
+  <NavLink
+    to={filter === 'SHOW_ALL' ? '/' : `/${ filter }`}
+    activeStyle={ {
       textDecoration: 'none',
       color: 'black'
     }}
   >
     {children}
-  </Link>
-);
-
-export default FilterLink;
+  </NavLink>
+)
+ 
+export default FilterLink
 ```
 
 ### `components/Footer.js`
@@ -158,29 +167,30 @@ export default FilterLink;
 ```js
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
-
+import { VisibilityFilters } from '../actions'
+ 
 const Footer = () => (
   <p>
     Show:
-    {" "}
-    <FilterLink filter="all">
+    {' '}
+    <FilterLink filter={VisibilityFilters.SHOW_ALL}>
       All
     </FilterLink>
-    {", "}
-    <FilterLink filter="active">
+    {', '}
+    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
       Active
     </FilterLink>
-    {", "}
-    <FilterLink filter="completed">
+    {', '}
+    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>
       Completed
     </FilterLink>
   </p>
-);
-
+)
+ 
 export default Footer
 ```
 
-这时，如果你点击 `<FilterLink />`，你将看到你的 URL 在 `'/complete'`，`'/active'`，`'/'` 间切换。
+这时，如果你点击 `<FilterLink />`，你将看到你的 URL 在 `'/SHOW_COMPLETED'`，`'/SHOW_ACTIVE'`，`'/'` 间切换。
 甚至还支持浏览的回退功能，可以从历史记录中找到之前的 URL 并回退。
 
 ## 从 URL 中读取数据
@@ -202,10 +212,10 @@ const mapStateToProps = (state, ownProps) => {
 目前我们还没有传递任何参数给 `<App />`，所以 `ownProps` 依然是一个空对象。
 为了能够根据 URL 来过滤我们的 todo 列表，我们需要向 `<VisibleTodoList />` 传递URL参数。
 
-之前我们写过：`<Route path="/(:filter)" component={App} />`，这使得可以在 `App` 中获取 `params` 的属性。
+之前我们写过：`<Route path="/:filter?" component={App} />`，这使得可以在 `App` 中获取 `params` 的属性。
 
 `params` 是一个包含 url 中所有指定参数的对象。
-*例如：如果我们访问 `localhost:3000/completed`，那么 `params` 将等价于 `{ filter: 'completed' }`。
+*例如：如果我们访问 `localhost:3000/SHOW_COMPLETED`，那么 `match.params` 将等价于 `{ filter: 'SHOW_COMPLETED' }`。
 现在，我们可以在 `<App />` 中读取 URL 参数了。*
 
 注意，我们将使用 [ES6 的解构赋值](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)来对 `params` 进行赋值，以此传递给 `<VisibleTodoList />`。
@@ -213,22 +223,20 @@ const mapStateToProps = (state, ownProps) => {
 ### `components/App.js`
 
 ```js
-const App = ({ params }) => {
+const App = ({ match: { params } }) => {
   return (
     <div>
       <AddTodo />
-      <VisibleTodoList
-        filter={params.filter || 'all'}
-      />
+      <VisibleTodoList filter={params.filter || 'SHOW_ALL'} />
       <Footer />
     </div>
-  );
-};
+  )
+}
 ```
 
 ## 下一步
 
-现在你已经知道如何实现基础的路由，接下来你可以阅读 [React Router API](https://github.com/reactjs/react-router/tree/master/docs) 来学习更多知识。
+现在你已经知道如何实现基础的路由，接下来你可以阅读 [React Router API](http://reacttraining.cn/) 来学习更多知识。
 
 >##### 其它路由库注意点
 
