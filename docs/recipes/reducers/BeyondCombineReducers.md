@@ -1,6 +1,6 @@
 # `combineReducers` 进阶
 
-Redux 引入了非常实用的 `combineReducers` 工具函数，但我们却粗暴地将它限制于单一的应用场景：把不同片段的 state 的更新工作委托给一个特定的 reducer，以此更新由普通的 JavaScript 对象构成的 state 树。它不解决 Immutable.js Maps 所构建的 state tree，也不会把其余部分的 state 作为额外参数传递给 reducer 或者排列 reducer 的调用顺序，它同样不关心 reducer 如何工作。
+Redux 引入了非常实用的 `combineReducers` 工具函数，但我们却有意将它限制于单一的应用场景：把不同片段的 state 的更新工作委托给一个特定的 reducer，以此更新由普通的 JavaScript 对象构成的 state 树。它不解决 Immutable.js Maps 所构建的 state tree，也不会把其余部分的 state 作为额外参数传递给 reducer 或者排列 reducer 的调用顺序，它同样不关心 reducer 如何工作。
 
 于是一个常见问题出现了，“`combineReducers` 如何处理这些应用场景呢？”通常给出的回答只是“你不能这么做，你可能需要通过其他方式解决”。**一旦你突破 `combineReducers` 的这种限制，就是创建各色各样的“自定义” reducer 的时候了**，不管是为了解决一次性场景的特殊 reducer，还是能够被广泛复用的 reducer。本文为几种典型的应用场景提供了建议，但你也可以自由发挥。
 
