@@ -4,7 +4,7 @@
 
 ### 我收到以下警告：Accessing PropTypes via the main React package is deprecated. Use the prop-types package from npm instead.  
 
-这个 warning 会在你使用 react 15.5.* 的时候出现。基本上，现上它只是一个 warning， 但是在 React16 当中可能会导致你的应用奔溃。现在 PropTypes 应该从 'prop-types' 包中 import，而不是在 react 包中 import。
+这个 warning 会在你使用 react 15.5.* 的时候出现。基本上，现上它只是一个 warning， 但是在 React16 当中可能会导致你的应用崩溃。现在 PropTypes 应该从 'prop-types' 包中 import，而不是从 react 包中 import。
 
 更新到最新版本的 react-redux。
 
