@@ -26,7 +26,7 @@
 
 >##### 注意
 
->如果你使用 [react-redux](https://github.com/gaearon/react-redux) 或者类似的绑定库，最好不要直接在你的组件中操作 store 的实例。在接下来的内容中，仅仅是假设你会通过 store 显式地向下传递。
+>如果你使用 [react-redux](https://github.com/reactjs/react-redux) 或者类似的绑定库，最好不要直接在你的组件中操作 store 的实例。在接下来的内容中，仅仅是假设你会通过 store 显式地向下传递。
 
 假设，你在创建一个 Todo 时这样调用：
 
@@ -37,7 +37,7 @@ store.dispatch(addTodo('Use Redux'))
 为了记录这个 action 以及产生的新的 state，你可以通过这种方式记录日志：
 
 ```js
-let action = addTodo('Use Redux')
+const action = addTodo('Use Redux')
 
 console.log('dispatching', action)
 store.dispatch(action)
@@ -70,7 +70,7 @@ dispatchAndLog(store, addTodo('Use Redux'))
 如果我们直接替换 store 实例中的 `dispatch` 函数会怎么样呢？Redux store 只是一个包含[一些方法](../api/Store.md)的普通对象，同时我们使用的是 JavaScript，因此我们可以这样实现 `dispatch` 的 monkeypatch：
 
 ```js
-let next = store.dispatch
+const next = store.dispatch
 store.dispatch = function dispatchAndLog(action) {
   console.log('dispatching', action)
   let result = next(action)
@@ -95,7 +95,7 @@ store.dispatch = function dispatchAndLog(action) {
 
 ```js
 function patchStoreToAddLogging(store) {
-  let next = store.dispatch
+  const next = store.dispatch
   store.dispatch = function dispatchAndLog(action) {
     console.log('dispatching', action)
     let result = next(action)
@@ -105,7 +105,7 @@ function patchStoreToAddLogging(store) {
 }
 
 function patchStoreToAddCrashReporting(store) {
-  let next = store.dispatch
+  const next = store.dispatch
   store.dispatch = function dispatchAndReportErrors(action) {
     try {
       return next(action)
@@ -138,7 +138,7 @@ Monkeypatching 本质上是一种 hack。“将任意的方法替换成你想要
 
 ```js
 function logger(store) {
-  let next = store.dispatch
+  const next = store.dispatch
 
   // 我们之前的做法:
   // store.dispatch = function dispatchAndLog(action) {
@@ -169,7 +169,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
 然后像这样应用多个 middleware：
 
 ```js
-applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
+applyMiddlewareByMonkeypatching(store, [logger, crashReporter])
 ```
 
 尽管我们做了很多，实现方式依旧是 monkeypatching。  
@@ -182,7 +182,7 @@ applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
 ```js
 function logger(store) {
   // 这里的 next 必须指向前一个 middleware 返回的函数：
-  let next = store.dispatch
+  const next = store.dispatch
 
   return function dispatchAndLog(action) {
     console.log('dispatching', action)
@@ -248,16 +248,13 @@ Middleware 接收了一个 `next()` 的 dispatch 函数，并返回一个 dispat
 ```js
 // 警告：这只是一种“单纯”的实现方式！
 // 这 *并不是* Redux 的 API.
-
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
-
-  let dispatch = store.dispatch
+  const dispatch = store.dispatch
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   )
-
   return Object.assign({}, store, { dispatch })
 }
 ```
@@ -266,11 +263,15 @@ function applyMiddleware(store, middlewares) {
 
 * 它只暴露一个 [store API](../api/Store.md) 的子集给 middleware：[`dispatch(action)`](../api/Store.md#dispatch) 和 [`getState()`](../api/Store.md#getState)。
 
-* 它用了一个非常巧妙的方式，以确保如果你在 middleware 中调用的是 `store.dispatch(action)` 而不是 `next(action)`，那么这个操作会再次遍历包含当前 middleware 在内的整个 middleware 链。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。
+* 它用了一个非常巧妙的方式，以确保如果你在 middleware 中调用的是 `store.dispatch(action)` 而不是 `next(action)`，那么这个操作会再次遍历包含当前 middleware 在内的整个 middleware 链。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。在创建阶段调用 `dispatch` 时你需要特别注意，详见下方警告。
 
 * 为了保证你只能应用 middleware 一次，它作用在 `createStore()` 上而不是 `store` 本身。因此它的签名不是 `(store, middlewares) => store`， 而是 `(...middlewares) => (createStore) => createStore`。
 
 由于在使用之前需要先应用方法到 `createStore()` 之上有些麻烦，`createStore()` 也接受将希望被应用的函数作为最后一个可选参数传入。
+
+#### 警告：在创建阶段 dispatch
+
+执行 `applyMiddleware` 建立你的 middleware 时，`sotre.dispatch` 函数会指向 `createStore` 创建的原生版本。这时进行 dispatch 会导致没有任何 middleware 被应用。如果你准备在创建阶段与另一个 middleware 交互，你恐怕要失望了。由于这个行为出乎意料，如果你尝试在创建阶段结束前 dispatch 一个 action，`applyMiddleware` 会抛出一个错误。想要达到这个目的，你可以通过一个普通对象直接与其他 middleware 通信（例如对于一个负责 API 调用的 middleware，使用 API 客户端对象与之通信），或者使用回调函数等待 middleware 创建完毕。
 
 ### 最终的方法
 
@@ -305,8 +306,8 @@ const crashReporter = store => next => action => {
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-let todoApp = combineReducers(reducers)
-let store = createStore(
+const todoApp = combineReducers(reducers)
+const store = createStore(
   todoApp,
   // applyMiddleware() 告诉 createStore() 如何处理中间件
   applyMiddleware(logger, crashReporter)
@@ -366,7 +367,7 @@ const timeoutScheduler = store => next => action => {
     return next(action)
   }
 
-  let timeoutId = setTimeout(
+  const timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
   )
@@ -381,7 +382,7 @@ const timeoutScheduler = store => next => action => {
  * 在这个案例中，让 `dispatch` 返回一个从队列中移除该 action 的函数。
  */
 const rafScheduler = store => next => {
-  let queuedActions = []
+  const queuedActions = []
   let frame = null
 
   function loop() {
@@ -441,7 +442,7 @@ const readyStatePromise = store => next => action => {
   }
 
   function makeAction(ready, data) {
-    let newAction = Object.assign({}, action, { ready }, data)
+    const newAction = Object.assign({}, action, { ready }, data)
     delete newAction.promise
     return newAction
   }
@@ -462,13 +463,13 @@ const readyStatePromise = store => next => action => {
  * `dispatch` 会返回被发起函数的返回值。
  */
 const thunk = store => next => action =>
-  typeof action === 'function' ?
-    action(store.dispatch, store.getState) :
-    next(action)
+  typeof action === 'function' 
+    ? action(store.dispatch, store.getState) 
+    : next(action)
 
 // 你可以使用以上全部的 middleware！（当然，这不意味着你必须全都使用。）
-let todoApp = combineReducers(reducers)
-let store = createStore(
+const todoApp = combineReducers(reducers)
+const store = createStore(
   todoApp,
   applyMiddleware(
     rafScheduler,
