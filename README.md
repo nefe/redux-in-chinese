@@ -1,4 +1,4 @@
-# [Redux 中文文档](http://github.com/camsong/redux-in-chinese) [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+# [Redux 中文文档](http://github.com/camsong/redux-in-chinese) [![Join the chat at https://gitter.im/camsong/redux-in-chinese](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/camsong/redux-in-chinese?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/camsong/redux-in-chinese.svg?branch=master)](https://travis-ci.org/camsong/redux-in-chinese)
 
 <img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60'>
 
@@ -214,7 +214,6 @@ store.dispatch({ type: 'DECREMENT' });
 * [Owen Yang](https://github.com/owenyang0)
 * [Cai Huanyu](https://github.com/Darmody)
 
-[[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/camsong/redux-in-chinese/graphs/contributors"><img src="https://opencollective.com/redux-in-chinese/contributors.svg?width=890&button=false" /></a>
 
 **本文档翻译流程符合 [ETC 翻译规范](https://github.com/react-guide/ETC)，欢迎你来一起完善**
