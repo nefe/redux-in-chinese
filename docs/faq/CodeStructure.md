@@ -66,9 +66,37 @@
 
 - [Where do I put my business logic in a React/Redux application?](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
+- [The Tao of Redux, Part 2 - Practice and Philosophy. Thick and thin reducers.](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
 
 **讨论**
 
-- [#1165: Where to put business logic / validation？](https://github.com/reactjs/redux/issues/1165)
-- [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171 )
-- [Stack Overflow: Accessing Redux state in an action creator？](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
+- [How putting too much logic in action creators could affect debugging](https://github.com/reactjs/redux/issues/384#issuecomment-127393209)
+- [#384: The more that's in a reducer, the more you can replay via time travel](https://github.com/reactjs/redux/issues/384#issuecomment-127393209)
+- [#1165: Where to put business logic / validation?](https://github.com/reactjs/redux/issues/1165)
+- [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reactjs/redux/issues/1171)
+- [Stack Overflow: Accessing Redux state in an action creator?](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
+
+<a id="structure-action-creators"></a>
+### 为什么要使用 action 创建函数?
+
+Redux 并不需要 action 创建函数。 你可以自由地用对你最有利的方式创建 action。包括简单地将一个对象字面量传递给 `dispatch` 。action 创建函数产生于 [Flux architecture](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators)， 后被 Redux 社区采用，因为它有很多的好处。
+
+Action 创建函数更容易维护。对于 action 的更新可以在一个地方进行，并应用到任何地方。action 的所有实例都保证具有相同的形状和相同的默认值。
+
+Action 创建函数更容易测试。 内联 action 的正确性必须手动验证。与任何函数一样，操作创建者的测试可以编写一次并自动运行。
+
+Action 创建函数更容易写文档注释。 Action 创建函数会枚举 action 的依赖。而且，集中化的 action 定义为文档的注释提供了便利。 如果 action 是内联编写的，则很难去捕捉和传达这些信息。
+
+
+Action 创建函数是一个更强大的抽象（abstraction）。 创建 action 通常涉及转换数据和发出 Ajax 请求。 Action 创建函数为这种不同的逻辑提供了一个统一的接口。这种抽象可以使组件发起（dispatch）一个 action 的时候, 不被 action 创建者的细节弄得很复杂。
+
+#### 更多资料
+
+**文章**
+
+- [Idiomatic Redux: Why use action creators?](http://blog.isquaredsoftware.com/2016/10/idiomatic-redux-why-use-action-creators/)
+
+**讨论**
+
+- [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
+
