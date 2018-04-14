@@ -7,6 +7,7 @@
 - [在 reducer 中必须对 state 进行深拷贝吗？拷贝 state 不会很慢吗？](#performance-clone-state)
 - [怎样减少 store 更新事件的数量？](#performance-update-events)
 - [仅有 “一个 state 树” 会引发内存问题吗？分发多个 action 会占用内存空间吗？](#performance-state-memory)
+- [缓存远端数据会造成内存问题吗？](#performance-cache-memory)
 
 ## 性能
 
@@ -80,6 +81,8 @@ Redux 所做的工作可以分为以下几部分：在 middleware 和 reducer �
 
 以不可变的方式更新 state 意味着浅拷贝，而非深拷贝。相比于深拷贝，浅拷贝更快，因为只需复制很少的字段和对象，实际的底层实现中也只是移动了若干指针而已。
 
+并且，深拷贝 state 会为每一个层（field）创建新的引用。由于 React-Redux 的 `connect` 函数是比较引用来判断数据是否变化的，这意味着即使其他数据没有变化，UI 组件也会被迫进行不必要的重新渲染。
+
 因此，你需要创建一个副本，并且更新受影响的各个嵌套的对象层级即可。尽管上述动作代价不会很大，但这也是为什么需要维护范式化及扁平化 state 的又一充分理由。
 
 > Redux 常见的误解： 需要深拷贝 state。实际情况是：如果内部的某些数据没有改变，继续保持统一引用即可。
@@ -136,6 +139,30 @@ Redux 本身不存储 action 的历史。然而，Redux DevTools 会记录这些
 **讨论**
 
 - [Stack Overflow: Is there any way to "commit" the state in Redux to free memory？](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
+- [Stack Overflow: Can a Redux store lead to a memory leak?](https://stackoverflow.com/questions/39943762/can-a-redux-store-lead-to-a-memory-leak/40549594#40549594)
+- [Stack Overflow: Redux and ALL the application state](https://stackoverflow.com/questions/42489557/redux-and-all-the-application-state/42491766#42491766)
+- [Stack Overflow: Memory Usage Concern with Controlled Components](https://stackoverflow.com/questions/44956071/memory-usage-concern-with-controlled-components?noredirect=1&lq=1)
 - [Reddit: What's the best place to keep initial state？](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
+
+
+<a id="performance-cache-memory"></a>
+### 缓存远端数据会造成内存问题吗？
+
+浏览器中 JavaScript 应用可以使用的内存是有限的。所以当缓存的体积达到可用内存上限时，就会造成性能问题。然而只有在缓存的数据异常地大，或当前会话（session）异常地长时，这才会是个问题。你能够意识到这些潜在问题是一件好事，但这不应该妨碍你高效合理地使用缓存。
+
+这里有一些高效缓存远端数据的方法：
+
+首先，只缓存用户需要的数据。如果你的应用需要显示一个经过分页的记录列表，你不需要把整个列表缓存下来，而是缓存用户可见的部分。当用户需要（或即将需要）更多数据时，将这部分数据加入缓存。
+
+第二，尽可能缓存简短形式的记录。有的时候一份记录包含了与用户无关的数据，如果这个应用并不依赖于这些数据，就无需缓存这些数据。
+
+第三，只缓存一份记录的一个拷贝。在一份记录包含其它记录的拷贝的情况下，这点尤其重要。对于每份记录都缓存一份拷贝，然后将其中嵌套的拷贝替换成引用，这个过程叫做范式化。出于[很多原因](/docs/recipes/reducers/NormalizingStateShape.html#designing-a-normalized-state)（比如节省内存），在储存这种互相关联的数据时，范式化是最佳实践。
+
+#### 更多信息
+
+**讨论**
+- [Stack Overflow: How to choose the Redux state shape for an app with list/detail views and pagination?](https://stackoverflow.com/questions/33940015/how-to-choose-the-redux-state-shape-for-an-app-with-list-detail-views-and-pagina)
+- [Twitter: ...concerns over having "too much data in the state tree"...](https://twitter.com/acemarke/status/804071531844423683)
+- [Advanced Redux entity normalization](https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5)
 
 
