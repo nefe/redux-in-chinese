@@ -8,7 +8,7 @@ Store 不是类。它只是有几个方法的对象。
 
 >##### Flux 用户使用注意
 
->如果你以前使用 Flux，那么你只需要注意一个重要的区别。Redux 没有 Dispatcher 且不支持多个 store。相反，只有一个单一的 store 和一个根级的 reduce 函数（reducer）。随着应用不断变大，你应该把根级的 reducer 拆成多个小的 reducers，分别独立地操作 state 树的不同部分，而不是添加新的 stores。这就像一个 React 应用只有一个根级的组件，这个根组件又由很多小组件构成。
+>如果你以前使用 Flux，那么你只需要注意一个重要的区别。Redux 没有 Dispatcher 且不支持多个 store。**相反，只有一个单一的 store 和一个根级的 reduce 函数[reducing function](../Glossary.md#reducer)**。随着应用不断变大，你应该把根级的 reducer 拆成多个小的 reducers，分别独立地操作 state 树的不同部分，而不是添加新的 stores。然后你可以使用 [`combineReducers`](combineReducers.md) 来连接他们。这就像一个 React 应用只有一个根级的组件，这个根组件又由很多小组件构成。
 
 ### Store 方法
 
@@ -34,7 +34,7 @@ Store 不是类。它只是有几个方法的对象。
 
 分发 action。这是触发 state 变化的惟一途径。
 
-会使用当前 [`getState()`](#getState) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getState) 的返回值，同时变化监听器(change listener)会被触发。
+将使用当前 [`getState()`](#getState) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getState) 的返回值，同时变化监听器(change listener)会被触发。
 
 >##### Flux 用户使用注意
 >当你在 [reducer](../Glossary.md#reducer) 内部调用 `dispatch` 时，将会抛出错误提示“Reducers may not dispatch actions.（Reducer 内不能 dispatch action）”。这就相当于 Flux 里的 “Cannot dispatch in a middle of dispatch（dispatch 过程中不能再 dispatch）”，但并不会引起对应的错误。在 Flux 里，当 Store 处理 action 和触发 update 事件时，dispatch 是禁止的。这个限制并不好，因为他限制了不能在生命周期回调里 dispatch action，还有其它一些本来很正常的地方。
@@ -53,7 +53,7 @@ Store 不是类。它只是有几个方法的对象。
 
 <sup>†</sup> 使用 [`createStore`](createStore.md) 创建的 “纯正” store 只支持普通对象类型的 action，而且会立即传到 reducer 来执行。
 
-但是，如果你用 [`applyMiddleware`](applyMiddleware.md) 来套住 [`createStore`](createStore.md) 时，middleware 可以修改 action 的执行，并支持执行 dispatch [intent（意图）](../Glossary.md#intent)。Intent 一般是异步操作如 Promise、Observable 或者 Thunk。
+但是，如果你用 [`applyMiddleware`](applyMiddleware.md) 来套住 [`createStore`](createStore.md) 时，middleware 可以修改 action 的执行，并支持执行 dispatch [异步 actions](../Glossary.md#async-action)。异步action通常使用异步原语如 Promise、Observable 或者 Thunk。
 
 Middleware 是由社区创建，并不会同 Redux 一起发行。你需要手动安装 [redux-thunk](https://github.com/gaearon/redux-thunk) 或者 [redux-promise](https://github.com/acdlite/redux-promise) 库。你也可以创建自己的 middleware。
 
@@ -63,7 +63,7 @@ Middleware 是由社区创建，并不会同 Redux 一起发行。你需要手�
 
 ```js
 import { createStore } from 'redux'
-let store = createStore(todos, [ 'Use Redux' ])
+const store = createStore(todos, ['Use Redux'])
 
 function addTodo(text) {
   return {
@@ -73,8 +73,7 @@ function addTodo(text) {
 }
 
 store.dispatch(addTodo('Read the docs'))
-store.dispatch(addTodo('Read about the middleware'))
-```
+store
 
 <hr>
 
@@ -113,11 +112,16 @@ function handleChange() {
   currentValue = select(store.getState())
 
   if (previousValue !== currentValue) {
-    console.log('Some deep nested property changed from', previousValue, 'to', currentValue)
+    console.log(
+      'Some deep nested property changed from',
+      previousValue,
+      'to',
+      currentValue
+    )
   }
 }
 
-let unsubscribe = store.subscribe(handleChange)
+const unsubscribe = store.subscribe(handleChange)
 unsubscribe()
 ```
 
@@ -131,4 +135,4 @@ unsubscribe()
 
 #### 参数
 
-1. `reducer` (*Function*) store 会使用的下一个 reducer。
+1. `nextReducer` (*Function*) store 会使用的下一个 reducer。
