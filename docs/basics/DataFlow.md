@@ -4,7 +4,7 @@
 
 这意味着应用中所有的数据都遵循相同的生命周期，这样可以让应用变得更加可预测且容易理解。同时也鼓励做数据范式化，这样可以避免使用多个且独立的无法相互引用的重复数据。
 
-如果这些理由还不足以令你信服，读一下 [动机](../introduction/Motivation.md) 和 [Flux 案例](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6)，这里面有更加详细的单向数据流优势分析。虽然 Redux 并不是严格意义上的 [Flux](../introduction/Relation to Other Libraries.md)，但它们有共同的设计思想。
+如果这些理由还不足以令你信服，读一下 [动机](../introduction/Motivation.md) 和 [Flux 案例](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6)，这里面有更加详细的单向数据流优势分析。虽然 [Redux 不是严格意义上的 Flux](../introduction/PriorArt.md)，但它们有共同的设计思想。
 
 Redux 应用中数据的生命周期遵循下面 4 个步骤： 
 
@@ -12,13 +12,13 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
   [Action](Actions.md) 就是一个描述“发生了什么”的普通对象。比如：
 
-    ```js
+```js
     { type: 'LIKE_ARTICLE', articleId: 42 }
     { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Mary' } }
     { type: 'ADD_TODO', text: 'Read the Redux docs.' }
-    ```
+```
 
-  可以把 action 理解成新闻的摘要。如 “玛丽喜欢42号文章。” 或者 “任务列表里添加了'学习 Redux 文档'”。
+  可以把 action 理解成新闻的摘要。如 “玛丽喜欢42号文章。” 或者 “todolist 里添加了'学习 Redux 文档'”。
 
   你可以在任何地方调用 [`store.dispatch(action)`](../api/Store.md#dispatch)，包括组件中、XHR 回调中、甚至定时器中。
 
@@ -26,7 +26,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
   [Store](Store.md) 会把两个参数传入 [reducer](Reducers.md)： 当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
 
-    ```js
+```js
     // 当前应用的 state（todos 列表和选中的过滤器）
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
@@ -46,7 +46,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
     // reducer 返回处理后的应用状态
     let nextState = todoApp(previousState, action)
-    ```
+```
 
   注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
@@ -56,7 +56,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
   下面演示 [`combineReducers()`](../api/combineReducers.md) 如何使用。假如你有两个 reducer：一个是 todo 列表，另一个是当前选择的过滤器设置：
 
-    ```js
+```js
     function todos(state = [], action) {
       // 省略处理逻辑...
       return nextState
@@ -71,23 +71,23 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
       todos,
       visibleTodoFilter
     })
-    ```
+```
 
   当你触发 action 后，`combineReducers` 返回的 `todoApp` 会负责调用两个 reducer：
 
-    ```js
+```js
     let nextTodos = todos(state.todos, action)
     let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action)
-    ```
+```
 
   然后会把两个结果集合并成一个 state 树：
 
-    ```js
+```js
     return {
       todos: nextTodos,
       visibleTodoFilter: nextVisibleTodoFilter
     }
-    ```
+```
 
   虽然 [`combineReducers()`](../api/combineReducers.md) 是一个很方便的辅助工具，你也可以选择不用；你可以自行实现自己的根 reducer！
 
