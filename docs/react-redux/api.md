@@ -1,4 +1,4 @@
-## API
+        ## API
 
 ### `<Provider store>`
 
@@ -8,7 +8,7 @@
 
 #### 属性
 
-* `store` (*[Redux Store](http://redux.js.org/docs/api/Store.html)*): 应用程序中唯一的 Redux store 对象
+* `store` (*[Redux Store](http://cn.redux.js.org/docs/api/Store.html)*): 应用程序中唯一的 Redux store 对象
 * `children` (*ReactElement*) 组件层级的根组件。
 
 #### 例子
@@ -55,9 +55,10 @@ ReactDOM.render(
 
 * [`mapDispatchToProps(dispatch, [ownProps]): dispatchProps`] \(*Object* or *Function*): 如果传递的是一个对象，那么每个定义在该对象的函数都将被当作 Redux action creator，对象所定义的方法名将作为属性名；每个方法将返回一个新的函数，函数中`dispatch`方法会将action creator的返回值作为参数执行。这些属性会被合并到组件的 props 中。
 
-如果传递的是一个函数，该函数将接收一个 `dispatch` 函数，然后由你来决定如何返回一个对象，这个对象通过 `dispatch` 函数与 action creator 以某种方式绑定在一起（提示：你也许会用到 Redux 的辅助函数 [`bindActionCreators()`](http://rackt.github.io/redux/docs/api/bindActionCreators.html)）。如果你省略这个 `mapDispatchToProps` 参数，默认情况下，`dispatch` 会注入到你的组件 props 中。如果指定了该回调函数中第二个参数 `ownProps`，该参数的值为传递到组件的 props，而且只要组件接收到新 props，`mapDispatchToProps` 也会被调用。
+如果传递的是一个函数，该函数将接收一个 `dispatch` 函数，然后由你来决定如何返回一个对象，这个对象通过 `dispatch` 函数与 action creator 以某种方式绑定在一起（提示：你也许会用到 Redux 的辅助函数 [`bindActionCreators()`](http://cn.redux.js.org/docs/api/bindActionCreators.html)。如果你省略这个 `mapDispatchToProps` 参数，默认情况下，`dispatch` 会注入到你的组件 props 中。如果指定了该回调函数中第二个参数 `ownProps`，该参数的值为传递到组件的 props，而且只要组件接收到新 props，`mapDispatchToProps` 也会被调用。
 
   > 注意：在高级章节中，你需要更好地去控制渲染的性能，所用到的 `mapStateToProps()` 会返回一个函数。但在这个例子中，**这个**函数将被 `mapStateToProps()` 在独有的组件实例中调用。这样就允许你在每一个实例中去记录。你可以参考 [#279](https://github.com/reactjs/react-redux/pull/279) 去测试和了解其中的详细内容。但在绝大多数的应用中不会用到。
+  > `mapStateToProps` 函数的第一个参数是整个Redux store的state，它返回一个要作为 props 传递的对象。它通常被称作 **selector** （选择器）。 可以使用[reselect](https://github.com/reactjs/reselect)去有效地组合选择器和[计算衍生数据](http://cn.redux.js.org/docs/recipes/ComputingDerivedData.html).
 
 * [`mergeProps(stateProps, dispatchProps, ownProps): props`] \(*Function*):  如果指定了这个参数，`mapStateToProps()` 与 `mapDispatchToProps()` 的执行结果和组件自身的 `props` 将传入到这个回调函数中。该回调函数返回的对象将作为 props 传递到被包装的组件中。你也许可以用这个回调函数，根据组件的 props 来筛选部分的 state 数据，或者把 props 中的某个特定变量与 action creator 绑定在一起。如果你省略这个参数，默认情况下返回 `Object.assign({}, ownProps, stateProps, dispatchProps)` 的结果。
 
@@ -123,7 +124,7 @@ const mapStateToProps = (...args) => {
 
 * connect 函数不会修改传入的 React 组件，返回的是一个新的已与 Redux store 连接的组件，而且你应该使用这个新组件。
 
-* `mapStateToProps` 函数接收整个 Redux store 的 state 作为 props，然后返回一个传入到组件 props 的对象。该函数被称之为 **selector**。参考使用 [reselect](https://github.com/reactjs/reselect) 高效地组合多个 **selector** ，并对 [收集到的数据进行处理](http://redux.js.org/docs/recipes/ComputingDerivedData.html)。
+* `mapStateToProps` 函数接收整个 Redux store 的 state 作为 props，然后返回一个传入到组件 props 的对象。该函数被称之为 **selector**。参考使用 [reselect](https://github.com/reactjs/reselect) 高效地组合多个 **selector** ，并对 [收集到的数据进行处理](http://cn.redux.js.org/docs/recipes/ComputingDerivedData.html)。
 
 #### Examples 例子
 
@@ -202,6 +203,22 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addTodo }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp)
+```
+
+##### 简写语法注入 `todos` 和特定的 action 创建函数(`addTodo` and `deleteTodo`) 
+```js
+import { addTodo, deleteTodo } from './actionCreators'
+
+function mapStateToProps(state) {
+  return { todos: state.todos }
+}
+
+const mapDispatchToProps = {
+  addTodo,
+  deleteTodo
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp)
@@ -296,3 +313,35 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 
 export default connect(mapStateToProps, actionCreators, mergeProps)(TodoApp)
 ```
+
+###### 工厂（Factory）函数
+工厂函数可用于性能优化。
+
+```js
+import { addTodo } from './actionCreators'
+
+function mapStateToPropsFactory(initialState, initialProps) {
+  const getSomeProperty= createSelector(...);
+  const anotherProperty = 200 + initialState[initialProps.another];
+  return function(state){
+    return {
+      anotherProperty,
+      someProperty: getSomeProperty(state),
+      todos: state.todos
+    }
+  }
+}
+
+function mapDispatchToPropsFactory(initialState, initialProps) {
+  function goToSomeLink(){
+    initialProps.history.push('some/link');
+  }
+  return function(dispatch){
+    return {
+      addTodo
+    }
+  }
+}
+
+
+export default connect(mapStateToPropsFactory, mapDisp
