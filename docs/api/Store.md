@@ -73,7 +73,8 @@ function addTodo(text) {
 }
 
 store.dispatch(addTodo('Read the docs'))
-store
+store.dispatch(addTodo('Read about the middleware'))
+```
 
 <hr>
 
