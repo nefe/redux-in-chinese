@@ -61,12 +61,12 @@ Redux 使用函数（称为 action 创建函数）来返回一个 action 对象�
     * 参见 [#55](https://github.com/reactjs/redux/pull/55), [#534](https://github.com/reactjs/redux/issues/534), [#784](https://github.com/reactjs/redux/pull/784), [#922](https://github.com/reactjs/redux/issues/922), [#1744](https://github.com/reactjs/redux/issues/1744)
 
 <a id="closure-dispatch"></a>
-### 为什么 `applyMiddlewrae` 要为 `dispatch` 创建一个闭包？
+### 为什么 `applyMiddleware` 要为 `dispatch` 创建一个闭包？
 `applyMiddleware` 从 store 中获取已有的 dispatch，然后把它封装在一个闭包中来创建最开始的 middleware 链。然后用一个对象调用来调用，以暴露出 getState 和 dispatch 函数。这样做可以使得 middleware [在初始化时可以使用 dispatch](https://github.com/reactjs/redux/pull/1592)。
 
 #### 更多信息
 **讨论**
-* 为什么 `applyMiddlewrae` 要为 `dispatch` 创建一个闭包？
+* 为什么 `applyMiddleware` 要为 `dispatch` 创建一个闭包？
     * 参见 [#1592](https://github.com/reactjs/redux/pull/1592) 以及 [#2097](https://github.com/reactjs/redux/issues/2097)
 
 <a id="combineReducers-limitations"></a>
