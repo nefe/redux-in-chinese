@@ -132,11 +132,169 @@ export default VisibleTodoList
 
 ### 在 selectors 中访问 React Props
 
-> 现在假使我们要支持一个新功能：支持多个 Todo 列表新功能。为了简洁起见，省略了实现这个工程会遇到的与本节不相关的内容（reducers 的变化、组件、Actions 等）
-
 到目前为止，我们只看到 selector 接收 Redux store state 作为参数，然而，selector 也可以接收 props。
 
-这儿有一个 `App` 的组件，它渲染了三个叫做 `VisibleTodoList` 的子组件，每个组件都带一个 `listId` 的 prop;
+例如，我们来实现包含多个 Todo List 的应用。我们需要改写 state 来支持多个 Todo List，每个 Todo List 分别有各自的 `todos` 和 `visibilityFilter` state。
+
+我们还需要改写 reducer，现在 `todos` 和 `visibilityFilter` 分别在各自的 Todo List state里， 所以我们只需要一个 `todoLists` reducer 来进行我们的state 管理。
+
+#### `reducers/index.js`
+
+```js
+import { combineReducers } from 'redux'
+import todoLists from './todoLists'
+
+export default combineReducers({
+  todoLists
+});
+```
+
+#### `reducers/todoLists.js`
+
+```js
+// Note that we're hard coding three lists here just as an example.
+// In the real world, we'd have a feature to add/remove lists,
+// and this would be empty initially.
+const initialState = {
+  1: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  },
+  2: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  },
+  3: {
+    todos: [],
+    visibilityFilter: 'SHOW_ALL'
+  }
+}
+
+const addTodo = (state, action) => {
+  const todoList = state[action.listId]
+  const { todos } = todoList
+
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      todos: [
+        ...todos,
+        {
+          id: action.id,
+          text: action.text,
+          completed: false
+        }
+      ]
+    }
+  }
+}
+
+const toggleTodo = (state, action) => {
+  const todoList = state[action.listId]
+  const { todos } = todoList
+
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      todos: todos.map(todo =>
+        (todo.id === action.id)
+          ? {...todo, completed: !todo.completed}
+          : todo
+      )
+    }
+  }
+}
+
+const setVisibilityFilter = (state, action) => {
+  const todoList = state[action.listId]
+  return {
+    ...state,
+    [action.listId]: {
+      ...todoList,
+      visibilityFilter: action.filter
+    }
+  }
+}
+
+export default const todoLists = (state = initialState, action) => {
+  // make sure a list with the given id exists
+  if (!state[action.listId]) {
+    return state;
+  }
+
+  switch (action.type) {
+    case 'ADD_TODO':
+      return addTodo(state, action)
+
+    case 'TOGGLE_TODO':
+      return toggleTodo(state, action)
+
+    case 'SET_VISIBILITY_FILTER':
+      return setVisibilityFilter(state, action)
+
+    default:
+      return state
+  }
+}
+```
+
+上面的例子中，我们使用 `todoLists` reducer 来处理全部三个 action， 所以我们需要向 action creator 传入一个 `listId` 参数
+ 
+#### `actions/index.js`
+
+```js
+let nextTodoId = 0
+export const addTodo = (text, listId) => ({
+  type: 'ADD_TODO',
+  id: nextTodoId++,
+  text,
+  listId
+})
+ 
+export const setVisibilityFilter = (filter, listId) => ({
+  type: 'SET_VISIBILITY_FILTER',
+  filter,
+  listId
+})
+ 
+export const toggleTodo = (id, listId) => ({
+  type: 'TOGGLE_TODO',
+  id,
+  listId
+})
+ 
+export const VisibilityFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_COMPLETED: 'SHOW_COMPLETED',
+  SHOW_ACTIVE: 'SHOW_ACTIVE'
+}
+```
+
+#### `components/TodoList.js`
+
+```js
+import React from 'react'
+import PropTypes from 'prop-types'
+import Todo from './Todo'
+ 
+const TodoList = ({ todos, toggleTodo, listId }) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => toggleTodo(todo.id, listId)}
+      />
+    )}
+  </ul>
+)
+
+export default TodoList
+```
+
+以下是渲染三个 `VisibleTodoList` components 的 `App` , 每个`VisibleTodoList` 都有一个 `listId` prop。
 
 #### components/App.js
 
@@ -156,7 +314,7 @@ const App = () => (
 ```
 每个 `VisibleTodoList` 容器根据 `listId` props 的值选择不同的 state 切片，让我们修改 `getVisibilityFilter` 和 `getTodos` 来接收 props。
 
-#### selectors/todoSelectors.js
+#### `selectors/todoSelectors.js`
 
 ```js
 import { createSelector } from 'reselect'
@@ -164,11 +322,10 @@ import { createSelector } from 'reselect'
 const getVisibilityFilter = (state, props) =>
   state.todoLists[props.listId].visibilityFilter
 
-const getTodos = (state, props) =>
-  state.todoLists[props.listId].todos
+const getTodos = (state, props) => state.todoLists[props.listId].todos
 
 const getVisibleTodos = createSelector(
-  [ getVisibilityFilter, getTodos ],
+  [getVisibilityFilter, getTodos],
   (visibilityFilter, todos) => {
     switch (visibilityFilter) {
       case 'SHOW_COMPLETED':
@@ -198,7 +355,7 @@ const mapStateToProps = (state, props) => {
 
 **但是这儿有一个问题！**
 
-使用带有多个 `visibleTodoList` 容器实例的 `getVisibleTodos` selector 不能使用函数记忆功能。
+使用带有多个 `visibleTodoList` 容器实例的 `getVisibleTodos` selector 不能正常使用函数记忆功能。
 
 #### containers/VisibleTodoList.js
 
@@ -236,7 +393,7 @@ export default VisibleTodoList
 ### 跨多组件的共享 Selector
 > 这节中的例子需要 React Redux v4.3.0 或者更高的版本
 
-为了跨越多个 `VisibleTodoList` 组件共享 selector，**于此同时**正确记忆。每个组件的实例需要有拷贝 selector 的私有版本。
+为了跨越多个 `VisibleTodoList` 组件共享 selector，**同时实现**正确记忆。每个组件的实例需要有拷贝 selector 的私有版本。
 
 我们创建一个 `makeGetVisibleTodos` 的函数，在每个调用的时候返回一个 `getVisibleTodos` selector 的新拷贝。
 
