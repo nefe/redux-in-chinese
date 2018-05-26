@@ -24,7 +24,7 @@ type Action = Object
 
 除了 `type` 之外，action 对象的结构其实完全取决于你自己。如果你感兴趣的话，请参考 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ，了解如何构建 action。
 
-还有就是请看后面的 [异步 action](#async-action)。
+还有就是请看后面的 [异步 action](#异步-action)。
 
 ## Reducer
 
@@ -49,13 +49,13 @@ type BaseDispatch = (a: Action) => Action
 type Dispatch = (a: Action | AsyncAction) => any
 ```
 
-*dispatching function* (或简言之 *dispatch function*) 是一个接收 action 或者[异步 action](#async-action)的函数，该函数要么往 store 分发一个或多个 action，要么不分发任何 action。
+*dispatching function* (或简言之 *dispatch function*) 是一个接收 action 或者[异步 action](#异步-action)的函数，该函数要么往 store 分发一个或多个 action，要么不分发任何 action。
 
 我们必须分清一般的 dispatch function 以及由 store 实例提供的没有 middleware 的 base [`dispatch`](api/Store.md#dispatch) function 之间的区别。
 
 Base dispatch function **总是**同步地把 action 与上一次从 store 返回的 state 发往 reducer，然后计算出新的 state。它期望 action 会是一个可以被 reducer 消费的普通对象。
 
-[Middleware](#middleware) 封装了 base dispatch function，允许 dispatch function 处理 action 之外的[异步 action](#async-action)。 Middleware 可以改变、延迟、忽略 action 或异步 action，也可以在传递给下一个 middleware 之前对它们进行解释。获取更多信息请往后看。
+[Middleware](#middleware) 封装了 base dispatch function，允许 dispatch function 处理 action 之外的[异步 action](#异步-action)。 Middleware 可以改变、延迟、忽略 action 或异步 action，也可以在传递给下一个 middleware 之前对它们进行解释。获取更多信息请往后看。
 
 ## Action Creator
 
@@ -67,7 +67,7 @@ type ActionCreator = (...args: any) => Action | AsyncAction
 
 调用 action creator 只会生产 action，但不分发。你需要调用 store 的 [`dispatch`](api/Store.md#dispatch) function 才会引起变化。有时我们讲 *bound action creator*，是指一个函数调用了 action creator 并立即将结果分发给一个特定的 store 实例。
 
-如果 action creator 需要读取当前的 state、调用 API、或引起诸如路由变化等副作用，那么它应该返回一个[异步 action](#async-action)而不是 action。
+如果 action creator 需要读取当前的 state、调用 API、或引起诸如路由变化等副作用，那么它应该返回一个[异步 action](#异步-action)而不是 action。
 
 ## 异步 Action
 
@@ -84,7 +84,7 @@ type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 
-Middleware 是一个组合 [dispatch function](#dispatching-function) 的高阶函数，返回一个新的 dispatch function，通常将[异步 actions](#async-action) 转换成 action。
+Middleware 是一个组合 [dispatch function](#dispatching-function) 的高阶函数，返回一个新的 dispatch function，通常将[异步 actions](#异步-action) 转换成 action。
 
 Middleware 利用复合函数使其可以组合其他函数，可用于记录 action 日志、产生其他诸如变化路由的副作用，或将异步的 API 调用变为一组同步的 action。
 
