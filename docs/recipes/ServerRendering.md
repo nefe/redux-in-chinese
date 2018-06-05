@@ -20,7 +20,7 @@ Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初�
 
 ## 安装
 
-下面来介绍如何配置服务端渲染。使用极简的 [Counter 计数器应用](https://github.com/rackt/redux/tree/master/examples/counter) 来做示例，介绍如何根据请求在服务端提前渲染 state。
+下面来介绍如何配置服务端渲染。使用极简的 [Counter 计数器应用](https://github.com/reduxjs/redux/tree/master/examples/counter) 来做示例，介绍如何根据请求在服务端提前渲染 state。
 
 ### 安装依赖库
 
@@ -50,6 +50,9 @@ import App from './containers/App';
 const app = Express();
 const port = 3000;
 
+// 提供静态文件
+app.use('/static', Express.static('static'))
+
 // 每当收到请求时都会触发
 app.use(handleRender);
 
@@ -66,7 +69,7 @@ app.listen(port);
 
 渲染时，使用 `<Provider>` 来包住根组件 `<App />`，以此来让组件树中所有组件都能访问到 store，就像之前的[搭配 React](../basics/UsageWithReact.md) 教程讲的那样。
 
-服务端渲染最关键的一步是在**发送响应前**渲染初始的 HTML。这就要使用 [React.renderToString()](https://facebook.github.io/react/docs/top-level-api.html#react.rendertostring).
+服务端渲染最关键的一步是在**发送响应前**渲染初始的 HTML。这就要使用 [ReactDOMServer.renderToString()](https://facebook.github.io/react/docs/react-dom-server.html#rendertostring)。
 
 然后使用 [`store.getState()`](../api/Store.md#getState) 从 store 得到初始 state。`renderFullPage` 函数会介绍接下来如何传递。
 
@@ -94,9 +97,9 @@ function handleRender(req, res) {
 
 ### 注入初始组件的 HTML 和 State
 
-服务端最后一步就是把初始组件的 HTML 和初始 state 注入到客户端能够渲染的模板中。如何传递 state 呢，我们添加一个 `<script>` 标签来把 `preloadedState` 赋给 `window.__INITIAL_STATE__`。
+服务端最后一步就是把初始组件的 HTML 和初始 state 注入到客户端能够渲染的模板中。如何传递 state 呢，我们添加一个 `<script>` 标签来把 `preloadedState` 赋给 `window.__PRELOADED_STATE__`。
 
-客户端可以通过 `window.__INITIAL_STATE__` 获取 `preloadedState`。
+客户端可以通过 `window.__PRELOADED_STATE__` 获取 `preloadedState`。
 
 同时使用 script 标签来引入打包后的 js bundle 文件。这是打包工具输出的客户端入口文件，以静态文件或者 URL 的方式实现服务端开发中的热加载。下面是代码。
 
@@ -111,7 +114,9 @@ function renderFullPage(html, preloadedState) {
       <body>
         <div id="root">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(preloadedState)}
+          // 警告：关于在 HTML 中嵌入 JSON 的安全问题，请查看以下文档
+          // http://redux.js.org/recipes/ServerRendering.html#security-considerations
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -122,7 +127,7 @@ function renderFullPage(html, preloadedState) {
 
 ## 客户端开发
 
-客户端代码非常直观。只需要从 `window.__INITIAL_STATE__` 得到初始 state，并传给 [`createStore()`](../api/createStore.md) 函数即可。
+客户端代码非常直观。只需要从 `window.__PRELOADED_STATE__` 得到初始 state，并传给 [`createStore()`](../api/createStore.md) 函数即可。
 
 代码如下:
 
@@ -130,19 +135,19 @@ function renderFullPage(html, preloadedState) {
 
 ```js
 import React from 'react'
-import { render } from 'react-dom'
+import { hydrate } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './containers/App'
 import counterApp from './reducers'
 
 // 通过服务端注入的全局变量得到初始 state
-const preloadedState = window.__INITIAL_STATE__
+const preloadedState = window.__PRELOADED_STATE__
 
 // 使用初始 state 创建 Redux store
 const store = createStore(counterApp, preloadedState)
 
-render(
+hydrate(
   <Provider store={store}>
     <App />
   </Provider>,
@@ -150,9 +155,9 @@ render(
 )
 ```
 
-你可以选择自己喜欢的打包工具（Webpack, Browserify 或其它）来编译并打包文件到 `dist/bundle.js`。
+你可以选择自己喜欢的打包工具（Webpack, Browserify 或其它）来编译并打包文件到 `static/bundle.js`。
 
-当页面加载时，打包后的 js 会启动，并调用 [`React.render()`](https://facebook.github.io/react/docs/top-level-api.html#react.render)，然后会与服务端渲染的 HTML 的 `data-react-id` 属性做关联。这会把新生成的 React 实例与服务端的虚拟 DOM 连接起来。因为同样使用了来自 Redux store 的初始 state，并且 view 组件代码是一样的，结果就是我们得到了相同的 DOM。
+当页面加载时，打包后的 js 会启动，并调用 [`React.hydrate()`](https://reactjs.org/docs/react-dom.html#hydrate)，然后会与服务端渲染的 HTML 的 `data-react-id` 属性做关联。这会把新生成的 React 实例与服务端的虚拟 DOM 连接起来。因为同样使用了来自 Redux store 的初始 state，并且 view 组件代码是一样的，结果就是我们得到了相同的 DOM。
 
 就是这样！这就是实现服务端渲染的所有步骤。
 
@@ -166,7 +171,7 @@ render(
 
 服务端收到的唯一输入是来自浏览器的请求。在服务器启动时可能需要做一些配置（如运行在开发环境还是生产环境），但这些配置是静态的。
 
-请求会包含 URL 请求相关信息，包括请求参数，它们对于做 [React Router](https://github.com/rackt/react-router) 路由时可能会有用。也可能在请求头里包含 cookies，鉴权信息或者 POST 内容数据。下面演示如何基于请求参数来得到初始 state。
+请求会包含 URL 请求相关信息，包括请求参数，它们对于做 [React Router](https://github.com/ReactTraining/react-router) 路由时可能会有用。也可能在请求头里包含 cookies，鉴权信息或者 POST 内容数据。下面演示如何基于请求参数来得到初始 state。
 
 #### `server.js`
 
@@ -177,7 +182,7 @@ import { renderToString } from 'react-dom/server'
 function handleRender(req, res) {
   // 如果存在的话，从 request 读取 counter
   const params = qs.parse(req.query)
-  const counter = parseInt(params.counter) || 0
+  const counter = parseInt(params.counter, 10) || 0
 
   // 得到初始 state
   let preloadedState = { counter }
@@ -200,7 +205,7 @@ function handleRender(req, res) {
 }
 ```
 
-上面的代码首先访问 Express 的 `Request` 对象。把参数转成数字，然后设置到初始 state 中。如果你在浏览器中访问 [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100)，你会看到计数器从 100 开始。在渲染后的 HTML 中，你会看到计数显示 100 同时设置进了 `__INITIAL_STATE__` 变量。
+上面的代码首先访问 Express 的 `Request` 对象。把参数转成数字，然后设置到初始 state 中。如果你在浏览器中访问 [http://localhost:3000/?counter=100](http://localhost:3000/?counter=100)，你会看到计数器从 100 开始。在渲染后的 HTML 中，你会看到计数显示 100 同时设置进了 `__PRELOADED_STATE__` 变量。
 
 ### 获取异步 State
 
@@ -272,13 +277,13 @@ function handleRender(req, res) {
 
 我们的示例中，只对安全做基本处理。当从请求中拿参数时，对 `counter` 参数使用 `parseInt` 把它转成数字。如果不这样做，当 request 中有 script 标签时，很容易在渲染的 HTML 中生成危险代码。就像这样的：`?counter=</script><script>doSomethingBad();</script>`
 
-在我们极简的示例中，把输入转成数字已经比较安全。如果处理更复杂的输入，比如自定义格式的文本，你应该用安全函数处理输入，比如 [validator.js](https://www.npmjs.com/package/validator)。
+在我们极简的示例中，把输入转成数字已经比较安全。如果处理更复杂的输入，比如自定义格式的文本，你应该用安全函数处理输入，比如 [xss-filters](https://github.com/yahoo/xss-filters)。
 
-此外，可能添加额外的安全层来对产生的 state 进行消毒。`JSON.stringify` 可能会造成 script 注入。鉴于此，你需要清洗 JSON 字符串中的 HTML 标签和其它危险的字符。可能通过字符串替换或者使用复杂的库如 [serialize-javascript](https://github.com/yahoo/serialize-javascript) 处理。
+此外，你可以添加额外的安全层来对产生的 state 进行消毒。`JSON.stringify` 可能会造成 script 注入。鉴于此，你需要清洗 JSON 字符串中的 HTML 标签和其它危险的字符。可以通过字符串替换，例如`JSON.stringify(state).replace(/</g, '\\u003c')`，或者使用复杂的库如 [serialize-javascript](https://github.com/yahoo/serialize-javascript) 处理。
 
 ## 下一步
 
 你还可以参考 [异步 Actions](../advanced/AsyncActions.md) 学习更多使用 Promise 和 thunk 这些异步元素来表示异步数据流的方法。记住，那里学到的任何内容都可以用于同构渲染。
 
-如果你使用了 [React Router](https://github.com/rackt/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。
+如果你使用了 [React Router](https://github.com/ReactTraining/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。
 
