@@ -1,31 +1,31 @@
 # 初始化 State
 
-主要有两种方法来初始化应用的 state 。
+主要有两种方法可以用来初始化你的应用的 state 。
 
-可以使用 `createStore` 方法中的第二个可选参数 `preloadedState`。
+1. 可以通过 `createStore` 方法，该方法接受可选的 `preloadedState` 做为其第二个参数；
 
-也可以在 reducer 中为 `undefined` 的 state 参数指定的默认的初始值。这个可以通过在 reducer 中添加一个明确的检查来完成，也可以使用 ES6 中默认参数的语法 `function myReducer(state = someDefaultValue, action)`
+2. reducer 中 state 参数的默认值为 `undefined` ，修改其默认值也可以用来初始化应用的 state，可以在 reducer 中检查 state 值是否为 `undefined` 从而显式的添加默认值，也可以通过 ES6 中默认参数的语法来添加默认值： 
+`function myReducer(state = someDefaultValue, action)`
 
-这两种方法是怎么相互影响的也许并不总是很清楚，不过幸运的是，这个过程遵循着一些可预见的规则，这里来说明它们是如何联系在一起的。
+两种初始化 State 的方法会如何相互影响并没有那么直观，不过好在它们相互作用的过程遵守下面的这些明确的规则。
 
 
 ## 概要
 
-如果不使用 `combineReducers()` 或者类似的代码，那么 `preloadedState` 总是会优先于在 reducer 里面使用 `state = ...` ，因为 `state` 传到 reducer 里的**是** `preloadedState` 的 state **而不是** `undefined`，所以 ES6 的默认参数语法并不起作用。
+如果没有使用 `combineReducers()` 或者类似功能的代码，`preloadedState` 优先级会比在 reducer 里面使用 `state = ...` 高 ，这是因为 `preloadedState` 会做为 `state` 传递到 reducer 中，`state` 的值不再是 `undefined` ，ES6 的默认参数不会生效。
 
-如果使用 `combineReducers()` 方法，那么这里的行为就会有一些细微的差别了。那些指定了 `preloadedState` 的 reducer 会接收到那些对应的 state。而其他的 reducer 将会接收到 `undefined` 并因此回到了 `state = ...` 这里去获取指定的默认值。
+如果使用了 `combineReducers()` 方法，结果就会有一些细微的差别。那些在 `preloadedState` 中指明了 `state` 的 reducer 会以对应传入的值做为初始值。其他的 reducer 接收到的则还是 `undefined` 则还会使用 `state = ...` 指定的默认值。
 
-**通常情况下，通过 `preloadedState` 指定的 state 要优先于通过 reducer 指定 state。这样可以使通过 reducer 默认参数指定初始数据显得更加的合理，并且当你从一些持久化的存储器或服务器更新 store 的时候，允许你更新已存在的数据（全部或者部分）。**
+**通常情况下，通过 `preloadedState` 指定的 state 优先级要高于通过 reducer 指定的 state。这种机制的存在允许我们在 reducer 可以通过指明默认参数来指定初始数据，而且还为通过服务端或者其它机制注入数据到 store 中提供了可能。**
+
+> 注意：通过 `preloadedState` 传入了初始化数据的 reducers 仍然需要添加默认值来应对传递的 state 为 `undefined` 的情况。这样，当所有的 reducers 在初始化时被传入 state 的都是 `undefined` 时，还可以返回一些默认值，默认值可以是任何非 `undefined` 的值，不过也没有必要复制 `preloadedState` 做为其默认值。
 
 
-## 深度
+## 深入理解
 
-
-### 单一简单的 Reducer
-
-首先，让我们举一个单独的 reducer 的例子，并且不使用 `combineReducers()` 方法。
-
-那么你的 reducer 可能像下面这样：
+### 单个简单的 Reducer
+首先我们来考虑只有一个 reducer 的情况，这种情况下我们无须使用 `combineReducers()` 方法。
+此时的 reducer 可能会是下面这个样子：
 
 ```js
 function counter(state = 0, action) {
@@ -37,88 +37,87 @@ function counter(state = 0, action) {
 }
 ```
 
-现在让我们创建一个 store。
-
-```
-import { createStore } from 'redux';
-let store = createStore(counter);
-console.log(store.getState()); // 0
-```
-
-初始的状态是 0 。为什么呢？因为 `createStore` 的第二个参数是 `undefined`。这是 `state` 第一次传到了 reducer 当中。Redux 会发起（dispatch）一个“虚拟”的 action 来填充这个 state 。所以 `counter` reducer 里获得的 `state` 等于 `undefined`。**实际上这相当于触发了那个默认参数的特性**。因此，现在 `state` 的值是设定的默认参数 `0` ，这个 state (`0`) 是这里 reducer 的返回值。
-
-接下来让我们举一个不同场景的例子：
+接下来，假设你通过上面的 reducer 创建了一个 store。
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(counter, 42);
+const store = createStore(counter);
+console.log(store.getState()); // 0
+```
+
+结果我们得到的初始的 state 的值为 0 ，为什么呢？
+因为你传给 `createStore` 的第二个参数是 `undefined`，也就是说你传给 reducer 中的 state 的初始值也是 `undefined` 。当 Redux 初始化时，实际上会触发一个 “dummy” action 来填充 store。当 reducer `counter` 被调用时，由于传入的 `state` 等于 `undefined` ，默认参数生效了。因此 state 的值为设定的默认值 0。
+
+我们来看看另一种不同的场景：
+
+```js
+import { createStore } from 'redux';
+const store = createStore(counter, 42);
 console.log(store.getState()); // 42
 ```
 
-为什么这次这里的值是 `42` 而不是 `0` 呢？因为 `createStore` 的第二个参数是 `42` 。这个参数会赋给 state 并伴随着一个虚拟 action 一起传给 reducer。**这次，传给 reducer 的 `state` 不再是 `undefined` (是 `42` )，所以 ES6 的默认参数特性没有起作用。**所以这里的 `state` 是 `42`，`42` 是这个 reducer 的返回值。
+此时得到的值为 `42`，不是 `0`，为什么又会这样呢？
+这种情况下 `createStore` 方法被调用时，第二个参数传入的是 `42`。这个值会在 “dummmy” action 触发时传递给 state，由于这个值不为 `undefined`，因此设定的默认值不会起作用，在 reducer 中 `state` 返回值 42。
 
+### 合并的 Reducers 
 
-### 组合多个 Reducers
-
-现在让我们举一个使用 `combineReducers()` 的例子。
-
-你有两个 reducers：
+我们再来看看使用了 `combineReducers()` 方法的情况。
+假设你有下面这两个 reducer：
 
 ```js
 function a(state = 'lol', action) {
   return state;
 }
-
+​
 function b(state = 'wat', action) {
   return state;
 }
 ```
 
-这个组合的 reducer 通过 `combineReducers({ a, b })` 生成，就像下面这样：
+通过 `combineReducers({ a, b })` 方式我们可以把上面两个 reducer 合并为一个 reducer
 
 ```js
 // const combined = combineReducers({ a, b })
 function combined(state = {}, action) {
   return {
-	a: a(state.a, action),
-	b: b(state.b, action)
+    a: a(state.a, action),
+    b: b(state.b, action)
   };
 }
 ```
 
-如果我们调用 `createStore` 方法并且不使用 `preloadedState` 参数，它将会把 `state` 初始化成 `{}`。 因此，传入 reducer 的`state.a` 和 `state.b` 的值将会是 `undefined` **不论是 `a` 还是 `b` 的值都是 `undefined` ，这时如果指定 `state` 的默认值，那么 reducer 将会返回这个默认值。 这就是第一次请求这个组合的 reducer 时返回 state `{ a: 'lol', b: 'wat'}` 的原因。
+如果我们调用 `createStore` 方法时，不传入 `preloadedState` ，初始化 `state` 会为 `{}`。在调用对应的 reducer 时会传入 `state.a` 和 `state.b` 做为 `state` 的参数，不过由于这两个值都是 `undefined`。a 和 b 两个 reducer 都会接收 `undefined` 作为 `state` 的参数，此时如果 `state` 有默认值，就会返回默认值。因此上述组合 reducer 在首次调用时会返回 `{ a: 'lol', b: 'wat' }`。
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(combined);
+const store = createStore(combined);
 console.log(store.getState()); // { a: 'lol', b: 'wat' }
 ```
 
-接下来让我们举一个不同的场景的例子：
+我们再来看看一个不同的情况：
 
 ```js
 import { createStore } from 'redux';
-let store = createStore(combined, { a: 'horse' });
+const store = createStore(combined, { a: 'horse' });
 console.log(store.getState()); // { a: 'horse', b: 'wat' }
 ```
 
-现在我们指定了 `createStore()` 的 `preloadedState` 参数。现在这个组合的 reducer 返回的 state 结合了我们指定给 `a` 的默认值 `horse` 以及通过 reducer 本身默认参数指定的 `b` 的值 `'wat'` 。
+上述代码中我在 `createStore()` 方法调用时传入了 `preloadedState` 。得到的结果是我为 a reducer 指定的值和 b reducer 的默认值组合而成。
 
-让我们重新看看这个组合的 reducer 做了什么：
+我们仔细来看看这个组合 reducer 做了什么：
 
 ```js
 // const combined = combineReducers({ a, b })
 function combined(state = {}, action) {
   return {
-	a: a(state.a, action),
-	b: b(state.b, action)
+    a: a(state.a, action),
+    b: b(state.b, action)
   };
 }
 ```
 
-在这个案例中，`state` 是我们指定的，所以它并没有被赋值为 `{}`。这是一个 `a` 的值是 `'horse'` 的对象，但是没有 `b` 的值。这就是为什么 `a` reducer 收到了 `'horse'` 的 state 并高兴地返回它，但 `b` reducer 却得到了 `undefined` state 并因此返回了它自己设定的默认值（在这个例子里是`'wat'`）。这就是我们如何得到的 `{ a: 'horse', b: 'wat' }` 这个结果。
-
+上面的代码中，指定了组合 reducer 的 `state` ，因此其值不会是默认的 `{}`, 而是一个对象，并且该对象中键 `a` 的值为 `’horse'`，但是并不存在键 `b`。这就导致 a reducer 接受 `horse` 作为其 state 的参数，而 b reducer 则接收 `undefined` 做为其 `state` 的参数，因此在 b reducer 中设置的默认 `state` 会生效 （在本例中是 `'wat'`）。最终我们得到的结果为 `{ a: 'horse', b: 'wat'}`。
 
 ## 总结
 
-综上所述，如果你遵守 Redux 的约定并且要让 reducer 中 `undefined` 的 `state` 参数返回初始 state （最简单的实现方法就是利用 ES6 的默认参数来指定 state），那么对于组合多个 reducers 的情况，这将是一个很有用的做法，**他们会优先选择通过 `preloadedState` 参数传到 `createStore()` 的对象中的相应值，但是如果你不传任何东西，或者没设置相应的字段，那么 reducer 就会选择指定的默认 `state` 参数来取代**。这样的方法效果很好，因为他既能用来初始化也可以用来更新现有的数据，不过如果数据没有保护措施的话，这样做也会使一些独立的 reducer 的 state 被重新赋值。当然你可以递归地使用这个模式，比如你可以在多个层级上使用 `combineReducers()` 方法，或者甚至手动的组合这些 reducer 并且传入对应部分的 state tree。
+总结一下，如果你使用 redux 的推荐做法，在 reducer 中给定 state 参数的默认值（最简单的方法是通过 ES6 的默认值语法），你将拥有一个表现良好的组合 reducer。**这个组合 reducer 会优先使用你通过 `preloadedState` 传递来的对应的值，不过就算你没传递或者不存在对应的值，也会使用你设定的默认值。**这种机制非常棒，它提供了设置初始值并注入的途径，也保留了 reducer 设置默认值的能力。加上`combineReducers()` 可以在不同级别上使用，这种模式可以递归的使用。
