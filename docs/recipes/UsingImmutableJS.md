@@ -233,13 +233,13 @@ const newState = state.setIn(['prop1'], fromJS(newObj))
 **文档**
 - [技巧：计算衍生数据](http://cn.redux.js.org/docs/recipes/ComputingDerivedData.html)
 - [FAQ：Immutable 数据](/faq/ImmutableData.html#immutability-issues-with-react-redux)
-- [Reselect 文档：如何使用 Reselect 结合 Immutable.js？](https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
+- [Reselect 文档：如何使用 Reselect 结合 Immutable.js？](https://github.com/reduxjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
 
 **文章**
 - [Redux 模式和反面模式](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc#.451p9ycfy)
 
 **库**
-- [Reselect: Redux 的选择器库](https://github.com/reactjs/reselect)
+- [Reselect: Redux 的选择器库](https://github.com/reduxjs/reselect)
 
 ### 绝对不要在 `mapStateToProps` 中使用 `toJS()`
 
