@@ -6,6 +6,7 @@
   * [核心概念](/docs/introduction/CoreConcepts.md)
   * [三大原则](/docs/introduction/ThreePrinciples.md)
   * [先前技术](/docs/introduction/PriorArt.md)
+  * [学习资源](/docs/introduction/LearningResources.md)
   * [生态系统](/docs/introduction/Ecosystem.md)
   * [示例](/docs/introduction/Examples.md)
 * [基础](/docs/basics/README.md)
