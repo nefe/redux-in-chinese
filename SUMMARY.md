@@ -24,6 +24,7 @@
   * [示例：Reddit API](/docs/advanced/ExampleRedditAPI.md)
   * [下一步](/docs/advanced/NextSteps.md)
 * [技巧](/docs/recipes/README.md)
+  * [配置 Store](/docs/recipes/ConfiguringYourStore.md)
   * [迁移到 Redux](/docs/recipes/MigratingToRedux.md)
   * [使用对象展开运算符](/docs/recipes/UsingObjectSpreadOperator.md)
   * [减少样板代码](/docs/recipes/ReducingBoilerplate.md)
