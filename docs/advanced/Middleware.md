@@ -251,7 +251,7 @@ Middleware 接收了一个 `next()` 的 dispatch 函数，并返回一个 dispat
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
-  const dispatch = store.dispatch
+  let dispatch = store.dispatch
   middlewares.forEach(middleware =>
     dispatch = middleware(store)(dispatch)
   )
