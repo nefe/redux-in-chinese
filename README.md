@@ -21,32 +21,79 @@ Redux 是 JavaScript 状态容器，提供可预测化的状态管理。
 Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支持其它界面库。
 它体小精悍（只有2kB，包括依赖）。
 
-### 评价
+## 学习 Redux
 
->[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
->Jing Chen，Flux 作者
+我们会为你提供一系列广泛的资源。无论你基础如何，学习方式如何，这些资料都会帮助你学习 Redux。
 
->[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
->Bill Fisher，Flux 作者
+### 基础
 
->[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
->André Staltz，Cycle 作者
+如果你刚刚开始学习 Redux，想要了解一些基础概念，请看：
 
-### 开始之前
+- Redux 背后的 **[动机](https://cn.redux.js.org/docs/introduction/Motivation)**，**[核心概念](https://cn.redux.js.org/docs/introduction/coreconcepts)** 和 **[三大原则](https://cn.redux.js.org/docs/introduction/threeprinciples)**。
+- **[Redux 文档基础教程](https://cn.redux.js.org/docs/basics)**
+- Redux 作者 Dan Abramov 的 **免费 ["Getting Started with Redux" 系列视频](https://egghead.io/series/getting-started-with-redux)**
+- Redux 维护者 Mark Erikson 的 **["Redux Fundamentals" 幻灯片](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** 以及 **[Redux 学习推荐资源列表](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)**
+- 如果你喜欢直接浏览和运行代码来学习的话，看看我们的 **[Redux 示例应用](https://cn.redux.js.org/docs/introduction/examples)** 列表，Redux repo 中也有相应的项目，同时提供 CodeSandbox 上的在线可交互示例。
+- **[React/Redux links](https://github.com/markerikson/react-redux-links)** 中的 **[Redux Tutorials](https://github.com/markerikson/react-redux-links/blob/master/redux-tutorials.md)** 部分。下面是一些我们推荐的其中最好的文章：
+  - Dave Ceddia 的文章 [What Does Redux Do? (and when should you use it?)](https://daveceddia.com/what-does-redux-do/) 以及 [How Redux Works: A Counter-Example](https://daveceddia.com/how-does-redux-work/)，这篇文章很好的介绍了 Redux 的基础知识，如何与 React 一起使用。同时 [React and Redux: An Introduction](http://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/) 也有异曲同工之处。
+  - Valentino Gagliardi 的文章 [React Redux Tutorial for Beginners: Learning Redux in 2018](https://www.valentinog.com/blog/react-redux-tutorial-beginners/) 很好的拓展了 Redux 各方面的介绍。
+  - CSS Tricks 上的这篇 [Leveling Up with React: Redux](https://css-tricks.com/learning-react-redux/) 也介绍了 Redux 的基础。
+  - [DevGuides: Introduction to Redux](http://devguides.io/redux/) 这篇教程覆盖了 Redux 方方面面，包括 actions，reducers，结合 React 以及 middleware。
 
-> 也推荐阅读你可能并不需要Redux：
-> [“You Might Not Need Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
+### 进阶概念
 
-### 开发经历
+当你了解了 action、reducer、store 的基本使用方法之后，你也许会在其他一些方面遇到问题，比如异步逻辑和 AJAX 请求、连接到 React 等 UI 库、用 Redux 建立一个应用等等：
 
-Redux 的开发最早开始于我在准备 React Europe 演讲[热加载与时间旅行](https://www.youtube.com/watch?v=xsSnOQynTHs)的时候，当初的目标是创建一个状态管理库，来提供最简化 API，但同时做到行为的完全可预测，因此才得以实现日志打印，热加载，时间旅行，同构应用，录制和重放，而不需要任何开发参与。
+- **[Redux 文档“高级”部分](https://cn.redux.js.org/docs/advanced)** 包括异步逻辑、middleware、路由。
+- Redux 文档 **[“学习资源”](https://cn.redux.js.org/docs/introduction/LearningResources.html)** 中推荐了一些文章，覆盖了 Redux 很多方面。
+- Sophie DeBenedetto 的8个章节的 **[Building a Simple CRUD App with React + Redux](http://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/)** 教程，展示了如何从零开始建立一个 CURD（增删改查）应用。
 
-### 启示
+### 真实世界使用
+
+从一个 TodoMVC 应用过渡到一个真正的生产级别的应用是一个飞跃，但我们有很多资源可以帮到你：
+
+- Redux 作者 Dan Abramov 的 **[免费 “Building React Applications with Idiomatic Redux” 系列教程](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)**，基于他本人第一季的视频打造，涵盖了诸如 middleware、路由、不变性等内容。
+- **[Redux 常见问题](https://cn.redux.js.org/docs/faq)** 回答了一些常见问题，比如如何使用 Redux。**[文档中“技巧”部分](https://cn.redux.js.org/docs/recipes)** 包含了处理衍生数据、测试、组织 reducer 逻辑、减少样板代码等方面的信息。
+- Redux 维护者 Mark Erikson 的 **["Practical Redux" 教程系列](http://blog.isquaredsoftware.com/series/practical-redux/)** 演示了真实世界 React Redux 应用的进阶技巧。（还在 **[Educative.io 上提供一个可交互版本](https://www.educative.io/collection/5687753853370368/5707702298738688)**）
+- **[React/Redux links](https://github.com/markerikson/react-redux-links)** 储存了一些分类过的文章，包含 [reducer 和 selector](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md)、[管理副作用](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md)、[Redux 架构与最佳实践](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md) 等等。
+- 我们的社区创造了数以千计的 Redux 相关库，插件和工具。[文档的“生态系统”页面](https://cn.redux.js.org/docs/introduction/ecosystem) 列举了我们推荐的一些。在 **[Redux 插件目录](https://github.com/markerikson/redux-ecosystem-links)** 有完整的列表。
+- 如果你希望通过一个实际的应用代码来学习的话，插件目录中也有一个 **[出于特定目的构建的示例和真实世界应用](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)** 列表。
+
+最后，Mark Erikson 在 **[Workshop.me 教授了一系列工坊课程](#redux-workshops)**。查看[工坊时间表](https://workshop.me/?a=mark)获取即将到来的时间地点安排。
+
+### 帮助和讨论
+
+**[Reactiflux Discord community](http://www.reactiflux.com)** 中的 **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** 是我们的官方资源，所有有关学习和使用 Redux 的问题都可以提问。Reactiflux 是您闲逛、提问、学习的好地方，来加入我们吧！
+
+## 开始之前
+
+Redux 是负责组织 state 的工具，但你也要考虑它是否适合你的情况。不要因为有人告诉你要用 Redux 就去用，花点时间好好想想使用了 Redux 会带来的好处或坏处。
+
+在下面的场景中，引入 Redux 是比较明智的：
+
+- 你有着相当大量的、随时间变化的数据
+- 你的 state 需要有一个单一可靠数据来源
+- 你觉得把所有 state 放在最顶层组件中已经无法满足需要了
+
+的确，这些场景很主观笼统。因为对于何时应该引入 Redux 这个问题，对于每个使用者和每个应用来说都是不同的。
+
+> **对于 Redux 应该如何、何时使用的更多建议，请看：**
+>
+> - **[“You Might Not Need Redux”](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+> - **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+> - **[The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
+> - **[Redux 常见问题](https://cn.redux.js.org/docs/faq)**
+
+## 开发经历
+
+Dan Abramov（Redux 作者）在他准备 React Europe 演讲[热加载与时间旅行](https://www.youtube.com/watch?v=xsSnOQynTHs)时开始开发 Redux。他的目标是创建一个状态管理库，来提供最简化 API，但同时做到行为的完全可预测，因此才得以实现日志打印，热加载，时间旅行，同构应用，录制和重放，而不需要任何开发参与。
+
+## 启示
 
 Redux 由 [Flux](http://facebook.github.io/flux/) 演变而来，但受 [Elm](http://elm-lang.org/guide/architecture) 的启发，避开了 Flux 的复杂性。
 不管你有没有使用过它们，只需几分钟就能上手 Redux。
 
-### 安装
+## 安装
 
 安装稳定版：
 
@@ -64,7 +111,7 @@ npm install --save redux
 
 Redux 源文件由 ES2015 编写，但是会预编译到 CommonJS 和 UMD 规范的 ES5，所以它可以支持 [任何现代浏览器](http://caniuse.com/#feat=es5)。你不必非得使用 Babel 或模块打包器来使用 Redux。
 
-#### 附加包
+### 附加包
 
 多数情况下，你还需要使用 [React 绑定库](http://github.com/gaearon/react-redux)和[开发者工具](http://github.com/gaearon/redux-devtools)。
 
@@ -75,7 +122,7 @@ npm install --save-dev redux-devtools
 
 需要提醒的是，和 Redux 不同，很多 Redux 生态下的包并不提供 UMD 文件，所以为了提升开发体验，我们建议使用像 [Webpack](http://webpack.github.io/) 和 [Browserify](http://browserify.org/) 这样的 CommonJS 模块打包器。
 
-### 要点
+## 要点
 
 应用中所有的 state 都以一个对象树的形式储存在一个单一的 *store* 中。
 惟一改变 state 的办法是触发 *action*，一个描述发生什么的对象。
@@ -132,15 +179,69 @@ store.dispatch({ type: 'DECREMENT' });
 
 用这个架构开发计数器有点杀鸡用牛刀，但它的美在于做复杂应用和庞大系统时优秀的扩展能力。由于它可以用 action 追溯应用的每一次修改，因此才有强大的开发工具。如录制用户会话并回放所有 action 来重现它。
 
-### Redux 作者教你学
+## Redux 作者教你学
+
+### Dan Abramov 出品的 Redux 视频教程 
+
+#### Redux 入门（Getting Started with Redux）
 
 [Redux 入门](https://egghead.io/series/getting-started-with-redux) 是由 Redux 作者 Dan Abramov 讲述的包含 30 个视频的课程。它涵盖了本文档的“基础”部分，同时还有不可变（immutability）、测试、Redux 最佳实践、搭配 React 使用的讲解。**这个课程将永久免费。**
+
+> [“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
+> Sandrino Di Mattia
+
+> [“Plowing through @dan_abramov 'Getting Started with Redux' - its amazing how much simpler concepts get with video.”](https://twitter.com/chrisdhanaraj/status/670328025553219584)  
+> Chris Dhanaraj
+
+> [“This video series on Redux by @dan_abramov on @eggheadio is spectacular!”](https://twitter.com/eddiezane/status/670333133242408960)  
+> Eddie Zaneski
+
+> [“Come for the name hype. Stay for the rock solid fundamentals. (Thanks, and great job @dan_abramov and @eggheadio!)”](https://twitter.com/danott/status/669909126554607617)  
+> Dan
+
+> [“This series of videos on Redux by @dan_abramov is repeatedly blowing my mind - gunna do some serious refactoring”](https://twitter.com/gelatindesign/status/669658358643892224)  
+> Laurence Roberts
 
 还等什么？
 
 #### [开始观看 30 个免费视频！](https://egghead.io/series/getting-started-with-redux)
 
-### 文档
+> 注意：如果你喜欢 Dan Abromov 的课程，可以考虑[购买订阅](https://egghead.io/pricing)来支持 Egghead。订阅者可以查看视频中所有示例代码，以及更多高级课程，包括深入 Javascript，React，Angular 等等。许多 [Egghead 导师](https://egghead.io/instructors) 也是开源项目作者，所以购买订阅也是感谢他们的辛勤工作的一种方式。
+
+#### 使用 Redux 构建 React 应用的常用实践（Building React Applications with Idiomatic Redux）
+
+**[使用 Redux 构建 React 应用的常用实践](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** 是 Dan Abramov 出品的第二个系列视频。它从第一个视频结束的地方开始，涵盖了很多实用的手段，来构建生产级别 React 和 Redux 应用，包括：进阶 state 管理、中间件（middleware）、集成 React Router 以及构建应用可能会遇到的其它问题。跟第一季一样，**这个课程将永久免费。**
+
+#### [开始观看免费 "Idiomatic Redux" 视频](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)
+
+### Pratical Redux 课程
+
+**[Practical Redux](https://www.educative.io/collection/5687753853370368/5707702298738688/)** 是 Redux 维护者 Mark Erikson 教授的付费课程。这个课程展示了如何使用 Redux 的基本概念来创建一个比 TodoMVC 更大一点的应用。包括以下一些真实世界问题：
+
+- 把 Redux 添加到一个 Create-React-App 创建的项目中，并配置模块热加载来加速开发
+- 用 Redux 控制 UI
+- 使用 Redux-ORM 管理 Redux store 中的相关数据
+- 建立一个 master/detail 模式来展示并编辑数据
+- 自行编写的高级 Redux reducer 逻辑来解决特定问题
+- 对 Redux 连接的表单进行性能优化
+
+还有更多内容！
+
+这个课程基于 Mark 原来的免费课程 **["Practical Redux" 教程系列](http://blog.isquaredsoftware.com/series/practical-redux/)** 之上，并改进更新了其内容。
+
+### Redux 基础工坊（Redux Fundamentals Workshop） 
+
+Redux 维护者 [Mark Erikson](https://twitter.com/acemarke) 建立了一个 [**Redux 基础工坊**，幻灯片在这里](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)，包括如下内容：
+
+- Redux 的历史及目的
+- Reducer，action，使用 Redux store
+- 在 React 中使用 Redux
+- 使用并编写 Redux middleware
+- 使用 AJAX 请求和其他副作用操作
+- 为 Redux 应用编写单元测试
+- 真实世界中的 Redux 应用结构和开发
+
+## 文档
 
 * [介绍](http://camsong.github.io/redux-in-chinese//docs/introduction/index.html)
 * [基础](http://camsong.github.io/redux-in-chinese//docs/basics/index.html)
@@ -151,7 +252,7 @@ store.dispatch({ type: 'DECREMENT' });
 * [词汇表](http://camsong.github.io/redux-in-chinese//docs/Glossary.html)
 * [API 文档](http://camsong.github.io/redux-in-chinese//docs/api/index.html)
 
-### 示例
+## 示例
 
 * [原生 Counter](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#counter-vanilla) ([source](https://github.com/rackt/redux/tree/master/examples/counter-vanilla))
 * [Counter](http://camsong.github.io/redux-in-chinese/docs/introduction/Examples.html#counter) ([source](https://github.com/rackt/redux/tree/master/examples/counter))
@@ -166,11 +267,18 @@ store.dispatch({ type: 'DECREMENT' });
 
 如果你是 NPM 新手，创建和运行一个新的项目有难度，或者不知道上面的代码应该放到哪里使用，请下载 [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) 这个示例，它是一个集成了 React、Browserify 和 Redux 的最简化的示例项目。
 
-### 交流
+## 评价
 
-打开 Discord，加入 [Reactiflux](http://reactiflux.com/) 中的 **#redux** 频道。
+>[“Love what you’re doing with Redux”](https://twitter.com/jingc/status/616608251463909376)
+>Jing Chen，Flux 作者
 
-### 感谢
+>[“I asked for comments on Redux in FB's internal JS discussion group, and it was universally praised. Really awesome work.”](https://twitter.com/fisherwebdev/status/616286955693682688)
+>Bill Fisher，Flux 作者
+
+>[“It's cool that you are inventing a better Flux by not doing Flux at all.”](https://twitter.com/andrestaltz/status/616271392930201604)
+>André Staltz，Cycle 作者
+
+## 感谢
 
 * [Elm 架构](https://github.com/evancz/elm-architecture-tutorial) 介绍了使用 reducers 来操作 state 数据；
 * [Turning the database inside-out](http://blog.confluent.io/2015/03/04/turning-the-database-inside-out-with-apache-samza/) 大开脑洞;
@@ -183,7 +291,13 @@ store.dispatch({ type: 'DECREMENT' });
 * [Cycle](https://github.com/staltz/cycle) 介绍了 function 是如何在很多场景都是最好的工具；
 * [React](https://github.com/facebook/react) 实践启迪。
 
-### 作者列表
+特别感谢 [Jamie Paton](http://jdpaton.github.io) 交出了 `redux` 这个 NPM 包名。
+
+## Logo
+
+官方 Logo [在 Github 上可以找到](https://github.com/reduxjs/redux/tree/master/logo)。
+
+## 作者列表
 
 > 定期更新，谢谢各位辛勤贡献
 
