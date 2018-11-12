@@ -14,29 +14,30 @@ Redux 引入了非常实用的 `combineReducers` 工具函数，但我们却有�
 
 ```js
 function combinedReducer(state, action) {
-    switch(action.type) {
-        case "A_TYPICAL_ACTION" : {
-            return {
-                a : sliceReducerA(state.a, action),
-                b : sliceReducerB(state.b, action)
-            };
-        }
-        case "SOME_SPECIAL_ACTION" : {
-            return {
-                // 明确地把 state.b 作为额外参数进行传递
-                a : sliceReducerA(state.a, action, state.b),
-                b : sliceReducerB(state.b, action)
-            }        
-        }
-        case "ANOTHER_SPECIAL_ACTION" : {
-            return {
-                a : sliceReducerA(state.a, action),
-                // 明确地把全部的 state 作为额外参数进行传递
-                b : sliceReducerB(state.b, action, state)
-            }         
-        }    
-        default: return state;
+  switch (action.type) {
+    case 'A_TYPICAL_ACTION': {
+      return {
+        a: sliceReducerA(state.a, action),
+        b: sliceReducerB(state.b, action)
+      }
     }
+    case 'SOME_SPECIAL_ACTION': {
+      return {
+        // 明确地把 state.b 作为额外参数进行传递
+        a: sliceReducerA(state.a, action, state.b),
+        b: sliceReducerB(state.b, action)
+      }
+    }
+    case 'ANOTHER_SPECIAL_ACTION': {
+      return {
+        a: sliceReducerA(state.a, action),
+        // 明确地把全部的 state 作为额外参数进行传递
+        b: sliceReducerB(state.b, action, state)
+      }
+    }
+    default:
+      return state
+  }
 }
 ```
 
@@ -44,17 +45,17 @@ function combinedReducer(state, action) {
 
 ```js
 function someSpecialActionCreator() {
-    return (dispatch, getState) => {
-        const state = getState();
-        const dataFromB = selectImportantDataFromB(state);
+  return (dispatch, getState) => {
+    const state = getState()
+    const dataFromB = selectImportantDataFromB(state)
 
-        dispatch({
-            type : "SOME_SPECIAL_ACTION",
-            payload : {
-                dataFromB
-            }
-        });
-    }
+    dispatch({
+      type: 'SOME_SPECIAL_ACTION',
+      payload: {
+        dataFromB
+      }
+    })
+  }
 }
 ```
 
@@ -64,27 +65,28 @@ function someSpecialActionCreator() {
 
 ```js
 const combinedReducer = combineReducers({
-    a : sliceReducerA,
-    b : sliceReducerB
-});
+  a: sliceReducerA,
+  b: sliceReducerB
+})
 
 function crossSliceReducer(state, action) {
-    switch(action.type) {
-        case "SOME_SPECIAL_ACTION" : {
-            return {
-                // 明确地把 state.b 作为额外参数进行传递
-                a : handleSpecialCaseForA(state.a, action, state.b),
-                b : sliceReducerB(state.b, action)
-            }        
-        }
-        default : return state;
+  switch (action.type) {
+    case 'SOME_SPECIAL_ACTION': {
+      return {
+        // 明确地把 state.b 作为额外参数进行传递
+        a: handleSpecialCaseForA(state.a, action, state.b),
+        b: sliceReducerB(state.b, action)
+      }
     }
+    default:
+      return state
+  }
 }
 
 function rootReducer(state, action) {
-    const intermediateState = combinedReducer(state, action);
-    const finalState = crossSliceReducer(intermediateState, action);
-    return finalState;
+  const intermediateState = combinedReducer(state, action)
+  const finalState = crossSliceReducer(intermediateState, action)
+  return finalState
 }
 ```
 
@@ -92,7 +94,7 @@ function rootReducer(state, action) {
 
 ```js
 // 与上述手动编写的 `rootReducer` 一样
-const rootReducer = reduceReducers(combinedReducers, crossSliceReducer);
+const rootReducer = reduceReducers(combinedReducers, crossSliceReducer)
 ```
 
 值得注意的是，如果你使用 `reduceReducers` 你应该确保第一个 reducer 能够定义初始状态的 state 数据，因为后续的 reducers 通常会假定 state 树已经存在，也就不会为此提供默认状态。
@@ -102,11 +104,15 @@ const rootReducer = reduceReducers(combinedReducers, crossSliceReducer);
 再次强调，Reducer *只是*普通的函数，明确这一概念非常重要。`combineReducers` 虽然实用也只是冰山一角。除了用 switch 语句编写函数，还可以用条件逻辑；函数不仅可以彼此组合，也可以调用其他函数。也许你可能需要这样的一个 reducer，它既能够重置 state，也能够响应特定的 action。你可以这样做：
 
 ```js
-const undoableFilteredSliceA = compose(undoReducer, filterReducer("ACTION_1", "ACTION_2"), sliceReducerA);
+const undoableFilteredSliceA = compose(
+  undoReducer,
+  filterReducer('ACTION_1', 'ACTION_2'),
+  sliceReducerA
+)
 const rootReducer = combineReducers({
-    a : undoableFilteredSliceA,
-    b : normalSliceReducerB
-});
+  a: undoableFilteredSliceA,
+  b: normalSliceReducerB
+})
 ```
 
 注意 `combineReducers` 无需知道也不关心任何一个负责管理 `a` 数据的 reducer。所以我们并不需要像以往一样修改 `combineReducers` 来实现撤销功能 —— 我们只需把各种函数组合成一个新函数即可。

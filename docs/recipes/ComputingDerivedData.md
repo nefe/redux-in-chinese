@@ -24,15 +24,15 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -54,18 +54,18 @@ export default VisibleTodoList
 
 Reselect 提供 `createSelector` 函数来创建可记忆的 selector。`createSelector` 接收一个 input-selectors 数组和一个转换函数作为参数。如果 state tree 的改变会引起 input-selector 值变化，那么 selector 会调用转换函数，传入 input-selectors 作为参数，并返回结果。如果 input-selectors 的值和前一次的一样，它将会直接返回前一次计算的数据，而不会再调用一次转换函数。
 
-定义一个可记忆的 selector `getVisibleTodos ` 来替代上面的无记忆版本：
+定义一个可记忆的 selector `getVisibleTodos` 来替代上面的无记忆版本：
 
 #### `selectors/index.js`
 
 ```js
 import { createSelector } from 'reselect'
 
-const getVisibilityFilter = (state) => state.visibilityFilter
-const getTodos = (state) => state.todos
+const getVisibilityFilter = state => state.visibilityFilter
+const getTodos = state => state.todos
 
 export const getVisibleTodos = createSelector(
-  [ getVisibilityFilter, getTodos ],
+  [getVisibilityFilter, getTodos],
   (visibilityFilter, todos) => {
     switch (visibilityFilter) {
       case 'SHOW_ALL':
@@ -79,20 +79,19 @@ export const getVisibleTodos = createSelector(
 )
 ```
 
-在上例中，`getVisibilityFilter` 和 `getTodos ` 是 input-selector。因为他们并不转换数据，所以被创建成普通的非记忆的 selector 函数。但是，`getVisibleTodos` 是一个可记忆的 selector。他接收 `getVisibilityFilter` 和 `getTodos` 为 input-selector，还有一个转换函数来计算过滤的 todos 列表。
+在上例中，`getVisibilityFilter` 和 `getTodos` 是 input-selector。因为他们并不转换数据，所以被创建成普通的非记忆的 selector 函数。但是，`getVisibleTodos` 是一个可记忆的 selector。他接收 `getVisibilityFilter` 和 `getTodos` 为 input-selector，还有一个转换函数来计算过滤的 todos 列表。
 
 ### 组合 Selector
 
 可记忆的 selector 自身可以作为其它可记忆的 selector 的 input-selector。下面的 `getVisibleTodos` 被当作另一个 selector 的 input-selector，来进一步通过关键字（keyword）过滤 todos。
 
 ```js
-const getKeyword = (state) => state.keyword
+const getKeyword = state => state.keyword
 
 const getVisibleTodosFilteredByKeyword = createSelector(
-  [ getVisibleTodos, getKeyword ],
-  (visibleTodos, keyword) => visibleTodos.filter(
-    todo => todo.text.indexOf(keyword) > -1
-  )
+  [getVisibleTodos, getKeyword],
+  (visibleTodos, keyword) =>
+    visibleTodos.filter(todo => todo.text.indexOf(keyword) > -1)
 )
 ```
 
@@ -108,15 +107,15 @@ import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
 import { getVisibleTodos } from '../selectors'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state)
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -136,7 +135,7 @@ export default VisibleTodoList
 
 例如，我们来实现包含多个 Todo List 的应用。我们需要改写 state 来支持多个 Todo List，每个 Todo List 分别有各自的 `todos` 和 `visibilityFilter` state。
 
-我们还需要改写 reducer，现在 `todos` 和 `visibilityFilter` 分别在各自的 Todo List state里， 所以我们只需要一个 `todoLists` reducer 来进行我们的state 管理。
+我们还需要改写 reducer，现在 `todos` 和 `visibilityFilter` 分别在各自的 Todo List state 里， 所以我们只需要一个 `todoLists` reducer 来进行我们的 state 管理。
 
 #### `reducers/index.js`
 
@@ -146,7 +145,7 @@ import todoLists from './todoLists'
 
 export default combineReducers({
   todoLists
-});
+})
 ```
 
 #### `reducers/todoLists.js`
@@ -241,7 +240,7 @@ export default const todoLists = (state = initialState, action) => {
 ```
 
 上面的例子中，我们使用 `todoLists` reducer 来处理全部三个 action， 所以我们需要向 action creator 传入一个 `listId` 参数
- 
+
 #### `actions/index.js`
 
 ```js
@@ -252,19 +251,16 @@ export const addTodo = (text, listId) => ({
   text,
   listId
 })
- 
 export const setVisibilityFilter = (filter, listId) => ({
   type: 'SET_VISIBILITY_FILTER',
   filter,
   listId
 })
- 
 export const toggleTodo = (id, listId) => ({
   type: 'TOGGLE_TODO',
   id,
   listId
 })
- 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
@@ -278,16 +274,15 @@ export const VisibilityFilters = {
 import React from 'react'
 import PropTypes from 'prop-types'
 import Todo from './Todo'
- 
 const TodoList = ({ todos, toggleTodo, listId }) => (
   <ul>
-    {todos.map(todo =>
+    {todos.map(todo => (
       <Todo
         key={todo.id}
         {...todo}
         onClick={() => toggleTodo(todo.id, listId)}
       />
-    )}
+    ))}
   </ul>
 )
 
@@ -312,6 +307,7 @@ const App = () => (
   </div>
 )
 ```
+
 每个 `VisibleTodoList` 容器根据 `listId` props 的值选择不同的 state 切片，让我们修改 `getVisibilityFilter` 和 `getTodos` 来接收 props。
 
 #### `selectors/todoSelectors.js`
@@ -372,9 +368,9 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }
@@ -391,6 +387,7 @@ export default VisibleTodoList
 用 `createSelector` 创建的 selector 只有在参数集与之前的参数集相同时才会返回缓存的值。如果我们交替的渲染 `VisibleTodoList listId="1" />` 和 `VisibleTodoList listId="2" />`，共享的 selector 将交替的接收 `listId: 1` 和 `listId: 2`。这会导致每次调用时传入的参数不同，因此 selector 将始终重新计算而不是返回缓存的值。我们将在下一节了解如何解决这个限制。
 
 ### 跨多组件的共享 Selector
+
 > 这节中的例子需要 React Redux v4.3.0 或者更高的版本
 
 为了跨越多个 `VisibleTodoList` 组件共享 selector，**同时实现**正确记忆。每个组件的实例需要有拷贝 selector 的私有版本。
@@ -398,18 +395,18 @@ export default VisibleTodoList
 我们创建一个 `makeGetVisibleTodos` 的函数，在每个调用的时候返回一个 `getVisibleTodos` selector 的新拷贝。
 
 ####selectors/todoSelectors.js
+
 ```js
 import { createSelector } from 'reselect'
 
 const getVisibilityFilter = (state, props) =>
   state.todoLists[props.listId].visibilityFilter
 
-const getTodos = (state, props) =>
-  state.todoLists[props.listId].todos
+const getTodos = (state, props) => state.todoLists[props.listId].todos
 
 const makeGetVisibleTodos = () => {
   return createSelector(
-    [ getVisibilityFilter, getTodos ],
+    [getVisibilityFilter, getTodos],
     (visibilityFilter, todos) => {
       switch (visibilityFilter) {
         case 'SHOW_COMPLETED':
@@ -462,9 +459,9 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: (id) => {
+    onTodoClick: id => {
       dispatch(toggleTodo(id))
     }
   }

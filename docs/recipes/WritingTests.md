@@ -24,7 +24,7 @@ npm install --save-dev babel-jest
 }
 ```
 
-然后，在  `package.json`  中的 `scripts`  处添加相关的命令
+然后，在 `package.json` 中的 `scripts` 处添加相关的命令
 
 ```json
 {
@@ -38,9 +38,10 @@ npm install --save-dev babel-jest
 }
 ```
 
-执行  `npm test`  可以运行一次测试，执行 `npm run test:watch`  可以让每当文件改变时自动执行测试。
+执行 `npm test` 可以运行一次测试，执行 `npm run test:watch` 可以让每当文件改变时自动执行测试。
 
 ## 测试 Action Creators
+
 在 Redux 中，action creators 是返回普通对象的函数，当我们测试 action creators 时，我们想要测试是否调用了正确的 action creator 以及是否返回了正确的 action。
 
 ### 示例
@@ -72,8 +73,8 @@ describe('actions', () => {
 })
 ```
 
-
 ## 测试异步 Action Creators
+
 对于使用 [Redux-Thunk](https://github.com/reduxjs/redux-thunk) 或者其它中间件的异步 action Creator ，最好完全模拟 Redux store 来进行测试，可以通过使用 [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) 来把中间件应用于模拟的 store，还可以使用 [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/)) 来模拟 HTTP 请求。
 
 ### 示例
@@ -151,6 +152,7 @@ describe('async actions', () => {
 ```
 
 ## 测试 Reducers
+
 Reducer 把 action 应用到之前的 state，并返回新的 state。示例如下。
 
 ### 示例
@@ -246,9 +248,10 @@ describe('todos reducer', () => {
 ```
 
 ## 测试组件
+
 React 组件有一个优点，它们通常很小且只依赖于传入的 `props` ，因此测试起来很简便。
 
-首先，我们需要安装 [Enzyme](http://airbnb.io/enzyme/) ，Enzyme 底层使用了  [React  Test Utilities](https://reactjs.org/docs/test-utils.html) ，但是更方便，更具可读性，更强大。
+首先，我们需要安装 [Enzyme](http://airbnb.io/enzyme/) ，Enzyme 底层使用了 [React Test Utilities](https://reactjs.org/docs/test-utils.html) ，但是更方便，更具可读性，更强大。
 
 ```bash
 npm install —save-dev enzyme
@@ -346,8 +349,8 @@ describe('components', () => {
 })
 ```
 
-
 ## 测试 connected 组件
+
 如果你使用类似 [React redux](https://github.com/reduxjs/react-redux) 的库，你可能会使用 [高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)，比如 [`connect()` ](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)。可以让你把 Redux state 注入到常规的 React 组件中。
 
 考虑如下 `App` 组件
@@ -401,15 +404,16 @@ import App from './App'
 只在测试中使用命名导出。
 
 > **混用 ES6 模块和 CommonJS 的注意事项**
-> 
-> 如果在应用代码中使用 ES6，但在测试中使用 ES5，Babel 会通过其 [`interop`](https://old.babeljs.io/docs/plugins/#interop) 机制处理 ES6 的 `import` 和 CommonJS 的 `require` ，使得这两种模式能一起使用，但其行为依旧有细微的区别。 如果在默认导出的附近增加另一个导出，将导致无法默认导出 `require('./App')`。此时，应代以 `require('./App').default` 
+>
+> 如果在应用代码中使用 ES6，但在测试中使用 ES5，Babel 会通过其 [`interop`](https://old.babeljs.io/docs/plugins/#interop) 机制处理 ES6 的 `import` 和 CommonJS 的 `require` ，使得这两种模式能一起使用，但其行为依旧有细微的区别。 如果在默认导出的附近增加另一个导出，将导致无法默认导出 `require('./App')`。此时，应代以 `require('./App').default`
 
 ## 对中间件的测试
+
 中间件函数包装了 Redux 中 `dispatch` 的行为，为了测试中间件的行为，我们需要模拟 `dispatch` 调用时的行为。
 
 ### 示例
 
-首先，我们需要创建一个中间件函数，下述代码和 [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.js)  类似
+首先，我们需要创建一个中间件函数，下述代码和 [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.js) 类似
 
 ```js
 const thunk = ({ dispatch, getState }) => next => action => {
@@ -421,7 +425,7 @@ const thunk = ({ dispatch, getState }) => next => action => {
 }
 ```
 
-我们需要创造一个假的 `getState`,`dispatch` 和 `next` 函数，我们可以使用 `jest.fn()` 来创建  stubs，你也可以使用 sinon 等测试框架
+我们需要创造一个假的 `getState`,`dispatch` 和 `next` 函数，我们可以使用 `jest.fn()` 来创建 stubs，你也可以使用 sinon 等测试框架
 
 我们可以像 Redux 一样来触发函数
 
@@ -470,8 +474,7 @@ it('passes dispatch and getState', () => {
 在一些情况下，你需要修改 `create` 函数来模拟不同的 `getState` 和 `next` 。
 
 ## 词汇表
-* [Enzyme](http://airbnb.io/enzyme/): Enzyme 是一种用于 React 测试的 JavaScript 工具，它使得断言、操作以及遍历你的 React 组件的输出变得更简单。
-*  [React  Test Utilities](https://reactjs.org/docs/test-utils.html) :React 提供的测试工具，被 Enzyme 使用
-* [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html)： shallow renderer 使你可以实例化一个组件, 并有效地获取其 `render` 方法的结果,  其渲染深度仅一层, 而非递归地将组件渲染为 DOM。 shallow renderer 对单元测试很有用， 你只要测试某个特定的组件，而不用管它的子组件。这也意味着，更改子组件不会影响到其父组件的测试。如果要测试一个组件和它所有的子组件，可以用 [`Enzyme's mount()`](http://airbnb.io/enzyme/docs/api/mount.html) 方法 ，这个方法会进行完全的 DOM 渲染。
 
-
+- [Enzyme](http://airbnb.io/enzyme/): Enzyme 是一种用于 React 测试的 JavaScript 工具，它使得断言、操作以及遍历你的 React 组件的输出变得更简单。
+- [React Test Utilities](https://reactjs.org/docs/test-utils.html) :React 提供的测试工具，被 Enzyme 使用
+- [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html)： shallow renderer 使你可以实例化一个组件, 并有效地获取其 `render` 方法的结果, 其渲染深度仅一层, 而非递归地将组件渲染为 DOM。 shallow renderer 对单元测试很有用， 你只要测试某个特定的组件，而不用管它的子组件。这也意味着，更改子组件不会影响到其父组件的测试。如果要测试一个组件和它所有的子组件，可以用 [`Enzyme's mount()`](http://airbnb.io/enzyme/docs/api/mount.html) 方法 ，这个方法会进行完全的 DOM 渲染。

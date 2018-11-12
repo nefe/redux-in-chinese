@@ -1,6 +1,6 @@
 # 服务端渲染
 
-服务端渲染一个很常见的场景是当用户（或搜索引擎爬虫）第一次请求页面时，用它来做_初始渲染_。当服务器接收到请求后，它把需要的组件渲染成 HTML 字符串，然后把它返回给客户端（这里统指浏览器）。之后，客户端会接手渲染控制权。
+服务端渲染一个很常见的场景是当用户（或搜索引擎爬虫）第一次请求页面时，用它来做*初始渲染*。当服务器接收到请求后，它把需要的组件渲染成 HTML 字符串，然后把它返回给客户端（这里统指浏览器）。之后，客户端会接手渲染控制权。
 
 下面我们使用 React 来做示例，对于支持服务端渲染的其它 view 框架，做法也是类似的。
 
@@ -10,10 +10,10 @@
 
 把数据发送到客户端，需要以下步骤：
 
-* 为每次请求创建全新的 Redux store 实例；
-* 按需 dispatch 一些 action；
-* 从 store 中取出 state；
-* 把 state 一同返回给客户端。
+- 为每次请求创建全新的 Redux store 实例；
+- 按需 dispatch 一些 action；
+- 从 store 中取出 state；
+- 把 state 一同返回给客户端。
 
 在客户端，使用服务器返回的 state 创建并初始化一个全新的 Redux store。  
 Redux 在服务端**惟一**要做的事情就是，提供应用所需的**初始 state**。
@@ -39,28 +39,32 @@ npm install --save express react-redux
 ##### `server.js`
 
 ```js
-import path from 'path';
-import Express from 'express';
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import counterApp from './reducers';
-import App from './containers/App';
+import path from 'path'
+import Express from 'express'
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import counterApp from './reducers'
+import App from './containers/App'
 
-const app = Express();
-const port = 3000;
+const app = Express()
+const port = 3000
 
 // 提供静态文件
 app.use('/static', Express.static('static'))
 
 // 每当收到请求时都会触发
-app.use(handleRender);
+app.use(handleRender)
 
 // 接下来会补充这部分代码
-function handleRender(req, res) { /* ... */ }
-function renderFullPage(html, preloadedState) { /* ... */ }
+function handleRender(req, res) {
+  /* ... */
+}
+function renderFullPage(html, preloadedState) {
+  /* ... */
+}
 
-app.listen(port);
+app.listen(port)
 ```
 
 ### 处理请求
@@ -78,7 +82,7 @@ import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // 创建新的 Redux store 实例
-  const store = createStore(counterApp);
+  const store = createStore(counterApp)
 
   // 把组件渲染成字符串
   const html = renderToString(
@@ -88,10 +92,10 @@ function handleRender(req, res) {
   )
 
   // 从 store 中获得初始 state
-  const preloadedState = store.getState();
+  const preloadedState = store.getState()
 
   // 把渲染后的页面内容发送给客户端
-  res.send(renderFullPage(html, preloadedState));
+  res.send(renderFullPage(html, preloadedState))
 }
 ```
 
@@ -116,7 +120,10 @@ function renderFullPage(html, preloadedState) {
         <script>
           // 警告：关于在 HTML 中嵌入 JSON 的安全问题，请查看以下文档
           // http://redux.js.org/recipes/ServerRendering.html#security-considerations
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+            /</g,
+            '\\u003c'
+          )}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -176,7 +183,7 @@ hydrate(
 #### `server.js`
 
 ```js
-import qs from 'qs'; // 添加到文件开头
+import qs from 'qs' // 添加到文件开头
 import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
@@ -265,7 +272,7 @@ function handleRender(req, res) {
 
     // 把渲染后的页面发给客户端
     res.send(renderFullPage(html, finalState))
-  });
+  })
 }
 ```
 
@@ -286,4 +293,3 @@ function handleRender(req, res) {
 你还可以参考 [异步 Actions](../advanced/AsyncActions.md) 学习更多使用 Promise 和 thunk 这些异步元素来表示异步数据流的方法。记住，那里学到的任何内容都可以用于同构渲染。
 
 如果你使用了 [React Router](https://github.com/ReactTraining/react-router)，你可能还需要在路由处理组件中使用静态的 `fetchData()` 方法来获取依赖的数据。它可能返回 [异步 action](../advanced/AsyncActions.md)，以便你的 `handleRender` 函数可以匹配到对应的组件类，对它们均 dispatch `fetchData()` 的结果，在 Promise 解决后才渲染。这样不同路由需要调用的 API 请求都并置于路由处理组件了。在客户端，你也可以使用同样技术来避免在切换页面时，当数据还没有加载完成前执行路由。
-

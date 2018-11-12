@@ -2,12 +2,13 @@
 
 ## 目录
 
- - [文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？](#structure-file-structure)
- - [如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？](#structure-business-logic)
+- [文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？](#structure-file-structure)
+- [如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？](#structure-business-logic)
 
 ## 代码结构
 
 <a id="structure-file-structure"></a>
+
 ### 文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？
 
 因为 Redux 只是数据存储的库，它没有关于工程应该被如何组织的直接主张。然后，有一些被大多数 Redux 开发者所推荐的模式：
@@ -49,6 +50,7 @@
 - [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
 
 <a id="structure-business-logic"></a>
+
 ### 如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？
 
 关于逻辑的哪个部分应该放在 reducer 或者 action 创建函数中，没有清晰的答案。一些开发者喜欢 “fat” action 创建函数，“thin” reducer 仅仅从 action 拿到数据并绑定到 state 树。其他人的则强调 action 越简单越好，尽量减少在 action 创建函数中使用 `getState()` 方法。
@@ -77,6 +79,7 @@
 - [Stack Overflow: Accessing Redux state in an action creator?](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
 
 <a id="structure-action-creators"></a>
+
 ### 为什么要使用 action 创建函数?
 
 Redux 并不需要 action 创建函数。 你可以自由地用对你最有利的方式创建 action。包括简单地将一个对象字面量传递给 `dispatch` 。action 创建函数产生于 [Flux architecture](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators)， 后被 Redux 社区采用，因为它有很多的好处。
@@ -86,7 +89,6 @@ Action 创建函数更容易维护。对于 action 的更新可以在一个地�
 Action 创建函数更容易测试。 内联 action 的正确性必须手动验证。与任何函数一样，操作创建者的测试可以编写一次并自动运行。
 
 Action 创建函数更容易写文档注释。 Action 创建函数会枚举 action 的依赖。而且，集中化的 action 定义为文档的注释提供了便利。 如果 action 是内联编写的，则很难去捕捉和传达这些信息。
-
 
 Action 创建函数是一个更强大的抽象（abstraction）。 创建 action 通常涉及转换数据和发出 Ajax 请求。 Action 创建函数为这种不同的逻辑提供了一个统一的接口。这种抽象可以使组件发起（dispatch）一个 action 的时候, 不被 action 创建者的细节弄得很复杂。
 
@@ -99,4 +101,3 @@ Action 创建函数是一个更强大的抽象（abstraction）。 创建 action
 **讨论**
 
 - [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
-

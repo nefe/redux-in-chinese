@@ -1,15 +1,13 @@
-React Redux
-=========================
+# React Redux
 
 > 译者注：本库并不是 Redux 内置，需要单独安装。因为一般会和 Redux 一起使用，所以放到一起翻译
 
 [Redux](https://github.com/reactjs/redux) 官方提供的 React 绑定库。
 具有高效且灵活的特性。
 
-[![build status](https://img.shields.io/travis/reactjs/react-redux/master.svg?style=flat-square)](https://travis-ci.org/reactjs/react-redux) [![npm version](https://img.shields.io/npm/v/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
-[![npm downloads](https://img.shields.io/npm/dm/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
+[![build status](https://img.shields.io/travis/reactjs/react-redux/master.svg?style=flat-square)](https://travis-ci.org/reactjs/react-redux) [![npm version](https://img.shields.io/npm/v/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
+[![npm downloads](https://img.shields.io/npm/dm/react-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-redux)
 [![redux channel on slack](https://img.shields.io/badge/slack-redux@reactiflux-61DAFB.svg?style=flat-square)](http://www.reactiflux.com)
-
 
 ## 安装
 
@@ -25,7 +23,7 @@ npm install --save react-redux
 
 ## React Native
 
-从 React Native 0.18 发布之后，5.x 版本的 React Redux 能搭配 React Native 一起开发。如果你在使用 5.x 版本的 React Redux 和 React Native 一起开发遇到问题时，请先运行 `npm ls react` 确保你的 `node_modules` 中没有 React 的复制品。我们建议你使用  `npm@3.x` 来更好地规避这类问题。
+从 React Native 0.18 发布之后，5.x 版本的 React Redux 能搭配 React Native 一起开发。如果你在使用 5.x 版本的 React Redux 和 React Native 一起开发遇到问题时，请先运行 `npm ls react` 确保你的 `node_modules` 中没有 React 的复制品。我们建议你使用 `npm@3.x` 来更好地规避这类问题。
 
 如果你使用的是旧版本的 React Native 遇到[这个问题](https://github.com/facebook/react-native/issues/2985)，你可能需要继续使用 [React Redux 3.x 和对应文档](https://github.com/reactjs/react-redux/tree/v3.1.0)去解决。
 

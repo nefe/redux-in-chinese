@@ -2,9 +2,9 @@
 
 开始之前，一定你已经学习 [Redux 排错](https://cn.redux.js.org/docs/Troubleshooting.html)。
 
-### 我收到以下警告：Accessing PropTypes via the main React package is deprecated. Use the prop-types package from npm instead.  
+### 我收到以下警告：Accessing PropTypes via the main React package is deprecated. Use the prop-types package from npm instead.
 
-这个 warning 会在你使用 react 15.5.* 的时候出现。基本上，现上它只是一个 warning， 但是在 React16 当中可能会导致你的应用崩溃。现在 PropTypes 应该从 'prop-types' 包中 import，而不是从 react 包中 import。
+这个 warning 会在你使用 react 15.5.\* 的时候出现。基本上，现上它只是一个 warning， 但是在 React16 当中可能会导致你的应用崩溃。现在 PropTypes 应该从 'prop-types' 包中 import，而不是从 react 包中 import。
 
 更新到最新版本的 react-redux。
 
@@ -13,8 +13,8 @@
 阅读上面的链接。
 简而言之，
 
-* Reducer 永远不应该更改原有 state，应该始终返回新的对象，否则，React Redux 觉察不到数据变化。
-* 确保你使用了 `connect()` 的 `mapDispatchToProps` 参数或者 `bindActionCreators` 来绑定 action creator 函数，你也可以手动调用 `dispatch()` 进行绑定。直接调用 `MyActionCreators.addTodo()` 并不会起任何作用，因为它只会**返回**一个 action 对象，并不会 *dispatch* 它。
+- Reducer 永远不应该更改原有 state，应该始终返回新的对象，否则，React Redux 觉察不到数据变化。
+- 确保你使用了 `connect()` 的 `mapDispatchToProps` 参数或者 `bindActionCreators` 来绑定 action creator 函数，你也可以手动调用 `dispatch()` 进行绑定。直接调用 `MyActionCreators.addTodo()` 并不会起任何作用，因为它只会**返回**一个 action 对象，并不会 _dispatch_ 它。
 
 ### React Router 0.13 的 route 变化中，view 不更新
 
@@ -23,7 +23,8 @@
 根 View：
 
 ```js
-Router.run(routes, Router.HistoryLocation, (Handler, routerState) => { // 注意这里的 "routerState"
+Router.run(routes, Router.HistoryLocation, (Handler, routerState) => {
+  // 注意这里的 "routerState"
   ReactDOM.render(
     <Provider store={store}>
       {/* 注意这里的 "routerState" */}
@@ -50,7 +51,7 @@ render() {
 
 如果 view 依赖全局的 state 或是 [React “context”](http://facebook.github.io/react/docs/context.html)，你可能发现那些使用 `connect()` 进行修饰的 view 无法更新。
 
->这是因为，默认情况下 `connect()` 实现了 [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate)，它假定在 props 和 state 一样的情况下，组件会渲染出同样的结果。这与 React 中 [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html) 的概念很类似。
+> 这是因为，默认情况下 `connect()` 实现了 [shouldComponentUpdate](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate)，它假定在 props 和 state 一样的情况下，组件会渲染出同样的结果。这与 React 中 [PureRenderMixin](https://facebook.github.io/react/docs/pure-render-mixin.html) 的概念很类似。
 
 这个问题的**最好**的解决方案是保持组件的纯净，并且所有外部的 state 都应通过 props 传递给它们。这将确保组件只在需要重新渲染时才会重新渲染，这将大大地提高了应用的速度。
 

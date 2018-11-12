@@ -8,18 +8,18 @@
 
 一种方法是将 action 的内容合并到现有的 state。在这种情况下，我们需要一个对数据的深拷贝（非浅拷贝）。Lodash 的 `merge` 方法可以帮我们处理这个：
 
-``` javascript
-import merge from "lodash/object/merge";
+```javascript
+import merge from 'lodash/object/merge'
 
 function commentsById(state = {}, action) {
-    switch(action.type) {
-        default : {
-           if(action.entities && action.entities.comments) {
-               return merge({}, state, action.entities.comments.byId);
-           }
-           return state;
-        }
+  switch (action.type) {
+    default: {
+      if (action.entities && action.entities.comments) {
+        return merge({}, state, action.entities.comments.byId)
+      }
+      return state
     }
+  }
 }
 ```
 
@@ -31,99 +31,102 @@ function commentsById(state = {}, action) {
 
 > 译者注：结合上章节中范式化之后的 state 阅读
 
-``` javascript
+```javascript
 // actions.js
 function addComment(postId, commentText) {
-    // 为这个 comment 生成一个独一无二的 ID
-    const commentId = generateId("comment");
+  // 为这个 comment 生成一个独一无二的 ID
+  const commentId = generateId('comment')
 
-    return {
-        type : "ADD_COMMENT",
-        payload : {
-            postId,
-            commentId,
-            commentText
-        }
-    };
+  return {
+    type: 'ADD_COMMENT',
+    payload: {
+      postId,
+      commentId,
+      commentText
+    }
+  }
 }
-
 
 // reducers/posts.js
 function addComment(state, action) {
-    const {payload} = action;
-    const {postId, commentId} = payload;
+  const { payload } = action
+  const { postId, commentId } = payload
 
-    // 查找出相应的文章，简化其余代码
-    const post = state[postId];
+  // 查找出相应的文章，简化其余代码
+  const post = state[postId]
 
-    return {
-        ...state,
-        // 用新的 comments 数据更新 Post 对象
-        [postId] : {
-             ...post,
-             comments : post.comments.concat(commentId)             
-        }
-    };
+  return {
+    ...state,
+    // 用新的 comments 数据更新 Post 对象
+    [postId]: {
+      ...post,
+      comments: post.comments.concat(commentId)
+    }
+  }
 }
 
 function postsById(state = {}, action) {
-    switch(action.type) {
-        case "ADD_COMMENT" : return addComment(state, action);
-        default : return state;
-    }
+  switch (action.type) {
+    case 'ADD_COMMENT':
+      return addComment(state, action)
+    default:
+      return state
+  }
 }
 
 function allPosts(state = [], action) {
-    // 省略，这个例子中不需要它
+  // 省略，这个例子中不需要它
 }
 
 const postsReducer = combineReducers({
-    byId : postsById,
-    allIds : allPosts
-});
-
+  byId: postsById,
+  allIds: allPosts
+})
 
 // reducers/comments.js
 function addCommentEntry(state, action) {
-    const {payload} = action;
-    const {commentId, commentText} = payload;
+  const { payload } = action
+  const { commentId, commentText } = payload
 
-    // 创建一个新的 Comment 对象
-    const comment = {id : commentId, text : commentText};
+  // 创建一个新的 Comment 对象
+  const comment = { id: commentId, text: commentText }
 
-    // 在查询表中插入新的 Comment 对象
-    return {
-        ...state,
-        [commentId] : comment
-    };
+  // 在查询表中插入新的 Comment 对象
+  return {
+    ...state,
+    [commentId]: comment
+  }
 }
 
 function commentsById(state = {}, action) {
-    switch(action.type) {
-        case "ADD_COMMENT" : return addCommentEntry(state, action);
-        default : return state;
-    }
+  switch (action.type) {
+    case 'ADD_COMMENT':
+      return addCommentEntry(state, action)
+    default:
+      return state
+  }
 }
 
-
 function addCommentId(state, action) {
-    const {payload} = action;
-    const {commentId} = payload;
-    // 把新 Comment 的 ID 添加在 all IDs 的列表后面
-    return state.concat(commentId);
+  const { payload } = action
+  const { commentId } = payload
+  // 把新 Comment 的 ID 添加在 all IDs 的列表后面
+  return state.concat(commentId)
 }
 
 function allComments(state = [], action) {
-    switch(action.type) {
-        case "ADD_COMMENT" : return addCommentId(state, action);
-        default : return state;
-    }
+  switch (action.type) {
+    case 'ADD_COMMENT':
+      return addCommentId(state, action)
+    default:
+      return state
+  }
 }
 
 const commentsReducer = combineReducers({
-    byId : commentsById,
-    allIds : allComments
-});
+  byId: commentsById,
+  allIds: allComments
+})
 ```
 
 这个例子之所有有点长，是因为它展示了不同切片 reducer 和 case reducer 是如何配合在一起使用的。注意这里对 “委托” 的理解。postById reducer 切片将工作委拖给 addComment，addComment 将新的评论 id 插入到相应的数据项中。同时 commentsById 和 allComments 的 reducer 切片都有自己的 case reducer，他们更新评论查找表和所有评论 id 列表的表。
@@ -134,7 +137,7 @@ const commentsReducer = combineReducers({
 
 reducer 仅仅是个函数，因此有无数种方法来拆分这个逻辑。使用切片 reducer 是最常见，但也可以在更面向任务的结构中组织行为。由于通常会涉及到更多嵌套的更新，因此常常会使用 [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)、[object-path-immutable](https://github.com/mariocasciaro/object-path-immutable) 等库实现不可变更新。
 
-``` javascript
+```javascript
 import posts from "./postsReducer";
 import comments from "./commentsReducer";
 import dotProp from "dot-prop-immutable";
@@ -191,119 +194,118 @@ const rootReducer = reduceReducers(
 
 有几种方法可以用 Redux-ORM 执行数据更新。首选，Redux-ORM 文档建议在每个 Model 子类上定义 reducer 函数，然后将自动生成的组合 reducer 函数放到 store 中：
 
-``` javascript
+```javascript
 // models.js
-import {Model, many, Schema} from "redux-orm";
+import { Model, many, Schema } from 'redux-orm'
 
 export class Post extends Model {
   static get fields() {
     return {
       // 定义一个多边关系 - 一个 Post 可以有多个 Comments，
       // 字段名是 “comments”
-      comments : many("Comment")
-    };
+      comments: many('Comment')
+    }
   }
 
   static reducer(state, action, Post) {
-    switch(action.type) {
-      case "CREATE_POST" : {
+    switch (action.type) {
+      case 'CREATE_POST': {
         // 排队创建一个 Post 实例
-        Post.create(action.payload);
-        break;
+        Post.create(action.payload)
+        break
       }
-      case "ADD_COMMENT" : {
-        const {payload} = action;
-        const {postId, commentId} = payload;
+      case 'ADD_COMMENT': {
+        const { payload } = action
+        const { postId, commentId } = payload
         // 排队增加一个 Comment ID 和 Post 实例的联系
-        Post.withId(postId).comments.add(commentId);
-        break;
+        Post.withId(postId).comments.add(commentId)
+        break
       }
     }
 
     // Redux-ORM 将在返回后自动应用排队的更新
   }
 }
-Post.modelName = "Post";
+Post.modelName = 'Post'
 
 export class Comment extends Model {
   static get fields() {
-    return {};
+    return {}
   }
 
   static reducer(state, action, Comment) {
-    switch(action.type) {
-      case "ADD_COMMENT" : {
-        const {payload} = action;
-        const {commentId, commentText} = payload;
+    switch (action.type) {
+      case 'ADD_COMMENT': {
+        const { payload } = action
+        const { commentId, commentText } = payload
 
         // 排队创建一个 Comment 实例
-        Comment.create({id : commentId, text : commentText});
-        break;
-      }   
+        Comment.create({ id: commentId, text: commentText })
+        break
+      }
     }
 
     // Redux-ORM 将在返回后自动应用排队的更新
   }
 }
-Comment.modelName = "Comment";
+Comment.modelName = 'Comment'
 
 // 创建 Schema 实例，然后和 Post、Comment 数据模型挂钩起来
-export const schema = new Schema();
-schema.register(Post, Comment);
-
+export const schema = new Schema()
+schema.register(Post, Comment)
 
 // main.js
 import { createStore, combineReducers } from 'redux'
-import {schema} from "./models";
+import { schema } from './models'
 
 const rootReducer = combineReducers({
   // 插入 Redux-ORM 自动生成的 reducer，这将
   // 初始化一个数据模型 “表”，并且和我们在
   // 每个 Model 子类中定义的 reducer 逻辑挂钩起来
-  entities : schema.reducer()
-});
+  entities: schema.reducer()
+})
 
 // dispatch 一个 action 以创建一个 Post 实例
 store.dispatch({
-  type : "CREATE_POST",
-  payload : {
-    id : 1,
-    name : "Test Post Please Ignore"
+  type: 'CREATE_POST',
+  payload: {
+    id: 1,
+    name: 'Test Post Please Ignore'
   }
-});
+})
 
 // dispath 一个 action 以创建一个 Comment 实例作为上个 Post 的子元素
 store.dispatch({
-  type : "ADD_COMMENT",
-  payload : {
-    postId : 1,
-    commentId : 123,
-    commentText : "This is a comment"
+  type: 'ADD_COMMENT',
+  payload: {
+    postId: 1,
+    commentId: 123,
+    commentText: 'This is a comment'
   }
-});
+})
 ```
 
 Redux-ORM 库维护要应用的内部更新队列。这些更新是不可变更新，这个库简化了这个更新过程。
 
 使用 Redux-ORM 的另一个变化是用一个单一的 case reducer 作为抽象层。
 
-``` javascript
-import {schema} from "./models";
+```javascript
+import { schema } from './models'
 
 // 假设这个 case reducer 正在我们的 “entities” 切片 reducer 使用，
 // 并且我们在 Redux-ORM 的 Model 子类上没有定义 reducer
 function addComment(entitiesState, action) {
-    const session = schema.from(entitiesState);
-    const {Post, Comment} = session;
-    const {payload} = action;
-    const {postId, commentId, commentText} = payload;
+  const session = schema.from(entitiesState)
+  const { Post, Comment } = session
+  const { payload } = action
+  const { postId, commentId, commentText } = payload
 
-    const post = Post.withId(postId);
-    post.comments.add(commentId);
+  const post = Post.withId(postId)
+  post.comments.add(commentId)
 
-    Comment.create({id : commentId, text : commentText});
+  Comment.create({ id: commentId, text: commentText })
 
-    return session.reduce();
+  return session.reduce()
 }
 ```
 

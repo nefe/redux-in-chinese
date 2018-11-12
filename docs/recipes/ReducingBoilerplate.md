@@ -10,7 +10,7 @@ Actions 是用来描述在 app 中发生了什么的普通对象，并且是描�
 
 Action 一般长这样:
 
-``` javascript
+```javascript
 { type: 'ADD_TODO', text: 'Use Redux' }
 { type: 'REMOVE_TODO', id: 42 }
 { type: 'LOAD_ARTICLE', response: { ... } }
@@ -20,18 +20,18 @@ Action 一般长这样:
 
 在 Flux 中，传统的想法是将每个 action type 定义为 string 常量：
 
-``` javascript
-const ADD_TODO = 'ADD_TODO';
-const REMOVE_TODO = 'REMOVE_TODO';
-const LOAD_ARTICLE = 'LOAD_ARTICLE';
+```javascript
+const ADD_TODO = 'ADD_TODO'
+const REMOVE_TODO = 'REMOVE_TODO'
+const LOAD_ARTICLE = 'LOAD_ARTICLE'
 ```
 
 这么做的优势是什么？**人们通常声称常量不是必要的。对于小项目也许正确。** 对于大的项目，将 action types 定义为常量有如下好处：
 
-* 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
-* 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的action，而你并不知道。
-* Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
-* 如果你在 import 一个 Action 常量的时候拼写错了，你会得到 `undefined` 。在 dispatch 这个 action 的时候，Redux 会立即抛出这个错误，你也会马上发现错误。
+- 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
+- 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的 action，而你并不知道。
+- Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
+- 如果你在 import 一个 Action 常量的时候拼写错了，你会得到 `undefined` 。在 dispatch 这个 action 的时候，Redux 会立即抛出这个错误，你也会马上发现错误。
 
 你的项目约定取决与你自己。开始时，可能在刚开始用内联字符串（inline string），之后转为常量，也许再之后将他们归为一个独立文件。Redux 在这里没有任何建议，选择你自己最喜欢的。
 
@@ -41,31 +41,31 @@ const LOAD_ARTICLE = 'LOAD_ARTICLE';
 
 例如，不是使用对象字面量调用 `dispatch` ：
 
-``` javascript
+```javascript
 // event handler 里的某处
 dispatch({
   type: 'ADD_TODO',
   text: 'Use Redux'
-});
+})
 ```
 
 你其实可以在单独的文件中写一个 action creator ，然后从 component 里 import：
 
 #### `actionCreators.js`
 
-``` javascript
+```javascript
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 ```
 
 #### `AddTodo.js`
 
-``` javascript
-import { addTodo } from './actionCreators';
+```javascript
+import { addTodo } from './actionCreators'
 
 // event handler 里的某处
 dispatch(addTodo('Use Redux'))
@@ -75,24 +75,24 @@ Action creators 总被当作样板代码受到批评。好吧，其实你并不�
 
 假设有个设计师看完我们的原型之后回来说，我们最多只允许三个 todo 。我们可以使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 中间件，并添加一个提前退出，把我们的 action creator 重写成回调形式：
 
-``` javascript
+```javascript
 function addTodoWithoutCheck(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 
 export function addTodo(text) {
   // Redux Thunk 中间件允许这种形式
   // 在下面的 “异步 Action Creators” 段落中有写
-  return function (dispatch, getState) {
+  return function(dispatch, getState) {
     if (getState().todos.length === 3) {
       // 提前退出
-      return;
+      return
     }
 
-    dispatch(addTodoWithoutCheck(text));
+    dispatch(addTodoWithoutCheck(text))
   }
 }
 ```
@@ -105,7 +105,7 @@ export function addTodo(text) {
 
 写简单的 action creator 很容易让人厌烦，且往往最终生成多余的样板代码：
 
-``` javascript
+```javascript
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
@@ -131,7 +131,7 @@ export function removeTodo(id) {
 
 你可以写一个用于生成 action creator 的函数：
 
-``` javascript
+```javascript
 function makeActionCreator(type, ...argNames) {
   return function(...args) {
     let action = { type }
@@ -150,6 +150,7 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
+
 一些工具库也可以帮助生成 action creator ，例如 [redux-act](https://github.com/pauldijou/redux-act) 和 [redux-actions](https://github.com/acdlite/redux-actions) 。这些库可以有效减少你的样板代码，并紧守例如 [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action) 一类的标准。
 
 ## 异步 Action Creators
@@ -160,13 +161,13 @@ export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 
 #### `actionCreators.js`
 
-``` javascript
+```javascript
 export function loadPostsSuccess(userId, response) {
   return {
     type: 'LOAD_POSTS_SUCCESS',
     userId,
     response
-  };
+  }
 }
 
 export function loadPostsFailure(userId, error) {
@@ -174,153 +175,155 @@ export function loadPostsFailure(userId, error) {
     type: 'LOAD_POSTS_FAILURE',
     userId,
     error
-  };
+  }
 }
 
 export function loadPostsRequest(userId) {
   return {
     type: 'LOAD_POSTS_REQUEST',
     userId
-  };
+  }
 }
 ```
 
 #### `UserInfo.js`
 
-``` javascript
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { loadPostsRequest, loadPostsSuccess, loadPostsFailure } from './actionCreators';
+```javascript
+import { Component } from 'react'
+import { connect } from 'react-redux'
+import {
+  loadPostsRequest,
+  loadPostsSuccess,
+  loadPostsFailure
+} from './actionCreators'
 
 class Posts extends Component {
   loadData(userId) {
     // 调用 React Redux `connect()` 注入的 props ：
-    let { dispatch, posts } = this.props;
+    let { dispatch, posts } = this.props
 
     if (posts[userId]) {
       // 这里是被缓存的数据！啥也不做。
-      return;
+      return
     }
 
     // Reducer 可以通过设置 `isFetching` 响应这个 action
     // 因此让我们显示一个 Spinner 控件。
-    dispatch(loadPostsRequest(userId));
+    dispatch(loadPostsRequest(userId))
 
     // Reducer 可以通过填写 `users` 响应这些 actions
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response => dispatch(loadPostsSuccess(userId, response)),
       error => dispatch(loadPostsFailure(userId, error))
-    );
+    )
   }
 
   componentDidMount() {
-    this.loadData(this.props.userId);
+    this.loadData(this.props.userId)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.userId !== this.props.userId) {
-      this.loadData(nextProps.userId);
+      this.loadData(nextProps.userId)
     }
   }
 
   render() {
     if (this.props.isLoading) {
-      return <p>Loading...</p>;
+      return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post =>
-      <Post post={post} key={post.id} />
-    );
+    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
 
-    return <div>{posts}</div>;
+    return <div>{posts}</div>
   }
 }
 
 export default connect(state => ({
   posts: state.posts
-}))(Posts);
+}))(Posts)
 ```
 
-然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
+然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个 components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
 
 **中间件让我们能写表达更清晰的、潜在的异步 action creators。** 它允许我们 dispatch 普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经 dispatch 的 Promises 并把他们变为一对请求和成功/失败的 action.
 
 中间件最简单的例子是 [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” 中间件让你可以把 action creators 写成 “thunks”，也就是返回函数的函数。** 这使得控制被反转了： 你会像一个参数一样取得 `dispatch` ，所以你也能写一个多次分发的 action creator 。
 
->##### 注意
+> ##### 注意
 
->Thunk 只是一个中间件的例子。中间件不仅仅是关于 “分发函数” 的：而是关于你可以使用特定的中间件来分发任何该中间件可以处理的东西。例子中的 Thunk 中间件添加了一个特定的行为用来分发函数，但这实际取决于你用的中间件。
+> Thunk 只是一个中间件的例子。中间件不仅仅是关于 “分发函数” 的：而是关于你可以使用特定的中间件来分发任何该中间件可以处理的东西。例子中的 Thunk 中间件添加了一个特定的行为用来分发函数，但这实际取决于你用的中间件。
 
 用 [redux-thunk](https://github.com/gaearon/redux-thunk) 重写上面的代码：
 
 #### `actionCreators.js`
 
-``` javascript
+```javascript
 export function loadPosts(userId) {
   // 用 thunk 中间件解释：
-  return function (dispatch, getState) {
-    let { posts } = getState();
+  return function(dispatch, getState) {
+    let { posts } = getState()
     if (posts[userId]) {
       // 这里是数据缓存！啥也不做。
-      return;
+      return
     }
 
     dispatch({
       type: 'LOAD_POSTS_REQUEST',
       userId
-    });
+    })
 
     // 异步分发原味 action
     fetch(`http://myapi.com/users/${userId}/posts`).then(
-      response => dispatch({
-        type: 'LOAD_POSTS_SUCCESS',
-        userId,
-        response
-      }),
-      error => dispatch({
-        type: 'LOAD_POSTS_FAILURE',
-        userId,
-        error
-      })
-    );
+      response =>
+        dispatch({
+          type: 'LOAD_POSTS_SUCCESS',
+          userId,
+          response
+        }),
+      error =>
+        dispatch({
+          type: 'LOAD_POSTS_FAILURE',
+          userId,
+          error
+        })
+    )
   }
 }
 ```
 
 #### `UserInfo.js`
 
-``` javascript
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import { loadPosts } from './actionCreators';
+```javascript
+import { Component } from 'react'
+import { connect } from 'react-redux'
+import { loadPosts } from './actionCreators'
 
 class Posts extends Component {
   componentDidMount() {
-    this.props.dispatch(loadPosts(this.props.userId));
+    this.props.dispatch(loadPosts(this.props.userId))
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.userId !== this.props.userId) {
-      this.props.dispatch(loadPosts(nextProps.userId));
+      this.props.dispatch(loadPosts(nextProps.userId))
     }
   }
 
   render() {
     if (this.props.isLoading) {
-      return <p>Loading...</p>;
+      return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post =>
-      <Post post={post} key={post.id} />
-    );
+    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
 
-    return <div>{posts}</div>;
+    return <div>{posts}</div>
   }
 }
 
 export default connect(state => ({
   posts: state.posts
-}))(Posts);
+}))(Posts)
 ```
 
 这样打得字少多了！如果你喜欢，你还是可以保留 “原味” action creators 比如从一个容器 `loadPosts` action creator 里用到的 `loadPostsSuccess` 。
@@ -333,26 +336,21 @@ export function loadPosts(userId) {
     // 要在之前和之后发送的 action types
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
     // 检查缓存 (可选):
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: state => !state.users[userId],
     // 进行取：
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     // 在 actions 的开始和结束注入的参数
     payload: { userId }
-  };
+  }
 }
 ```
 
 解释这个 actions 的中间件可以像这样：
 
-``` javascript
+```javascript
 function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
-    const {
-      types,
-      callAPI,
-      shouldCallAPI = () => true,
-      payload = {}
-    } = action
+    const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
 
     if (!types) {
       // Normal action: pass it on
@@ -375,21 +373,29 @@ function callAPIMiddleware({ dispatch, getState }) {
       return
     }
 
-    const [ requestType, successType, failureType ] = types
+    const [requestType, successType, failureType] = types
 
-    dispatch(Object.assign({}, payload, {
-      type: requestType
-    }))
+    dispatch(
+      Object.assign({}, payload, {
+        type: requestType
+      })
+    )
 
     return callAPI().then(
-      response => dispatch(Object.assign({}, payload, {
-        response,
-        type: successType
-      })),
-      error => dispatch(Object.assign({}, payload, {
-        error,
-        type: failureType
-      }))
+      response =>
+        dispatch(
+          Object.assign({}, payload, {
+            response,
+            type: successType
+          })
+        ),
+      error =>
+        dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
     )
   }
 }
@@ -397,38 +403,47 @@ function callAPIMiddleware({ dispatch, getState }) {
 
 在传给 [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md) 一次以后，你能用相同方式写你的 API 调用 action creators ：
 
-``` javascript
+```javascript
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: (state) => !state.users[userId],
+    shouldCallAPI: state => !state.users[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     payload: { userId }
-  };
+  }
 }
 
 export function loadComments(postId) {
   return {
-    types: ['LOAD_COMMENTS_REQUEST', 'LOAD_COMMENTS_SUCCESS', 'LOAD_COMMENTS_FAILURE'],
-    shouldCallAPI: (state) => !state.posts[postId],
+    types: [
+      'LOAD_COMMENTS_REQUEST',
+      'LOAD_COMMENTS_SUCCESS',
+      'LOAD_COMMENTS_FAILURE'
+    ],
+    shouldCallAPI: state => !state.posts[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
     payload: { postId }
-  };
+  }
 }
 
 export function addComment(postId, message) {
   return {
-    types: ['ADD_COMMENT_REQUEST', 'ADD_COMMENT_SUCCESS', 'ADD_COMMENT_FAILURE'],
-    callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`, {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message })
-    }),
+    types: [
+      'ADD_COMMENT_REQUEST',
+      'ADD_COMMENT_SUCCESS',
+      'ADD_COMMENT_FAILURE'
+    ],
+    callAPI: () =>
+      fetch(`http://myapi.com/posts/${postId}/comments`, {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message })
+      }),
     payload: { postId, message }
-  };
+  }
 }
 ```
 
@@ -438,7 +453,7 @@ Redux reducer 用函数描述逻辑更新减少了样板代码里大量的 Flux 
 
 这个 Flux store:
 
-``` javascript
+```javascript
 let _todos = []
 
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
@@ -447,7 +462,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
   }
 })
 
-AppDispatcher.register(function (action) {
+AppDispatcher.register(function(action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       let text = action.text.trim()
@@ -464,16 +479,16 @@ export default TodoStore
 ```js
 export function todos(state = [], action) {
   switch (action.type) {
-  case ActionTypes.ADD_TODO:
-    let text = action.text.trim()
-    return [ ...state, text ]
-  default:
-    return state
+    case ActionTypes.ADD_TODO:
+      let text = action.text.trim()
+      return [...state, text]
+    default:
+      return state
   }
 }
 ```
 
-`switch` 语句 *不是* 真正的样板代码。真正的 Flux 样板代码是概念性的：发送更新的需求，用 Dispatcher 注册 Store 的需求，Store 是对象的需求 (当你想要一个哪都能跑的 App 的时候复杂度会提升)。
+`switch` 语句 _不是_ 真正的样板代码。真正的 Flux 样板代码是概念性的：发送更新的需求，用 Dispatcher 注册 Store 的需求，Store 是对象的需求 (当你想要一个哪都能跑的 App 的时候复杂度会提升)。
 
 不幸的是很多人仍然靠文档里用没用 `switch` 来选择 Flux 框架。如果你不爱用 `switch` 你可以用一个单独的函数来解决，下面会演示。
 
@@ -481,24 +496,24 @@ export function todos(state = [], action) {
 
 写一个函数将 reducers 表达为 action types 到 handlers 的映射对象。例如，如果想在 `todos` reducer 里这样定义：
 
-``` javascript
+```javascript
 export const todos = createReducer([], {
   [ActionTypes.ADD_TODO](state, action) {
-    let text = action.text.trim();
-    return [...state, text];
+    let text = action.text.trim()
+    return [...state, text]
   }
 })
 ```
 
 我们可以编写下面的辅助函数来完成：
 
-``` javascript
+```javascript
 function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
-      return handlers[action.type](state, action);
+      return handlers[action.type](state, action)
     } else {
-      return state;
+      return state
     }
   }
 }

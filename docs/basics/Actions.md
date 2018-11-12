@@ -23,9 +23,9 @@ Action 本质上是 JavaScript 普通对象。我们约定，action 内必须使
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 ```
 
->##### 样板文件使用提醒
+> ##### 样板文件使用提醒
 
->使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中把它们显式地定义成常量还是利大于弊的。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取更多保持代码简洁的实践经验。
+> 使用单独的模块或文件来定义 action type 常量并不是必须的，甚至根本不需要定义。对于小应用来说，使用字符串做 action type 更方便些。不过，在大型应用中把它们显式地定义成常量还是利大于弊的。参照 [减少样板代码](../recipes/ReducingBoilerplate.md) 获取更多保持代码简洁的实践经验。
 
 除了 `type` 字段外，action 对象的结构完全由你自己决定。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取关于如何构造 action 的建议。
 
@@ -112,7 +112,7 @@ Action 创建函数也可以是异步非纯函数。你可以通过阅读 [高�
  * action 类型
  */
 
-export const ADD_TODO = 'ADD_TODO';
+export const ADD_TODO = 'ADD_TODO'
 export const TOGGLE_TODO = 'TOGGLE_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 

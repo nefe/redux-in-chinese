@@ -228,7 +228,7 @@ Redux 文档旨在教授 Redux 的基本概念，并解释在实际应用程序�
   https://medium.com/react-native-training/redux-4-ways-95a130da0cdc  
   使用 thunks，sagas，observables 和 promise 中间件实现一些基本数据获取的并排比较。
 
-- **Redux 的常用方式: 关于 Thunk、Saga、抽象和可重用性的思考 **
+- **Redux 的常用方式: 关于 Thunk、Saga、抽象和可重用性的思考 **
   http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/  
   对几个 “thunk 不好” 问题的回应，认为 thunk（和 saga）仍然是管理复杂同步逻辑和异步副作用 (Side Effect) 的有效方法。
 
@@ -238,7 +238,7 @@ Redux 文档旨在教授 Redux 的基本概念，并解释在实际应用程序�
   http://formidable.com/blog/2017/real-world-redux-saga-patterns/  
   这是一个精彩的系列，讲述了 Redux-Saga 背后的概念、实现和优势，包括如何使用 ES6 generator 来控制功能流、如何将 saga 组合在一起以实现并发以及实际的 saga 使用案例。
 
-- ** 探索 Redux Saga** 
+- ** 探索 Redux Saga**
   https://medium.com/onfido-tech/exploring-redux-sagas-cc1fca2015ee  
   这篇文章探讨了如何使用 saga 提供粘合层以在 Redux 应用程序中实现解耦业务逻辑。
 
@@ -262,7 +262,7 @@ Redux 文档旨在教授 Redux 的基本概念，并解释在实际应用程序�
   https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367  
   Dan Abramov 的一些是否需要使用 Redux 的看法。
 
-- **Redux 的常用方式: Redux 之道，第 1 部分——实现和意图 **
+- **Redux 的常用方式: Redux 之道，第 1 部分——实现和意图 **
   http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/  
   深入探讨 Redux 的实际工作方式，它要求您遵循的约束条件，以及其设计和使用背后的意图。
 
@@ -297,7 +297,7 @@ Redux 文档旨在教授 Redux 的基本概念，并解释在实际应用程序�
   https://speakerdeck.com/goopscoop/react-plus-redux-tips-and-best-practices-for-clean-reliable-and-scalable-code  
   一个出色的幻灯片，提供各种提示和建议，包括简化 action 创建和减少 reducer 中的数据操作，抽象 API 调用，避免 props 传递等等。
 
-- **Redux 用于大型 Web 应用程序中的状态管理 ** 
+- **Redux 用于大型 Web 应用程序中的状态管理 **
   https://www.mapbox.com/blog/redux-for-state-management-in-large-web-apps/  
   优秀的讨论和常用的 Redux 架构示例，以及 Mapbox 如何将这些方法应用于他们的 Mapbox Studio 应用程序。
 

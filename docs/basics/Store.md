@@ -4,11 +4,11 @@
 
 **Store** 就是把它们联系到一起的对象。Store 有以下职责：
 
-* 维持应用的 state；
-* 提供 [`getState()`](../api/Store.md#getState) 方法获取 state；
-* 提供 [`dispatch(action)`](../api/Store.md#dispatch) 方法更新 state；
-* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器;
-* 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 返回的函数注销监听器。
+- 维持应用的 state；
+- 提供 [`getState()`](../api/Store.md#getState) 方法获取 state；
+- 提供 [`dispatch(action)`](../api/Store.md#dispatch) 方法更新 state；
+- 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 注册监听器;
+- 通过 [`subscribe(listener)`](../api/Store.md#subscribe) 返回的函数注销监听器。
 
 再次强调一下 **Redux 应用只有一个单一的 store**。当需要拆分数据处理逻辑时，你应该使用 [reducer 组合](Reducers.md#splitting-reducers) 而不是创建多个 store。
 
@@ -43,9 +43,7 @@ console.log(store.getState())
 
 // 每次 state 更新时，打印日志
 // 注意 subscribe() 返回一个函数用来注销监听器
-const unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
-)
+const unsubscribe = store.subscribe(() => console.log(store.getState()))
 
 // 发起一系列 action
 store.dispatch(addTodo('Learn about actions'))
@@ -56,7 +54,7 @@ store.dispatch(toggleTodo(1))
 store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
 
 // 停止监听 state 更新
-unsubscribe();
+unsubscribe()
 ```
 
 可以看到 store 里的 state 是如何变化的：

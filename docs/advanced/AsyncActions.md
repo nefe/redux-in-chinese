@@ -10,15 +10,15 @@
 
 这两个时刻都可能会更改应用的 state；为此，你需要 dispatch 普通的同步 action。一般情况下，每个 API 请求都需要 dispatch 至少三种 action：
 
-* **一种通知 reducer 请求开始的 action。**
+- **一种通知 reducer 请求开始的 action。**
 
   对于这种 action，reducer 可能会切换一下 state 中的 `isFetching` 标记。以此来告诉 UI 来显示加载界面。
 
-* **一种通知 reducer 请求成功的 action。**
+- **一种通知 reducer 请求成功的 action。**
 
   对于这种 action，reducer 可能会把接收到的新数据合并到 state 中，并重置 `isFetching`。UI 则会隐藏加载界面，并显示接收到的数据。
 
-* **一种通知 reducer 请求失败的 action。**
+- **一种通知 reducer 请求失败的 action。**
 
   对于这种 action，reducer 可能会重置 `isFetching`。另外，有些 reducer 会保存这些失败信息，并在 UI 里显示出来。
 
@@ -107,9 +107,9 @@ export function receivePosts(subreddit, json) {
 
 以上就是现在需要知道的所有内容。稍后会介绍如何把 dispatch action 与网络请求结合起来。
 
->##### 错误处理须知
+> ##### 错误处理须知
 
->在实际应用中，网络请求失败时也需要 dispatch action。虽然在本教程中我们并不做错误处理，但是这个 [真实场景的案例](../introduction/Examples.md#real-world) 会演示一种实现方案。
+> 在实际应用中，网络请求失败时也需要 dispatch action。虽然在本教程中我们并不做错误处理，但是这个 [真实场景的案例](../introduction/Examples.md#real-world) 会演示一种实现方案。
 
 ## 设计 state 结构
 
@@ -151,17 +151,17 @@ export function receivePosts(subreddit, json) {
 
 下面列出几个要点：
 
-* 分开存储 subreddit 信息，是为了缓存所有 subreddit。当用户来回切换 subreddit 时，可以立即更新，同时在不需要的时候可以不请求数据。不要担心把所有帖子放到内存中（会浪费内存）：除非你需要处理成千上万条帖子，同时用户还很少关闭标签页，否则你不需要做任何清理。
+- 分开存储 subreddit 信息，是为了缓存所有 subreddit。当用户来回切换 subreddit 时，可以立即更新，同时在不需要的时候可以不请求数据。不要担心把所有帖子放到内存中（会浪费内存）：除非你需要处理成千上万条帖子，同时用户还很少关闭标签页，否则你不需要做任何清理。
 
-* 每个帖子的列表都需要使用 `isFetching` 来显示进度条，`didInvalidate` 来标记数据是否过期，`lastUpdated` 来存放数据最后更新时间，还有 `items` 存放列表信息本身。在实际应用中，你还需要存放 `fetchedPageCount` 和 `nextPageUrl` 这样分页相关的 state。
+- 每个帖子的列表都需要使用 `isFetching` 来显示进度条，`didInvalidate` 来标记数据是否过期，`lastUpdated` 来存放数据最后更新时间，还有 `items` 存放列表信息本身。在实际应用中，你还需要存放 `fetchedPageCount` 和 `nextPageUrl` 这样分页相关的 state。
 
->##### 嵌套内容须知
+> ##### 嵌套内容须知
 
->在这个示例中，接收到的列表和分页信息是存在一起的。但是，这种做法并不适用于有互相引用的嵌套内容的场景，或者用户可以编辑列表的场景。想像一下用户需要编辑一个接收到的帖子，但这个帖子在 state tree 的多个位置重复出现。这会让开发变得非常困难。
+> 在这个示例中，接收到的列表和分页信息是存在一起的。但是，这种做法并不适用于有互相引用的嵌套内容的场景，或者用户可以编辑列表的场景。想像一下用户需要编辑一个接收到的帖子，但这个帖子在 state tree 的多个位置重复出现。这会让开发变得非常困难。
 
->如果你有嵌套内容，或者用户可以编辑接收到的内容，你需要把它们分开存放在 state 中，就像数据库中一样。在分页信息中，只使用它们的 ID 来引用。这可以让你始终保持数据更新。[真实场景的案例](../introduction/Examples.md#real-world) 中演示了这种做法，结合 [normalizr](https://github.com/gaearon/normalizr) 来把嵌套的 API 响应数据范式化，最终的 state 看起来是这样：
+> 如果你有嵌套内容，或者用户可以编辑接收到的内容，你需要把它们分开存放在 state 中，就像数据库中一样。在分页信息中，只使用它们的 ID 来引用。这可以让你始终保持数据更新。[真实场景的案例](../introduction/Examples.md#real-world) 中演示了这种做法，结合 [normalizr](https://github.com/gaearon/normalizr) 来把嵌套的 API 响应数据范式化，最终的 state 看起来是这样：
 
->```js
+> ```js
 > {
 >   selectedsubreddit: 'frontend',
 >   entities: {
@@ -198,17 +198,17 @@ export function receivePosts(subreddit, json) {
 >     }
 >   }
 > }
->```
+> ```
 
->在本教程中，我们不会对内容进行范式化，但是在一个复杂些的应用中你可能需要使用。
+> 在本教程中，我们不会对内容进行范式化，但是在一个复杂些的应用中你可能需要使用。
 
 ## 处理 Action
 
 在讲 dispatch action 与网络请求结合使用细节前，我们为上面定义的 action 开发一些 reducer。
 
->##### Reducer 组合须知
+> ##### Reducer 组合须知
 
->这里，我们假设你已经学习过 [`combineReducers()`](../api/combineReducers.md) 并理解 reducer 组合，还有 [基础章节](../basics/README.md) 中的 [拆分 Reducer](../basics/Reducers.md#splitting-reducers)。如果还没有，请 [先学习](../basics/Reducers.md#splitting-reducers)。
+> 这里，我们假设你已经学习过 [`combineReducers()`](../api/combineReducers.md) 并理解 reducer 组合，还有 [基础章节](../basics/README.md) 中的 [拆分 Reducer](../basics/Reducers.md#splitting-reducers)。如果还没有，请 [先学习](../basics/Reducers.md#splitting-reducers)。
 
 #### `reducers.js`
 
@@ -232,9 +232,9 @@ function selectedsubreddit(state = 'reactjs', action) {
 
 function posts(
   state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: []
+    isFetching: false,
+    didInvalidate: false,
+    items: []
   },
   action
 ) {
@@ -283,13 +283,14 @@ export default rootReducer
 
 上面代码有两个有趣的点：
 
-* 使用 ES6 计算属性语法，使用 `Object.assign()` 来简洁高效地更新 `state[action.subreddit]`。这个：
+- 使用 ES6 计算属性语法，使用 `Object.assign()` 来简洁高效地更新 `state[action.subreddit]`。这个：
 
   ```js
   return Object.assign({}, state, {
     [action.subreddit]: posts(state[action.subreddit], action)
   })
   ```
+
   与下面代码等价：
 
   ```js
@@ -298,7 +299,7 @@ export default rootReducer
   return Object.assign({}, state, nextState)
   ```
 
-* 我们提取出 `posts(state, action)` 来管理指定帖子列表的 state。这就是 [reducer 组合](../basics/Reducers.md#splitting-reducers) ！我们还可以借此机会把 reducer 分拆成更小的 reducer，这种情况下，我们把对象内列表的更新代理到了 `posts` reducer 上。在 [真实场景的案例](../introduction/Examples.md#real-world) 中甚至更进一步，里面介绍了如何做一个 reducer 工厂来生成参数化的分页 reducer。
+- 我们提取出 `posts(state, action)` 来管理指定帖子列表的 state。这就是 [reducer 组合](../basics/Reducers.md#splitting-reducers) ！我们还可以借此机会把 reducer 分拆成更小的 reducer，这种情况下，我们把对象内列表的更新代理到了 `posts` reducer 上。在 [真实场景的案例](../introduction/Examples.md#real-world) 中甚至更进一步，里面介绍了如何做一个 reducer 工厂来生成参数化的分页 reducer。
 
 记住 reducer 只是函数而已，所以你可以尽情使用函数组合和高阶函数这些特性。
 
@@ -383,23 +384,23 @@ export function fetchPosts(subreddit) {
 }
 ```
 
->##### `fetch` 使用须知
+> ##### `fetch` 使用须知
 
->本示例使用了 [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。它是替代 `XMLHttpRequest` 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 [`cross_fetch`](https://github.com/lquixada/cross-fetch) 库：
+> 本示例使用了 [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API)。它是替代 `XMLHttpRequest` 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 [`cross_fetch`](https://github.com/lquixada/cross-fetch) 库：
 
->```js
->// 每次使用 `fetch` 前都这样调用一下
->import fetch from 'cross_fetch'
->```
+> ```js
+> // 每次使用 `fetch` 前都这样调用一下
+> import fetch from 'cross_fetch'
+> ```
 
->在底层，它在浏览器端使用 [`whatwg-fetch` polyfill](https://github.com/github/fetch)，在服务器端使用 [`node-fetch`](https://github.com/bitinn/node-fetch)，所以如果当你把应用改成 [同构](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) 时，并不需要改变 API 请求。
+> 在底层，它在浏览器端使用 [`whatwg-fetch` polyfill](https://github.com/github/fetch)，在服务器端使用 [`node-fetch`](https://github.com/bitinn/node-fetch)，所以如果当你把应用改成 [同构](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) 时，并不需要改变 API 请求。
 
->注意，`fetch` polyfill 假设你已经使用了 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 的 polyfill。确保你使用 Promise polyfill 的一个最简单的办法是在所有应用代码前启用 Babel 的 ES6 polyfill：
+> 注意，`fetch` polyfill 假设你已经使用了 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 的 polyfill。确保你使用 Promise polyfill 的一个最简单的办法是在所有应用代码前启用 Babel 的 ES6 polyfill：
 
->```js
->// 在应用中其它任何代码执行前调用一次
->import 'babel-polyfill'
->```
+> ```js
+> // 在应用中其它任何代码执行前调用一次
+> import 'babel-polyfill'
+> ```
 
 我们是如何在 dispatch 机制中引入 Redux Thunk middleware 的呢？我们使用了 [`applyMiddleware()`](../api/applyMiddleware.md)，如下：
 
@@ -423,10 +424,7 @@ const store = createStore(
 )
 
 store.dispatch(selectSubreddit('reactjs'))
-store
-  .dispatch(fetchPosts('reactjs'))
-  .then(() => console.log(store.getState())
-)
+store.dispatch(fetchPosts('reactjs')).then(() => console.log(store.getState()))
 ```
 
 thunk 的一个优点是它的结果可以再次被 dispatch：
@@ -483,7 +481,6 @@ function shouldFetchPosts(state, subreddit) {
 }
 
 export function fetchPostsIfNeeded(subreddit) {
-
   // 注意这个函数也接收了 getState() 方法
   // 它让你选择接下来 dispatch 什么。
 
@@ -509,21 +506,20 @@ export function fetchPostsIfNeeded(subreddit) {
 ```js
 store
   .dispatch(fetchPostsIfNeeded('reactjs'))
-  .then(() => console.log(store.getState())
-)
+  .then(() => console.log(store.getState()))
 ```
 
->##### 服务端渲染须知
+> ##### 服务端渲染须知
 
->异步 action 创建函数对于做服务端渲染非常方便。你可以创建一个 store，dispatch 一个异步 action 创建函数，这个 action 创建函数又 dispatch 另一个异步 action 创建函数来为应用的一整块请求数据，同时在 Promise 完成和结束时才 render 界面。然后在 render 前，store 里就已经存在了需要用的 state。
+> 异步 action 创建函数对于做服务端渲染非常方便。你可以创建一个 store，dispatch 一个异步 action 创建函数，这个 action 创建函数又 dispatch 另一个异步 action 创建函数来为应用的一整块请求数据，同时在 Promise 完成和结束时才 render 界面。然后在 render 前，store 里就已经存在了需要用的 state。
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) 并不是 Redux 处理异步 action 的唯一方式：
 
-* 你可以使用 [redux-promise](https://github.com/acdlite/redux-promise) 或者 [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) 来 dispatch Promise 来替代函数。
-* 你可以使用 [redux-observable](https://github.com/redux-observable/redux-observable) 来 dispatch Observable。
-* 你可以使用 [redux-saga](https://github.com/yelouafi/redux-saga/) 中间件来创建更加复杂的异步 action。
-* 你可以使用 [redux-pack](https://github.com/lelandrichardson/redux-pack) 中间件 dispatch 基于 Promise 的异步 Action。
-* 你甚至可以写一个自定义的 middleware 来描述 API 请求，就像这个 [真实场景的案例](../introduction/Examples.md#real-world) 中的做法一样。
+- 你可以使用 [redux-promise](https://github.com/acdlite/redux-promise) 或者 [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) 来 dispatch Promise 来替代函数。
+- 你可以使用 [redux-observable](https://github.com/redux-observable/redux-observable) 来 dispatch Observable。
+- 你可以使用 [redux-saga](https://github.com/yelouafi/redux-saga/) 中间件来创建更加复杂的异步 action。
+- 你可以使用 [redux-pack](https://github.com/lelandrichardson/redux-pack) 中间件 dispatch 基于 Promise 的异步 Action。
+- 你甚至可以写一个自定义的 middleware 来描述 API 请求，就像这个 [真实场景的案例](../introduction/Examples.md#real-world) 中的做法一样。
 
 你也可以先尝试一些不同做法，选择喜欢的，并使用下去，不论有没有使用到 middleware 都行。
 
