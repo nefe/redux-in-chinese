@@ -50,5 +50,10 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/redux-in-chinese"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
