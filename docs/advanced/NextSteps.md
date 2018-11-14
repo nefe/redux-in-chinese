@@ -43,8 +43,8 @@
 在一个大项目中，命名会带来巨大的困惑，通常命名和写代码一样重要。在项目刚刚开始时，最好制定一套 action 的命名规范，并在之后的开发中严格遵守。当项目范围逐渐增大时，这将非常有助于你的代码的扩张。
 
 非常好的文章：
-[A Simple Naming Convention for Action Creators in Redux](https://decembersoft.com/posts/a-simple-naming-convention-for-action-creators-in-redux-js/) 
-和 
+[A Simple Naming Convention for Action Creators in Redux](https://decembersoft.com/posts/a-simple-naming-convention-for-action-creators-in-redux-js/)
+和
 [Redux Patterns and Anti-Patterns](https://tech.affirm.com/redux-patterns-and-anti-patterns-7d80ef3d53bc)
 
 **小提示**：使用一个代码格式化工具，比如 [Prettier](https://github.com/prettier/prettier)。
@@ -59,7 +59,6 @@
 - [Redux: Architecting and scaling a new web app at the NY Times](https://www.youtube.com/watch?v=lI3IcjFg9Wk)
 
 **小提示**：在动手之前确实应该做好计划，但也不要陷入[“纸上谈兵”](https://en.wikipedia.org/wiki/Analysis_paralysis)。毕竟“做完”比“完美做完”更好，而且如果需要的话，[Redux 的重构起来很容易](https://blog.boldlisting.com/so-youve-screwed-up-your-redux-store-or-why-redux-makes-refactoring-easy-400e19606c71)
-
 
 总之，最好的实践永远是 keep coding and learning。参与 [issues](https://github.com/reduxjs/redux/issues) 和 [StackOverFlow questions](https://stackoverflow.com/questions/tagged/redux) 的讨论也是一种精通 Redux 的好办法。
 

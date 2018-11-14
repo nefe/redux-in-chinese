@@ -5,15 +5,16 @@
 - [为何 type 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？](#actions-string-constants)
 - [是否存在 reducer 和 action 之间的一对一映射？](#actions-reducer-mappings)
 - [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunk” 以及 “middleware” 类似的东西去处理异步行为？](#actions-side-effects)
-- [应该使用什么样的异步中间件? 怎样在thunks、sagas、observables或其他类似的库中做出选择?](#actions-async-middlewares)
+- [应该使用什么样的异步中间件? 怎样在 thunks、sagas、observables 或其他类似的库中做出选择?](#actions-async-middlewares)
 - [是否应该在 action 创建函数中连续分发多个 action？](#actions-multiple-actions)
 
 ## Actions
 
 <a id="actions-string-constants"></a>
+
 ### 为何 `type` 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？
 
-和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 等去定义 `type` 值，或者用 `instanceof` 对 action 做自检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 *可以* 的。 action 只有当它们真正到达 store 且被传递给 reducer 时才需要被序列化。
+和 state 一样，可序列化的 action 使得若干 Redux 的经典特性变得可能，比如时间旅行调试器、录制和重放 action。若使用 `Symbol` 等去定义 `type` 值，或者用 `instanceof` 对 action 做自检查都会破坏这些特性。字符串是可序列化的、自解释型，所以是更好的选择。注意，如果 action 目的是在 middleware 中处理，那么使用 Symbols、 Promises 或者其它非可序列化值也是 _可以_ 的。 action 只有当它们真正到达 store 且被传递给 reducer 时才需要被序列化。
 
 因为性能原因，我们无法强制序列化 action，所以 Redux 只会校验 action 是否是普通对象，以及 `type` 是否定义。其它的都交由你决定，但是确保数据是可序列化将对调试以及问题的重现有很大帮助。
 
@@ -35,6 +36,7 @@
 - [Stack Overflow: What is the point of the constants in Redux？](http://stackoverflow.com/q/34965856/62937)
 
 <a id="actions-reducer-mappings"></a>
+
 ### 是否存在 reducer 和 action 之间的一对一映射？
 
 不存在。建议的方式是编写独立且很小的 reducer 方法去更新指定的 state 部分，这种模式被称为 “reducer 合成”。一个指定的 action 也许被它们中的全部、部分、甚至没有一个处理到。这种方式把组件从实际的数据变更中解耦，一个 action 可能影响到 state 树的不同部分，对组件而言再也不必知道这些了。有些用户选择将它们紧密绑定在一起，就像 “ducks” 文件结构，显然是没有默认的一对一映射。所以当你想在多个 reducer 中处理同一个 action 时，应当避免此类结构。
@@ -54,19 +56,21 @@
 - [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware？](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
 
 <a id="actions-side-effects"></a>
+
 ### 怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？
 
 这是一个持久且复杂的话题，针对如何组织代码以及采用何种方式有很多的观点。
 
 任何有价值的 web 应用都必然要执行复杂的逻辑，通常包括 AJAX 请求等异步工作。这类代码不再是针对输入的纯函数，与第三方的交互被认为是 [“副作用”](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)。
 
-Redux 深受函数式编程的影响，创造性的不支持副作用的执行。尤其是 reducer， *必须* 是符合  `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，还可以添加副作用。
+Redux 深受函数式编程的影响，创造性的不支持副作用的执行。尤其是 reducer， _必须_ 是符合 `(state, action) => newState` 的纯函数。然而，Redux 的 middleware 能拦截分发的 action 并添加额外的复杂行为，还可以添加副作用。
 
-Redux 建议将带副作用的代码作为 action 创建过程的一部分。因为该逻辑 *能* 在 UI 组件内执行，那么通常抽取此类逻辑作为可重用的方法都是有意义的，因此同样的逻辑能被多个地方调用，也就是所谓的 action 创建函数。
+Redux 建议将带副作用的代码作为 action 创建过程的一部分。因为该逻辑 _能_ 在 UI 组件内执行，那么通常抽取此类逻辑作为可重用的方法都是有意义的，因此同样的逻辑能被多个地方调用，也就是所谓的 action 创建函数。
 
-最简单也是最常用的方法就是使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛使用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 *许多* 其它开源的库和理念，都有各自针对副作用的管理方法。
+最简单也是最常用的方法就是使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware，这样就能用更为复杂或者异步的逻辑书写 action 创建函数。另一个被广泛使用的方法是 [Redux Saga](https://github.com/yelouafi/redux-saga)，你可以用 generator 书写类同步代码，就像在 Redux 应用中使用 “后台线程” 或者 “守护进程”。还有一个方法是 [Redux Loop](https://github.com/raisemarketplace/redux-loop)，它允许 reducer 以声明副作用的方式去响应 state 变化，并让它们分别执行，从而反转了进程。除此之外，还有 _许多_ 其它开源的库和理念，都有各自针对副作用的管理方法。
 
 #### 补充资料
+
 **文档**
 
 - [Advanced: Async Actions](advanced/AsyncActions.md)
@@ -98,21 +102,20 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 - [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
 
 <a id="actions-async-middlewares"></a>
-### 应该使用什么样的异步中间件? 怎样在thunk、saga、observable或其他类似的库中做出选择?
 
-这里有 [许多可用的异步/副作用中间件](https://github.com/markerikson/redux-ecosystem-links/blob/master/side-effects.md), 但最常用的有 [`redux-thunk`](https://github.com/reduxjs/redux-thunk)、 [`redux-saga`](https://github.com/redux-saga/redux-saga)和 [`redux-observable`](https://github.com/redux-observable/redux-observable)。  它们是优势、弱点及用例各不相同的工具。
+### 应该使用什么样的异步中间件? 怎样在 thunk、saga、observable 或其他类似的库中做出选择?
+
+这里有 [许多可用的异步/副作用中间件](https://github.com/markerikson/redux-ecosystem-links/blob/master/side-effects.md), 但最常用的有 [`redux-thunk`](https://github.com/reduxjs/redux-thunk)、 [`redux-saga`](https://github.com/redux-saga/redux-saga)和 [`redux-observable`](https://github.com/redux-observable/redux-observable)。 它们是优势、弱点及用例各不相同的工具。
 
 一般的经验是:
 
-- Thunk最适合复杂的同步逻辑（特别是需要访问整个Redux存储状态的代码）和简单的异步逻辑（如基本的AJAX调用）。 通过使用`async / await`，也可将thunk用于更复杂的基于promise的逻辑。
-- Saga最适合复杂的异步逻辑和解耦的“后台线程”类型的行为，特别是如果需要监听发起的（dispatched）action（这是通过thunk无法完成的事情）。 saga需要使用者熟练使用ES6 generator函数和`redux-saga`的“effects”运算符。
-- Observable与saga解决了同一类问题，但依赖于RxJS来实现异步行为。 Observable需要使用者熟练使用RxJS API。
+- Thunk 最适合复杂的同步逻辑（特别是需要访问整个 Redux 存储状态的代码）和简单的异步逻辑（如基本的 AJAX 调用）。 通过使用`async / await`，也可将 thunk 用于更复杂的基于 promise 的逻辑。
+- Saga 最适合复杂的异步逻辑和解耦的“后台线程”类型的行为，特别是如果需要监听发起的（dispatched）action（这是通过 thunk 无法完成的事情）。 saga 需要使用者熟练使用 ES6 generator 函数和`redux-saga`的“effects”运算符。
+- Observable 与 saga 解决了同一类问题，但依赖于 RxJS 来实现异步行为。 Observable 需要使用者熟练使用 RxJS API。
 
-我们建议大多数Redux用户应该从thunk开始，如果他们的应用确实需要处理更复杂的异步逻辑，再添加一个额外的副作用库，如saga或observable。
+我们建议大多数 Redux 用户应该从 thunk 开始，如果他们的应用确实需要处理更复杂的异步逻辑，再添加一个额外的副作用库，如 saga 或 observable。
 
-因为saga和observable具有相同的用例，所以应用程序通常使用其中一个，但不能同时使用两者。 但是，请注意 **同时使用thunk和saga或者observable是完全没问题的**，因为它们解决的是不同的问题。
-
-
+因为 saga 和 observable 具有相同的用例，所以应用程序通常使用其中一个，但不能同时使用两者。 但是，请注意 **同时使用 thunk 和 saga 或者 observable 是完全没问题的**，因为它们解决的是不同的问题。
 
 **文章**
 
@@ -128,11 +131,12 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 - [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
 
 <a id="actions-multiple-actions"></a>
+
 ### 是否应该在 action 创建函数中连续分发多个 action？
 
 关于如何构建 action 并没有统一的规范。使用类似 Redux Thunk 的异步 middleware 支持了更多的场景，比如分发连续多个独立且相关联的 action、 分发 action 指示 AJAX 请求的阶段、 根据 state 有条件的分发 action、甚至分发 action 并随后校验更新的 state。
 
-通常，明确这些 action 是关联还是独立，是否应当作为一个 action。评判当前场景影响因素的同时，还需根据 action 日志权衡 reducer 的可读性。例如，一个包含新 state 树的 action 会使你的 reducer 只有一行，副作用是没有任何历史表明 *为什么* 发生了变更，进而导致调试异常困难。另一方面，如果为了维持它们的粒状结构（granular），在循环中分发 action，这表明也许需要引入新的 acton 类型并以不同的方式去处理它。
+通常，明确这些 action 是关联还是独立，是否应当作为一个 action。评判当前场景影响因素的同时，还需根据 action 日志权衡 reducer 的可读性。例如，一个包含新 state 树的 action 会使你的 reducer 只有一行，副作用是没有任何历史表明 _为什么_ 发生了变更，进而导致调试异常困难。另一方面，如果为了维持它们的粒状结构（granular），在循环中分发 action，这表明也许需要引入新的 acton 类型并以不同的方式去处理它。
 
 避免在同一地方连续多次以同步的方式进行分发，其性能问题是值得担忧的。有许多插件和方法可以批处理调度。
 
@@ -143,6 +147,7 @@ Redux 建议将带副作用的代码作为 action 创建过程的一部分。因
 - [FAQ: Performance - Reducing Update Events](/docs/faq/Performance.md#performance-update-events)
 
 **文章**
+
 - [Idiomatic Redux: Thoughts on Thunks, Sagas, Abstraction, and Reusability](http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/#multiple-dispatching)
 
 **讨论**

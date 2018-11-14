@@ -14,7 +14,7 @@ Redux 默认并不包含 [React 绑定库](https://github.com/reactjs/react-redu
 npm install --save react-redux
 ```
 
-如果你不使用npm，你也可以从unpkg获取最新的UMD包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你用 `<script>` 标签的方式引入UMD包，那么它会在全局抛出`window.ReactRedux`对象。
+如果你不使用 npm，你也可以从 unpkg 获取最新的 UMD 包（包括[开发环境包](https://unpkg.com/react-redux@latest/dist/react-redux.js)和[生产环境包](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果你用 `<script>` 标签的方式引入 UMD 包，那么它会在全局抛出`window.ReactRedux`对象。
 
 ## 容器组件（Smart/Container Components）和展示组件（Dumb/Presentational Components）
 
@@ -73,17 +73,17 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
 
 以下的这些组件（和它们的 props ）就是从这个设计里来的：
 
-* **`TodoList`** 用于显示 todos 列表。
+- **`TodoList`** 用于显示 todos 列表。
   - `todos: Array` 以 `{ text, completed }` 形式显示的 todo 项数组。
   - `onTodoClick(index: number)` 当 todo 项被点击时调用的回调函数。
-* **`Todo`** 一个 todo 项。
+- **`Todo`** 一个 todo 项。
   - `text: string` 显示的文本内容。
   - `completed: boolean` todo 项是否显示删除线。
   - `onClick()` 当 todo 项被点击时调用的回调函数。
-* **`Link`** 带有 callback 回调功能的链接
+- **`Link`** 带有 callback 回调功能的链接
   - `onClick()` 当点击链接时会触发
-* **`Footer`** 一个允许用户改变可见 todo 过滤器的组件。
-* **`App`** 根组件，渲染余下的所有内容。
+- **`Footer`** 一个允许用户改变可见 todo 过滤器的组件。
+- **`App`** 根组件，渲染余下的所有内容。
 
 这些组件只定义外观并不关心数据来源和如何改变。传入什么就渲染什么。如果你把代码从 Redux 迁移到别的架构，这些组件可以不做任何改动直接使用。它们并不依赖于 Redux。
 
@@ -91,15 +91,15 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
 
 还需要一些容器组件来把展示组件连接到 Redux。例如，展示型的 `TodoList` 组件需要一个类似 `VisibleTodoList` 的容器来监听 Redux store 变化并处理如何过滤出要显示的数据。为了实现状态过滤，需要实现 `FilterLink` 的容器组件来渲染 `Link` 并在点击时触发对应的 action：
 
-* **`VisibleTodoList`** 根据当前显示的状态来对 todo 列表进行过滤，并渲染 `TodoList`。
-* **`FilterLink`** 得到当前过滤器并渲染 `Link`。
+- **`VisibleTodoList`** 根据当前显示的状态来对 todo 列表进行过滤，并渲染 `TodoList`。
+- **`FilterLink`** 得到当前过滤器并渲染 `Link`。
   - `filter: string` 就是当前过滤的状态
 
 ### 其它组件
 
 有时很难分清到底该使用容器组件还是展示组件。例如，有时表单和函数严重耦合在一起，如这个小的组件：
 
-* **`AddTodo`** 含有“Add”按钮的输入框
+- **`AddTodo`** 含有“Add”按钮的输入框
 
 技术上讲可以把它分成两个组件，但一开始就这么做有点早。在一些非常小的组件里混用容器和展示是可以的。当业务变复杂后，如何拆分就很明显了。所以现在就使用混合型的吧。
 
@@ -120,7 +120,7 @@ import PropTypes from 'prop-types'
 const Todo = ({ onClick, completed, text }) => (
   <li
     onClick={onClick}
-    style={ {
+    style={{
       textDecoration: completed ? 'line-through' : 'none'
     }}
   >
@@ -207,19 +207,11 @@ import FilterLink from '../containers/FilterLink'
 
 const Footer = () => (
   <p>
-    Show:
-    {' '}
-    <FilterLink filter="SHOW_ALL">
-      All
-    </FilterLink>
+    Show: <FilterLink filter="SHOW_ALL">All</FilterLink>
     {', '}
-    <FilterLink filter="SHOW_ACTIVE">
-      Active
-    </FilterLink>
+    <FilterLink filter="SHOW_ACTIVE">Active</FilterLink>
     {', '}
-    <FilterLink filter="SHOW_COMPLETED">
-      Completed
-    </FilterLink>
+    <FilterLink filter="SHOW_COMPLETED">Completed</FilterLink>
   </p>
 )
 
@@ -353,7 +345,7 @@ export default VisibleTodoList
 ### 其它组件
 
 #### `containers/AddTodo.js`
- 
+
 回想一下[前面提到的](#其它组件)， `AddTodo` 组件的视图和逻辑混合在一个单独的定义之中。
 
 ```js
@@ -381,9 +373,7 @@ let AddTodo = ({ dispatch }) => {
             input = node
           }}
         />
-        <button type="submit">
-          Add Todo
-        </button>
+        <button type="submit">Add Todo</button>
       </form>
     </div>
   )
@@ -393,9 +383,10 @@ AddTodo = connect()(AddTodo)
 export default AddTodo
 ```
 
-如果你不熟悉ref属性, 请阅读这篇[文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)以熟悉这个属性的推荐用法。
+如果你不熟悉 ref 属性, 请阅读这篇[文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)以熟悉这个属性的推荐用法。
 
 ### 将容器放到一个组件
+
 #### `components/App.js`
 
 ```js

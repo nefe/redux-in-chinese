@@ -184,7 +184,7 @@ export default function configureStore(preloadedState) {
 
   ```js
   if (process.env === 'development') {
-      middlewares.push(secretMiddleware)
+    middlewares.push(secretMiddleware)
   }
   ```
 

@@ -1,6 +1,6 @@
 # Middleware
 
-我们已经在[异步 Action ](../advanced/AsyncActions.md)一节的示例中看到了一些 middleware 的使用。如果你使用过 [Express](http://expressjs.com/) 或者 [Koa](http://koajs.com/) 等服务端框架, 那么应该对 *middleware* 的概念不会陌生。 在这类框架中，middleware 是指可以被嵌入在框架接收请求到产生响应过程之中的代码。例如，Express 或者 Koa 的 middleware 可以完成添加 CORS headers、记录日志、内容压缩等工作。middleware 最优秀的特性就是可以被链式组合。你可以在一个项目中使用多个独立的第三方 middleware。
+我们已经在[异步 Action ](../advanced/AsyncActions.md)一节的示例中看到了一些 middleware 的使用。如果你使用过 [Express](http://expressjs.com/) 或者 [Koa](http://koajs.com/) 等服务端框架, 那么应该对 _middleware_ 的概念不会陌生。 在这类框架中，middleware 是指可以被嵌入在框架接收请求到产生响应过程之中的代码。例如，Express 或者 Koa 的 middleware 可以完成添加 CORS headers、记录日志、内容压缩等工作。middleware 最优秀的特性就是可以被链式组合。你可以在一个项目中使用多个独立的第三方 middleware。
 
 相对于 Express 或者 Koa 的 middleware，Redux middleware 被用于解决不同的问题，但其中的概念是类似的。**它提供的是位于 action 被发起之后，到达 reducer 之前的扩展点。** 你可以利用 Redux middleware 来进行日志记录、创建崩溃报告、调用异步接口或者路由等等。
 
@@ -24,9 +24,9 @@
 
 最直接的解决方案就是在每次调用 [`store.dispatch(action)`](../api/Store.md#dispatch) 前后手动记录被发起的 action 和新的 state。这称不上一个真正的解决方案，仅仅是我们理解这个问题的第一步。
 
->##### 注意
+> ##### 注意
 
->如果你使用 [react-redux](https://github.com/reactjs/react-redux) 或者类似的绑定库，最好不要直接在你的组件中操作 store 的实例。在接下来的内容中，仅仅是假设你会通过 store 显式地向下传递。
+> 如果你使用 [react-redux](https://github.com/reactjs/react-redux) 或者类似的绑定库，最好不要直接在你的组件中操作 store 的实例。在接下来的内容中，仅仅是假设你会通过 store 显式地向下传递。
 
 假设，你在创建一个 Todo 时这样调用：
 
@@ -63,6 +63,7 @@ function dispatchAndLog(store, action) {
 ```js
 dispatchAndLog(store, addTodo('Use Redux'))
 ```
+
 你可以选择到此为止，但是每次都要导入一个外部方法总归还是不太方便。
 
 ### 尝试 #3: Monkeypatching Dispatch
@@ -160,9 +161,7 @@ function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares.reverse()
 
   // 在每一个 middleware 中变换 dispatch 方法。
-  middlewares.forEach(middleware =>
-    store.dispatch = middleware(store)
-  )
+  middlewares.forEach(middleware => (store.dispatch = middleware(store)))
 }
 ```
 
@@ -211,6 +210,7 @@ function logger(store) {
   }
 }
 ```
+
 现在是[“我们该更进一步”](http://knowyourmeme.com/memes/we-need-to-go-deeper)的时刻了，所以可能会多花一点时间来让它变的更为合理一些。这些串联函数很吓人。ES6 的箭头函数可以使其 [柯里化](https://en.wikipedia.org/wiki/Currying) ，从而看起来更舒服一些:
 
 ```js
@@ -252,20 +252,18 @@ function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
   let dispatch = store.dispatch
-  middlewares.forEach(middleware =>
-    dispatch = middleware(store)(dispatch)
-  )
+  middlewares.forEach(middleware => (dispatch = middleware(store)(dispatch)))
   return Object.assign({}, store, { dispatch })
 }
 ```
 
 这与 Redux 中 [`applyMiddleware()`](../api/applyMiddleware.md) 的实现已经很接近了，但是**有三个重要的不同之处**：
 
-* 它只暴露一个 [store API](../api/Store.md) 的子集给 middleware：[`dispatch(action)`](../api/Store.md#dispatch) 和 [`getState()`](../api/Store.md#getState)。
+- 它只暴露一个 [store API](../api/Store.md) 的子集给 middleware：[`dispatch(action)`](../api/Store.md#dispatch) 和 [`getState()`](../api/Store.md#getState)。
 
-* 它用了一个非常巧妙的方式，以确保如果你在 middleware 中调用的是 `store.dispatch(action)` 而不是 `next(action)`，那么这个操作会再次遍历包含当前 middleware 在内的整个 middleware 链。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。在创建阶段调用 `dispatch` 时你需要特别注意，详见下方警告。
+- 它用了一个非常巧妙的方式，以确保如果你在 middleware 中调用的是 `store.dispatch(action)` 而不是 `next(action)`，那么这个操作会再次遍历包含当前 middleware 在内的整个 middleware 链。这对异步的 middleware 非常有用，正如我们在[之前的章节](AsyncActions.md)中提到的。在创建阶段调用 `dispatch` 时你需要特别注意，详见下方警告。
 
-* 为了保证你只能应用 middleware 一次，它作用在 `createStore()` 上而不是 `store` 本身。因此它的签名不是 `(store, middlewares) => store`， 而是 `(...middlewares) => (createStore) => createStore`。
+- 为了保证你只能应用 middleware 一次，它作用在 `createStore()` 上而不是 `store` 本身。因此它的签名不是 `(store, middlewares) => store`， 而是 `(...middlewares) => (createStore) => createStore`。
 
 由于在使用之前需要先应用方法到 `createStore()` 之上有些麻烦，`createStore()` 也接受将希望被应用的函数作为最后一个可选参数传入。
 
@@ -321,7 +319,7 @@ const store = createStore(
 store.dispatch(addTodo('Use Redux'))
 ```
 
-## 7个示例
+## 7 个示例
 
 如果读完上面的章节你已经觉得头都要爆了，那就想象一下把它写出来之后的样子。下面的内容会让我们放松一下，并让你的思路延续。
 
@@ -367,10 +365,7 @@ const timeoutScheduler = store => next => action => {
     return next(action)
   }
 
-  const timeoutId = setTimeout(
-    () => next(action),
-    action.meta.delay
-  )
+  const timeoutId = setTimeout(() => next(action), action.meta.delay)
 
   return function cancel() {
     clearTimeout(timeoutId)
@@ -463,8 +458,8 @@ const readyStatePromise = store => next => action => {
  * `dispatch` 会返回被发起函数的返回值。
  */
 const thunk = store => next => action =>
-  typeof action === 'function' 
-    ? action(store.dispatch, store.getState) 
+  typeof action === 'function'
+    ? action(store.dispatch, store.getState)
     : next(action)
 
 // 你可以使用以上全部的 middleware！（当然，这不意味着你必须全都使用。）

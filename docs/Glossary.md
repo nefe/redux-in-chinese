@@ -8,7 +8,7 @@
 type State = any
 ```
 
-*State* (也称为 *state tree*) 是一个宽泛的概念，但是在 Redux API 中，通常是指一个唯一的 state 值，由 store 管理且由 [`getState()`](api/Store.md#getState) 方法获得。它表示了 Redux 应用的全部状态，通常为一个多层嵌套的对象。
+_State_ (也称为 _state tree_) 是一个宽泛的概念，但是在 Redux API 中，通常是指一个唯一的 state 值，由 store 管理且由 [`getState()`](api/Store.md#getState) 方法获得。它表示了 Redux 应用的全部状态，通常为一个多层嵌套的对象。
 
 约定俗成，顶层 state 或为一个对象，或像 Map 那样的键-值集合，也可以是任意的数据类型。然而你应尽可能确保 state 可以被序列化，而且不要把什么数据都放进去，导致无法轻松地把 state 转换成 JSON。
 
@@ -18,7 +18,7 @@ type State = any
 type Action = Object
 ```
 
-*Action* 是一个普通对象，用来表示即将改变 state 的意图。它是将数据放入 store 的唯一途径。无论是从 UI 事件、网络回调，还是其他诸如 WebSocket 之类的数据源所获得的数据，最终都会被 dispatch 成 action。
+_Action_ 是一个普通对象，用来表示即将改变 state 的意图。它是将数据放入 store 的唯一途径。无论是从 UI 事件、网络回调，还是其他诸如 WebSocket 之类的数据源所获得的数据，最终都会被 dispatch 成 action。
 
 约定俗成，action 必须拥有一个 `type` 域，它指明了需要被执行的 action type。Type 可以被定义为常量，然后从其他 module 导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type`，使用 String 是更好的方法，因为 string 可以被序列化。
 
@@ -32,7 +32,7 @@ type Action = Object
 type Reducer<S, A> = (state: S, action: A) => S
 ```
 
-*Reducer* (也称为 *reducing function*) 函数接受两个参数：之前累积运算的结果和当前被累积的值，返回的是一个新的累积结果。该函数把一个集合归并成一个单值。
+_Reducer_ (也称为 _reducing function_) 函数接受两个参数：之前累积运算的结果和当前被累积的值，返回的是一个新的累积结果。该函数把一个集合归并成一个单值。
 
 Reducer 并不是 Redux 特有的函数 —— 它是函数式编程中的一个基本概念，甚至大部分的非函数式语言比如 JavaScript，都有一个内置的 reduce API。对于 JavaScript，这个 API 是 [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
 
@@ -49,7 +49,7 @@ type BaseDispatch = (a: Action) => Action
 type Dispatch = (a: Action | AsyncAction) => any
 ```
 
-*dispatching function* (或简言之 *dispatch function*) 是一个接收 action 或者[异步 action](#异步-action)的函数，该函数要么往 store 分发一个或多个 action，要么不分发任何 action。
+_dispatching function_ (或简言之 _dispatch function_) 是一个接收 action 或者[异步 action](#异步-action)的函数，该函数要么往 store 分发一个或多个 action，要么不分发任何 action。
 
 我们必须分清一般的 dispatch function 以及由 store 实例提供的没有 middleware 的 base [`dispatch`](api/Store.md#dispatch) function 之间的区别。
 
@@ -63,9 +63,9 @@ Base dispatch function **总是**同步地把 action 与上一次从 store 返�
 type ActionCreator = (...args: any) => Action | AsyncAction
 ```
 
-*Action Creator* 很简单，就是一个创建 action 的函数。不要混淆 action 和 action creator 这两个概念。Action 是一个信息的负载，而 action creator 是一个创建 action 的工厂。
+_Action Creator_ 很简单，就是一个创建 action 的函数。不要混淆 action 和 action creator 这两个概念。Action 是一个信息的负载，而 action creator 是一个创建 action 的工厂。
 
-调用 action creator 只会生产 action，但不分发。你需要调用 store 的 [`dispatch`](api/Store.md#dispatch) function 才会引起变化。有时我们讲 *bound action creator*，是指一个函数调用了 action creator 并立即将结果分发给一个特定的 store 实例。
+调用 action creator 只会生产 action，但不分发。你需要调用 store 的 [`dispatch`](api/Store.md#dispatch) function 才会引起变化。有时我们讲 _bound action creator_，是指一个函数调用了 action creator 并立即将结果分发给一个特定的 store 实例。
 
 如果 action creator 需要读取当前的 state、调用 API、或引起诸如路由变化等副作用，那么它应该返回一个[异步 action](#异步-action)而不是 action。
 
@@ -75,9 +75,9 @@ type ActionCreator = (...args: any) => Action | AsyncAction
 type AsyncAction = any
 ```
 
-*异步 action* 是一个发给 dispatching 函数的值，但是这个值还不能被 reducer 消费。在发往 base [`dispatch()`](api/Store.md#dispatch) function 之前，[middleware](#middleware) 会把异步 action 转换成一个或一组 action。异步 action 可以有多种 type，这取决于你所使用的 middleware。它通常是 Promise 或者 thunk 之类的异步原生数据类型，虽然不会立即把数据传递给 reducer，但是一旦操作完成就会触发 action 的分发事件。
+_异步 action_ 是一个发给 dispatching 函数的值，但是这个值还不能被 reducer 消费。在发往 base [`dispatch()`](api/Store.md#dispatch) function 之前，[middleware](#middleware) 会把异步 action 转换成一个或一组 action。异步 action 可以有多种 type，这取决于你所使用的 middleware。它通常是 Promise 或者 thunk 之类的异步原生数据类型，虽然不会立即把数据传递给 reducer，但是一旦操作完成就会触发 action 的分发事件。
 
-##  Middleware
+## Middleware
 
 ```js
 type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }

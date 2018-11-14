@@ -8,6 +8,7 @@
 ## 其他
 
 <a id="miscellaneous-real-projects"></a>
+
 ### 有 “真实存在” 且很庞大的 Redux 项目吗？
 
 存在，并且有很多，比如：
@@ -23,13 +24,16 @@
 #### 补充资料
 
 **文档**
+
 - [Introduction: Examples](introduction/Examples.md)
 
 **讨论**
+
 - [Reddit: Large open source react/redux projects？](https://www.reddit.com/r/reactjs/comments/496db2/large_open_source_reactredux_projects/)
 - [HN: Is there any huge web application built using Redux？](https://news.ycombinator.com/item？id=10710240)
 
 <a id="miscellaneous-authentication"></a>
+
 ### 如何在 Redux 中实现鉴权？
 
 在任何真正的应用中，鉴权都必不可少。当考虑鉴权时须谨记：不管你怎样组织应用，都并不会改变什么，你应当像实现其它功能一样实现鉴权。这实际上很简单：
@@ -56,7 +60,3 @@
 **讨论**
 
 - [redux-auth](https://github.com/lynndylanhurley/redux-auth)
-
-
-
-

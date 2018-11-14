@@ -13,10 +13,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import Root from './containers/Root'
 
-render(
-  <Root />,
-  document.getElementById('root')
-)
+render(<Root />, document.getElementById('root'))
 ```
 
 ## Action Creators 和 Constants
@@ -105,10 +102,10 @@ import {
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_SUBREDDIT:
-    return action.subreddit
-  default:
-    return state
+    case SELECT_SUBREDDIT:
+      return action.subreddit
+    default:
+      return state
   }
 }
 
@@ -179,10 +176,7 @@ export default function configureStore(preloadedState) {
   return createStore(
     rootReducer,
     preloadedState,
-    applyMiddleware(
-      thunkMiddleware,
-      loggerMiddleware
-    )
+    applyMiddleware(thunkMiddleware, loggerMiddleware)
   )
 }
 ```
@@ -259,34 +253,30 @@ class AsyncApp extends Component {
     const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <Picker value={selectedSubreddit}
-                onChange={this.handleChange}
-                options={[ 'reactjs', 'frontend' ]} />
+        <Picker
+          value={selectedSubreddit}
+          onChange={this.handleChange}
+          options={['reactjs', 'frontend']}
+        />
         <p>
-          {lastUpdated &&
+          {lastUpdated && (
             <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
+              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
             </span>
-          }
-          {!isFetching &&
-            <a href='#'
-               onClick={this.handleRefreshClick}>
+          )}
+          {!isFetching && (
+            <a href="#" onClick={this.handleRefreshClick}>
               Refresh
             </a>
-          }
+          )}
         </p>
-        {isFetching && posts.length === 0 &&
-          <h2>Loading...</h2>
-        }
-        {!isFetching && posts.length === 0 &&
-          <h2>Empty.</h2>
-        }
-        {posts.length > 0 &&
+        {isFetching && posts.length === 0 && <h2>Loading...</h2>}
+        {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
+        {posts.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <Posts posts={posts} />
           </div>
-        }
+        )}
       </div>
     )
   }
@@ -302,11 +292,9 @@ AsyncApp.propTypes = {
 
 function mapStateToProps(state) {
   const { selectedSubreddit, postsBySubreddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsBySubreddit[selectedSubreddit] || {
+  const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
+    selectedSubreddit
+  ] || {
     isFetching: true,
     items: []
   }
@@ -337,13 +325,12 @@ export default class Picker extends Component {
     return (
       <span>
         <h1>{value}</h1>
-        <select onChange={e => onChange(e.target.value)}
-                value={value}>
-          {options.map(option =>
+        <select onChange={e => onChange(e.target.value)} value={value}>
+          {options.map(option => (
             <option value={option} key={option}>
               {option}
-            </option>)
-          }
+            </option>
+          ))}
         </select>
       </span>
     )
@@ -351,9 +338,7 @@ export default class Picker extends Component {
 }
 
 Picker.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.string.isRequired
-  ).isRequired,
+  options: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
 }
@@ -369,9 +354,9 @@ export default class Posts extends Component {
   render() {
     return (
       <ul>
-        {this.props.posts.map((post, i) =>
+        {this.props.posts.map((post, i) => (
           <li key={i}>{post.title}</li>
-        )}
+        ))}
       </ul>
     )
   }

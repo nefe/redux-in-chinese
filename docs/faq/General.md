@@ -8,12 +8,15 @@
 - [Redux 需要特殊的编译工具支持吗？](#general-build-tools)
 
 ## 综合
+
 <a id="general-when-to-learn"></a>
+
 ### 何时学习 Redux？
 
 对于 Javascript 开发者来说，学什么是一个很大的问题。因为每次在你学习一项技术或着手于工作中遇到的问题时，你所学的会帮助你缩小可选择的范围。Redux 是一个管理应用状态的模式。如果你没有遇到应用状态管理方面的问题，你就很难理解 Redux 的益处何在。某些 UI 库（例如 React）有着它们自己的状态管理系统。如果你正在使用这样的库，特别是你刚刚开始学习这样的库，我们鼓励你优先学着用原生的系统来解决问题，因为这对于构建你的应用来说已经足够了。当你的应用已经达到相当的复杂程度，以至“状态储存到哪了”、“状态怎么变化的”这样的问题开始困扰你，这就是学习 Redux 的大好时机。感受一下 Redux 对复杂事物的抽象过程，将有助于你将这种抽象应用到工作中去。
 
 <a id="general-when-to-use"></a>
+
 ### 何时使用 Redux？
 
 React 早期贡献者之一 Pete Hunt 说：
@@ -55,16 +58,17 @@ Redux 的创建者之一 Dan Abramov 也曾表达过类似的意思:
 - [Stack Overflow: When should I add Redux to a React app?](http://stackoverflow.com/questions/36631761/when-should-i-add-redux-to-a-react-app)
 
 <a id="general-only-react"></a>
+
 ### Redux 只能搭配 React 使用？
 
 Redux 能作为任何 UI 层的 store。通常是与 React 或 React Native 搭配使用，但是也可以绑定 Angular、 Angular 2、 Vue、 Mithril 等框架使用。 Redux 提供的订阅机制，可以与任何代码集成。这就是说，在结合 UI 随 state 变化的声明式视图时（如 React 或者其他相似的库），Redux 就发挥它的最大作用。
 
 <a id="general-build-tools"></a>
+
 ### Redux 需要特殊的编译工具支持吗？
 
 Redux 写法遵循 ES6 语法，但在发布时被 Webpack 和 Babel 编译成了 ES5，所以在使用时可以忽略 JavaScript 的编译过程。 Redux 也提供了 UMD 版本，可以直接使用而不需要任何编译过程。[counter-vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) 示例用 `<script>` 标签的方式展示了 Redux 基本的 ES5 用法。正如相关 pull request 中的说法：
 
 > Counter Vanilla 例子意图是消除 Redux 需要 Webpack、 React、 热重载、 sagas、 action 创建函数、 constants、 Babel、 npm、 CSS 模块化、 decorators、 fluent Latin、 Egghead subscription、 博士学位或者需要达到 Exceeds Expectations O.W.L. 这一级别的荒谬观点。
 
-> 仅仅是 HTML， 一些 `<script>`  标签，和简单的 DOM 操作而已。
-
+> 仅仅是 HTML， 一些 `<script>` 标签，和简单的 DOM 操作而已。

@@ -6,20 +6,20 @@ Redux 的 API 非常少。Redux 定义了一系列的约定（contract）来让�
 
 ### 顶级暴露的方法
 
-* [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
-* [combineReducers(reducers)](combineReducers.md)
-* [applyMiddleware(...middlewares)](applyMiddleware.md)
-* [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
-* [compose(...functions)](compose.md)
+- [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
+- [combineReducers(reducers)](combineReducers.md)
+- [applyMiddleware(...middlewares)](applyMiddleware.md)
+- [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
+- [compose(...functions)](compose.md)
 
 ### Store API
 
-* [Store](Store.md)
-  * [getState()](Store.md#getState)
-  * [dispatch(action)](Store.md#dispatch)
-  * [subscribe(listener)](Store.md#subscribe)
-  * [getReducer()](Store.md#getReducer)
-  * [replaceReducer(nextReducer)](Store.md#replaceReducer)
+- [Store](Store.md)
+  - [getState()](Store.md#getState)
+  - [dispatch(action)](Store.md#dispatch)
+  - [subscribe(listener)](Store.md#subscribe)
+  - [getReducer()](Store.md#getReducer)
+  - [replaceReducer(nextReducer)](Store.md#replaceReducer)
 
 ### 引入
 
@@ -28,17 +28,17 @@ Redux 的 API 非常少。Redux 定义了一系列的约定（contract）来让�
 #### ES6
 
 ```js
-import { createStore } from 'redux';
+import { createStore } from 'redux'
 ```
 
 #### ES5 (CommonJS)
 
 ```js
-var createStore = require('redux').createStore;
+var createStore = require('redux').createStore
 ```
 
 #### ES5 (UMD build)
 
 ```js
-var createStore = Redux.createStore;
+var createStore = Redux.createStore
 ```

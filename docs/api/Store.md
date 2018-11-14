@@ -6,9 +6,9 @@ Store 就是用来维持应用所有的 [state 树](../Glossary.md#state) 的一
 Store 不是类。它只是有几个方法的对象。
 要创建它，只需要把根部的 [reducing 函数](../Glossary.md#reducer) 传递给 [`createStore`](createStore.md)。
 
->##### Flux 用户使用注意
+> ##### Flux 用户使用注意
 
->如果你以前使用 Flux，那么你只需要注意一个重要的区别。Redux 没有 Dispatcher 且不支持多个 store。**相反，只有一个单一的 store 和一个根级的 reduce 函数[reducing function](../Glossary.md#reducer)**。随着应用不断变大，你应该把根级的 reducer 拆成多个小的 reducers，分别独立地操作 state 树的不同部分，而不是添加新的 stores。然后你可以使用 [`combineReducers`](combineReducers.md) 来连接他们。这就像一个 React 应用只有一个根级的组件，这个根组件又由很多小组件构成。
+> 如果你以前使用 Flux，那么你只需要注意一个重要的区别。Redux 没有 Dispatcher 且不支持多个 store。**相反，只有一个单一的 store 和一个根级的 reduce 函数[reducing function](../Glossary.md#reducer)**。随着应用不断变大，你应该把根级的 reducer 拆成多个小的 reducers，分别独立地操作 state 树的不同部分，而不是添加新的 stores。然后你可以使用 [`combineReducers`](combineReducers.md) 来连接他们。这就像一个 React 应用只有一个根级的组件，这个根组件又由很多小组件构成。
 
 ### Store 方法
 
@@ -26,7 +26,7 @@ Store 不是类。它只是有几个方法的对象。
 
 #### 返回值
 
-*(any)*: 应用当前的 state 树。
+_(any)_: 应用当前的 state 树。
 
 <hr>
 
@@ -36,14 +36,15 @@ Store 不是类。它只是有几个方法的对象。
 
 将使用当前 [`getState()`](#getState) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getState) 的返回值，同时变化监听器(change listener)会被触发。
 
->##### Flux 用户使用注意
->当你在 [reducer](../Glossary.md#reducer) 内部调用 `dispatch` 时，将会抛出错误提示“Reducers may not dispatch actions.（Reducer 内不能 dispatch action）”。这就相当于 Flux 里的 “Cannot dispatch in a middle of dispatch（dispatch 过程中不能再 dispatch）”，但并不会引起对应的错误。在 Flux 里，当 Store 处理 action 和触发 update 事件时，dispatch 是禁止的。这个限制并不好，因为他限制了不能在生命周期回调里 dispatch action，还有其它一些本来很正常的地方。
+> ##### Flux 用户使用注意
+>
+> 当你在 [reducer](../Glossary.md#reducer) 内部调用 `dispatch` 时，将会抛出错误提示“Reducers may not dispatch actions.（Reducer 内不能 dispatch action）”。这就相当于 Flux 里的 “Cannot dispatch in a middle of dispatch（dispatch 过程中不能再 dispatch）”，但并不会引起对应的错误。在 Flux 里，当 Store 处理 action 和触发 update 事件时，dispatch 是禁止的。这个限制并不好，因为他限制了不能在生命周期回调里 dispatch action，还有其它一些本来很正常的地方。
 
->在 Redux 里，只会在根 reducer 返回新 state 结束后再会调用事件监听器，因此，你可以在事件监听器里再做 dispatch。惟一使你不能在 reducer 中途 dispatch 的原因是要确保 reducer 没有副作用。如果 action 处理会产生副作用，正确的做法是使用异步 [action 创建函数](../Glossary.md#action-creator)。
+> 在 Redux 里，只会在根 reducer 返回新 state 结束后再会调用事件监听器，因此，你可以在事件监听器里再做 dispatch。惟一使你不能在 reducer 中途 dispatch 的原因是要确保 reducer 没有副作用。如果 action 处理会产生副作用，正确的做法是使用异步 [action 创建函数](../Glossary.md#action-creator)。
 
 #### 参数
 
-1. `action` (*Object*<sup>†</sup>): 描述应用变化的普通对象。Action 是把数据传入 store 的惟一途径，所以任何数据，无论来自 UI 事件，网络回调或者是其它资源如 WebSockets，最终都应该以 action 的形式被 dispatch。按照约定，action 具有 `type` 字段来表示它的类型。type 也可被定义为常量或者是从其它模块引入。最好使用字符串，而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action，因为字符串是可以被序列化的。除了 `type` 字段外，action 对象的结构完全取决于你。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取如何组织 action 的建议。
+1. `action` (_Object_<sup>†</sup>): 描述应用变化的普通对象。Action 是把数据传入 store 的惟一途径，所以任何数据，无论来自 UI 事件，网络回调或者是其它资源如 WebSockets，最终都应该以 action 的形式被 dispatch。按照约定，action 具有 `type` 字段来表示它的类型。type 也可被定义为常量或者是从其它模块引入。最好使用字符串，而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action，因为字符串是可以被序列化的。除了 `type` 字段外，action 对象的结构完全取决于你。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取如何组织 action 的建议。
 
 #### 返回值
 
@@ -53,7 +54,7 @@ Store 不是类。它只是有几个方法的对象。
 
 <sup>†</sup> 使用 [`createStore`](createStore.md) 创建的 “纯正” store 只支持普通对象类型的 action，而且会立即传到 reducer 来执行。
 
-但是，如果你用 [`applyMiddleware`](applyMiddleware.md) 来套住 [`createStore`](createStore.md) 时，middleware 可以修改 action 的执行，并支持执行 dispatch [异步 actions](../Glossary.md#async-action)。异步action通常使用异步原语如 Promise、Observable 或者 Thunk。
+但是，如果你用 [`applyMiddleware`](applyMiddleware.md) 来套住 [`createStore`](createStore.md) 时，middleware 可以修改 action 的执行，并支持执行 dispatch [异步 actions](../Glossary.md#async-action)。异步 action 通常使用异步原语如 Promise、Observable 或者 Thunk。
 
 Middleware 是由社区创建，并不会同 Redux 一起发行。你需要手动安装 [redux-thunk](https://github.com/gaearon/redux-thunk) 或者 [redux-promise](https://github.com/acdlite/redux-promise) 库。你也可以创建自己的 middleware。
 
@@ -94,11 +95,11 @@ store.dispatch(addTodo('Read about the middleware'))
 
 #### 参数
 
-1. `listener` (*Function*): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
+1. `listener` (_Function_): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
 
 ##### 返回值
 
-(*Function*): 一个可以解绑变化监听器的函数。
+(_Function_): 一个可以解绑变化监听器的函数。
 
 ##### 示例
 
@@ -136,4 +137,4 @@ unsubscribe()
 
 #### 参数
 
-1. `nextReducer` (*Function*) store 会使用的下一个 reducer。
+1. `nextReducer` (_Function_) store 会使用的下一个 reducer。

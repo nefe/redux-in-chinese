@@ -12,32 +12,32 @@
 
 ```javascript
 function updateNestedState(state, action) {
-    let nestedState = state.nestedState;
-    // 错误: 这将导致直接修改已经存在的对象引用-不要这么做!
-    nestedState.nestedField = action.data;
+  let nestedState = state.nestedState
+  // 错误: 这将导致直接修改已经存在的对象引用-不要这么做!
+  nestedState.nestedField = action.data
 
-    return {
-        ...state,
-        nestedState
-    };
+  return {
+    ...state,
+    nestedState
+  }
 }
 ```
 
 这个函数正确返回了顶层状态对象的浅复制，但是变量 `nestedState` 依然指向已经存在的对象，这个状态被直接修改了。
 
-##### 常见错误 #2：仅仅在一个层级上做浅复制  
+##### 常见错误 #2：仅仅在一个层级上做浅复制
 
 这个错误的另外一个常见版本的如下所示：
 
 ```javascript
 function updateNestedState(state, action) {
-    // 问题: 这仅仅做了浅复制！
-    let newState = {...state};
+  // 问题: 这仅仅做了浅复制！
+  let newState = { ...state }
 
-    // 错误: nestedState 仍然是同一个对象!
-    newState.nestedState.nestedField = action.data;
+  // 错误: nestedState 仍然是同一个对象!
+  newState.nestedState.nestedField = action.data
 
-    return newState;
+  return newState
 }
 ```
 
@@ -73,18 +73,15 @@ function updateVeryNestedField(state, action) {
 
 ```javascript
 function insertItem(array, action) {
-    return [
-        ...array.slice(0, action.index),
-        action.item,
-        ...array.slice(action.index)
-    ]
+  return [
+    ...array.slice(0, action.index),
+    action.item,
+    ...array.slice(action.index)
+  ]
 }
 
 function removeItem(array, action) {
-    return [
-        ...array.slice(0, action.index),
-        ...array.slice(action.index + 1)
-    ];
+  return [...array.slice(0, action.index), ...array.slice(action.index + 1)]
 }
 ```
 
@@ -94,15 +91,15 @@ function removeItem(array, action) {
 
 ```javascript
 function insertItem(array, action) {
-    let newArray = array.slice();
-    newArray.splice(action.index, 0, action.item);
-    return newArray;
+  let newArray = array.slice()
+  newArray.splice(action.index, 0, action.item)
+  return newArray
 }
 
 function removeItem(array, action) {
-    let newArray = array.slice();
-    newArray.splice(action.index, 1);
-    return newArray;
+  let newArray = array.slice()
+  newArray.splice(action.index, 1)
+  return newArray
 }
 ```
 
@@ -110,7 +107,7 @@ function removeItem(array, action) {
 
 ```javascript
 function removeItem(array, action) {
-    return array.filter( (item, index) => index !== action.index);
+  return array.filter((item, index) => index !== action.index)
 }
 ```
 
@@ -120,18 +117,18 @@ function removeItem(array, action) {
 
 ```javascript
 function updateObjectInArray(array, action) {
-    return array.map( (item, index) => {
-        if(index !== action.index) {
-            // 这不是我们关心的项-保持原来的值
-            return item;
-        }
+  return array.map((item, index) => {
+    if (index !== action.index) {
+      // 这不是我们关心的项-保持原来的值
+      return item
+    }
 
-        // 否则, 这是我们关心的-返回一个更新的值
-        return {
-            ...item,
-            ...action.item
-        };    
-    });
+    // 否则, 这是我们关心的-返回一个更新的值
+    return {
+      ...item,
+      ...action.item
+    }
+  })
 }
 ```
 
@@ -146,10 +143,12 @@ state = dotProp.set(state, `todos.${index}.complete`, true)
 其他的，例如  [immutability-helper](https://github.com/kolodny/immutability-helper) （现在过时的 React 不可变助手插件的一个复制），使用嵌套数据和助手函数：
 
 ```javascript
-var collection = [1, 2, {a: [12, 17, 15]}];
-var newCollection = update(collection, {2: {a: {$splice: [[1, 1, 13, 14]]}}});
+var collection = [1, 2, { a: [12, 17, 15] }]
+var newCollection = update(collection, {
+  2: { a: { $splice: [[1, 1, 13, 14]] } }
+})
 ```
 
 这些可以有效的替代了手写不可变更新逻辑。
 
-许多不可变更新工具的列表可以在  [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities) 的  [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links) 部分找到。
+许多不可变更新工具的列表可以在  [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities)  的  [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links) 部分找到。

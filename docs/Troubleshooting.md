@@ -69,7 +69,7 @@ function todos(state = [], action) {
 ```
 
 虽然需要写更多代码，但是让 Redux 变得可具有可预测性和高效。如果你想减少代码量，你可以用一些辅助方法类似
- [`React.addons.update`](https://facebook.github.io/react/docs/update.html) 来让这样的不可变转换操作变得更简单：
+[`React.addons.update`](https://facebook.github.io/react/docs/update.html) 来让这样的不可变转换操作变得更简单：
 
 ```js
 // 修改前
@@ -120,7 +120,7 @@ return state.map((todo, index) => {
 
 注意还在实验阶段的特性会经常改变。
 
-同时要注意那些需要复制的深层嵌套的　state 对象。而　`_.extend` 和 `Object.assign`　只能提供浅层的　state 复制。在　[更新嵌套的对象](recipes/reducers/ImmutableUpdatePatterns.md#updating-nested-objects) 章节中会教会你如何处理嵌套的　state　对象。
+同时要注意那些需要复制的深层嵌套的　 state 对象。而　`_.extend` 和 `Object.assign`　只能提供浅层的　 state 复制。在　[更新嵌套的对象](recipes/reducers/ImmutableUpdatePatterns.md#updating-nested-objects) 章节中会教会你如何处理嵌套的　 state 　对象。
 
 #### 不要忘记调用 [`dispatch(action)`](api/Store.md#dispatch)
 
@@ -147,11 +147,7 @@ class AddTodo extends Component {
   }
 
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>
-        Add
-      </button>
-    )
+    return <button onClick={() => this.handleClick()}>Add</button>
   }
 }
 ```
@@ -170,7 +166,9 @@ handleClick() {
 如果组件的层级非常深，把 store 一层层传下去很麻烦。因此 [react-redux](https://github.com/gaearon/react-redux) 提供了 `connect` 这个 [高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)，它除了可以帮你监听 Redux store，还会把 `dispatch` 注入到组件的 props 中。
 
 修复后的代码是这样的：
+
 #### `AddTodo.js`
+
 ```js
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -183,11 +181,7 @@ class AddTodo extends Component {
   }
 
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>
-        Add
-      </button>
-    )
+    return <button onClick={() => this.handleClick()}>Add</button>
   }
 }
 
@@ -197,9 +191,9 @@ export default connect()(AddTodo)
 
 如果你想的话也可以把 `dispatch` 手动传给其它组件。
 
-####　确保　mapStateToProps　是正确的
+####　确保　 mapStateToProps 　是正确的
 
-你可能正确地　diaptching 一个 action　并且将它提到了　reducer　中，但是对应的　state　却没有通过　props　正确地传输。
+你可能正确地　 diaptching 一个 action 　并且将它提到了　 reducer 　中，但是对应的　 state 　却没有通过　 props 　正确地传输。
 
 ## 其它问题
 

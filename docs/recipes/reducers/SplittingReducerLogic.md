@@ -12,11 +12,11 @@
 
 为了清楚起见，这些术语将用于区分不同类型的功能和不同的用例：
 
-* **reducer:** 任何符合 `(state, action) -> newState` 格式的函数（即，可以用做 `Array.reducer` 参数的任何函数）。
-* **root reducer:** 通常作为 `createStore` 第一个参数的函数。他是唯一的一个在所有的 reducer 函数中必须符合 `(state, action) -> newState` 格式的函数。
-* **slice reducer:** 一个负责处理状态树中一块切片数据的函数，通常会作为 `combineReducers` 函数的参数。
-* **case function:** 一个负责处理特殊 action 的更新逻辑的函数。可能就是一个 reducer 函数，也可能需要其他参数才能正常工作。
-* **higher-order reducer:** 一个以 reducer 函数作为参数，且/或返回一个新的 reducer 函数的函数（比如： `combineReducers`, `redux-undo`）。
+- **reducer:** 任何符合 `(state, action) -> newState` 格式的函数（即，可以用做 `Array.reducer` 参数的任何函数）。
+- **root reducer:** 通常作为 `createStore` 第一个参数的函数。他是唯一的一个在所有的 reducer 函数中必须符合 `(state, action) -> newState` 格式的函数。
+- **slice reducer:** 一个负责处理状态树中一块切片数据的函数，通常会作为 `combineReducers` 函数的参数。
+- **case function:** 一个负责处理特殊 action 的更新逻辑的函数。可能就是一个 reducer 函数，也可能需要其他参数才能正常工作。
+- **higher-order reducer:** 一个以 reducer 函数作为参数，且/或返回一个新的 reducer 函数的函数（比如： `combineReducers`, `redux-undo`）。
 
 在各种讨论中 “sub-reducer” 这个术语通常表示那些不是 root reducer 的任何函数，但这个表述并不是很精确。一些人认为应该表示 "业务逻辑（business logic）" （与应用程序特定行为相关的功能）或者 “工具函数（utility functions）”（非应用程序特定的通用功能）。
 

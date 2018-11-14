@@ -12,7 +12,7 @@
   - [处理 action 必须用 switch 语句吗？](/faq/Reducers#reducers-use-switch)
 - **组织 State**
   - [必须将所有 state 都维护在 Redux 中吗？ 可以用 React 的 setState() 方法吗？](/faq/OrganizingState#organizing-state-only-redux-state)
-  - [可以将 store 的 state 设置为函数、promise或者其它非序列化值吗？](/faq/OrganizingState#organizing-state-non-serializable)
+  - [可以将 store 的 state 设置为函数、promise 或者其它非序列化值吗？](/faq/OrganizingState#organizing-state-non-serializable)
   - [如何在 state 中组织嵌套及重复数据？](/faq/OrganizingState#organizing-state-nested-data)
 - **创建 Store**
   - [可以创建多个 store 吗，应该这么做吗？能在组件中直接引用 store 并使用吗？](/faq/StoreSetup#store-setup-multiple-stores)
@@ -23,7 +23,7 @@
   - [是否存在 reducer 和 action 之间的一对一映射？](/faq/Actions#actions-reducer-mappings)
   - [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？](/faq/Actions#actions-side-effects)
   - [是否应该在 action 创建函数中连续分发多个 action？](/faq/Actions#actions-multiple-actions)
-- **代码结构**  
+- **代码结构**
   - [文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？](/faq/CodeStructure#structure-file-structure)
   - [如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？](/faq/CodeStructure#structure-business-logic)
   - [为何应该使用 action 创建函数?](/docs/faq/CodeStructure.md#structure-action-creators)
@@ -39,7 +39,7 @@
   - [Immutable.JS 是否值得一用？](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
   - [在 Redux 中使用 Immutable.JS 的一些最佳实践](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
 - **代码结构**  
-  - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器（selector）应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
+   - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器（selector）应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [如何分离 reducer 与 action 创建函数之间的逻辑？业务逻辑应该放在哪里？](/docs/faq/CodeStructure.md#structure-business-logic)
   - [为什么需要使用 action 创建函数？](/docs/faq/CodeStructure.md#structure-action-creators)
 - **性能**

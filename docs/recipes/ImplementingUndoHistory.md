@@ -6,9 +6,9 @@
 
 然而你可以用 Redux 轻而易举地实现撤销历史，因为以下三个原因：
 
-* 不存在多个模型的问题，你需要关心的只是 state 的子树。
-* state 是不可变数据，所有修改被描述成独立的 action，而这些 action 与预期的撤销堆栈模型很接近了。
-* reducer 的签名 `(state, action) => state` 可以自然地实现 “reducer enhancers” 或者 “higher order reducers”。它们在你为 reducer 添加额外的功能时保持着这个签名。撤销历史就是一个典型的应用场景。
+- 不存在多个模型的问题，你需要关心的只是 state 的子树。
+- state 是不可变数据，所有修改被描述成独立的 action，而这些 action 与预期的撤销堆栈模型很接近了。
+- reducer 的签名 `(state, action) => state` 可以自然地实现 “reducer enhancers” 或者 “higher order reducers”。它们在你为 reducer 添加额外的功能时保持着这个签名。撤销历史就是一个典型的应用场景。
 
 在动手之前，确认你已经阅读过[基础教程](../basics/README.md)并且良好掌握了 [reducer 合成](../basics/Reducers.md)。本文中的代码会构建于[基础教程](../basics/README.md)的示例之上。
 
@@ -17,7 +17,6 @@
 在第二部分中，我们会展示如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 库来无缝地实现撤销和重做。
 
 [![demo of todos-with-undo](http://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
-
 
 ## 理解撤销历史
 
@@ -35,9 +34,9 @@
 
 如果我们希望在这样一个应用中实现撤销和重做的话，我们必须保存更多的 state 以解决下面几个问题：
 
-* 撤销或重做留下了哪些信息？
-* 当前的状态是什么？
-* 撤销堆栈中过去（和未来）的状态是什么？
+- 撤销或重做留下了哪些信息？
+- 当前的状态是什么？
+- 撤销堆栈中过去（和未来）的状态是什么？
 
 为此我们对 state 结构做了以下修改以便解决上述问题：
 
@@ -186,21 +185,21 @@
 
 #### 处理 Undo
 
-* 移除 `past` 中的**最后一个**元素。
-* 将上一步移除的元素赋予 `present`。
-* 将原来的 `present` 插入到 `future` 的**最前面**。
+- 移除 `past` 中的**最后一个**元素。
+- 将上一步移除的元素赋予 `present`。
+- 将原来的 `present` 插入到 `future` 的**最前面**。
 
 #### 处理 Redo
 
-* 移除 `future` 中的**第一个**元素。
-* 将上一步移除的元素赋予 `present`。
-* 将原来的 `present` 追加到 `past` 的**最后面**。
+- 移除 `future` 中的**第一个**元素。
+- 将上一步移除的元素赋予 `present`。
+- 将原来的 `present` 追加到 `past` 的**最后面**。
 
 #### 处理其他 Action
 
-* 将当前的 `present` 追加到 `past` 的**最后面**。
-* 将处理完 action 所产生的新的 state 赋予 `present`。
-* 清空 `future`。
+- 将当前的 `present` 追加到 `past` 的**最后面**。
+- 将处理完 action 所产生的新的 state 赋予 `present`。
+- 清空 `future`。
 
 ### 第一次尝试: 编写 Reducer
 
@@ -212,7 +211,7 @@ const initialState = {
 }
 
 function undoable(state = initialState, action) {
-  const { past, present, future } = state;
+  const { past, present, future } = state
 
   switch (action.type) {
     case 'UNDO':
@@ -221,13 +220,13 @@ function undoable(state = initialState, action) {
       return {
         past: newPast,
         present: previous,
-        future: [ present, ...future ]
+        future: [present, ...future]
       }
     case 'REDO':
       const next = future[0]
       const newFuture = future.slice(1)
       return {
-        past: [ ...past, present ],
+        past: [...past, present],
         present: next,
         future: newFuture
       }
@@ -240,9 +239,9 @@ function undoable(state = initialState, action) {
 
 这个实现是无法使用的，因为它忽略了下面三个重要的问题：
 
-* 我们从何处获取初始的 `present` 状态？我们无法预先知道它。
-* 当处理完外部的 action 后，我们在哪里完成将 `present` 保存到 `past` 的工作？
-* 我们如何将 `present` 状态的控制委托给一个自定义的 reducer？
+- 我们从何处获取初始的 `present` 状态？我们无法预先知道它。
+- 当处理完外部的 action 后，我们在哪里完成将 `present` 保存到 `past` 的工作？
+- 我们如何将 `present` 状态的控制委托给一个自定义的 reducer？
 
 看起来 reducer 并不是正确的抽象方式，但是我们已经非常接近了。
 
@@ -256,10 +255,10 @@ function undoable(state = initialState, action) {
 
 ```js
 function doNothingWith(reducer) {
-  return function (state, action) {
+  return function(state, action) {
     // 仅仅调用传入的 reducer
     return reducer(state, action)
-  };
+  }
 }
 ```
 
@@ -267,7 +266,7 @@ function doNothingWith(reducer) {
 
 ```js
 function combineReducers(reducers) {
-  return function (state = {}, action) {
+  return function(state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
       // 调用每一个 reducer 并将其管理的部分 state 传给它
       nextState[key] = reducers[key](state[key], action)
@@ -291,8 +290,8 @@ function undoable(reducer) {
   }
 
   // 返回一个可以执行撤销和重做的新的reducer
-  return function (state = initialState, action) {
-    const { past, present, future } = state;
+  return function(state = initialState, action) {
+    const { past, present, future } = state
 
     switch (action.type) {
       case 'UNDO':
@@ -301,24 +300,24 @@ function undoable(reducer) {
         return {
           past: newPast,
           present: previous,
-          future: [ present, ...future ]
+          future: [present, ...future]
         }
       case 'REDO':
         const next = future[0]
         const newFuture = future.slice(1)
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: next,
           future: newFuture
         }
       default:
         // 将其他 action 委托给原始的 reducer 处理
-        const newPresent = reducer(present, action);
+        const newPresent = reducer(present, action)
         if (present === newPresent) {
           return state
         }
         return {
-          past: [ ...past, present ],
+          past: [...past, present],
           present: newPresent,
           future: []
         }
@@ -445,7 +444,7 @@ export default todoApp
 #### `containers/VisibleTodoList.js`
 
 ```js
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     todos: getVisibleTodos(state.todos.present, state.visibilityFilter)
   }
@@ -489,14 +488,14 @@ import { connect } from 'react-redux'
 
 /* ... */
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     canUndo: state.todos.past.length > 0,
     canRedo: state.todos.future.length > 0
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     onUndo: () => dispatch(UndoActionCreators.undo()),
     onRedo: () => dispatch(UndoActionCreators.redo())
