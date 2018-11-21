@@ -258,7 +258,7 @@ function todoApp(state = initialState, action) {
 
 下面深入探讨一下如何做 reducer 合成。能否抽出一个 reducer 来专门管理 `visibilityFilter`？当然可以：
 
-首先引用, 让我们使用 [ES6 对象结构](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) 去声明 `SHOW_ALL`:
+首先引用, 让我们使用 [ES6 对象解构](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) 去声明 `SHOW_ALL`:
 
 ```js
 const { SHOW_ALL } = VisibilityFilters
