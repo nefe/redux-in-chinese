@@ -91,7 +91,6 @@ export function addTodo(text) {
       // 提前退出
       return
     }
-
     dispatch(addTodoWithoutCheck(text))
   }
 }
@@ -134,7 +133,7 @@ export function removeTodo(id) {
 ```javascript
 function makeActionCreator(type, ...argNames) {
   return function(...args) {
-    let action = { type }
+    const action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
     })
@@ -146,8 +145,8 @@ const ADD_TODO = 'ADD_TODO'
 const EDIT_TODO = 'EDIT_TODO'
 const REMOVE_TODO = 'REMOVE_TODO'
 
-export const addTodo = makeActionCreator(ADD_TODO, 'todo')
-export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
+export const addTodo = makeActionCreator(ADD_TODO, 'text')
+export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'text')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
 
@@ -200,7 +199,7 @@ import {
 class Posts extends Component {
   loadData(userId) {
     // 调用 React Redux `connect()` 注入的 props ：
-    let { dispatch, posts } = this.props
+    const { dispatch, posts } = this.props
 
     if (posts[userId]) {
       // 这里是被缓存的数据！啥也不做。
@@ -222,25 +221,28 @@ class Posts extends Component {
     this.loadData(this.props.userId)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.loadData(nextProps.userId)
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.loadData(this.props.userId)
     }
   }
 
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isFetching) {
       return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
+    const posts = this.props.posts.map(post => (
+      <Post post={post} key={post.id} />
+    ))
 
     return <div>{posts}</div>
   }
 }
 
 export default connect(state => ({
-  posts: state.posts
+  posts: state.posts,
+  isFetching: state.isFetching
 }))(Posts)
 ```
 
@@ -262,7 +264,7 @@ export default connect(state => ({
 export function loadPosts(userId) {
   // 用 thunk 中间件解释：
   return function(dispatch, getState) {
-    let { posts } = getState()
+    const { posts } = getState()
     if (posts[userId]) {
       // 这里是数据缓存！啥也不做。
       return
@@ -304,25 +306,28 @@ class Posts extends Component {
     this.props.dispatch(loadPosts(this.props.userId))
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
-      this.props.dispatch(loadPosts(nextProps.userId))
+  componentDidUpdate(prevProps) {
+    if (prevProps.userId !== this.props.userId) {
+      this.props.dispatch(loadPosts(this.props.userId))
     }
   }
 
   render() {
-    if (this.props.isLoading) {
+    if (this.props.isFetching) {
       return <p>Loading...</p>
     }
 
-    let posts = this.props.posts.map(post => <Post post={post} key={post.id} />)
+    const posts = this.props.posts.map(post => (
+      <Post post={post} key={post.id} />
+    ))
 
     return <div>{posts}</div>
   }
 }
 
 export default connect(state => ({
-  posts: state.posts
+  posts: state.posts,
+  isFetching: state.isFetching
 }))(Posts)
 ```
 
@@ -454,7 +459,7 @@ Redux reducer 用函数描述逻辑更新减少了样板代码里大量的 Flux 
 这个 Flux store:
 
 ```javascript
-let _todos = []
+const _todos = []
 
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
   getAll() {
@@ -465,7 +470,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
-      let text = action.text.trim()
+      const text = action.text.trim()
       _todos.push(text)
       TodoStore.emitChange()
   }
@@ -480,7 +485,7 @@ export default TodoStore
 export function todos(state = [], action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
-      let text = action.text.trim()
+      const text = action.text.trim()
       return [...state, text]
     default:
       return state
@@ -498,8 +503,8 @@ export function todos(state = [], action) {
 
 ```javascript
 export const todos = createReducer([], {
-  [ActionTypes.ADD_TODO](state, action) {
-    let text = action.text.trim()
+  [ActionTypes.ADD_TODO]: (state, action) => {
+    const text = action.text.trim()
     return [...state, text]
   }
 })
@@ -521,4 +526,4 @@ function createReducer(initialState, handlers) {
 
 不难对吧？鉴于写法多种多样，Redux 没有默认提供这样的辅助函数。可能你想要自动地将普通 JS 对象变成 Immutable 对象，以填满服务器状态的对象数据。可能你想合并返回状态和当前状态。有多种多样的方法来 “获取所有” handler，具体怎么做则取决于项目中你和你的团队的约定。
 
-Redux reducer 的 API 是 `(state, action) => state`，但是怎么创建这些 reducers 由你来定。
+Redux reducer 的 API 是 `(state, action) => newState`，但是怎么创建这些 reducers 由你来定。

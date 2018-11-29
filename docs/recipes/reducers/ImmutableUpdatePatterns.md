@@ -4,7 +4,7 @@
 
 ## 更新嵌套的对象
 
-更新嵌套数据的关键是必须适当地复制和更新嵌套的每个级别。这往往是那些学习 redux 一个难以理解的概念，当试图更新嵌套对象的时候，有一些具体的问题会经常出现。这些意外的导致了直接变化，应该被避免。
+更新嵌套数据的关键是**必须适当地复制和更新嵌套的每个级别**。这往往是那些学习 redux 一个难以理解的概念，当试图更新嵌套对象的时候，有一些具体的问题会经常出现。这些意外的导致了直接变化，应该被避免。
 
 ##### 常见错误 #1：指向同一对象的新变量
 
@@ -41,7 +41,7 @@ function updateNestedState(state, action) {
 }
 ```
 
-做一个顶层的浅复制是不够的 - `nestedState` 对象也应该被复制。
+做一个顶层的浅复制是**不**够的 - `nestedState` 对象也应该被复制。
 
 ##### 正确方法：复制嵌套数据的所有层级
 
@@ -49,19 +49,19 @@ function updateNestedState(state, action) {
 
 ```javascript
 function updateVeryNestedField(state, action) {
-    return {
-        ....state,
-        first : {
-            ...state.first,
-            second : {
-                ...state.first.second,
-                [action.someId] : {
-                    ...state.first.second[action.someId],
-                    fourth : action.someValue
-                }
-            }
+  return {
+    ...state,
+    first: {
+      ...state.first,
+      second: {
+        ...state.first.second,
+        [action.someId]: {
+          ...state.first.second[action.someId],
+          fourth: action.someValue
         }
+      }
     }
+  }
 }
 ```
 
@@ -134,7 +134,18 @@ function updateObjectInArray(array, action) {
 
 ## 不可变更新工具库
 
-因为编写不可变的更新代码可能变得乏味，所以有许多工具程序库试图抽象出这个过程。这些库在 API 和用法上有所不同，但都试图提供一种更短和更简洁的方式来编写这些更新。有些，像 [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable) ，使用字符串路径作为命令：
+因为编写不可变的更新代码可能变得乏味，所以有许多工具程序库试图抽象出这个过程。这些库在 API 和用法上有所不同，但都试图提供一种更短和更简洁的方式来编写这些更新。例如，[Immer](https://github.com/mweststrate/immer) 使不可变更新成为一个简单的函数和纯 JavaScript 对象：
+
+```js
+var usersState = [{ name: 'John Doe', address: { city: 'London' } }]
+var newState = immer.produce(usersState, draftState => {
+  draftState[0].name = 'Jon Doe'
+  draftState[0].address.city = 'Paris'
+  //nested update similar to mutable way
+})
+```
+
+有些，像 [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable) ，使用字符串路径作为命令：
 
 ```javascript
 state = dotProp.set(state, `todos.${index}.complete`, true)

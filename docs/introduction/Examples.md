@@ -1,6 +1,6 @@
 # 示例
 
-Redux [源码](https://github.com/reactjs/redux/tree/master/examples) 中同时包含了一些示例。你也可以使用在线编辑器 [CodeSandbox](https://codesandbox.io) 测试这些示例。
+Redux [源码](https://github.com/reactjs/redux/tree/master/examples) 中同时包含了一些示例。这些示例中的大多数也在[CodeSandbox](https://codesandbox.io)上，这是一个在线编辑器，可让您在线测试示例。
 
 ## 原生版 Counter
 
@@ -29,7 +29,7 @@ npm start
 
 或者可以浏览在线[示例](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/counter)。
 
-Redux 结合 React 使用的最基本示例。出于简化，当 store 发生变化，React 组件会手动重新渲染。在实际的项目中，推荐使用 React 和更高效的 [React Redux](https://github.com/reactjs/react-redux)绑定。
+这是 Redux 结合 React 使用的最基本示例。出于简化，当 store 发生变化，React 组件会手动重新渲染。在实际的项目中，推荐使用 React 和更高效的 [React Redux](https://github.com/reactjs/react-redux)绑定。
 
 该示例包含测试代码。
 
@@ -65,7 +65,7 @@ npm start
 
 或者可以浏览在线[示例](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todos-with-undo)。
 
-前一个示例的衍生。基本相同但额外展示了如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 打包 reducer，仅增加几行代码实现撤销/重做功能。
+此示例是前一个示例的变体。它与上一个示例基本相同但额外展示了如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 打包 reducer，仅增加几行代码实现撤销/重做功能。
 
 ## TodoMVC
 
@@ -81,7 +81,7 @@ npm start
 
 或者可以浏览在线[示例](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/todomvc)。
 
-经典的 [TodoMVC](http://todomvc.com/) 示例。与 Todos 示例的目的相同，可以比较这个示例和其他框架的异同。
+经典的 [TodoMVC](http://todomvc.com/) 示例。与 Todos 示例的目的相同，可以通过这个示例比较和其他框架的异同。
 
 该示例包含测试代码。
 
@@ -147,9 +147,7 @@ npm install
 npm start
 ```
 
-或者可以浏览在线[示例](https://codesandbox.io/s/github/reactjs/redux/tree/master/examples/universal)。
-
-展示了基于 Redux 和 React 的 [server rendering](../recipes/ServerRendering.md)。怎样在服务器端准备 store 中的初始 state 并传递到客户端，使客户端中的 store 可以从现有的 state 启动。
+这是使用 Redux 和 React 的[服务端渲染](../recipes/ServerRendering.md) 的基本演示。 它演示了如何在服务器上准备初始 store state，并将其传递给客户端，以便客户端 store 可以从现有 state 启动。
 
 ## 真实场景
 

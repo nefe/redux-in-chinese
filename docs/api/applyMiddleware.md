@@ -10,8 +10,7 @@ Middleware 并不需要和 [`createStore`](createStore.md) 绑在一起使用，
 
 #### 参数
 
-- `...middleware` (_arguments_): 遵循 Redux _middleware API_ 的函数。每个 middleware 接受 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 函数作为命名参数，并返回一个函数。该函数会被传入
-  被称为 `next` 的下一个 middleware 的 dispatch 方法，并返回一个接收 action 的新函数，这个函数可以直接调用 `next(action)`，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个 middleware 会接受真实的 store 的 [`dispatch`](Store.md#dispatch) 方法作为 `next` 参数，并借此结束调用链。所以，middleware 的函数签名是 `({ getState, dispatch }) => next => action`。
+- `...middleware` (_arguments_): 遵循 Redux _middleware API_ 的函数。每个 middleware 接受 [`Store`](Store.md) 的 [`dispatch`](Store.md#dispatch) 和 [`getState`](Store.md#getState) 函数作为命名参数，并返回一个函数。该函数会被传入被称为 `next` 的下一个 middleware 的 dispatch 方法，并返回一个接收 action 的新函数，这个函数可以直接调用 `next(action)`，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个 middleware 会接受真实的 store 的 [`dispatch`](Store.md#dispatch) 方法作为 `next` 参数，并借此结束调用链。所以，middleware 的函数签名是 `({ getState, dispatch }) => next => action`。
 
 #### 返回值
 
@@ -28,7 +27,7 @@ function logger({ getState }) {
     console.log('will dispatch', action)
 
     // 调用 middleware 链中下一个 middleware 的 dispatch。
-    let returnValue = next(action)
+    const returnValue = next(action)
 
     console.log('state after dispatch', getState())
 
@@ -38,7 +37,7 @@ function logger({ getState }) {
   }
 }
 
-let store = createStore(todos, ['Use Redux'], applyMiddleware(logger))
+const store = createStore(todos, ['Use Redux'], applyMiddleware(logger))
 
 store.dispatch({
   type: 'ADD_TODO',
@@ -56,9 +55,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
-let reducer = combineReducers(reducers)
+const reducer = combineReducers(reducers)
 // applyMiddleware 为 createStore 注入了 middleware:
-let store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
@@ -173,9 +172,9 @@ class SandwichShop extends Component {
     this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.forPerson !== this.props.forPerson) {
-      this.props.dispatch(makeASandwichWithSecretSauce(nextProps.forPerson))
+  componentDidUpdate(prevProps) {
+    if (prevProps.forPerson !== this.props.forPerson) {
+      this.props.dispatch(makeASandwichWithSecretSauce(this.props.forPerson))
     }
   }
 
@@ -193,15 +192,15 @@ export default connect(state => ({
 
 - Middleware 只是包装了 store 的 [`dispatch`](Store.md#dispatch) 方法。技术上讲，任何 middleware 能做的事情，都可能通过手动包装 `dispatch` 调用来实现，但是放在同一个地方统一管理会使整个项目的扩展变的容易得多。
 
-- 如果除了 `applyMiddleware`，你还用了其它 store enhancer，一定要把 `applyMiddleware` 放到组合链的前面，因为 middleware 可能会包含异步操作。比如，它应该在 [redux-devtools](https://github.com/gaearon/redux-devtools) 前面，否则 DevTools 就看不到 Promise middleware 里 dispatch 的 action 了。
+- 如果除了 `applyMiddleware`，你还用了其它 store enhancer，一定要把 `applyMiddleware` 放到组合链的前面，因为 middleware 可能会包含异步操作。比如，它应该在 [redux-devtools](https://github.com/reduxjs/redux-devtools) 前面，否则 DevTools 就看不到 Promise middleware 里 dispatch 的 action 了。
 
 - 如果你想有条件地使用 middleware，记住只 import 需要的部分：
 
   ```js
-  let middleware = [a, b]
+  const middleware = [a, b]
   if (process.env.NODE_ENV !== 'production') {
-    let c = require('some-debug-middleware')
-    let d = require('another-debug-middleware')
+    const c = require('some-debug-middleware')
+    const d = require('another-debug-middleware')
     middleware = [...middleware, c, d]
   }
 
@@ -214,7 +213,7 @@ export default connect(state => ({
 
   这样做有利于打包时去掉不需要的模块，减小打包文件大小。
 
-- 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancer](../Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/gaearon/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
+- 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancer](../Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/reduxjs/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
 
 - Middleware 听起来比实际难一些。真正理解 middleware 的唯一办法是了解现有的 middleware 是如何工作的，并尝试自己实现。需要的功能可能错综复杂，但是你会发现大部分 middleware 实际上很小，只有 10 行左右，是通过对它们的组合使用来达到最终的目的。
 
