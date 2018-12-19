@@ -46,6 +46,7 @@
     - [不可变更新模式](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
     - [初始化 State](/docs/recipes/reducers/InitializingState.md)
   - [结合 Immutable.JS 使用 Redux](/docs/recipes/UsingImmutableJS.md)
+  - [代码分割](/docs/recipes/CodeSplitting.md)
 - [常见问题](/docs/FAQ.md)
   - [综合](/docs/faq/General.md)
   - [Reducer](/docs/faq/Reducers.md)
