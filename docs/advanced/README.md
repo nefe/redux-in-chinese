@@ -6,5 +6,6 @@
 - [异步数据流](AsyncFlow.md)
 - [Middleware](Middleware.md)
 - [搭配 React Router](UsageWithReactRouter.md)
+- [搭配 TypeScript](UsagewithTypeScript.md)
 - [示例：Reddit API](ExampleRedditAPI.md)
 - [下一步](NextSteps.md)
