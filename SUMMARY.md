@@ -21,6 +21,7 @@
   - [异步数据流](/docs/advanced/AsyncFlow.md)
   - [Middleware](/docs/advanced/Middleware.md)
   - [搭配 React Router](/docs/advanced/UsageWithReactRouter.md)
+  - [搭配 TypeScript](/docs/advanced/UsageWithTypeScript.md)
   - [示例：Reddit API](/docs/advanced/ExampleRedditAPI.md)
   - [下一步](/docs/advanced/NextSteps.md)
 - [技巧](/docs/recipes/README.md)
