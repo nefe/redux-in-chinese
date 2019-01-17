@@ -16,13 +16,13 @@ Immutable.JS 不可变的库被设计旨在解决 JavaScript 中固有的不可�
 
 你是选择使用这样的库，还是坚持使用简单的 JavaScript，完全取决于你对向应用程序中添加另一个依赖是满意程度，或者取决于你是否确信使用它可以避免 JavaScript 处理不可变的方法中固有的缺陷。
 
-无论你做何选择，请确保你熟悉[不可变，副作用和突变](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)的概念。尤其要确保你深入了解 JavaScript 在更新和复制值时所做的操作，以防止意外的突变（mutation）导致应用程序性能的降低，甚至完全破坏应用程序的性能。
+无论你做何选择，请确保你熟悉[关于不可变（immutability）和突变（mutation）以及副作用](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)的概念。尤其要确保你深入了解 JavaScript 在更新和复制值时所做的操作，以防止意外的突变（mutation）导致应用程序性能的降低，甚至完全破坏应用程序的性能。
 
 #### 更多信息
 
 **文档**
 
-- [技巧：不可变，副作用和突变](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
+- [技巧：关于不可变（immutability）和突变（mutation）以及副作用](http://cn.redux.js.org/docs/recipes/reducers/PrerequisiteConcepts.html#note-on-immutability-side-effects-and-mutation)
 
 **文章**
 
@@ -39,11 +39,11 @@ Immutable.JS 旨在以一种高性能的方式提供不可变，以克服 JavaSc
 
 封装在 Immutable.JS 对象中的数据永远不会发生变换（mutate）。总是会返回一个新的拷贝对象。这与 JavaScript 相反，其中一些操作不会改变数据（例如，一些数组方法，包括 map，filter，concat，forEach 等），但有一些操作会改变数据（Array 的 pop，push，splice 等）。
 
-#### 拥有 API
+#### 丰富的 API
 
 Immutable.JS 提供了一组丰富的不可变对象来封装数据（例如，Maps，Lists，Sets，Records 等），以及一系列操作它们的方法，包括 sort，filter，数据分组，reverse，flatten 以及创建子集等方法。
 
-#### 性能
+#### 高性能
 
 Immutable.JS 在实现过程中针对性能优化做了很多工作。这是非常关键的功能，因为使用不可变的数据结构可能需要进行大量昂贵的复制。尤其是对大型复杂数据集（如嵌套的 Redux state tree(状态树)）进行不可变操作时，中间可能会产生很多拷贝对象，当浏览器的垃圾回收器清理对象时，这些拷贝对象会消耗内存并降低性能。
 
@@ -235,7 +235,11 @@ const newState = state.setIn(['prop1'], fromJS(newObj))
 
 ### 你的选择器应该返回 Immutable.JS 对象
 
-总是返回 Immutable.JS 对象。
+这种做法可以带来以下几个好处：
+
+- 它避免了在选择器中调用 `.toJS（）` 导致的不必要的重新渲染（因为 `.toJS（）` 将始终返回一个新对象）。
+  - 虽然可以在调用 `.toJS（）` 的地方对选择器进行缓存，但是如果返回的是 immutable.js 对象，就不需要多余的缓存。
+- 为选择器建立一致的接口; 您将不必考虑返回的是 Immutable.js 对象还是纯 JavaScript 对象。
 
 ### 在 Smart 组件中使用 Immutable.JS 对象
 
@@ -285,7 +289,7 @@ const newState = state.setIn(['prop1'], fromJS(newObj))
 
 有些东西需要将 Smart 组件中的 Immutable.JS props 映射到 Dumb 组件中的纯 JavaScript props。这里的有些东西是指高阶组件（HOC），它只需从 Smart 组件中获取 Immutable.JS props，然后使用 `toJS()` 将它们转换为普通 JavaScript props，然后传递给你的 Dumb 组件。
 
-这是一个关于 HOC 的例子：
+下面是一个关于 HOC 的例子。为了方便您，还以 NPM 包的形式提供了类似的 HOC:[with-immutable-props-to-js](https://www.npmjs.com/package/with-immutable-props-to-js)。
 
 ```js
 import React from 'react'
