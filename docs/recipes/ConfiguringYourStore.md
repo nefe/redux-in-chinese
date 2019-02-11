@@ -305,6 +305,66 @@ renderApp()
 
 这里只有一个地方与刚刚不同，就是我们将应用的渲染封装进了 `renderApp` 函数，调用它将会重新渲染整个应用。
 
+## 使用 Redux Starter Kit 简化设置
+
+Redux 核心库特意设置为最轻量化的。它可以让您决定如何处理所有内容，例如 store
+设置、您的 state 包含的内容、以及您希望如何构建 Reducer。
+
+这在某些情况下是好的，因为它为您提供了灵活性，但我们并不总是需要这种灵活性。有时我们
+只想要使用一个包含默认配置的开箱即用的方法。
+
+[Redux Starter Kit](https://redux-starter-kit.js.org/) 包旨在帮助简化几个常见的 Redux 用例，包括 store 设置。
+让我们看看它如何帮助改善 store 设置流程。
+
+Redux Starter Kit 包含一个预构建的 [`configureStore` 函数](https://redux-starter-kit.js.org/api/configureStore) ，该函数类似于前面示例展示的同名函数。
+
+最快的使用方法是只传递 root reducer 函数：
+
+```js
+import { configureStore } from 'redux-starter-kit'
+import rootReducer from './reducers'
+
+const store = configureStore({
+  reducer: rootReducer
+})
+
+export default store
+```
+
+请注意，它接受具有命名参数的对象，以使您更清楚地展示所传入的内容。
+
+默认情况下，Redux Starter Kit 中 的 `configureStore` 将：
+
+- 调用 `applyMiddleware` 来使用 [默认的多个中间件, 包括 `redux-thunk`](https://redux-starter-kit.js.org/api/getDefaultMiddleware), 以及一些仅用于开发环境的中间件，例如用来捕获类似 state 变异错误的中间件。
+- 调用 `composeWithDevTools` 来设置 Redux DevTools 扩展
+
+以下是使用 Redux Starter Kit 的 hot reloading 示例：
+
+```js
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit'
+
+import monitorReducersEnhancer from './enhancers/monitorReducers'
+import loggerMiddleware from './middleware/logger'
+import rootReducer from './reducers'
+
+export default function configureAppStore(preloadedState) {
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: [loggerMiddleware, ...getDefaultMiddleware()],
+    preloadedState,
+    enhancers: [monitorReducersEnhancer]
+  })
+
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./reducers', () => store.replaceReducer(rootReducer))
+  }
+
+  return store
+}
+```
+
+这肯定简化了一些设置过程。
+
 ## 下一步
 
 现在你已经学会了将配置 store 的方法进行封装，让它更易于维护。你现在可以[学习 Redux 提供的高级特性](../advanced/README.md)，或者看看一些[Redux 生态系统提供的扩展程序](../introduction/Ecosystem.md#debuggers-and-viewers)。
