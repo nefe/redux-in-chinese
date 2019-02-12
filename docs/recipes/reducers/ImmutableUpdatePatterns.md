@@ -163,3 +163,33 @@ var newCollection = update(collection, {
 这些可以有效的替代了手写不可变更新逻辑。
 
 许多不可变更新工具的列表可以在  [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities)  的  [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links) 部分找到。
+
+## 使用 Redux Starter Kit 简化不可变更新
+
+我们的 [Redux Starter Kit](https://redux-starter-kit.js.org/) 包中包含在内部使用了 Immer 的[`createReducer` 实用程序](https://redux-starter-kit.js.org/api/createReducer)。
+因此，您可以编写看似“变异”状态的 Reducer，但更新实际上是不可改变的。
+
+这允许以更简单的方式编写不可变更新逻辑。这是[嵌套数据示例](#正确方法：复制嵌套数据的所有层级)
+可能看起来像使用 `createReducer`：
+
+```js
+import { createReducer } from 'redux-starter-kit'
+
+const initialState = {
+  first: {
+    second: {
+      id1: { fourth: 'a' },
+      id2: { fourth: 'b' }
+    }
+  }
+}
+
+const reducer = createReducer(initialState, {
+  UPDATE_ITEM: (state, action) => {
+    state.first.second[action.someId].fourth = action.someValue
+  }
+})
+```
+
+这显然更短，更易读。但是，这仅仅在您使用来自 Redux Starter Kit 中的 `createReducer` 函数将这个 reducer 包装在 Immer 的 [`produce` 函数](https://github.com/mweststrate/immer#api) 中才会生效。
+**如果这个 reducer 脱离 Immer 使用，它实际上会改变 state**。而且仅仅依靠代码，可能不容易发现这个函数实际上是安全并且更新是不可改变的。请确保您完全理解不可变更新的概念。当您完全理解这些概念后，可能有助于在你的代码中添加一些注释，来说明你的 Reducer 正在使用 Redux Starter Kit 和 Immer。
