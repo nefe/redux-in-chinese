@@ -65,7 +65,7 @@ Redux 所做的工作可以分为以下几部分：在 middleware 和 reducer �
 
 显然，在单独的方法里处理所有的 action 仅从方法大小及可读性方面考虑，就已经很不利于扩展了，所以将实际工作分割成独立的方法并在顶层的 reducer 中调用就变得很有意义。尤其是目前的建议模式中推荐让单独的子 reducer 只负责更新特定的 state 部分。 `combineReducers()` 和 Redux 搭配的方案只是许多实现方式中的一种。强烈建议尽可能保持 store 中 state 的扁平化和范式化，至少你可以随心所欲的组织你的 reducer 逻辑。
 
-即使你在不经意间已经维护了许多独立的子 reducer，甚至 state 也是深度嵌套，reducer 的速度也并不构成任何问题。JavaScript 引擎有足够的能力在每秒运行大量的函数调用，而且大部门的子 reducer 只是使用 `switch` 语句，并且针对大部分 action 返回的都是默认的 state。
+即使你在不经意间已经维护了许多独立的子 reducer，甚至 state 也是深度嵌套，reducer 的速度也并不构成任何问题。JavaScript 引擎有足够的能力在每秒运行大量的函数调用，而且大部份的子 reducer 只是使用 `switch` 语句，并且针对大部分 action 返回的都是默认的 state。
 
 如果你仍然关心 reducer 的性能，可以使用类似 [redux-ignore](https://github.com/omnidan/redux-ignore) 和 [reduxr-scoped-reducer](https://github.com/chrisdavies/reduxr-scoped-reducer) 的工具，确保只有某几个 reducer 响应特定的 action。你还可以使用 [redux-log-slow-reducers](https://github.com/michaelcontento/redux-log-slow-reducers) 进行性能测试。
 
