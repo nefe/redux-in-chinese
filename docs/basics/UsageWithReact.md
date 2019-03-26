@@ -65,7 +65,7 @@ Redux 的 React 绑定库是基于 [容器组件和展示组件相分离](https:
 
 ## 设计组件层次结构
 
-还记得当初如何 [设计 state 根对象的结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://facebook.github.io/react/docs/thinking-in-react.html)在这方面解释的非常棒。
+还记得当初如何 [设计 state 根对象的结构](Reducers.md) 吗？现在就要定义与它匹配的界面的层次结构。其实这不是 Redux 相关的工作，[React 开发思想](https://zh-hans.reactjs.org/docs/thinking-in-react.html)在这方面解释的非常棒。
 
 我们的概要设计很简单。我们想要显示一个 todo 项的列表。一个 todo 项被点击后，会增加一条删除线并标记 completed。我们会显示用户新增一个 todo 字段。在 footer 里显示一个可切换的显示全部/只显示 completed 的/只显示 incompleted 的 todos。
 
