@@ -269,7 +269,7 @@ function applyMiddleware(store, middlewares) {
 
 #### 警告：在创建阶段 dispatch
 
-执行 `applyMiddleware` 建立你的 middleware 时，`sotre.dispatch` 函数会指向 `createStore` 创建的原生版本。这时进行 dispatch 会导致没有任何 middleware 被应用。如果你准备在创建阶段与另一个 middleware 交互，你恐怕要失望了。由于这个行为出乎意料，如果你尝试在创建阶段结束前 dispatch 一个 action，`applyMiddleware` 会抛出一个错误。想要达到这个目的，你可以通过一个普通对象直接与其他 middleware 通信（例如对于一个负责 API 调用的 middleware，使用 API 客户端对象与之通信），或者使用回调函数等待 middleware 创建完毕。
+执行 `applyMiddleware` 建立你的 middleware 时，`store.dispatch` 函数会指向 `createStore` 创建的原生版本。这时进行 dispatch 会导致没有任何 middleware 被应用。如果你准备在创建阶段与另一个 middleware 交互，你恐怕要失望了。由于这个行为出乎意料，如果你尝试在创建阶段结束前 dispatch 一个 action，`applyMiddleware` 会抛出一个错误。想要达到这个目的，你可以通过一个普通对象直接与其他 middleware 通信（例如对于一个负责 API 调用的 middleware，使用 API 客户端对象与之通信），或者使用回调函数等待 middleware 创建完毕。
 
 ### 最终的方法
 
