@@ -1,0 +1,1497 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>搭配 TypeScript · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-advanced-emoji/emoji-website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="ExampleRedditAPI.html" />
+    
+    
+    <link rel="prev" href="UsageWithReactRouter.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">目录</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    自述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    介绍
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    动机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    核心概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    三大原则
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    先前技术
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    学习资源
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    生态系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    示例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    数据流
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    搭配 React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    示例：Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    高级
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="AsyncActions.html">
+            
+                <a href="AsyncActions.html">
+            
+                    
+                    异步 Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="AsyncFlow.html">
+            
+                <a href="AsyncFlow.html">
+            
+                    
+                    异步数据流
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="Middleware.html">
+            
+                <a href="Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="UsageWithReactRouter.html">
+            
+                <a href="UsageWithReactRouter.html">
+            
+                    
+                    搭配 React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.5" data-path="UsageWithTypeScript.html">
+            
+                <a href="UsageWithTypeScript.html">
+            
+                    
+                    搭配 TypeScript
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="ExampleRedditAPI.html">
+            
+                <a href="ExampleRedditAPI.html">
+            
+                    
+                    示例：Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="NextSteps.html">
+            
+                <a href="NextSteps.html">
+            
+                    
+                    下一步
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../recipes/">
+            
+                <a href="../recipes/">
+            
+                    
+                    技巧
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../recipes/ConfiguringYourStore.html">
+            
+                <a href="../recipes/ConfiguringYourStore.html">
+            
+                    
+                    配置 Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../recipes/MigratingToRedux.html">
+            
+                <a href="../recipes/MigratingToRedux.html">
+            
+                    
+                    迁移到 Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../recipes/UsingObjectSpreadOperator.html">
+            
+                <a href="../recipes/UsingObjectSpreadOperator.html">
+            
+                    
+                    使用对象展开运算符
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../recipes/ReducingBoilerplate.html">
+            
+                <a href="../recipes/ReducingBoilerplate.html">
+            
+                    
+                    减少样板代码
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../recipes/ServerRendering.html">
+            
+                <a href="../recipes/ServerRendering.html">
+            
+                    
+                    服务端渲染
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../recipes/WritingTests.html">
+            
+                <a href="../recipes/WritingTests.html">
+            
+                    
+                    编写测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../recipes/ComputingDerivedData.html">
+            
+                <a href="../recipes/ComputingDerivedData.html">
+            
+                    
+                    计算衍生数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../recipes/ImplementingUndoHistory.html">
+            
+                <a href="../recipes/ImplementingUndoHistory.html">
+            
+                    
+                    实现撤销重做
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../recipes/IsolatingSubapps.html">
+            
+                <a href="../recipes/IsolatingSubapps.html">
+            
+                    
+                    子应用隔离
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../recipes/StructuringReducers.html">
+            
+                <a href="../recipes/StructuringReducers.html">
+            
+                    
+                    组织 Reducer
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.1" data-path="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                <a href="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Reducer 基础概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2" data-path="../recipes/reducers/BasicReducerStructure.html">
+            
+                <a href="../recipes/reducers/BasicReducerStructure.html">
+            
+                    
+                    Reducer 基础结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3" data-path="../recipes/reducers/SplittingReducerLogic.html">
+            
+                <a href="../recipes/reducers/SplittingReducerLogic.html">
+            
+                    
+                    Reducer 逻辑拆分
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.4" data-path="../recipes/reducers/RefactoringReducersExample.html">
+            
+                <a href="../recipes/reducers/RefactoringReducersExample.html">
+            
+                    
+                    Reducer 重构示例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.5" data-path="../recipes/reducers/UsingCombineReducers.html">
+            
+                <a href="../recipes/reducers/UsingCombineReducers.html">
+            
+                    
+                    combineReducers 用法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.6" data-path="../recipes/reducers/BeyondCombineReducers.html">
+            
+                <a href="../recipes/reducers/BeyondCombineReducers.html">
+            
+                    
+                    combineReducers 进阶
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.7" data-path="../recipes/reducers/NormalizingStateShape.html">
+            
+                <a href="../recipes/reducers/NormalizingStateShape.html">
+            
+                    
+                    State 范式化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.8" data-path="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                <a href="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                    
+                    管理范式化数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.9" data-path="../recipes/reducers/ReusingReducerLogic.html">
+            
+                <a href="../recipes/reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reducer 逻辑复用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.10" data-path="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    不可变更新模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.11" data-path="../recipes/reducers/InitializingState.html">
+            
+                <a href="../recipes/reducers/InitializingState.html">
+            
+                    
+                    初始化 State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.11" data-path="../recipes/UsingImmutableJS.html">
+            
+                <a href="../recipes/UsingImmutableJS.html">
+            
+                    
+                    结合 Immutable.JS 使用 Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.12" data-path="../recipes/CodeSplitting.html">
+            
+                <a href="../recipes/CodeSplitting.html">
+            
+                    
+                    代码分割
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    常见问题
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../faq/General.html">
+            
+                <a href="../faq/General.html">
+            
+                    
+                    综合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../faq/Reducers.html">
+            
+                <a href="../faq/Reducers.html">
+            
+                    
+                    Reducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../faq/OrganizingState.html">
+            
+                <a href="../faq/OrganizingState.html">
+            
+                    
+                    组织 State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../faq/StoreSetup.html">
+            
+                <a href="../faq/StoreSetup.html">
+            
+                    
+                    创建 Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../faq/Actions.html">
+            
+                <a href="../faq/Actions.html">
+            
+                    
+                    Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../faq/ImmutableData.html">
+            
+                <a href="../faq/ImmutableData.html">
+            
+                    
+                    不可变数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="../faq/CodeStructure.html">
+            
+                <a href="../faq/CodeStructure.html">
+            
+                    
+                    代码结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="../faq/Performance.html">
+            
+                <a href="../faq/Performance.html">
+            
+                    
+                    性能
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="../faq/DesignDecisions.html">
+            
+                <a href="../faq/DesignDecisions.html">
+            
+                    
+                    设计哲学
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="../faq/ReactRedux.html">
+            
+                <a href="../faq/ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="../faq/Miscellaneous.html">
+            
+                <a href="../faq/Miscellaneous.html">
+            
+                    
+                    其它
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    排错
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    词汇表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API 文档
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../react-redux/">
+            
+                <a href="../react-redux/">
+            
+                    
+                    react-redux 文档
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../react-redux/api.html">
+            
+                <a href="../react-redux/api.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../react-redux/troubleshooting.html">
+            
+                <a href="../react-redux/troubleshooting.html">
+            
+                    
+                    排错
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" >
+            
+                <a target="_blank" href="https://github.com/react-guide/redux-tutorial-cn">
+            
+                    
+                    redux-tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >搭配 TypeScript</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="&#x642D;&#x914D;-typescript">&#x642D;&#x914D; TypeScript</h1>
+<p><strong>TypeScript</strong> &#x662F; JavaScript &#x7C7B;&#x578B;&#x7684;&#x8D85;&#x96C6;&#x3002;&#x7531;&#x4E8E;&#x5176;&#x5E26;&#x6765;&#x7684;&#x597D;&#x5904;&#xFF0C;&#x5B83;&#x6700;&#x8FD1;&#x5728;&#x5E94;&#x7528;&#x4E2D;&#x53D8;&#x5F97;&#x6D41;&#x884C;&#x3002;&#x5982;&#x679C;&#x60A8;&#x5C1A;&#x672A;&#x4F7F;&#x7528;&#x8FC7; TypeScript&#xFF0C;&#x5F3A;&#x70C8;&#x5EFA;&#x8BAE;&#x60A8;&#x5728;&#x7EE7;&#x7EED;&#x9605;&#x8BFB;&#x4E4B;&#x524D;&#x5148;&#x719F;&#x6089;&#x5B83;&#x3002; &#x60A8;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x5176;<a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank">&#x6587;&#x6863;</a>&#x3002;</p>
+<p>TypeScript &#x53EF;&#x4EE5;&#x4E3A; Redux &#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5E26;&#x6765;&#x4EE5;&#x4E0B;&#x597D;&#x5904;&#xFF1A;</p>
+<ol>
+<li>&#x4E3A; reducer&#x3001;state &#x548C; action creator &#x5E26;&#x6765;&#x7C7B;&#x578B;&#x5B89;&#x5168;</li>
+<li>&#x8F7B;&#x677E;&#x91CD;&#x6784; type &#x4EE3;&#x7801;</li>
+<li>&#x5728;&#x56E2;&#x961F;&#x534F;&#x4F5C;&#x73AF;&#x5883;&#x4E2D;&#x83B7;&#x5F97;&#x6109;&#x60A6;&#x7684;&#x5F00;&#x53D1;&#x4F53;&#x9A8C;</li>
+</ol>
+<h2 id="&#x5B9E;&#x4F8B;">&#x5B9E;&#x4F8B;</h2>
+<p>&#x6211;&#x4EEC;&#x5C06;&#x901A;&#x8FC7;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x804A;&#x5929;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x6765;&#x6F14;&#x793A;&#x5305;&#x542B;&#x9759;&#x6001;&#x7C7B;&#x578B;&#x7684;&#x53EF;&#x80FD;&#x65B9;&#x6CD5;&#x3002;&#x8FD9;&#x4E2A;&#x804A;&#x5929;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5C06;&#x6709;&#x4E24;&#x4E2A; reducer&#x3002;<strong>chat reducer</strong> &#x5C06;&#x4E13;&#x6CE8;&#x4E8E;&#x5B58;&#x50A8;&#x804A;&#x5929;&#x8BB0;&#x5F55;&#xFF0C;<strong>system reducer</strong> &#x5C06;&#x4E13;&#x6CE8;&#x4E8E;&#x5B58;&#x50A8;&#x4F1A;&#x8BDD;&#x4FE1;&#x606F;&#x3002;</p>
+<p>&#x5B8C;&#x6574;&#x7684;&#x6E90;&#x4EE3;&#x7801;&#x53EF;&#x5728; <a href="https://codesandbox.io/s/w02m7jm3q7" target="_blank">codesandbox</a> &#x67E5;&#x770B;&#x3002;&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x901A;&#x8FC7;&#x4EB2;&#x81EA;&#x9605;&#x8BFB;&#x8FD9;&#x4E2A;&#x793A;&#x4F8B;&#xFF0C;&#x60A8;&#x5C06;&#x4F53;&#x9A8C;&#x5230;&#x4F7F;&#x7528; TypeScript &#x7684;&#x4E00;&#x4E9B;&#x597D;&#x5904;&#x3002;</p>
+<h2 id="&#x4E3A;-state-&#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;">&#x4E3A; State &#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;</h2>
+<p>&#x5411;&#x6BCF;&#x4E2A; state &#x5207;&#x7247;&#x6DFB;&#x52A0;&#x7C7B;&#x578B;&#x662F;&#x4E00;&#x4E2A;&#x5F88;&#x597D;&#x7684;&#x5F00;&#x59CB;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x4E0D;&#x4F9D;&#x8D56;&#x4E8E;&#x5176;&#x4ED6;&#x7C7B;&#x578B;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x9996;&#x5148;&#x63CF;&#x8FF0; <strong>chat reducer</strong> &#x76F8;&#x5173;&#x7684; state &#x5207;&#x7247;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/chat/types.ts
+
+export interface Message {
+  user: string
+  message: string
+  timestamp: number
+}
+
+export interface ChatState {
+  messages: Message[]
+}
+</code></pre>
+<p>&#x7136;&#x540E;&#x5BF9; <strong>system reducer</strong> &#x76F8;&#x5173;&#x7684; state &#x5207;&#x7247;&#x505A;&#x540C;&#x6837;&#x7684;&#x5904;&#x7406;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/system/types.ts
+
+export interface SystemState {
+  loggedIn: boolean
+  session: string
+  userName: string
+}
+</code></pre>
+<p>&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x6211;&#x4EEC;&#x6B63;&#x5728;&#x5BFC;&#x51FA;&#x8FD9;&#x4E9B; interface&#xFF0C;&#x4EE5;&#x4FBF;&#x7A0D;&#x540E;&#x5728; reducer &#x548C; action creators &#x4E2D;&#x91CD;&#x7528;&#x5B83;&#x4EEC;&#x3002;</p>
+<h2 id="&#x4E3A;-action--action-creator-&#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;">&#x4E3A; Action &amp; Action Creator &#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;</h2>
+<p>&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528;&#x5B57;&#x7B26;&#x4E32;&#x6587;&#x5B57;&#x5E76;&#x4F7F;&#x7528; <code>typeof</code> &#x6765;&#x58F0;&#x660E;&#x6211;&#x4EEC;&#x7684; action &#x5E38;&#x91CF;&#x548C;&#x63A8;&#x65AD;&#x7C7B;&#x578B;&#x3002; &#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x6743;&#x8861;&#x662F;&#x5426;&#x9700;&#x8981;&#x5728;&#x5355;&#x72EC;&#x7684;&#x6587;&#x4EF6;&#x4E2D;&#x58F0;&#x660E;&#x6211;&#x4EEC;&#x7684;&#x7C7B;&#x578B;&#x3002; &#x5C06;&#x6211;&#x4EEC;&#x7684;&#x7C7B;&#x578B;&#x5206;&#x6210;&#x5355;&#x72EC;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x53EF;&#x4EE5;&#x8BA9;&#x6211;&#x4EEC;&#x7684;&#x5176;&#x4ED6;&#x6587;&#x4EF6;&#x66F4;&#x4E13;&#x6CE8;&#x4E8E;&#x5B83;&#x4EEC;&#x7684;&#x76EE;&#x7684;&#x3002; &#x867D;&#x7136;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x53EF;&#x4EE5;&#x63D0;&#x9AD8;&#x4EE3;&#x7801;&#x5E93;&#x7684;&#x53EF;&#x7EF4;&#x62A4;&#x6027;&#xFF0C;&#x4F46;&#x662F;&#x60A8;&#x4F9D;&#x65E7;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x81EA;&#x5DF1;&#x7684;&#x559C;&#x597D;&#x7EC4;&#x7EC7;&#x4EE3;&#x7801;&#x7ED3;&#x6784;&#x3002;</p>
+<p>chat Action &#x5E38;&#x91CF;&#x548C;&#x5F62;&#x72B6;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/chat/types.ts
+export const SEND_MESSAGE = &apos;SEND_MESSAGE&apos;
+export const DELETE_MESSAGE = &apos;DELETE_MESSAGE&apos;
+
+interface SendMessageAction {
+  type: typeof SEND_MESSAGE
+  payload: Message
+}
+
+interface DeleteMessageAction {
+  type: typeof DELETE_MESSAGE
+  meta: {
+    timestamp: number
+  }
+}
+
+export type ChatActionTypes = SendMessageAction | DeleteMessageAction
+</code></pre>
+<p>&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x6B64;&#x5904;&#x4F7F;&#x7528; TypeScript &#x7684;&#x8054;&#x5408;&#x7C7B;&#x578B;&#x6765;&#x8868;&#x8FBE;&#x6240;&#x6709;&#x53EF;&#x80FD;&#x7684;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x58F0;&#x660E;&#x8FD9;&#x4E9B;&#x7C7B;&#x578B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x8FD8;&#x53EF;&#x4EE5;&#x5BF9; chat &#x7684; action creator &#x505A;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x3002;&#x5728;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x5229;&#x7528; TypeScript &#x7684; inference&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/chat/actions.ts
+
+import { Message, SEND_MESSAGE, DELETE_MESSAGE } from &apos;./types&apos;
+
+// TypeScript infers that this function is returning SendMessageAction
+export function sendMessage(newMessage: Message) {
+  return {
+    type: SEND_MESSAGE,
+    payload: newMessage
+  }
+}
+
+// TypeScript infers that this function is returning DeleteMessageAction
+export function deleteMessage(timestamp: number) {
+  return {
+    type: DELETE_MESSAGE,
+    meta: {
+      timestamp
+    }
+  }
+}
+</code></pre>
+<p>system action &#x5E38;&#x91CF;&#x548C;&#x5F62;&#x72B6;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/system/types.ts
+export const UPDATE_SESSION = &apos;UPDATE_SESSION&apos;
+
+interface UpdateSessionAction {
+  type: typeof UPDATE_SESSION
+  payload: SystemState
+}
+
+export type SystemActionTypes = UpdateSessionAction
+</code></pre>
+<p>&#x6709;&#x4E86;&#x8FD9;&#x4E9B;&#x7C7B;&#x578B;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x4E5F;&#x53EF;&#x4EE5;&#x5BF9; system &#x7684; action creator &#x505A;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/system/actions.ts
+
+import { SystemState, UPDATE_SESSION } from &apos;./types&apos;
+
+export function updateSession(newSession: SystemState) {
+  return {
+    type: UPDATE_SESSION,
+    payload: newSession
+  }
+}
+</code></pre>
+<h2 id="&#x4E3A;-reducer-&#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;">&#x4E3A; reducer &#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;</h2>
+<p>reducer &#x53EA;&#x662F;&#x7EAF;&#x51FD;&#x6570;&#xFF0C;&#x5B83;&#x8F93;&#x5165; &#x5148;&#x524D;&#x7684; state &#x548C;&#x4E00;&#x4E2A; action &#x7136;&#x540E;&#x8FD4;&#x56DE;&#x4E0B;&#x4E00;&#x4E2A; state&#x3002;&#x5728;&#x6B64;&#x793A;&#x4F8B;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x663E;&#x5F0F;&#x58F0;&#x660E;&#x6B64; reducer &#x5C06;&#x63A5;&#x6536;&#x7684; action &#x7C7B;&#x578B;&#x4EE5;&#x53CA;&#x5B83;&#x5E94;&#x8FD4;&#x56DE;&#x7684;&#x5185;&#x5BB9;&#xFF08;&#x9002;&#x5F53;&#x7684; state &#x5207;&#x7247;&#xFF09;&#x3002; &#x901A;&#x8FC7;&#x8FD9;&#x4E9B;&#x6DFB;&#x52A0;&#xFF0C;TypeScript &#x5C06;&#x5728;&#x6211;&#x4EEC;&#x7684; action &#x548C; state &#x7684;&#x5C5E;&#x6027;&#x4E0A;&#x63D0;&#x4F9B;&#x4E30;&#x5BCC;&#x7684;&#x667A;&#x80FD;&#x611F;&#x77E5;&#x3002;&#x53E6;&#x5916;&#xFF0C;&#x5F53;&#x67D0;&#x4E2A;&#x6848;&#x4F8B;&#x6CA1;&#x6709;&#x8FD4;&#x56DE; <code>ChatState</code> &#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x4F1A;&#x6536;&#x5230;&#x9519;&#x8BEF;&#x63D0;&#x793A;&#x3002;</p>
+<p>&#x5DF2;&#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x7684; chat reducer&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/chat/reducers.ts
+
+import {
+  ChatState,
+  ChatActions,
+  ChatActionTypes,
+  SEND_MESSAGE,
+  DELETE_MESSAGE
+} from &apos;./types&apos;
+
+const initialState: ChatState = {
+  messages: []
+}
+
+export function chatReducer(
+  state = initialState,
+  action: ChatActionTypes
+): ChatState {
+  switch (action.type) {
+    case SEND_MESSAGE:
+      return {
+        messages: [...state.messages, action.payload]
+      }
+    case DELETE_MESSAGE:
+      return {
+        messages: state.messages.filter(
+          message =&gt; message.timestamp !== action.meta.timestamp
+        )
+      }
+    default:
+      return state
+  }
+}
+</code></pre>
+<p>&#x5DF2;&#x589E;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x7684; system reducer&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/store/system/reducers.ts
+
+import {
+  SystemActions,
+  SystemState,
+  SystemActionTypes,
+  UPDATE_SESSION
+} from &apos;./types&apos;
+
+const initialState: SystemState = {
+  loggedIn: false,
+  session: &apos;&apos;,
+  userName: &apos;&apos;
+}
+
+export function systemReducer(
+  state = initialState,
+  action: SystemActionTypes
+): SystemState {
+  switch (action.type) {
+    case UPDATE_SESSION: {
+      return {
+        ...state,
+        ...action.payload
+      }
+    }
+    default:
+      return state
+  }
+}
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x9700;&#x8981;&#x751F;&#x6210; root reducer &#x51FD;&#x6570;&#xFF0C;&#x901A;&#x5E38;&#x4F7F;&#x7528; <code>combineReducers</code> &#x6765;&#x5B8C;&#x6210;&#x3002;&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x5FC5;&#x4E3A; AppState &#x663E;&#x5F0F;&#x58F0;&#x660E;&#x65B0;&#x63A5;&#x53E3;&#x3002; &#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>ReturnType</code> &#x4ECE; <code>rootReducer</code> &#x63A8;&#x65AD;&#x72B6;&#x6001;&#x5F62;&#x72B6;&#x3002;</p>
+<pre class="language-"><code class="lang-ts">// src/store/index.ts
+
+import { systemReducer } from &apos;./system/reducers&apos;
+import { chatReducer } from &apos;./chat/reducers&apos;
+
+const rootReducer = combineReducers({
+  system: systemReducer,
+  chat: chatReducer
+})
+
+export type AppState = ReturnType<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>typeof</span> <span class="token attr-name">rootReducer</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+<h2 id="&#x642D;&#x914D;-react-redux">&#x642D;&#x914D; React Redux</h2>
+<p>&#x867D;&#x7136; React Redux &#x662F;&#x4E00;&#x4E2A;&#x72EC;&#x7ACB;&#x4E8E; redux &#x672C;&#x8EAB;&#x7684;&#x5E93;&#xFF0C;&#x4F46;&#x5B83;&#x901A;&#x5E38;&#x4E0E; react &#x4E00;&#x8D77;&#x4F7F;&#x7528;&#x3002;&#x51FA;&#x4E8E;&#x8FD9;&#x4E2A;&#x539F;&#x56E0;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528;&#x672C;&#x8282;&#x524D;&#x9762;&#x4F7F;&#x7528;&#x7684;&#x76F8;&#x540C;&#x793A;&#x4F8B;&#x6765;&#x4E86;&#x89E3; React Redux &#x5982;&#x4F55;&#x4F7F;&#x7528; TypeScript&#x3002;</p>
+<p>&#x63D0;&#x793A;: React Redux &#x672C;&#x8EAB;&#x6CA1;&#x6709;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#xFF0C;&#x4F60;&#x5FC5;&#x987B;&#x901A;&#x8FC7;&#x8FD0;&#x884C; <code>npm i @types/react-redux -D</code> &#x6765;&#x5B89;&#x88C5; <code>@types/react-redux</code>&#x3002;</p>
+<p>&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x5C06;&#x5BF9; <code>mapStateToProps</code> &#x63A5;&#x6536;&#x7684;&#x53C2;&#x6570;&#x6DFB;&#x52A0;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x3002; &#x5E78;&#x8FD0;&#x7684;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x901A;&#x8FC7;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x4ECE; <code>rootReducer</code> &#x63A8;&#x65AD;&#x7684;&#x7C7B;&#x578B;&#x6765;&#x58F0;&#x660E; store &#x5E94;&#x8BE5;&#x662F;&#x4EC0;&#x4E48;&#x6837;&#x5B50;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/App.tsx
+
+import { AppState } from &apos;./store&apos;
+
+const mapStateToProps = (state: AppState) =&gt; ({
+  system: state.system,
+  chat: state.chat
+})
+</code></pre>
+<p>&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5728; <code>mapStateToProps</code> &#x4E2D;&#x58F0;&#x660E;&#x4E86;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x5C5E;&#x6027;&#x3002; &#x8981;&#x5BF9;&#x8FD9;&#x4E9B;&#x5C5E;&#x6027;&#x505A;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528;&#x9002;&#x5F53;&#x7684; state &#x5207;&#x7247;&#x521B;&#x5EFA;&#x4E00;&#x4E2A; interface&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/App.tsx
+
+import { SystemState } from &apos;./store/system/types&apos;
+
+import { ChatState } from &apos;./store/chat/types&apos;
+
+interface AppProps {
+  chat: ChatState
+  system: SystemState
+}
+</code></pre>
+<p>&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A; interface &#x6765;&#x6307;&#x5B9A;&#x76F8;&#x5E94;&#x7EC4;&#x4EF6;&#x5C06;&#x63A5;&#x6536;&#x7684; props&#xFF0C;&#x5982;&#x4E0B;&#x6240;&#x793A;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/App.tsx
+
+class App extends React.Component<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>AppProps</span><span class="token punctuation">&gt;</span></span> {
+</code></pre>
+<p>&#x5728;&#x8FD9;&#x4E2A;&#x7EC4;&#x4EF6;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x8FD8;&#x5C06; action creator &#x6620;&#x5C04;&#x5230;&#x7EC4;&#x4EF6;&#x7684; props &#x4E2D;&#x3002;&#x5728;&#x76F8;&#x540C;&#x7684; <code>AppProps</code> interface &#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528;&#x5F3A;&#x5927;&#x7684; <code>typeof</code> &#x529F;&#x80FD;&#x8BA9; TypeScript &#x4E86;&#x89E3;&#x6211;&#x4EEC;&#x7684; action creator &#x6240;&#x671F;&#x671B;&#x7684;&#x5185;&#x5BB9;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/App.tsx
+
+import { SystemState } from &apos;./store/system/types&apos;
+import { updateSession } from &apos;./store/system/actions&apos;
+
+import { ChatState } from &apos;./store/chat/types&apos;
+import { sendMessage } from &apos;./store/chat/actions&apos;
+
+interface AppProps {
+  sendMessage: typeof sendMessage
+  updateSession: typeof updateSession
+  chat: ChatState
+  system: SystemState
+}
+</code></pre>
+<p>&#x901A;&#x8FC7;&#x8FD9;&#x4E9B;&#x6DFB;&#x52A0;&#xFF0C;&#x53EF;&#x4EE5;&#x5BF9;&#x6765;&#x81EA; redux &#x4FA7;&#x7684; props &#x8FDB;&#x884C;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x3002; &#x60A8;&#x53EF;&#x4EE5;&#x6839;&#x636E;&#x9700;&#x8981;&#x6269;&#x5C55; interface&#xFF0C;&#x4EE5;&#x4FBF;&#x8003;&#x8651;&#x4ECE;&#x7236;&#x7EC4;&#x4EF6;&#x4F20;&#x9012;&#x7684;&#x5176;&#x4ED6; props&#x3002;</p>
+<h2 id="&#x642D;&#x914D;-redux-thunk">&#x642D;&#x914D; Redux Thunk</h2>
+<p>Redux Thunk &#x662F;&#x5E38;&#x7528;&#x7684;&#x5F02;&#x6B65;&#x8BF7;&#x6C42;&#x4E2D;&#x95F4;&#x4EF6;&#x3002;&#x53EF;&#x5728;<a href="https://github.com/reduxjs/redux-thunk" target="_blank">&#x6B64;&#x5904;</a>&#x67E5;&#x770B;&#x5176;&#x6587;&#x6863;&#x3002; thunk &#x662F;&#x4E00;&#x4E2A;&#x8FD4;&#x56DE;&#x53E6;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4E3A; <code>dispatch</code> &#x548C; <code>getState</code> &#x7684;&#x51FD;&#x6570;&#x7684;&#x51FD;&#x6570;&#x3002; Redux Thunk &#x6709;&#x4E00;&#x4E2A;&#x5185;&#x7F6E;&#x7C7B;&#x578B; <code>ThunkAction</code>&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8FD9;&#x6837;&#x4F7F;&#x7528;&#xFF1A;</p>
+<pre class="language-"><code class="lang-ts">// src/thunks.ts
+
+import { Action } from &apos;redux&apos;
+import { sendMessage } from &apos;./store/chat/actions&apos;
+import { AppState } from &apos;./store&apos;
+import { ThunkAction } from &apos;redux-thunk&apos;
+
+export const thunkSendMessage = (
+  message: string
+): ThunkAction<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>void,</span> <span class="token attr-name">AppState,</span> <span class="token attr-name">null,</span> <span class="token attr-name">Action&lt;string</span><span class="token punctuation">&gt;</span></span>&gt; =&gt; async dispatch =&gt; {
+  const asyncResp = await exampleAPI()
+  dispatch(
+    sendMessage({
+      message,
+      user: asyncResp,
+      timestamp: new Date().getTime()
+    })
+  )
+}
+
+function exampleAPI() {
+  return Promise.resolve(&apos;Async Chat Bot&apos;)
+}
+</code></pre>
+<p>&#x5F3A;&#x70C8;&#x5EFA;&#x8BAE;&#x5728;&#x60A8;&#x7684; dispatch &#x4E2D;&#x4F7F;&#x7528; action creator&#xFF0C;&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x91CD;&#x7528;&#x5BF9;&#x8FD9;&#x4E9B;&#x51FD;&#x6570;&#x7684;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x3002;</p>
+<h2 id="&#x63D0;&#x793A;&#x548C;&#x6CE8;&#x610F;&#x4E8B;&#x9879;">&#x63D0;&#x793A;&#x548C;&#x6CE8;&#x610F;&#x4E8B;&#x9879;</h2>
+<ul>
+<li>&#x672C;&#x6587;&#x6863;&#x4E3B;&#x8981;&#x4ECB;&#x7ECD;&#x4E86; redux &#x7684;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x65B9;&#x9762;&#x3002;&#x51FA;&#x4E8E;&#x6F14;&#x793A;&#x76EE;&#x7684;&#xFF0C;codesandbox &#x793A;&#x4F8B;&#x8FD8;&#x6F14;&#x793A;&#x4E86; redux &#x4E0E; React Redux &#x7684;&#x96C6;&#x6210;&#x3002;</li>
+<li>&#x6709;&#x5F88;&#x591A;&#x79CD;&#x5BF9; redux &#x63D0;&#x4F9B;&#x7C7B;&#x578B;&#x68C0;&#x67E5;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD9;&#x53EA;&#x662F;&#x5176;&#x4E2D;&#x7684;&#x4E00;&#x4E2D;&#x3002;</li>
+<li>&#x6B64;&#x793A;&#x4F8B;&#x4EC5;&#x7528;&#x4E8E;&#x663E;&#x793A;&#x6B64;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD9;&#x610F;&#x5473;&#x7740;&#x5176;&#x4ED6;&#x9AD8;&#x7EA7;&#x6982;&#x5FF5;&#x5DF2;&#x88AB;&#x5220;&#x9664;&#x4EE5;&#x7B80;&#x5316;&#x64CD;&#x4F5C;&#x3002;&#x5982;&#x679C;&#x4F60;&#x662F;&#x62C6;&#x5206;&#x4F60;&#x7684; redux &#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x8BF7;&#x770B;<a href="https://medium.com/@matthewgerstman/redux-with-code-splitting-and-type-checking-205195aded46" target="_blank">&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;</a>&#x3002;</li>
+<li>&#x8981;&#x77E5;&#x9053; TypeScript &#x786E;&#x5B9E;&#x6709;&#x5B83;&#x81EA;&#x8EAB;&#x7684;&#x4F18;&#x7F3A;&#x70B9;&#x3002;&#x6743;&#x8861;&#x8FD9;&#x4E9B;&#x4F18;&#x7F3A;&#x70B9;&#x6765;&#x5224;&#x65AD; TypeScript &#x662F;&#x5426;&#x9002;&#x7528;&#x4E8E;&#x4F60;&#x7684;&#x5E94;&#x7528;&#x3002;</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="UsageWithReactRouter.html" class="navigation navigation-prev " aria-label="Previous page: 搭配 React Router">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="ExampleRedditAPI.html" class="navigation navigation-next " aria-label="Next page: 示例：Reddit API">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"搭配 TypeScript","level":"1.4.5","depth":2,"next":{"title":"示例：Reddit API","level":"1.4.6","depth":2,"path":"docs/advanced/ExampleRedditAPI.md","ref":"docs/advanced/ExampleRedditAPI.md","articles":[]},"previous":{"title":"搭配 React Router","level":"1.4.4","depth":2,"path":"docs/advanced/UsageWithReactRouter.md","ref":"docs/advanced/UsageWithReactRouter.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","ga","advanced-emoji"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"ga":{"configuration":"auto","token":"UA-66122997-1"},"advanced-emoji":{"embedEmojis":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"开始纠错","base":"https://github.com/camsong/redux-in-chinese/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh-hans","gitbook":"3.2.3"},"file":{"path":"docs/advanced/UsageWithTypeScript.md","mtime":"2019-06-13T06:53:11.949Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-06-13T06:54:02.442Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-ga/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

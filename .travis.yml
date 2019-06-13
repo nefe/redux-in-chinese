@@ -1,0 +1,22 @@
+language: node_js
+node_js: stable
+branches:
+  only:
+  - master
+before_install:
+- git config --global user.name "camsong"
+- git config --global user.email "neosoyn@gmail.com"
+install:
+- npm i
+script:
+- npm run clean
+- npm run build
+- cp CNAME _book
+- cd _book
+- git init
+- git commit --allow-empty -m 'update book'
+- git checkout -b gh-pages && touch .nojekyll
+- git add .
+- git commit -am 'update book'
+after_success:
+- git push https://$REPO_TOKEN@github.com/camsong/redux-in-chinese gh-pages --force

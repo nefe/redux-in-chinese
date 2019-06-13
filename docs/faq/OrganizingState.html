@@ -1,0 +1,1323 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>组织 State · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-advanced-emoji/emoji-website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="StoreSetup.html" />
+    
+    
+    <link rel="prev" href="Reducers.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">目录</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    自述
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../introduction/">
+            
+                <a href="../introduction/">
+            
+                    
+                    介绍
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../introduction/Motivation.html">
+            
+                <a href="../introduction/Motivation.html">
+            
+                    
+                    动机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../introduction/CoreConcepts.html">
+            
+                <a href="../introduction/CoreConcepts.html">
+            
+                    
+                    核心概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../introduction/ThreePrinciples.html">
+            
+                <a href="../introduction/ThreePrinciples.html">
+            
+                    
+                    三大原则
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../introduction/PriorArt.html">
+            
+                <a href="../introduction/PriorArt.html">
+            
+                    
+                    先前技术
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../introduction/LearningResources.html">
+            
+                <a href="../introduction/LearningResources.html">
+            
+                    
+                    学习资源
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../introduction/Ecosystem.html">
+            
+                <a href="../introduction/Ecosystem.html">
+            
+                    
+                    生态系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../introduction/Examples.html">
+            
+                <a href="../introduction/Examples.html">
+            
+                    
+                    示例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../basics/">
+            
+                <a href="../basics/">
+            
+                    
+                    基础
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../basics/Actions.html">
+            
+                <a href="../basics/Actions.html">
+            
+                    
+                    Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../basics/Reducers.html">
+            
+                <a href="../basics/Reducers.html">
+            
+                    
+                    Reducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../basics/Store.html">
+            
+                <a href="../basics/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../basics/DataFlow.html">
+            
+                <a href="../basics/DataFlow.html">
+            
+                    
+                    数据流
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../basics/UsageWithReact.html">
+            
+                <a href="../basics/UsageWithReact.html">
+            
+                    
+                    搭配 React
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../basics/ExampleTodoList.html">
+            
+                <a href="../basics/ExampleTodoList.html">
+            
+                    
+                    示例：Todo List
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../advanced/">
+            
+                <a href="../advanced/">
+            
+                    
+                    高级
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../advanced/AsyncActions.html">
+            
+                <a href="../advanced/AsyncActions.html">
+            
+                    
+                    异步 Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../advanced/AsyncFlow.html">
+            
+                <a href="../advanced/AsyncFlow.html">
+            
+                    
+                    异步数据流
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../advanced/Middleware.html">
+            
+                <a href="../advanced/Middleware.html">
+            
+                    
+                    Middleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../advanced/UsageWithReactRouter.html">
+            
+                <a href="../advanced/UsageWithReactRouter.html">
+            
+                    
+                    搭配 React Router
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../advanced/UsageWithTypeScript.html">
+            
+                <a href="../advanced/UsageWithTypeScript.html">
+            
+                    
+                    搭配 TypeScript
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../advanced/ExampleRedditAPI.html">
+            
+                <a href="../advanced/ExampleRedditAPI.html">
+            
+                    
+                    示例：Reddit API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="../advanced/NextSteps.html">
+            
+                <a href="../advanced/NextSteps.html">
+            
+                    
+                    下一步
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../recipes/">
+            
+                <a href="../recipes/">
+            
+                    
+                    技巧
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../recipes/ConfiguringYourStore.html">
+            
+                <a href="../recipes/ConfiguringYourStore.html">
+            
+                    
+                    配置 Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../recipes/MigratingToRedux.html">
+            
+                <a href="../recipes/MigratingToRedux.html">
+            
+                    
+                    迁移到 Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../recipes/UsingObjectSpreadOperator.html">
+            
+                <a href="../recipes/UsingObjectSpreadOperator.html">
+            
+                    
+                    使用对象展开运算符
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../recipes/ReducingBoilerplate.html">
+            
+                <a href="../recipes/ReducingBoilerplate.html">
+            
+                    
+                    减少样板代码
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../recipes/ServerRendering.html">
+            
+                <a href="../recipes/ServerRendering.html">
+            
+                    
+                    服务端渲染
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../recipes/WritingTests.html">
+            
+                <a href="../recipes/WritingTests.html">
+            
+                    
+                    编写测试
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" data-path="../recipes/ComputingDerivedData.html">
+            
+                <a href="../recipes/ComputingDerivedData.html">
+            
+                    
+                    计算衍生数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" data-path="../recipes/ImplementingUndoHistory.html">
+            
+                <a href="../recipes/ImplementingUndoHistory.html">
+            
+                    
+                    实现撤销重做
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="../recipes/IsolatingSubapps.html">
+            
+                <a href="../recipes/IsolatingSubapps.html">
+            
+                    
+                    子应用隔离
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" data-path="../recipes/StructuringReducers.html">
+            
+                <a href="../recipes/StructuringReducers.html">
+            
+                    
+                    组织 Reducer
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.1" data-path="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                <a href="../recipes/reducers/PrerequisiteConcepts.html">
+            
+                    
+                    Reducer 基础概念
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2" data-path="../recipes/reducers/BasicReducerStructure.html">
+            
+                <a href="../recipes/reducers/BasicReducerStructure.html">
+            
+                    
+                    Reducer 基础结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3" data-path="../recipes/reducers/SplittingReducerLogic.html">
+            
+                <a href="../recipes/reducers/SplittingReducerLogic.html">
+            
+                    
+                    Reducer 逻辑拆分
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.4" data-path="../recipes/reducers/RefactoringReducersExample.html">
+            
+                <a href="../recipes/reducers/RefactoringReducersExample.html">
+            
+                    
+                    Reducer 重构示例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.5" data-path="../recipes/reducers/UsingCombineReducers.html">
+            
+                <a href="../recipes/reducers/UsingCombineReducers.html">
+            
+                    
+                    combineReducers 用法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.6" data-path="../recipes/reducers/BeyondCombineReducers.html">
+            
+                <a href="../recipes/reducers/BeyondCombineReducers.html">
+            
+                    
+                    combineReducers 进阶
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.7" data-path="../recipes/reducers/NormalizingStateShape.html">
+            
+                <a href="../recipes/reducers/NormalizingStateShape.html">
+            
+                    
+                    State 范式化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.8" data-path="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                <a href="../recipes/reducers/UpdatingNormalizedData.html">
+            
+                    
+                    管理范式化数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.9" data-path="../recipes/reducers/ReusingReducerLogic.html">
+            
+                <a href="../recipes/reducers/ReusingReducerLogic.html">
+            
+                    
+                    Reducer 逻辑复用
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.10" data-path="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                <a href="../recipes/reducers/ImmutableUpdatePatterns.html">
+            
+                    
+                    不可变更新模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.11" data-path="../recipes/reducers/InitializingState.html">
+            
+                <a href="../recipes/reducers/InitializingState.html">
+            
+                    
+                    初始化 State
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.11" data-path="../recipes/UsingImmutableJS.html">
+            
+                <a href="../recipes/UsingImmutableJS.html">
+            
+                    
+                    结合 Immutable.JS 使用 Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.12" data-path="../recipes/CodeSplitting.html">
+            
+                <a href="../recipes/CodeSplitting.html">
+            
+                    
+                    代码分割
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../FAQ.html">
+            
+                <a href="../FAQ.html">
+            
+                    
+                    常见问题
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="General.html">
+            
+                <a href="General.html">
+            
+                    
+                    综合
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="Reducers.html">
+            
+                <a href="Reducers.html">
+            
+                    
+                    Reducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.3" data-path="OrganizingState.html">
+            
+                <a href="OrganizingState.html">
+            
+                    
+                    组织 State
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="StoreSetup.html">
+            
+                <a href="StoreSetup.html">
+            
+                    
+                    创建 Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="Actions.html">
+            
+                <a href="Actions.html">
+            
+                    
+                    Action
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="ImmutableData.html">
+            
+                <a href="ImmutableData.html">
+            
+                    
+                    不可变数据
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="CodeStructure.html">
+            
+                <a href="CodeStructure.html">
+            
+                    
+                    代码结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="Performance.html">
+            
+                <a href="Performance.html">
+            
+                    
+                    性能
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="DesignDecisions.html">
+            
+                <a href="DesignDecisions.html">
+            
+                    
+                    设计哲学
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.10" data-path="ReactRedux.html">
+            
+                <a href="ReactRedux.html">
+            
+                    
+                    React Redux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.11" data-path="Miscellaneous.html">
+            
+                <a href="Miscellaneous.html">
+            
+                    
+                    其它
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../Troubleshooting.html">
+            
+                <a href="../Troubleshooting.html">
+            
+                    
+                    排错
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../Glossary.html">
+            
+                <a href="../Glossary.html">
+            
+                    
+                    词汇表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../api/">
+            
+                <a href="../api/">
+            
+                    
+                    API 文档
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../api/createStore.html">
+            
+                <a href="../api/createStore.html">
+            
+                    
+                    createStore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../api/Store.html">
+            
+                <a href="../api/Store.html">
+            
+                    
+                    Store
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../api/combineReducers.html">
+            
+                <a href="../api/combineReducers.html">
+            
+                    
+                    combineReducers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../api/applyMiddleware.html">
+            
+                <a href="../api/applyMiddleware.html">
+            
+                    
+                    applyMiddleware
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.5" data-path="../api/bindActionCreators.html">
+            
+                <a href="../api/bindActionCreators.html">
+            
+                    
+                    bindActionCreators
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.6" data-path="../api/compose.html">
+            
+                <a href="../api/compose.html">
+            
+                    
+                    compose
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../react-redux/">
+            
+                <a href="../react-redux/">
+            
+                    
+                    react-redux 文档
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../react-redux/api.html">
+            
+                <a href="../react-redux/api.html">
+            
+                    
+                    API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../react-redux/troubleshooting.html">
+            
+                <a href="../react-redux/troubleshooting.html">
+            
+                    
+                    排错
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" >
+            
+                <a target="_blank" href="https://github.com/react-guide/redux-tutorial-cn">
+            
+                    
+                    redux-tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >组织 State</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="redux-&#x5E38;&#x89C1;&#x95EE;&#x9898;&#xFF1A;&#x7EC4;&#x7EC7;-state">Redux &#x5E38;&#x89C1;&#x95EE;&#x9898;&#xFF1A;&#x7EC4;&#x7EC7; State</h1>
+<h2 id="&#x76EE;&#x5F55;">&#x76EE;&#x5F55;</h2>
+<ul>
+<li><a href="#organizing-state-only-redux-state">&#x5FC5;&#x987B;&#x5C06;&#x6240;&#x6709; state &#x90FD;&#x7EF4;&#x62A4;&#x5728; Redux &#x4E2D;&#x5417;&#xFF1F; &#x53EF;&#x4EE5;&#x7528; React &#x7684; setState() &#x65B9;&#x6CD5;&#x5417;&#xFF1F;</a></li>
+<li><a href="#organizing-state-non-serializable">&#x53EF;&#x4EE5;&#x5C06; store &#x7684; state &#x8BBE;&#x7F6E;&#x4E3A;&#x51FD;&#x6570;&#x3001;promise &#x6216;&#x8005;&#x5176;&#x5B83;&#x975E;&#x5E8F;&#x5217;&#x5316;&#x503C;&#x5417;&#xFF1F;</a></li>
+<li><a href="#organizing-state-nested-data">&#x5982;&#x4F55;&#x5728; state &#x4E2D;&#x7EC4;&#x7EC7;&#x5D4C;&#x5957;&#x53CA;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;</a></li>
+</ul>
+<h2 id="&#x7EC4;&#x7EC7;-state">&#x7EC4;&#x7EC7; State</h2>
+<p><a id="organizing-state-only-redux-state"></a></p>
+<h3 id="&#x5FC5;&#x987B;&#x5C06;&#x6240;&#x6709;-state-&#x90FD;&#x7EF4;&#x62A4;&#x5728;-redux-&#x4E2D;&#x5417;&#xFF1F;-&#x53EF;&#x4EE5;&#x7528;-react-&#x7684;-setstate-&#x65B9;&#x6CD5;&#x5417;&#xFF1F;">&#x5FC5;&#x987B;&#x5C06;&#x6240;&#x6709; state &#x90FD;&#x7EF4;&#x62A4;&#x5728; Redux &#x4E2D;&#x5417;&#xFF1F; &#x53EF;&#x4EE5;&#x7528; React &#x7684; <code>setState()</code> &#x65B9;&#x6CD5;&#x5417;&#xFF1F;</h3>
+<p>&#x6CA1;&#x6709; &#x201C;&#x6807;&#x51C6;&#x201D;&#x3002;&#x6709;&#x4E9B;&#x7528;&#x6237;&#x9009;&#x62E9;&#x5C06;&#x6240;&#x6709;&#x6570;&#x636E;&#x90FD;&#x5728; Redux &#x4E2D;&#x7EF4;&#x62A4;&#xFF0C;&#x90A3;&#x4E48;&#x5728;&#x4EFB;&#x4F55;&#x65F6;&#x523B;&#xFF0C;&#x5E94;&#x7528;&#x90FD;&#x662F;&#x5B8C;&#x5168;&#x6709;&#x5E8F;&#x53CA;&#x53EF;&#x63A7;&#x7684;&#x3002;&#x4E5F;&#x6709;&#x4EBA;&#x5C06;&#x7C7B;&#x4F3C;&#x4E8E;&#x201C;&#x4E0B;&#x62C9;&#x83DC;&#x5355;&#x662F;&#x5426;&#x6253;&#x5F00;&#x201D;&#x7684;&#x975E;&#x5173;&#x952E;&#x6216;&#x8005; UI &#x72B6;&#x6001;&#xFF0C;&#x5728;&#x7EC4;&#x4EF6;&#x5185;&#x90E8;&#x7EF4;&#x62A4;&#x3002;&#x9002;&#x5408;&#x81EA;&#x5DF1;&#x7684;&#x624D;&#x662F;&#x6700;&#x597D;&#x7684;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x5C40;&#x90E8;&#x7EC4;&#x4EF6;&#x72B6;&#x6001;&#x662F;&#x66F4;&#x597D;&#x7684;&#x3002;&#x4F5C;&#x4E3A;&#x4E00;&#x540D;&#x5F00;&#x53D1;&#x8005;&#xFF0C;&#x5E94;&#x8BE5;&#x51B3;&#x5B9A;&#x4F7F;&#x7528;&#x4F55;&#x79CD; state &#x6765;&#x7EC4;&#x88C5;&#x4F60;&#x7684;&#x5E94;&#x7528;&#xFF0C;&#x6BCF;&#x4E2A; state &#x7684;&#x751F;&#x5B58;&#x8303;&#x56F4;&#x662F;&#x4EC0;&#x4E48;&#x3002;&#x5728;&#x4E24;&#x8005;&#x4E4B;&#x95F4;&#x505A;&#x597D;&#x5E73;&#x8861;&#xFF0C;&#x7136;&#x540E;&#x5C31;&#x53BB;&#x505A;&#x5427;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x6709;&#x4E00;&#x4E9B;&#x5C06;&#x600E;&#x6837;&#x7684;&#x6570;&#x636E;&#x653E;&#x5165; Redux &#x7684;&#x7ECF;&#x9A8C;&#x6CD5;&#x5219;&#xFF1A;</p>
+<ul>
+<li>&#x5E94;&#x7528;&#x7684;&#x5176;&#x4ED6;&#x90E8;&#x5206;&#x662F;&#x5426;&#x5173;&#x5FC3;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#xFF1F;</li>
+<li>&#x662F;&#x5426;&#x9700;&#x8981;&#x6839;&#x636E;&#x9700;&#x8981;&#x5728;&#x539F;&#x59CB;&#x6570;&#x636E;&#x7684;&#x57FA;&#x7840;&#x4E0A;&#x521B;&#x5EFA;&#x884D;&#x751F;&#x6570;&#x636E;&#xFF1F;</li>
+<li>&#x76F8;&#x540C;&#x7684;&#x6570;&#x636E;&#x662F;&#x5426;&#x88AB;&#x7528;&#x4F5C;&#x9A71;&#x52A8;&#x591A;&#x4E2A;&#x7EC4;&#x4EF6;&#xFF1F;</li>
+<li>&#x80FD;&#x5426;&#x5C06;&#x72B6;&#x6001;&#x6062;&#x590D;&#x5230;&#x7279;&#x5B9A;&#x65F6;&#x95F4;&#x70B9;&#xFF08;&#x5728;&#x65F6;&#x5149;&#x65C5;&#x884C;&#x8C03;&#x8BD5;&#x7684;&#x65F6;&#x5019;&#xFF09;&#xFF1F;</li>
+<li>&#x662F;&#x5426;&#x8981;&#x7F13;&#x5B58;&#x6570;&#x636E;&#xFF08;&#x6BD4;&#x5982;&#xFF1A;&#x6570;&#x636E;&#x5B58;&#x5728;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x76F4;&#x63A5;&#x53BB;&#x4F7F;&#x7528;&#x5B83;&#x800C;&#x4E0D;&#x662F;&#x91CD;&#x590D;&#x53BB;&#x8BF7;&#x6C42;&#x4ED6;&#xFF09;&#xFF1F;</li>
+</ul>
+<p>&#x6709;&#x8BB8;&#x591A;&#x5F00;&#x6E90;&#x7EC4;&#x4EF6;&#x5B9E;&#x73B0;&#x4E86;&#x5404;&#x5F0F;&#x5404;&#x6837;&#x5728; Redux store &#x5B58;&#x50A8;&#x72EC;&#x7ACB;&#x7EC4;&#x4EF6;&#x72B6;&#x6001;&#x7684;&#x66FF;&#x4EE3;&#x65B9;&#x6CD5;&#xFF0C;&#x6BD4;&#x5982; <a href="https://github.com/tonyhb/redux-ui" target="_blank">redux-ui</a>&#x3001; <a href="https://github.com/tomchentw/redux-component" target="_blank">redux-component</a>&#x3001; <a href="https://github.com/threepointone/redux-react-local" target="_blank">redux-react-local</a>&#x7B49;&#x7B49;&#x3002;&#x8FD8;&#x53EF;&#x4EE5;&#x5C06; Redux &#x7684;&#x539F;&#x5219;&#x548C; reducers &#x7684;&#x6982;&#x5FF5;&#x5E94;&#x7528;&#x5230;&#x7EC4;&#x4EF6;&#x5C42;&#x9762;&#xFF0C;&#x6309;&#x7167; <code>this.setState((previousState) =&gt; reducer(previousState, someAction))</code> &#x7684;&#x60C5;&#x5F62;&#x3002;</p>
+<h4 id="&#x8865;&#x5145;&#x8D44;&#x6599;">&#x8865;&#x5145;&#x8D44;&#x6599;</h4>
+<p><strong>&#x6587;&#x7AE0;</strong></p>
+<ul>
+<li><a href="https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367" target="_blank">You Might Not Need Redux</a></li>
+<li><a href="https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172#.ioh033t3j" target="_blank">Finding <code>state</code>&#x2019;s place with React and Redux.</a></li>
+<li><a href="https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73#.dwhuf0g8f" target="_blank">A Case for setState</a></li>
+<li><a href="https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c" target="_blank">How to handle state in React. The missing FAQ.
+</a></li>
+<li><a href="https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00" target="_blank">Where to Hold React Component Data: state, store, static, and this</a></li>
+<li><a href="http://jamesknelson.com/5-types-react-application-state/" target="_blank">The 5 Types Of React Application State</a></li>
+</ul>
+<p><strong>&#x8BA8;&#x8BBA;</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/159" target="_blank">#159: Investigate using Redux for pseudo-local component state</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1098" target="_blank">#1098: Using Redux in reusable React component</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1287" target="_blank">#1287: How to choose between Redux&apos;s store and React&apos;s state&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1385" target="_blank">#1385: What are the disadvantages of storing all your state in a single immutable atom&#xFF1F;</a></li>
+<li><a href="https://twitter.com/dan_abramov/status/749710501916139520" target="_blank">Twitter: Should I keep something in React component state?</a></li>
+<li><a href="https://twitter.com/dan_abramov/status/736310245945933824" target="_blank">Twitter: Using a reducer to update a component</a></li>
+<li><a href="https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187" target="_blank">React Forums: Redux and global state vs local state</a></li>
+<li><a href="https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8/" target="_blank">Reddit: &quot;When should I put something into my Redux store?&quot;</a></li>
+<li><a href="http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global" target="_blank">Stack Overflow: Why is state all in one place, even state that isn&apos;t global&#xFF1F;</a></li>
+<li><a href="http://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store" target="_blank">Stack Overflow: Should all component state be kept in Redux store&#xFF1F;</a></li>
+</ul>
+<p><strong>&#x5E93;</strong></p>
+<ul>
+<li><a href="https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md" target="_blank">Redux Addons Catalog: Component State</a></li>
+</ul>
+<p><a id="organizing-state-non-serializable"></a></p>
+<h3 id="&#x53EF;&#x4EE5;&#x5C06;-store-&#x7684;-state-&#x8BBE;&#x7F6E;&#x4E3A;&#x51FD;&#x6570;&#x3001;promise-&#x6216;&#x8005;&#x5176;&#x5B83;&#x975E;&#x5E8F;&#x5217;&#x5316;&#x503C;&#x5417;&#xFF1F;">&#x53EF;&#x4EE5;&#x5C06; store &#x7684; state &#x8BBE;&#x7F6E;&#x4E3A;&#x51FD;&#x6570;&#x3001;promise &#x6216;&#x8005;&#x5176;&#x5B83;&#x975E;&#x5E8F;&#x5217;&#x5316;&#x503C;&#x5417;&#xFF1F;</h3>
+<p>&#x5F3A;&#x70C8;&#x63A8;&#x8350;&#x53EA;&#x5728; store &#x4E2D;&#x7EF4;&#x62A4;&#x666E;&#x901A;&#x7684;&#x53EF;&#x5E8F;&#x5217;&#x5316;&#x5BF9;&#x8C61;&#x3001;&#x6570;&#x7EC4;&#x4EE5;&#x53CA;&#x57FA;&#x672C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3002;&#x867D;&#x7136;&#x4ECE; <em>&#x6280;&#x672F;</em> &#x5C42;&#x9762;&#x4E0A;&#x5C06;&#x975E;&#x5E8F;&#x5217;&#x5316;&#x9879;&#x4FDD;&#x5B58;&#x5728; store &#x4E2D;&#x662F;&#x53EF;&#x884C;&#x7684;&#xFF0C;&#x4F46;&#x8FD9;&#x6837;&#x4F1A;&#x7834;&#x574F; store &#x5185;&#x5BB9;&#x6301;&#x4E45;&#x5316;&#x548C;&#x6062;&#x590D;&#x80FD;&#x529B;&#xFF0C;&#x4EE5;&#x53CA;&#x4F1A;&#x5E72;&#x6270;&#x65F6;&#x95F4;&#x65C5;&#x884C;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x4F60;&#x4E0D;&#x5173;&#x5FC3;&#x6570;&#x636E;&#x6301;&#x4E45;&#x5316;&#x548C;&#x65F6;&#x95F4;&#x65C5;&#x884C;&#xFF0C;&#x90A3;&#x4E48;&#x5B8C;&#x5168;&#x6B22;&#x8FCE;&#x628A;&#x4E0D;&#x53EF;&#x4EE5;&#x6301;&#x4E45;&#x5316;&#x7684;&#x6570;&#x636E;&#x653E;&#x5165; Redux &#x7684; Store &#x4E2D;&#x5B58;&#x50A8;&#x3002;&#x6700;&#x7EC8;&#xFF0C;&#x4ED6;&#x662F;&#x4F60;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#xFF0C;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x5B8C;&#x5168;&#x53D6;&#x51B3;&#x4E8E;&#x4F60;&#x81EA;&#x5DF1;&#x3002;&#x4E0E;&#x5176;&#x4ED6;&#x5F88;&#x591A; Redux &#x7684;&#x4E8B;&#x60C5;&#x4E00;&#x6837;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x660E;&#x767D;&#x6743;&#x8861;&#x6240;&#x9700;&#x3002;</p>
+<h4 id="&#x8865;&#x5145;&#x8D44;&#x6599;">&#x8865;&#x5145;&#x8D44;&#x6599;</h4>
+<p><strong>&#x8BA8;&#x8BBA;</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/1248" target="_blank">#1248: Is it ok and possible to store a react component in a reducer&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1279" target="_blank">#1279: Have any suggestions for where to put a Map Component in Flux&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1390" target="_blank">#1390: Component Loading</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1407" target="_blank">#1407: Just sharing a great base class</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1793" target="_blank">#1793: React Elements in Redux State</a></li>
+</ul>
+<p><a id="organizing-state-nested-data"></a></p>
+<h3 id="&#x5982;&#x4F55;&#x5728;-state-&#x4E2D;&#x7EC4;&#x7EC7;&#x5D4C;&#x5957;&#x53CA;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;">&#x5982;&#x4F55;&#x5728; state &#x4E2D;&#x7EC4;&#x7EC7;&#x5D4C;&#x5957;&#x53CA;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;</h3>
+<p>&#x5F53;&#x6570;&#x636E;&#x5B58;&#x5728; ID&#x3001;&#x5D4C;&#x5957;&#x6216;&#x8005;&#x5173;&#x8054;&#x5173;&#x7CFB;&#x65F6;&#xFF0C;&#x5E94;&#x5F53;&#x4EE5; &#x201C;&#x8303;&#x5F0F;&#x5316;&#x201D; &#x5F62;&#x5F0F;&#x5B58;&#x50A8;&#xFF1A;&#x5BF9;&#x8C61;&#x53EA;&#x80FD;&#x5B58;&#x50A8;&#x4E00;&#x6B21;&#xFF0C;ID &#x4F5C;&#x4E3A;&#x952E;&#x503C;&#xFF0C;&#x5BF9;&#x8C61;&#x95F4;&#x901A;&#x8FC7; ID &#x76F8;&#x4E92;&#x5F15;&#x7528;&#x3002;&#x5C06; store &#x7C7B;&#x6BD4;&#x4E8E;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x6BCF;&#x4E00;&#x9879;&#x90FD;&#x662F;&#x72EC;&#x7ACB;&#x7684; &#x201C;&#x8868;&#x201D;&#x3002;<a href="https://github.com/gaearon/normalizr" target="_blank">normalizr</a> &#x3001; <a href="https://github.com/tommikaikkonen/redux-orm" target="_blank">redux-orm</a> &#x6B64;&#x7C7B;&#x7684;&#x5E93;&#x80FD;&#x5728;&#x7BA1;&#x7406;&#x89C4;&#x8303;&#x5316;&#x6570;&#x636E;&#x65F6;&#x63D0;&#x4F9B;&#x53C2;&#x8003;&#x548C;&#x62BD;&#x8C61;&#x3002;</p>
+<h4 id="&#x8865;&#x5145;&#x8D44;&#x6599;">&#x8865;&#x5145;&#x8D44;&#x6599;</h4>
+<p><strong>&#x6587;&#x6863;</strong></p>
+<ul>
+<li><a href="advanced/AsyncActions.md">Advanced: Async Actions</a></li>
+<li><a href="introduction/Examples.html#real-world">Examples: Real World example</a></li>
+<li><a href="https://github.com/reactjs/redux/blob/master/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data" target="_blank">Recipes: Structuring Reducers - Prerequisite Concepts</a></li>
+<li><a href="https://github.com/reactjs/redux/blob/master/docs/recipes/reducers/NormalizingStateShape.md" target="_blank">Recipes: Structuring Reducers - Normalizing State Shape</a></li>
+<li><a href="https://github.com/reactjs/redux/tree/master/examples/tree-view" target="_blank">Examples: Tree View</a></li>
+</ul>
+<p><strong>&#x6587;&#x7AE0;</strong></p>
+<ul>
+<li><a href="http://somebody32.github.io/high-performance-redux/" target="_blank">High-Performance Redux</a></li>
+<li><a href="https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f" target="_blank">https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f</a></li>
+</ul>
+<p><strong>&#x8BA8;&#x8BBA;</strong></p>
+<ul>
+<li><a href="https://github.com/reactjs/redux/issues/316" target="_blank">#316: How to create nested reducers&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/815" target="_blank">#815: Working with Data Structures</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/946" target="_blank">#946: Best way to update related state fields with split reducers&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/994" target="_blank">#994: How to cut the boilerplate when updating nested entities&#xFF1F;</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1255" target="_blank">#1255: Normalizr usage with nested objects in React/Redux</a></li>
+<li><a href="https://github.com/reactjs/redux/pull/1269" target="_blank">#1269: Add tree view example</a></li>
+<li><a href="https://github.com/reactjs/redux/issues/1824#issuecomment-228585904" target="_blank">#1824: Normalising state and garbage collection</a></li>
+<li><a href="https://twitter.com/dan_abramov/status/715507260244496384" target="_blank">Twitter: state shape should be normalized</a></li>
+<li><a href="http://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers" target="_blank">Stack Overflow: How to handle tree-shaped entities in Redux reducers?</a></li>
+<li><a href="http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux" target="_blank">Stack Overflow: How to optimize small updates to props of nested components in React + Redux?</a></li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Reducers.html" class="navigation navigation-prev " aria-label="Previous page: Reducer">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="StoreSetup.html" class="navigation navigation-next " aria-label="Next page: 创建 Store">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"组织 State","level":"1.6.3","depth":2,"next":{"title":"创建 Store","level":"1.6.4","depth":2,"path":"docs/faq/StoreSetup.md","ref":"docs/faq/StoreSetup.md","articles":[]},"previous":{"title":"Reducer","level":"1.6.2","depth":2,"path":"docs/faq/Reducers.md","ref":"docs/faq/Reducers.md","articles":[]},"dir":"ltr"},"config":{"plugins":["edit-link","prism","ga","advanced-emoji"],"root":"./","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"ga":{"configuration":"auto","token":"UA-66122997-1"},"advanced-emoji":{"embedEmojis":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"开始纠错","base":"https://github.com/camsong/redux-in-chinese/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh-hans","gitbook":"3.2.3"},"file":{"path":"docs/faq/OrganizingState.md","mtime":"2019-06-13T06:53:11.949Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-06-13T06:54:02.442Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-ga/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
