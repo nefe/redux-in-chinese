@@ -227,7 +227,7 @@ const App = ({ match: { params } }) => {
 
 ## 下一步
 
-现在你已经知道如何实现基础的路由，接下来你可以阅读 [React Router API](http://reacttraining.cn/) 来学习更多知识。
+现在你已经知道如何实现基础的路由，接下来你可以阅读 [React Router API](https://reacttraining.com/react-router/) 来学习更多知识。
 
 > ##### 其它路由库注意点
 
