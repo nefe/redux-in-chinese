@@ -8,7 +8,7 @@
 
 Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
-1. **调用** [`store.dispatch(action)`](../api/Store.md#dispatch)。
+1). **调用** [`store.dispatch(action)`](../api/Store.md#dispatch)。
 
 [Action](Actions.md) 就是一个描述“发生了什么”的普通对象。比如：
 
@@ -22,7 +22,7 @@ Redux 应用中数据的生命周期遵循下面 4 个步骤：
 
 你可以在任何地方调用 [`store.dispatch(action)`](../api/Store.md#dispatch)，包括组件中、XHR 回调中、甚至定时器中。
 
-2. **Redux store 调用传入的 reducer 函数。**
+2). **Redux store 调用传入的 reducer 函数。**
 
 [Store](Store.md) 会把两个参数传入 [reducer](Reducers.md)： 当前的 state 树和 action。例如，在这个 todo 应用中，根 reducer 可能接收这样的数据：
 
@@ -50,7 +50,7 @@ let nextState = todoApp(previousState, action)
 
 注意 reducer 是纯函数。它仅仅用于计算下一个 state。它应该是完全可预测的：多次传入相同的输入必须产生相同的输出。它不应做有副作用的操作，如 API 调用或路由跳转。这些应该在 dispatch action 前发生。
 
-3. **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
+3). **根 reducer 应该把多个子 reducer 输出合并成一个单一的 state 树。**
 
 根 reducer 的结构完全由你决定。Redux 原生提供[`combineReducers()`](../api/combineReducers.md)辅助函数，来把根 reducer 拆分成多个函数，用于分别处理 state 树的一个分支。
 
@@ -91,7 +91,7 @@ return {
 
 虽然 [`combineReducers()`](../api/combineReducers.md) 是一个很方便的辅助工具，你也可以选择不用；你可以自行实现自己的根 reducer！
 
-4. **Redux store 保存了根 reducer 返回的完整 state 树。**
+4). **Redux store 保存了根 reducer 返回的完整 state 树。**
 
 这个新的树就是应用的下一个 state！所有订阅 [`store.subscribe(listener)`](../api/Store.md#subscribe) 的监听器都将被调用；监听器里可以调用 [`store.getState()`](../api/Store.md#getState) 获得当前 state。
 
