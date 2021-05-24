@@ -1,57 +1,91 @@
-# Redux 常见问题：React Redux
+---
+id: react-redux
+title: React Redux
+hide_title: true
+---
 
-## 目录
+# Redux FAQ: React Redux
 
-- [为何组件没有被重新渲染、或者 mapStateToProps 没有运行？](#react-not-rerendering)
-- [为何组件频繁的重新渲染？](#react-rendering-too-often)
-- [怎样使 mapStateToProps 执行更快？](#react-mapstate-speed)
-- [为何不在被连接的组件中使用 this.props.dispatch ？](#react-props-dispatch)
-- [应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件吗？](#react-multiple-components)
+## Table of Contents
+
+- [Redux FAQ: React Redux](#redux-faq-react-redux)
+  - [Table of Contents](#table-of-contents)
+  - [React Redux](#react-redux)
+    - [Why should I use React-Redux?](#why-should-i-use-react-redux)
+      - [Further Information](#further-information)
+    - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+      - [Further information](#further-information-1)
+    - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
+      - [Further information](#further-information-2)
+    - [How can I speed up my `mapStateToProps`?](#how-can-i-speed-up-my-mapstatetoprops)
+      - [Further information](#further-information-3)
+    - [Why don't I have `this.props.dispatch` available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
+      - [Further information](#further-information-4)
+    - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+      - [Further information](#further-information-5)
+    - [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
+      - [Further information](#further-information-6)
 
 ## React Redux
 
-<a id="react-not-rerendering"></a>
+### Why should I use React-Redux?
 
-### 为何组件没有被重新渲染、或者 mapStateToProps 没有运行？
+Redux itself is a standalone library that can be used with any UI layer or framework, including React, Angular, Vue, Ember, and vanilla JS. Although Redux and React are commonly used together, they are independent of each other.
 
-目前来看，导致组件在 action 分发后却没有被重新渲染，最常见的原因是对 state 进行了直接修改。Redux 期望 reducer 以 “不可变的方式” 更新 state，实际使用中则意味着复制数据，然后更新数据副本。如果直接返回同一对象，即使你改变了数据内容，Redux 也会认为没有变化。类似的，React Redux 会在 `shouldComponentUpdate` 中对新的 props 进行浅层的判等检查，以期提升性能。如果所有的引用都是相同的，则返回 `false` 从而跳过此次对组件的更新。
+If you are using Redux with any kind of UI framework, you will normally use a "UI binding" library to tie Redux together with your UI framework, rather than directly interacting with the store from your UI code.
 
-需要注意的是，不管何时更新了一个嵌套的值，都必须同时返回上层的任何数据副本给 state 树。如果数据是 `state.a.b.c.d`，你想更新 `d`，你也必须返回 `c`、`b`、`a` 以及 `state` 的拷贝。[state 树变化图](http://arqex.com/wp-content/uploads/2015/02/trees.png) 展示了树的深层变化为何需要改变途经的结点。
+**React-Redux is the official Redux UI binding library for React**. If you are using Redux and React together, you should also use React-Redux to bind these two libraries.
 
-“以不可变的方式更新数据” 并 _不_ 代表你必须使用 [Immutable.js](https://facebook.github.io/immutable-js/), 虽然是很好的选择。你可以使用多种方法，达到对普通 JS 对象进行不可变更新的目的：
+While it is possible to write Redux store subscription logic by hand, doing so would become very repetitive. In addition, optimizing UI performance would require complicated logic.
 
-- 使用类似于 `Object.assign()` 或者 `_.extend()` 的方法复制对象， `slice()` 和 `concat()` 方法复制数组。
-- ES6 数组的 spread sperator（展开运算符），JavaScript 新版本提案中类似的对象展开运算符。
-- 将不可变更新逻辑包装成简单方法的工具库。
+The process of subscribing to the store, checking for updated data, and triggering a re-render can be made more generic and reusable. **A UI binding library like React-Redux handles the store interaction logic, so you don't have to write that code yourself.**
 
-#### 补充资料
+Overall, React-Redux encourages good React architecture, and implements complex performance optimizations for you. It is also kept up-to-date with the latest API changes from Redux and React.
 
-**文档**
+#### Further Information
 
-- [Troubleshooting](Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md)
-- [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+**Documentation**
 
-**文章**
+- **[React-Redux docs: Why Use React-Redux?](https://react-redux.js.org/introduction/why-use-react-redux)**
 
-- [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+### Why isn't my component re-rendering, or my mapStateToProps running?
+
+Accidentally mutating or modifying your state directly is by far the most common reason why components do not re-render after an action has been dispatched. Redux expects that your reducers will update their state “immutably”, which effectively means always making copies of your data, and applying your changes to the copies. If you return the same object from a reducer, Redux assumes that nothing has been changed, even if you made changes to its contents. Similarly, React Redux tries to improve performance by doing shallow equality reference checks on incoming props in `shouldComponentUpdate`, and if all references are the same, `shouldComponentUpdate` returns `false` to skip actually updating your original component.
+
+It's important to remember that whenever you update a nested value, you must also return new copies of anything above it in your state tree. If you have `state.a.b.c.d`, and you want to make an update to `d`, you would also need to return new copies of `c`, `b`, `a`, and `state`. This [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) demonstrates how a change deep in a tree requires changes all the way up.
+
+Note that “updating data immutably” does _not_ mean that you must use [Immer](https://github.com/immerjs/immer), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
+
+- Copying objects using functions like `Object.assign()` or `_.extend()`, and array functions such as `slice()` and `concat()`
+- The array spread operator in ES6, and the similar object spread operator that is proposed for a future version of JavaScript
+- Utility libraries that wrap immutable update logic into simpler functions
+
+#### Further information
+
+**Documentation**
+
+- [Troubleshooting](../recipes/Troubleshooting.md)
+- [React Redux: Troubleshooting](https://react-redux.js.org/troubleshooting)
+- [Recipes: Using the Object Spread Operator](../recipes/UsingObjectSpreadOperator.md)
+- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md)
+- [Recipes: Structuring Reducers - Immutable Update Patterns](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)
+
+**Articles**
+
+- [Pros and Cons of Using Immutability with React](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 - [React/Redux Links: Immutable Data](https://github.com/markerikson/react-redux-links/blob/master/immutable-data.md)
 
-**讨论**
+**Discussions**
 
-- [#1262: Immutable data + bad performance](https://github.com/reactjs/redux/issues/1262)
-- [React Redux #235: Predicate function for updating component](https://github.com/reactjs/react-redux/issues/235)
-- [React Redux #291: Should mapStateToProps be called every time an action is dispatched？](https://github.com/reactjs/react-redux/issues/291)
-- [Stack Overflow: Cleaner/shorter way to update nested state in Redux？](http://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
+- [#1262: Immutable data + bad performance](https://github.com/reduxjs/redux/issues/1262)
+- [React Redux #235: Predicate function for updating component](https://github.com/reduxjs/react-redux/issues/235)
+- [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reduxjs/react-redux/issues/291)
+- [Stack Overflow: Cleaner/shorter way to update nested state in Redux?](https://stackoverflow.com/questions/35592078/cleaner-shorter-way-to-update-nested-state-in-redux)
 - [Gist: state mutations](https://gist.github.com/amcdnl/7d93c0c67a9a44fe5761#gistcomment-1706579)
 
-<a id="react-rendering-too-often"></a>
+### Why is my component re-rendering too often?
 
-### 为何组件频繁的重新渲染？
-
-React Redux 采取了很多的优化手段，保证组件直到必要时才执行重新渲染。一种是对 `mapStateToProps` 和 `mapDispatchToProps` 生成后传入 `connect` 的 props 对象进行浅层的判等检查。遗憾的是，如果当 `mapStateToProps` 调用时都生成新的数组或对象实例的话，此种情况下的浅层判等不会起任何作用。一个典型的示例就是通过 ID 数组返回映射的对象引用，如下所示：
+React Redux implements several optimizations to ensure your actual component only re-renders when actually necessary. One of those is a shallow equality check on the combined props object generated by the `mapStateToProps` and `mapDispatchToProps` arguments passed to `connect`. Unfortunately, shallow equality does not help in cases where new array or object instances are created each time `mapStateToProps` is called. A typical example might be mapping over an array of IDs and returning the matching object references, such as:
 
 ```js
 const mapStateToProps = state => {
@@ -61,105 +95,122 @@ const mapStateToProps = state => {
 }
 ```
 
-尽管每次数组内都包含了同样的对象引用，数组本身却指向不同的引用，所以浅层判等的检查结果会导致 React Redux 重新渲染包装的组件。
+Even though the array might contain the exact same object references each time, the array itself is a different reference, so the shallow equality check fails and React Redux would re-render the wrapped component.
 
-这种额外的重新渲染也可以避免，使用 reducer 将对象数组保存到 state，利用 [Reselect](https://github.com/reactjs/reselect) 缓存映射的数组，或者在组件的 `shouldComponentUpdate` 方法中，采用 `_.isEqual` 等对 props 进行更深层次的比较。注意在自定义的 `shouldComponentUpdate()` 方法中不要采用了比重新渲染本身更为昂贵的实现。可以使用分析器评估方案的性能。
+The extra re-renders could be resolved by saving the array of objects into the state using a reducer, caching the mapped array using [Reselect](https://github.com/reduxjs/reselect), or implementing `shouldComponentUpdate` in the component by hand and doing a more in-depth props comparison using a function such as `_.isEqual`. Be careful to not make your custom `shouldComponentUpdate()` more expensive than the rendering itself! Always use a profiler to check your assumptions about performance.
 
-对于独立的组件，也许你想检查传入的 props。一个普遍存在的问题就是在 render 方法中绑定父组件的回调，比如 `<Child onClick={this.handleClick.bind(this)} />`。这样就会在每次父组件重新渲染时重新生成一个函数的引用。所以只在父组件的构造函数中绑定一次回调是更好的做法。
+For non-connected components, you may want to check what props are being passed in. A common issue is having a parent component re-bind a callback inside its render function, like `<Child onClick={this.handleClick.bind(this)} />`. That creates a new function reference every time the parent re-renders. It's generally good practice to only bind callbacks once in the parent component's constructor.
 
-#### 补充资料
+#### Further information
 
-**文档**
+**Documentation**
 
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+- [FAQ: Performance - Scaling](./Performance.md#performance-scaling)
 
-**文章**
+**Articles**
 
-- [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
+- [A Deep Dive into React Perf Debugging](https://benchling.engineering/deep-dive-react-perf-debugging/)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
-- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
-- [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
+- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
+- [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: React/Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md)
 
-**讨论**
+**Discussions**
 
-- [Stack Overflow: Can a React Redux app scale as well as Backbone？](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
+- [Stack Overflow: Can a React Redux app scale as well as Backbone?](https://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
 
-**库**
+**Libraries**
 
 - [Redux Addons Catalog: DevTools - Component Update Monitoring](https://github.com/markerikson/redux-ecosystem-links/blob/master/devtools.md#component-update-monitoring)
 
-<a id="react-mapstate-speed"></a>
+### How can I speed up my `mapStateToProps`?
 
-### 怎样使 `mapStateToProps` 执行更快？
+While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reduxjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
 
-尽管 React Redux 已经优化并尽量减少对 `mapStateToProps` 的调用次数，加快 `mapStateToProps` 执行并减少其执行次数仍然是非常有价值的。普遍的推荐方式是利用 [Reselect](https://github.com/reactjs/reselect) 创建可记忆（memoized）的 “selector” 方法。这样，selector 就能被组合在一起，并且同一管道（pipeline）后面的 selector 只有当输入变化时才会执行。意味着你可以像筛选器或过滤器那样创建 selector，并确保任务的执行时机。
+#### Further information
 
-#### 补充资料
+**Documentation**
 
-**文档**
+- [Recipes: Computed Derived Data](../recipes/ComputingDerivedData.md)
 
-- [Recipes: Computed Derived Data](/docs/recipes/ComputingDerivedData.md)
+**Articles**
 
-**文章**
+- [Improving React and Redux Performance with Reselect](https://blog.rangle.io/react-and-redux-performance-with-reselect/)
 
-- [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
+**Discussions**
 
-**讨论**
+- [#815: Working with Data Structures](https://github.com/reduxjs/redux/issues/815)
+- [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reduxjs/reselect/issues/47)
 
-- [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
-- [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
+### Why don't I have `this.props.dispatch` available in my connected component?
 
-<a id="react-props-dispatch"></a>
+The `connect()` function takes two primary arguments, both optional. The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component. The second, `mapDispatchToProps`, is a function you provide to make use of the store's `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
 
-### 为何不在被连接的组件中使用 `this.props.dispatch`？
+If you do not provide your own `mapDispatchToProps` function when calling `connect()`, React Redux will provide a default version, which simply returns the `dispatch` function as a prop. That means that if you _do_ provide your own function, `dispatch` is _not_ automatically provided. If you still want it available as a prop, you need to explicitly return it yourself in your `mapDispatchToProps` implementation.
 
-`connect()` 方法有两个主要的参数，而且都是可选的。第一个参数 `mapStateToProps` 是个函数，让你在数据变化时从 store 获取数据，并作为 props 传到组件中。第二个参数 `mapDispatchToProps` 依然是函数，让你可以使用 store 的 `dispatch` 方法，通常都是创建 action 创建函数并预先绑定，那么在调用时就能直接分发 action。
+#### Further information
 
-如果在执行 `connect()` 时没有指定 `mapDispatchToProps` 方法，React Redux 默认将 `dispatch` 作为 prop 传入。所以当你指定方法时， `dispatch` 将 _不_ 会自动注入。如果你还想让其作为 prop，需要在 `mapDispatchToProps` 实现的返回值中明确指出。
+**Documentation**
 
-#### 补充资料
+- [React Redux API: connect()](https://react-redux.js.org/api/connect)
 
-**文档**
+**Discussions**
 
-- [React Redux API: connect()](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
+- [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reduxjs/react-redux/issues/89)
+- [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reduxjs/react-redux/issues/145)
+- [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reduxjs/react-redux/issues/255)
+- [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](https://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
-**讨论**
+### Should I only connect my top component, or can I connect multiple components in my tree?
 
-- [React Redux #89: can i wrap multi actionCreators into one props with name？](https://github.com/reactjs/react-redux/issues/89)
-- [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
-- [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
-- [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux？](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
+Early Redux documentation advised that you should only have a few connected components near the top of your component tree. However, time and experience has shown that such a component architecture generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.
 
-<a id="react-multiple-components"></a>
+The current suggested best practice is to categorize your components as “presentational” or “container” components, and extract a connected container component wherever it makes sense:
 
-### 应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件吗？
+> Emphasizing “one container component at the top” in Redux examples was a mistake. Don't take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it's convenient. Whenever you feel like you're duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
 
-早期的 Redux 文档中建议只在组件树顶层附近连接若干组件。然而，时间和经验都表明，这需要让这些组件非常了解它们子孙组件的数据需求，还导致它们会向下传递一些令人困惑的 props。
+In fact, benchmarks have shown that more connected components generally leads to better performance than fewer connected components.
 
-目前的最佳实践是将组件按照 “展现层（presentational）” 或者 “容器（container）” 分类，并在合理的地方抽象出一个连接的容器组件：
+In general, try to find a balance between understandable data flow and areas of responsibility with your components.
 
-> Redux 示例中强调的 “在顶层保持一个容器组件” 是错误的。不要把这个当做准则。让你的展现层组件保持独立。然后创建容器组件并在合适时进行连接。当你感觉到你是在父组件里通过复制代码为某些子组件提供数据时，就是时候抽取出一个容器了。只要你认为父组件过多了解子组件的数据或者 action，就可以抽取容器。
+#### Further information
 
-总之，试着在数据流和组件职责间找到平衡。
+**Documentation**
 
-#### 补充资料
+- [Fundamentals: UI and React](../tutorials/fundamentals/part-5-ui-and-react.md)
+- [FAQ: Performance - Scaling](../faq/Performance.md#performance-scaling)
 
-**文档**
-
-- [Basics: Usage with React](basics/UsageWithReact.md)
-
-**文章**
+**Articles**
 
 - [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
-- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
+- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
 - [React/Redux Links: Architecture - Redux Architecture](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#redux-architecture)
 - [React/Redux Links: Performance - Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
-**讨论**
+**Discussions**
 
 - [Twitter: emphasizing “one container” was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
-- [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
-- [#756: container vs component？](https://github.com/reactjs/redux/issues/756)
-- [#1176: Redux+React with only stateless components](https://github.com/reactjs/redux/issues/1176)
-- [Stack Overflow: can a dumb component use a Redux container？](http://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
+- [#419: Recommended usage of connect](https://github.com/reduxjs/redux/issues/419)
+- [#756: container vs component?](https://github.com/reduxjs/redux/issues/756)
+- [#1176: Redux+React with only stateless components](https://github.com/reduxjs/redux/issues/1176)
+- [Stack Overflow: can a dumb component use a Redux container?](https://stackoverflow.com/questions/34992247/can-a-dumb-component-use-render-redux-container-component)
+
+### How does Redux compare to the React Context API?
+
+**Similarities**
+
+Both Redux and React's Context API deal with "prop drilling". That said, they both allow you to pass data without having to pass the props through multiple layers of components. Internally, Redux _uses_ the React context API that allows it to pass the store along your component tree.
+
+**Differences**
+
+With Redux, you get the the power of [Redux Dev Tools Extension](https://github.com/zalmoxisus/redux-devtools-extension). It automatically logs every action your app performs, and it allows time traveling – you can click on any past action and jump to that point in time. Redux also supports the concept of middleware, where you may bind customized function calls on every action dispatch. Such examples include an automatic event logger, interception of certain actions, etc.
+
+With React's Context API, you deal with a pair of components speaking only to each other. This gives you nice isolation between irrelevant data. You also have the flexibility of how you may use the data with your components, i.e., you can provide the state of a parent component, and you may pass context data as props to wrapped components.
+
+There is a key difference in how Redux and React's Context treat data. Redux maintains the data of your whole app in a giant, stateful object. It deduces the changes of your data by running the reducer function you provide, and returns the next state that corresponds to every action dispatched. React Redux then optimizes component rendering and makes sure that each component re-renders only when the data it needs change. Context, on the other hand, does not hold any state. It is only a conduit for the data. To express changes in data you need to rely on the state of a parent component.
+
+#### Further information
+
+- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
+- [Redux vs. The React Context API](https://daveceddia.com/context-api-vs-redux/)
+- [You Might Not Need Redux (But You Can’t Replace It With Hooks)](https://www.simplethread.com/cant-replace-redux-with-hooks/)

@@ -1,66 +1,72 @@
+---
+id: store
+title: Store
+hide_title: true
+---
+
 # Store
 
-Store 就是用来维持应用所有的 [state 树](../Glossary.md#state) 的一个对象。
-改变 store 内 state 的惟一途径是对它 dispatch 一个 [action](../Glossary.md#action)。
+A store holds the whole [state tree](../understanding/thinking-in-redux/Glossary.md#state) of your application.
+The only way to change the state inside it is to dispatch an [action](../understanding/thinking-in-redux/Glossary.md#action) on it.
 
-Store 不是类。它只是有几个方法的对象。
-要创建它，只需要把根部的 [reducing 函数](../Glossary.md#reducer) 传递给 [`createStore`](createStore.md)。
+A store is not a class. It's just an object with a few methods on it.
+To create it, pass your root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) to [`createStore`](createStore.md).
 
-> ##### Flux 用户使用注意
-
-> 如果你以前使用 Flux，那么你只需要注意一个重要的区别。Redux 没有 Dispatcher 且不支持多个 store。**相反，只有一个单一的 store 和一个根级的 reduce 函数[reducing function](../Glossary.md#reducer)**。随着应用不断变大，你应该把根级的 reducer 拆成多个小的 reducers，分别独立地操作 state 树的不同部分，而不是添加新的 stores。然后你可以使用 [`combineReducers`](combineReducers.md) 来连接他们。这就像一个 React 应用只有一个根级的组件，这个根组件又由很多小组件构成。
-
-### Store 方法
-
-- [`getState()`](#getState)
-- [`dispatch(action)`](#dispatch)
-- [`subscribe(listener)`](#subscribe)
-- [`replaceReducer(nextReducer)`](#replaceReducer)
-
-## Store 方法
-
-### <a id='getState'></a>[`getState()`](#getState)
-
-返回应用当前的 state 树。  
-它与 store 的最后一个 reducer 返回值相同。
-
-#### 返回值
-
-_(any)_: 应用当前的 state 树。
-
-<hr>
-
-### <a id='dispatch'></a>[`dispatch(action)`](#dispatch)
-
-分发 action。这是触发 state 变化的惟一途径。
-
-将使用当前 [`getState()`](#getState) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getState) 的返回值，同时变化监听器(change listener)会被触发。
-
-> ##### Flux 用户使用注意
+> ##### A Note for Flux Users
 >
-> 当你在 [reducer](../Glossary.md#reducer) 内部调用 `dispatch` 时，将会抛出错误提示“Reducers may not dispatch actions.（Reducer 内不能 dispatch action）”。这就相当于 Flux 里的 “Cannot dispatch in a middle of dispatch（dispatch 过程中不能再 dispatch）”，但并不会引起对应的错误。在 Flux 里，当 Store 处理 action 和触发 update 事件时，dispatch 是禁止的。这个限制并不好，因为他限制了不能在生命周期回调里 dispatch action，还有其它一些本来很正常的地方。
+> If you're coming from Flux, there is a single important difference you need to understand. Redux doesn't have a Dispatcher or support many stores. **Instead, there is just a single store with a single root [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer).** As your app grows, instead of adding stores, you split the root reducer into smaller reducers independently operating on the different parts of the state tree. You can use a helper like [`combineReducers`](combineReducers.md) to combine them. This is similar to how there is just one root component in a React app, but it is composed out of many small components.
 
-> 在 Redux 里，只会在根 reducer 返回新 state 结束后再会调用事件监听器，因此，你可以在事件监听器里再做 dispatch。惟一使你不能在 reducer 中途 dispatch 的原因是要确保 reducer 没有副作用。如果 action 处理会产生副作用，正确的做法是使用异步 [action 创建函数](../Glossary.md#action-creator)。
+### Store Methods
 
-#### 参数
+- [`getState()`](#getstate)
+- [`dispatch(action)`](#dispatchaction)
+- [`subscribe(listener)`](#subscribelistener)
+- [`replaceReducer(nextReducer)`](#replacereducernextreducer)
 
-1. `action` (_Object_<sup>†</sup>): 描述应用变化的普通对象。Action 是把数据传入 store 的惟一途径，所以任何数据，无论来自 UI 事件，网络回调或者是其它资源如 WebSockets，最终都应该以 action 的形式被 dispatch。按照约定，action 具有 `type` 字段来表示它的类型。type 也可被定义为常量或者是从其它模块引入。最好使用字符串，而不是 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action，因为字符串是可以被序列化的。除了 `type` 字段外，action 对象的结构完全取决于你。参照 [Flux 标准 Action](https://github.com/acdlite/flux-standard-action) 获取如何组织 action 的建议。
+## Store Methods
 
-#### 返回值
+### getState()
 
-(Object<sup>†</sup>): 要 dispatch 的 action。
+Returns the current state tree of your application.
+It is equal to the last value returned by the store's reducer.
 
-#### 注意
+#### Returns
 
-<sup>†</sup> 使用 [`createStore`](createStore.md) 创建的 “纯正” store 只支持普通对象类型的 action，而且会立即传到 reducer 来执行。
+_(any)_: The current state tree of your application.
 
-但是，如果你用 [`applyMiddleware`](applyMiddleware.md) 来套住 [`createStore`](createStore.md) 时，middleware 可以修改 action 的执行，并支持执行 dispatch [异步 actions](../Glossary.md#async-action)。异步 action 通常使用异步原语如 Promise、Observable 或者 Thunk。
+---
 
-Middleware 是由社区创建，并不会同 Redux 一起发行。你需要手动安装 [redux-thunk](https://github.com/gaearon/redux-thunk) 或者 [redux-promise](https://github.com/acdlite/redux-promise) 库。你也可以创建自己的 middleware。
+### dispatch(action)
 
-想学习如何描述异步 API 调用？看一下 action 创建函数里当前的 state，执行一个有副作用的操作，或者以链式操作执行它们，参照 [`applyMiddleware`](applyMiddleware.md) 中的示例。
+Dispatches an action. This is the only way to trigger a state change.
 
-#### 示例
+The store's reducing function will be called with the current [`getState()`](#getState) result and the given `action` synchronously. Its return value will be considered the next state. It will be returned from [`getState()`](#getState) from now on, and the change listeners will immediately be notified.
+
+> ##### A Note for Flux Users
+>
+> If you attempt to call `dispatch` from inside the [reducer](../understanding/thinking-in-redux/Glossary.md#reducer), it will throw with an error saying “Reducers may not dispatch actions.” This is similar to “Cannot dispatch in a middle of dispatch” error in Flux, but doesn't cause the problems associated with it. In Flux, a dispatch is forbidden while Stores are handling the action and emitting updates. This is unfortunate because it makes it impossible to dispatch actions from component lifecycle hooks or other benign places.
+>
+> In Redux, subscriptions are called after the root reducer has returned the new state, so you _may_ dispatch in the subscription listeners. You are only disallowed to dispatch inside the reducers because they must have no side effects. If you want to cause a side effect in response to an action, the right place to do this is in the potentially async [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator).
+
+#### Arguments
+
+1. `action` (_Object_<sup>†</sup>): A plain object describing the change that makes sense for your application. Actions are the only way to get data into the store, so any data, whether from the UI events, network callbacks, or other sources such as WebSockets needs to eventually be dispatched as actions. Actions must have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It's better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable. Other than `type`, the structure of an action object is really up to you. If you're interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions could be constructed.
+
+#### Returns
+
+(Object<sup>†</sup>): The dispatched action (see notes).
+
+#### Notes
+
+<sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
+
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../understanding/thinking-in-redux/Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
+
+Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
+
+To learn how to describe asynchronous API calls, read the current state inside action creators, perform side effects, or chain them to execute in a sequence, see the examples for [`applyMiddleware`](applyMiddleware.md).
+
+#### Example
 
 ```js
 import { createStore } from 'redux'
@@ -77,31 +83,33 @@ store.dispatch(addTodo('Read the docs'))
 store.dispatch(addTodo('Read about the middleware'))
 ```
 
-<hr>
+---
 
-### <a id='subscribe'></a>[`subscribe(listener)`](#subscribe)
+### subscribe(listener)
 
-添加一个变化监听器。每当 dispatch action 的时候就会执行，state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。
+Adds a change listener. It will be called any time an action is dispatched, and some part of the state tree may potentially have changed. You may then call [`getState()`](#getState) to read the current state tree inside the callback.
 
-你可以在变化监听器里面进行 [`dispatch()`](#dispatch)，但你需要注意下面的事项：
+You may call [`dispatch()`](#dispatchaction) from a change listener, with the following caveats:
 
-1. 监听器调用 [`dispatch()`](#dispatch) 仅仅应当发生在响应用户的 actions 或者特殊的条件限制下（比如： 在 store 有一个特殊的字段时 dispatch action）。虽然没有任何条件去调用 [`dispatch()`](#dispatch) 在技术上是可行的，但是随着每次 [`dispatch()`](#dispatch) 改变 store 可能会导致陷入无穷的循环。
-2. 订阅器（subscriptions） 在每次 [`dispatch()`](#dispatch) 调用之前都会保存一份快照。当你在正在调用监听器（listener）的时候订阅(subscribe)或者去掉订阅（unsubscribe），对当前的 [`dispatch()`](#dispatch) 不会有任何影响。但是对于下一次的 [`dispatch()`](#dispatch)，无论嵌套与否，都会使用订阅列表里最近的一次快照。
-3. 订阅器不应该注意到所有 state 的变化，在订阅器被调用之前，往往由于嵌套的 [`dispatch()`](#dispatch) 导致 state 发生多次的改变。保证所有的监听器都注册在 [`dispatch()`](#dispatch) 启动之前，这样，在调用监听器的时候就会传入监听器所存在时间里最新的一次 state。
+1. The listener should only call [`dispatch()`](#dispatchaction) either in response to user actions or under specific conditions (e. g. dispatching an action when the store has a specific field). Calling [`dispatch()`](#dispatchaction) without any conditions is technically possible, however it leads to an infinite loop as every [`dispatch()`](#dispatchaction) call usually triggers the listener again.
 
-这是一个底层 API。多数情况下，你不会直接使用它，会使用一些 React（或其它库）的绑定。如果你想让回调函数执行的时候使用当前的 state，你可以 [把 store 转换成一个 Observable 或者写一个定制的 `observeStore` 工具](https://github.com/rackt/redux/issues/303#issuecomment-125184409)。
+2. The subscriptions are snapshotted just before every [`dispatch()`](#dispatchaction) call. If you subscribe or unsubscribe while the listeners are being invoked, this will not have any effect on the [`dispatch()`](#dispatchaction) that is currently in progress. However, the next [`dispatch()`](#dispatchaction) call, whether nested or not, will use a more recent snapshot of the subscription list.
 
-如果需要解绑这个变化监听器，执行 `subscribe` 返回的函数即可。
+3. The listener should not expect to see all state changes, as the state might have been updated multiple times during a nested [`dispatch()`](#dispatchaction) before the listener is called. It is, however, guaranteed that all subscribers registered before the [`dispatch()`](#dispatchaction) started will be called with the latest state by the time it exits.
 
-#### 参数
+It is a low-level API. Most likely, instead of using it directly, you'll use React (or other) bindings. If you commonly use the callback as a hook to react to state changes, you might want to [write a custom `observeStore` utility](https://github.com/reduxjs/redux/issues/303#issuecomment-125184409). The `Store` is also an [`Observable`](https://github.com/zenparsing/es-observable), so you can `subscribe` to changes with libraries like [RxJS](https://github.com/ReactiveX/RxJS).
 
-1. `listener` (_Function_): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
+To unsubscribe the change listener, invoke the function returned by `subscribe`.
 
-##### 返回值
+#### Arguments
 
-(_Function_): 一个可以解绑变化监听器的函数。
+1. `listener` (_Function_): The callback to be invoked any time an action has been dispatched, and the state tree might have changed. You may call [`getState()`](#getState) inside this callback to read the current state tree. It is reasonable to expect that the store's reducer is a pure function, so you may compare references to some deep path in the state tree to learn whether its value has changed.
 
-##### 示例
+##### Returns
+
+(_Function_): A function that unsubscribes the change listener.
+
+##### Example
 
 ```js
 function select(state) {
@@ -127,14 +135,14 @@ const unsubscribe = store.subscribe(handleChange)
 unsubscribe()
 ```
 
-<hr>
+---
 
-### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
+### replaceReducer(nextReducer)
 
-替换 store 当前用来计算 state 的 reducer。
+Replaces the reducer currently used by the store to calculate the state.
 
-这是一个高级 API。只有在你需要实现代码分隔，而且需要立即加载一些 reducer 的时候才可能会用到它。在实现 Redux 热加载机制的时候也可能会用到。
+It is an advanced API. You might need this if your app implements code splitting, and you want to load some of the reducers dynamically. You might also need this if you implement a hot reloading mechanism for Redux.
 
-#### 参数
+#### Arguments
 
-1. `nextReducer` (_Function_) store 会使用的下一个 reducer。
+1. `nextReducer` (_Function_) The next reducer for the store to use.

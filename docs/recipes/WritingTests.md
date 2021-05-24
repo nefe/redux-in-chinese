@@ -1,32 +1,39 @@
-# 编写测试
+---
+id: writing-tests
+title: Writing Tests
+hide_title: true
+---
 
-由于你写的大部分 Redux 代码是函数，而且其中大部分是纯函数，所以很好测，不需要模拟。
+# Writing Tests
 
-## 准备工作
+Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
 
-我们推荐使用 [Jest](https://jestjs.io/)) 作为测试引擎，需要注意的是 Jest 运行在 Node 环境中，因此你不能访问 DOM。
+### Setting Up
 
-```bash
+We recommend [Jest](https://facebook.github.io/jest/) as the testing engine.
+Note that it runs in a Node environment, so you won't have access to the DOM.
+
+```sh
 npm install --save-dev jest
 ```
 
-如果想要和 [Babel](http://babeljs.io/) 一起使用，还需要安装 `babel-jest`
+To use it together with [Babel](https://babeljs.io), you will need to install `babel-jest`:
 
-```bash
+```sh
 npm install --save-dev babel-jest
 ```
 
-并且在 `.babelrc` 中通过 [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env) 来配置
+and configure it to use [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env) features in `.babelrc`:
 
-```javascript
+```js
 {
-   "presets": ["@babel/preset-env"]
+  "presets": ["@babel/preset-env"]
 }
 ```
 
-然后，在 `package.json` 中的 `scripts` 处添加相关的命令
+Then, add this to `scripts` in your `package.json`:
 
-```json
+```js
 {
   ...
   "scripts": {
@@ -38,13 +45,13 @@ npm install --save-dev babel-jest
 }
 ```
 
-执行 `npm test` 可以运行一次测试，执行 `npm run test:watch` 可以让每当文件改变时自动执行测试。
+and run `npm test` to run it once, or `npm run test:watch` to test on every file change.
 
-## 测试 Action Creators
+### Action Creators
 
-在 Redux 中，action creators 是返回普通对象的函数，当我们测试 action creators 时，我们想要测试是否调用了正确的 action creator 以及是否返回了正确的 action。
+In Redux, action creators are functions which return plain objects. When testing action creators, we want to test whether the correct action creator was called and also whether the right action was returned.
 
-### 示例
+#### Example
 
 ```js
 export function addTodo(text) {
@@ -55,12 +62,12 @@ export function addTodo(text) {
 }
 ```
 
-可以这样来测试：
+can be tested like:
 
 ```js
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
-​
+
 describe('actions', () => {
   it('should create an action to add a todo', () => {
     const text = 'Finish docs'
@@ -73,35 +80,35 @@ describe('actions', () => {
 })
 ```
 
-## 测试异步 Action Creators
+### Async Action Creators
 
-对于使用 [Redux-Thunk](https://github.com/reduxjs/redux-thunk) 或者其它中间件的异步 action Creator ，最好完全模拟 Redux store 来进行测试，可以通过使用 [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) 来把中间件应用于模拟的 store，还可以使用 [fetch-mock](http://www.wheresrhys.co.uk/fetch-mock/)) 来模拟 HTTP 请求。
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it's best to completely mock the Redux store for tests. You can apply the middleware to a mock store using [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store). You can also use [fetch-mock](https://www.wheresrhys.co.uk/fetch-mock/) to mock the HTTP requests.
 
-### 示例
+#### Example
 
 ```js
 import 'cross-fetch/polyfill'
-​
+
 function fetchTodosRequest() {
   return {
     type: FETCH_TODOS_REQUEST
   }
 }
-​
+
 function fetchTodosSuccess(body) {
   return {
     type: FETCH_TODOS_SUCCESS,
     body
   }
 }
-​
+
 function fetchTodosFailure(ex) {
   return {
     type: FETCH_TODOS_FAILURE,
     ex
   }
 }
-​
+
 export function fetchTodos() {
   return dispatch => {
     dispatch(fetchTodosRequest())
@@ -113,7 +120,7 @@ export function fetchTodos() {
 }
 ```
 
-可以这样来测试：
+can be tested like:
 
 ```js
 import configureMockStore from 'redux-mock-store'
@@ -121,28 +128,28 @@ import thunk from 'redux-thunk'
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 import fetchMock from 'fetch-mock'
-import expect from 'expect' // 可以使用任何测试库
-​
+import expect from 'expect' // You can use any testing library
+
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
-​
+
 describe('async actions', () => {
   afterEach(() => {
-    fetchMock.reset()
     fetchMock.restore()
   })
-​
+
   it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
-    fetchMock
-      .getOnce('/todos', { body: { todos: ['do something'] }, headers: { 'content-type': 'application/json' } })
-​
-​
+    fetchMock.getOnce('/todos', {
+      body: { todos: ['do something'] },
+      headers: { 'content-type': 'application/json' }
+    })
+
     const expectedActions = [
       { type: types.FETCH_TODOS_REQUEST },
       { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something'] } }
     ]
     const store = mockStore({ todos: [] })
-​
+
     return store.dispatch(actions.fetchTodos()).then(() => {
       // return of async actions
       expect(store.getActions()).toEqual(expectedActions)
@@ -151,15 +158,15 @@ describe('async actions', () => {
 })
 ```
 
-## 测试 Reducers
+### Reducers
 
-Reducer 把 action 应用到之前的 state，并返回新的 state。示例如下。
+A reducer should return the new state after applying the action to the previous state, and that's the behavior tested below.
 
-### 示例
+#### Example
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes'
-​
+
 const initialState = [
   {
     text: 'Use Redux',
@@ -167,7 +174,7 @@ const initialState = [
     id: 0
   }
 ]
-​
+
 export default function todos(state = initialState, action) {
   switch (action.type) {
     case ADD_TODO:
@@ -179,19 +186,19 @@ export default function todos(state = initialState, action) {
         },
         ...state
       ]
-​
+
     default:
       return state
   }
 }
 ```
 
-可以这样来测试：
+can be tested like:
 
 ```js
-import reducer from '../../reducers/todos'
+import reducer from '../../structuring-reducers/todos'
 import * as types from '../../constants/ActionTypes'
-​
+
 describe('todos reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual([
@@ -202,7 +209,7 @@ describe('todos reducer', () => {
       }
     ])
   })
-​
+
   it('should handle ADD_TODO', () => {
     expect(
       reducer([], {
@@ -216,7 +223,7 @@ describe('todos reducer', () => {
         id: 0
       }
     ])
-​
+
     expect(
       reducer(
         [
@@ -247,234 +254,228 @@ describe('todos reducer', () => {
 })
 ```
 
-## 测试组件
+### Components
 
-React 组件有一个优点，它们通常很小且只依赖于传入的 `props` ，因此测试起来很简便。
+A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
-首先，我们需要安装 [Enzyme](http://airbnb.io/enzyme/) ，Enzyme 底层使用了 [React Test Utilities](https://reactjs.org/docs/test-utils.html) ，但是更方便，更具可读性，更强大。
+First, we will install [React Testing Library](https://testing-library.com/docs/react-testing-library/intro). React Testing Library is a simple and complete React DOM testing utilities that encourage good testing practices. It uses react-dom's `render` function and `act` from react-dom/tests-utils.
 
-```bash
-npm install —save-dev enzyme
+```sh
+npm install --save-dev @testing-library/react
 ```
 
-为了兼容 React 的版本，我们还需要安装 Enzyme 适配器，Enzyme 提供了适配器用以兼容 `React16` ,`React 15.x`,`React 0.14.x`,`React 0.13.x`。如果你使用的是 React16，你可以使用下面的命令安装相关依赖：
+If you are using jest as recommended above, we also recommend installing [jest-dom](https://github.com/testing-library/jest-dom) as it provides a set of custom jest matchers that you can use to extend jest. These will make your tests more declarative, clear to read and to maintain. jest-dom is being used in the examples below.
 
-```bash
-npm install --save-dev enzyme-adapter-react-16
+```sh
+npm install --save-dev @testing-library/jest-dom
 ```
 
-为了测试组件，我们创建了一个 `setup()` 辅助函数，用来把模拟过的（stubbed）回调函数当作 props 传入，然后使用 ([React Shallow Rendering](https://reactjs.org/docs/test-utils.html#shallow-rendering)) 来渲染组件。这样就可以依据 “是否调用了回调函数” 的断言来写独立的测试。
+To test the components, we `render` them into the DOM and pass stubbed callbacks as props, then we assert whether the callbacks were called when expected.
 
-### 示例
-
-```js
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import TodoTextInput from './TodoTextInput'
-​
-class Header extends Component {
-  handleSave(text) {
-    if (text.length !== 0) {
-      this.props.addTodo(text)
-    }
-  }
-​
-  render() {
-    return (
-      <header className="header">
-        <h1>todos</h1>
-        <TodoTextInput
-          newTodo={true}
-          onSave={this.handleSave.bind(this)}
-          placeholder="What needs to be done?"
-        />
-      </header>
-    )
-  }
-}
-​
-Header.propTypes = {
-  addTodo: PropTypes.func.isRequired
-}
-​
-export default Header
-```
-
-上面的组件可以这样来测试：
+#### Example
 
 ```js
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
-import Header from '../../components/Header'
-​
-Enzyme.configure({ adapter: new Adapter() });
-​
-function setup() {
-  const props = {
-    addTodo: jest.fn()
+import PropTypes from 'prop-types'
+import TodoTextInput from './TodoTextInput'
+
+const Header = ({ addTodo }) => {
+  const handleSave = text => {
+    if (text.length !== 0) {
+      addTodo(text)
+    }
   }
-​
-  const enzymeWrapper = mount(<Header {...props} />)
-​
-  return {
-    props,
-    enzymeWrapper
-  }
+
+  return (
+    <header className="header">
+      <h1>todos</h1>
+      <TodoTextInput
+        newTodo={true}
+        onSave={handleSave}
+        placeholder="What needs to be done?"
+      />
+    </header>
+  )
 }
-​
-describe('components', () => {
-  describe('Header', () => {
-    it('should render self and subcomponents', () => {
-      const { enzymeWrapper } = setup()
-​
-      expect(enzymeWrapper.find('header').hasClass('header')).toBe(true)
-​
-      expect(enzymeWrapper.find('h1').text()).toBe('todos')
-​
-      const todoInputProps = enzymeWrapper.find('TodoTextInput').props()
-      expect(todoInputProps.newTodo).toBe(true)
-      expect(todoInputProps.placeholder).toEqual('What needs to be done?')
-    })
-​
-    it('should call addTodo if length of text is greater than 0', () => {
-      const { enzymeWrapper, props } = setup()
-      const input = enzymeWrapper.find('TodoTextInput')
-      input.props().onSave('')
-      expect(props.addTodo.mock.calls.length).toBe(0)
-      input.props().onSave('Use Redux')
-      expect(props.addTodo.mock.calls.length).toBe(1)
-    })
+
+Header.propTypes = {
+  addTodo: PropTypes.func.isRequired
+}
+
+export default Header
+```
+
+can be tested like:
+
+```js
+import React from 'react'
+import { render, fireEvent, screen } from '@testing-library/react'
+import Header from '../../components/Header'
+
+it('should not call addTodo if length of text is 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
+
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: '' }
   })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(0)
+})
+
+it('should call addTodo if length of text is greater than 0', () => {
+  const mockAddTodo = jest.fn()
+  render(<Header addTodo={mockAddTodo} />)
+
+  fireEvent.change(screen.getByPlaceholderText(/what needs to be done/i), {
+    target: { value: 'Use Redux' }
+  })
+
+  expect(mockAddTodo).toHaveBeenCalledTimes(1)
 })
 ```
 
-## 测试 connected 组件
+### Connected Components
 
-如果你使用类似 [React redux](https://github.com/reduxjs/react-redux) 的库，你可能会使用 [高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)，比如 [`connect()` ](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)。可以让你把 Redux state 注入到常规的 React 组件中。
+If you use a library like [React Redux](https://github.com/reduxjs/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://react-redux.js.org/api/connect). This lets you inject Redux state into a regular React component.
 
-考虑如下 `App` 组件
-
-```js
-import { connect } from 'react-redux'
-​
-class App extends Component { /* ... */ }
-​
-export default connect(mapStateToProps)(App)
-```
-
-在单元测试中，通常会这样导入 `App` 组件：
-
-```
-import App from './App'
-```
-
-不过，上面这样导入的是通过 `connect()` 方法返回的包装组件，并非 `App` 组件本身，如果你想测试和 Redux 的整合，这很容易，通过 [`<Provider>`](https://github.com/reduxjs/react-redux/blob/master/docs/api.md#provider-store)包裹它后传入用以单元测试的特殊 store 就可以了。但是有时候我们想测试的其实是不带 Redux store 的组件的渲染。
-
-为了测试 App 组件本身而不用处理装饰器，我们推荐你导出未装饰的组件：
+Consider the following `App` component:
 
 ```js
 import { connect } from 'react-redux'
-​
-// 命名导出未连接的组件 (测试用)
-export class App extends Component { /* ... */ }
-​
-// 默认导出已连接的组件 (app 用)
-export default connect(mapStateToProps)(App)
-```
 
-由于默认导出的组件依旧是包装过的组件，上面代码中的导入依旧会生效，无须你更改已有的代码。不过现在你可以通过下面这样的办法导入未装饰的组件了：
-
-```js
-import { App } from './App'
-```
-
-如果你需要导入二者，可以按下面这样做：
-
-```js
-import ConnectedApp, { App } from './App'
-```
-
-在 app 中，仍然正常地导入：
-
-```js
-import App from './App'
-```
-
-只在测试中使用命名导出。
-
-> **混用 ES6 模块和 CommonJS 的注意事项**
->
-> 如果在应用代码中使用 ES6，但在测试中使用 ES5，Babel 会通过其 [`interop`](https://old.babeljs.io/docs/plugins/#interop) 机制处理 ES6 的 `import` 和 CommonJS 的 `require` ，使得这两种模式能一起使用，但其行为依旧有细微的区别。 如果在默认导出的附近增加另一个导出，将导致无法默认导出 `require('./App')`。此时，应代以 `require('./App').default`
-
-## 对中间件的测试
-
-中间件函数包装了 Redux 中 `dispatch` 的行为，为了测试中间件的行为，我们需要模拟 `dispatch` 调用时的行为。
-
-### 示例
-
-首先，我们需要创建一个中间件函数，下述代码和 [redux-thunk](https://github.com/reduxjs/redux-thunk/blob/master/src/index.js) 类似
-
-```js
-const thunk = ({ dispatch, getState }) => next => action => {
-  if (typeof action === 'function') {
-    return action(dispatch, getState)
-  }
-​
-  return next(action)
+const App = props => {
+  return <div>{props.user}</div>
 }
+
+const mapStateToProps = state => {
+  return state
+}
+
+export default connect(mapStateToProps)(App)
 ```
 
-我们需要创造一个假的 `getState`,`dispatch` 和 `next` 函数，我们可以使用 `jest.fn()` 来创建 stubs，你也可以使用 sinon 等测试框架
+To test it, we can use the `wrapper` option in React Testing Library's `render` function and export our own `render` function as explained in React Testing Library's [setup docs](https://testing-library.com/docs/react-testing-library/setup).
 
-我们可以像 Redux 一样来触发函数
+Our `render` function can look like this:
+
+```js
+// test-utils.js
+import React from 'react'
+import { render as rtlRender } from '@testing-library/react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+// Import your own reducer
+import reducer from '../reducer'
+
+function render(
+  ui,
+  {
+    initialState,
+    store = createStore(reducer, initialState),
+    ...renderOptions
+  } = {}
+) {
+  function Wrapper({ children }) {
+    return <Provider store={store}>{children}</Provider>
+  }
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
+}
+
+// re-export everything
+export * from '@testing-library/react'
+// override render method
+export { render }
+```
+
+And our test can use our exported `render` function:
+
+```js
+import React from 'react'
+// We're using our own custom render function and not RTL's render
+// our custom utils also re-export everything from RTL
+// so we can import fireEvent and screen here as well
+import { render, fireEvent, screen } from '../../test-utils'
+import App from '../../containers/App'
+
+it('Renders the connected app with initialState', () => {
+  render(<App />, { initialState: { user: 'Redux User' } })
+
+  expect(screen.getByText(/redux user/i)).toBeInTheDocument()
+})
+```
+
+### Middleware
+
+Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
+
+#### Example
+
+First, we'll need a middleware function. This is similar to the real [redux-thunk](https://github.com/gaearon/redux-thunk/blob/master/src/index.js).
+
+```js
+const thunk =
+  ({ dispatch, getState }) =>
+  next =>
+  action => {
+    if (typeof action === 'function') {
+      return action(dispatch, getState)
+    }
+
+    return next(action)
+  }
+```
+
+We need to create a fake `getState`, `dispatch`, and `next` functions. We use `jest.fn()` to create stubs, but with other test frameworks you would likely use [Sinon](https://sinonjs.org/).
+
+The invoke function runs our middleware in the same way Redux does.
 
 ```js
 const create = () => {
   const store = {
     getState: jest.fn(() => ({})),
-    dispatch: jest.fn(),
-  };
+    dispatch: jest.fn()
+  }
   const next = jest.fn()
-​
-  const invoke = (action) => thunk(store)(next)(action)
-​
-  return {store, next, invoke}
-};
+
+  const invoke = action => thunk(store)(next)(action)
+
+  return { store, next, invoke }
+}
 ```
 
-然后我们在适当的时机通过调用 `getState`,`dispatch`,`next`函数来测试中间件。
+We test that our middleware is calling the `getState`, `dispatch`, and `next` functions at the right time.
 
 ```js
 it('passes through non-function action', () => {
   const { next, invoke } = create()
-  const action = {type: 'TEST'}
+  const action = { type: 'TEST' }
   invoke(action)
   expect(next).toHaveBeenCalledWith(action)
 })
-​
+
 it('calls the function', () => {
   const { invoke } = create()
   const fn = jest.fn()
   invoke(fn)
   expect(fn).toHaveBeenCalled()
-});
-​
+})
+
 it('passes dispatch and getState', () => {
   const { store, invoke } = create()
   invoke((dispatch, getState) => {
     dispatch('TEST DISPATCH')
-    getState();
+    getState()
   })
   expect(store.dispatch).toHaveBeenCalledWith('TEST DISPATCH')
   expect(store.getState).toHaveBeenCalled()
-});
+})
 ```
 
-在一些情况下，你需要修改 `create` 函数来模拟不同的 `getState` 和 `next` 。
+In some cases, you will need to modify the `create` function to use different mock implementations of `getState` and `next`.
 
-## 词汇表
+### Glossary
 
-- [Enzyme](http://airbnb.io/enzyme/): Enzyme 是一种用于 React 测试的 JavaScript 工具，它使得断言、操作以及遍历你的 React 组件的输出变得更简单。
-- [React Test Utilities](https://reactjs.org/docs/test-utils.html) :React 提供的测试工具，被 Enzyme 使用
-- [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html)： shallow renderer 使你可以实例化一个组件, 并有效地获取其 `render` 方法的结果, 其渲染深度仅一层, 而非递归地将组件渲染为 DOM。 shallow renderer 对单元测试很有用， 你只要测试某个特定的组件，而不用管它的子组件。这也意味着，更改子组件不会影响到其父组件的测试。如果要测试一个组件和它所有的子组件，可以用 [`Enzyme's mount()`](http://airbnb.io/enzyme/docs/api/mount.html) 方法 ，这个方法会进行完全的 DOM 渲染。
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro): React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices. Its primary guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you."
+
+- [React Test Utils](https://reactjs.org/docs/test-utils.html): ReactTestUtils makes it easy to test React components in the testing framework of your choice. React Testing Library uses the `act` function exported by React Test Utils.

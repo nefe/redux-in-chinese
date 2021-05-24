@@ -1,10 +1,16 @@
-# API 文档
+---
+id: api-reference
+title: API Reference
+hide_title: true
+---
 
-Redux 的 API 非常少。Redux 定义了一系列的约定（contract）来让你来实现（例如 [reducers](../Glossary.md#reducer)），同时提供少量辅助函数来把这些约定整合到一起。
+# API Reference
 
-这一章会介绍所有的 Redux API。记住，Redux 只关心如何管理 state。在实际的项目中，你还需要使用 UI 绑定库如 [react-redux](https://github.com/gaearon/react-redux)。
+The Redux API surface is tiny. Redux defines a set of contracts for you to implement (such as [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
 
-### 顶级暴露的方法
+This section documents the complete Redux API. Keep in mind that Redux is only concerned with managing the state. In a real app, you'll also want to use UI bindings like [react-redux](https://github.com/gaearon/react-redux).
+
+### Top-Level Exports
 
 - [createStore(reducer, [preloadedState], [enhancer])](createStore.md)
 - [combineReducers(reducers)](combineReducers.md)
@@ -16,14 +22,13 @@ Redux 的 API 非常少。Redux 定义了一系列的约定（contract）来让�
 
 - [Store](Store.md)
   - [getState()](Store.md#getState)
-  - [dispatch(action)](Store.md#dispatch)
-  - [subscribe(listener)](Store.md#subscribe)
-  - [getReducer()](Store.md#getReducer)
-  - [replaceReducer(nextReducer)](Store.md#replaceReducer)
+  - [dispatch(action)](Store.md#dispatchaction)
+  - [subscribe(listener)](Store.md#subscribelistener)
+  - [replaceReducer(nextReducer)](Store.md#replacereducernextreducer)
 
-### 引入
+### Importing
 
-上面介绍的所有函数都是顶级暴露的方法。都可以这样引入：
+Every function described above is a top-level export. You can import any of them like this:
 
 #### ES6
 

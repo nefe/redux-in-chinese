@@ -1,60 +1,68 @@
-# Redux 常见问题
+---
+id: faq
+title: FAQ Index
+hide_title: true
+---
 
-## 目录
+# Redux FAQ
 
-- **综合**
-  - [何时学习 Redux ？](/docs/faq/General.md#general-when-to-learn)
-  - [何时使用 Redux ？](/faq/General#general-when-to-use)
-  - [Redux 只能搭配 React 使用？](/faq/General#general-only-react)
-  - [Redux 需要特殊的编译工具支持吗？](/faq/General#general-build-tools)
-- **Reducer**
-  - [如何在 reducer 之间共享 state ？ combineReducers 是必须的吗？](/faq/Reducers#reducers-share-state)
-  - [处理 action 必须用 switch 语句吗？](/faq/Reducers#reducers-use-switch)
-- **组织 State**
-  - [必须将所有 state 都维护在 Redux 中吗？ 可以用 React 的 setState() 方法吗？](/faq/OrganizingState#organizing-state-only-redux-state)
-  - [可以将 store 的 state 设置为函数、promise 或者其它非序列化值吗？](/faq/OrganizingState#organizing-state-non-serializable)
-  - [如何在 state 中组织嵌套及重复数据？](/faq/OrganizingState#organizing-state-nested-data)
-- **创建 Store**
-  - [可以创建多个 store 吗，应该这么做吗？能在组件中直接引用 store 并使用吗？](/faq/StoreSetup#store-setup-multiple-stores)
-  - [在 store enhancer 中可以存在多个 middleware 链吗？ 在 middleware 方法中，next 和 dispatch 之间区别是什么？](/faq/StoreSetup#store-setup-middleware-chains)
-  - [怎样只订阅 state 的一部分变更？如何将分发的 action 作为订阅的一部分？](/faq/StoreSetup#store-setup-subscriptions)
-- **Action**
-  - [为何 type 必须是字符串，或者至少可以被序列化？ 为什么 action 类型应该作为常量？](/faq/Actions#actions-string-constants)
-  - [是否存在 reducer 和 action 之间的一对一映射？](/faq/Actions#actions-reducer-mappings)
-  - [怎样表示类似 AJAX 请求的 “副作用”？为何需要 “action 创建函数”、“thunks” 以及 “middleware” 类似的东西去处理异步行为？](/faq/Actions#actions-side-effects)
-  - [是否应该在 action 创建函数中连续分发多个 action？](/faq/Actions#actions-multiple-actions)
-- **代码结构**
-  - [文件结构应该是什么样？项目中该如何对 action 创建函数和 reducer 分组？ selector 又该放在哪里？](/faq/CodeStructure#structure-file-structure)
-  - [如何将逻辑在 reducer 和 action 创建函数之间划分？ “业务逻辑” 应该放在哪里？](/faq/CodeStructure#structure-business-logic)
-  - [为何应该使用 action 创建函数?](/docs/faq/CodeStructure.md#structure-action-creators)
-- **不可变数据**
-  - [Immutability（数据不可变性）的好处是什么？](/docs/faq/ImmutableData.md#benefits-of-immutability)
-  - [为什么 Redux 要求数据不可变？](/docs/faq/ImmutableData.md#why-is-immutability-required)
-  - [我一定要用 Immutable.JS 吗？](/docs/faq/ImmutableData.md#do-i-have-to-use-immutable-js)
-  - [用 ES6 实现数据不可变的一些问题](/docs/faq/ImmutableData.md#issues-with-es6-for-immutable-ops)
-- **在 Redux 中使用 Immutable.JS**
-  - [为什么需要使用像 Immutable.JS 这种用于实现数据不可变的库？](/docs/recipes/UsingImmutableJS.md#why-use-immutable-library)
-  - [为什么要选择 Immutable.JS 作为实现数据不可变的库?](/docs/recipes/UsingImmutableJS.md#why-choose-immutable-js)
-  - [使用 Immutable.JS 的一些问题](/docs/recipes/UsingImmutableJS.md#issues-with-immutable-js)
-  - [Immutable.JS 是否值得一用？](/docs/recipes/UsingImmutableJS.md#is-immutable-js-worth-effort)
-  - [在 Redux 中使用 Immutable.JS 的一些最佳实践](/docs/recipes/UsingImmutableJS.md#immutable-js-best-practices)
-- **代码结构**  
-   - [我的项目结构应该是怎么样的？在项目中应该如何组织 action 创建函数和 reducer? 选择器（selector）应该放在哪里?](/docs/faq/CodeStructure.md#structure-file-structure)
-  - [如何分离 reducer 与 action 创建函数之间的逻辑？业务逻辑应该放在哪里？](/docs/faq/CodeStructure.md#structure-business-logic)
-  - [为什么需要使用 action 创建函数？](/docs/faq/CodeStructure.md#structure-action-creators)
-- **性能**
-  - [考虑到性能和架构， Redux “可扩展性” 如何？](/faq/Performance#performance-scaling)
-  - [每个 action 都调用 “所有的 reducer” 会不会很慢？](/faq/Performance#performance-all-reducers)
-  - [在 reducer 中必须对 state 进行深拷贝吗？拷贝 state 不会很慢吗？](/faq/Performance#performance-clone-state)
-  - [怎样减少 store 更新事件的数量？](/faq/Performance#performance-update-events)
-  - [仅有 “一个 state 树” 会引发内存问题吗？分发多个 action 会占用内存空间吗？](/faq/Performance#performance-state-memory)
-  - [缓存远程数据会导致内存问题吗?](/docs/faq/Performance.md#performance-cache-memory)
+## Table of Contents
+
+- **General**
+  - [When should I learn Redux?](faq/General.md#when-should-i-learn-redux)
+  - [When should I use Redux?](faq/General.md#when-should-i-use-redux)
+  - [Can Redux only be used with React?](faq/General.md#can-redux-only-be-used-with-react)
+  - [Do I need to have a particular build tool to use Redux?](faq/General.md#do-i-need-to-have-a-particular-build-tool-to-use-redux)
+- **Reducers**
+  - [How do I share state between two reducers? Do I have to use combineReducers?](faq/Reducers.md#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
+  - [Do I have to use the switch statement to handle actions?](faq/Reducers.md#do-i-have-to-use-the-switch-statement-to-handle-actions)
+- **Organizing State**
+  - [Do I have to put all my state into Redux? Should I ever use React's setState()?](faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+  - [Can I put functions, promises, or other non-serializable items in my store state?](faq/OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
+  - [How do I organize nested or duplicate data in my state?](faq/OrganizingState.md#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+  - [Should I put form state or other UI state in my store?](faq/OrganizingState.md#should-i-put-form-state-or-other-ui-state-in-my-store)
+- **Store Setup**
+  - [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](faq/StoreSetup.md#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
+  - [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](faq/StoreSetup.md#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
+  - [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](faq/StoreSetup.md#how-do-i-subscribe-to-only-a-portion-of-the-state-can-i-get-the-dispatched-action-as-part-of-the-subscription)
+- **Actions**
+  - [Why should type be a string, or at least serializable? Why should my action types be constants?](faq/Actions.md#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants)
+  - [Is there always a one-to-one mapping between reducers and actions?](faq/Actions.md#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
+  - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)
+  - [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](faq/Actions.md#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
+  - [Should I dispatch multiple actions in a row from one action creator?](faq/Actions.md#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
+- **Immutable Data**
+  - [What are the benefits of immutability?](faq/ImmutableData.md#what-are-the-benefits-of-immutability)
+  - [Why is immutability required by Redux?](faq/ImmutableData.md#why-is-immutability-required-by-redux)
+  - [What approaches are there for handling data immutability? Do I have to use Immer?](faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
+  - [What are the issues with using JavaScript for immutable operations?](faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
+- **Code Structure**
+  - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](faq/CodeStructure.md#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
+  - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](faq/CodeStructure.md#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
+  - [Why should I use action creators?](faq/CodeStructure.md#why-should-i-use-action-creators)
+  - [Where should websockets and other persistent connections live?](faq/CodeStructure.md#where-should-websockets-and-other-persistent-connections-live)
+  - [How can I use the Redux store in non-component files?](faq/CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files)
+- **Performance**
+  - [How well does Redux “scale” in terms of performance and architecture?](faq/Performance.md#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
+  - [Won't calling “all my reducers” for each action be slow?](faq/Performance.md#wont-calling-all-my-reducers-for-each-action-be-slow)
+  - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](faq/Performance.md#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
+  - [How can I reduce the number of store update events?](faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events)
+  - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](faq/Performance.md#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
+  - [Will caching remote data cause memory problems?](faq/Performance.md#will-caching-remote-data-cause-memory-problems)
+- **Design Decisions**
+  - [Why doesn't Redux pass the state and action to subscribers?](faq/DesignDecisions.md#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
+  - [Why doesn't Redux support using classes for actions and reducers?](faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
+  - [Why does the middleware signature use currying?](faq/DesignDecisions.md#why-does-the-middleware-signature-use-currying)
+  - [Why does applyMiddleware use a closure for dispatch?](faq/DesignDecisions.md#why-does-applymiddleware-use-a-closure-for-dispatch)
+  - [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
+  - [Why doesn't mapDispatchToProps allow use of return values from `getState()` or `mapStateToProps()`?](faq/DesignDecisions.md#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 - **React Redux**
-  - [为何组件没有被重新渲染、或者 mapStateToProps 没有运行？](/faq/ReactRedux#react-not-rerendering)
-  - [为何组件频繁的重新渲染？](/faq/ReactRedux#react-rendering-too-often)
-  - [怎样使 mapStateToProps 执行更快？](/faq/ReactRedux#react-mapstate-speed)
-  - [为何不在被连接的组件中使用 this.props.dispatch ？](/faq/ReactRedux#react-props-dispatch)
-  - [应该只连接到顶层组件吗，或者可以在组件树中连接到不同组件吗？](/faq/ReactRedux#react-multiple-components)
-- **其它**
-  - [有 “真实存在” 且很庞大的 Redux 项目吗？](#miscellaneous-real-projects)
-  - [如何在 Redux 中实现鉴权？](#miscellaneous-authentication)
+  - [Why should I use React-Redux?](faq/ReactRedux.md#why-should-i-use-react-redux)
+  - [Why isn't my component re-rendering, or my mapStateToProps running?](faq/ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+  - [Why is my component re-rendering too often?](faq/ReactRedux.md#why-is-my-component-re-rendering-too-often)
+  - [How can I speed up my mapStateToProps?](faq/ReactRedux.md#how-can-i-speed-up-my-mapstatetoprops)
+  - [Why don't I have this.props.dispatch available in my connected component?](faq/ReactRedux.md#why-dont-i-have-this-props-dispatch-available-in-my-connected-component)
+  - [Should I only connect my top component, or can I connect multiple components in my tree?](faq/ReactRedux.md#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+- **Miscellaneous**
+  - [Are there any larger, “real” Redux projects?](faq/Miscellaneous.md#are-there-any-larger-real-redux-projects)
+  - [How can I implement authentication in Redux?](faq/Miscellaneous.md#how-can-i-implement-authentication-in-redux)

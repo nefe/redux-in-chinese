@@ -1,31 +1,36 @@
-# 迁移到 Redux
+---
+id: migrating-to-redux
+title: Migrating to Redux
+hide_title: true
+---
 
-Redux 不是一个单一的框架，而是一系列的约定和[一些让他们协同工作的函数](../api/README.md)。你的 Redux 项目的主体代码甚至不需要使用 Redux 的 API，大部分时间你其实是在编写函数。
+# Migrating to Redux
 
-这让到 Redux 的双向迁移都非常的容易。  
-我们可不想把你限制得死死的！
+Redux is not a monolithic framework, but a set of contracts and a [few functions that make them work together](../api/README.md). The majority of your “Redux code” will not even use Redux APIs, as most of the time you'll be writing functions.
 
-## 从 Flux 项目迁移
+This makes it easy to migrate both to and from Redux.
+We don't want to lock you in!
 
-[Reducer](../Glossary.md#reducer) 抓住了 Flux Store 的本质，因此，将一个 Flux 项目逐步到 Redux 是可行的，无论你使用了 [Flummox](http://github.com/acdlite/flummox)、[Alt](http://github.com/goatslacker/alt)、[traditional Flux](https://github.com/facebook/flux) 还是其他 Flux 库。
+## From Flux
 
-同样你也可以将 Redux 的项目通过相同的步骤迁移回上述的这些 Flux 框架。
+[Reducers](../understanding/thinking-in-redux/Glossary.md#reducer) capture “the essence” of Flux Stores, so it's possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](https://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [traditional Flux](https://github.com/facebook/flux), or any other Flux library.
 
-你的迁移过程大致包含几个步骤：
+Your process will look like this:
 
-- 创建一个叫做 `createFluxStore(reducer)` 的函数，通过 reducer 函数适配你当前项目的 Flux Store。从代码来看，这个函数很像 Redux 中 [`createStore`](../api/createStore.md) ([来源](https://github.com/reactjs/redux/blob/master/src/createStore.js))的实现。它的 dispatch 处理器应该根据不同的 action 来调用不同的 `reducer`，保存新的 state 并抛出更新事件。
+- Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/reduxjs/redux/blob/v4.0.5/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
 
-- 通过创建 `createFluxStore(reducer)` 的方法来将每个 Flux Store 逐步重写为 Reducer，这个过程中你的应用中其他部分代码感知不到任何变化，仍可以和原来一样使用 Flux Store 。
+- This allows you to gradually rewrite every Flux Store in your app as a reducer, but still export `createFluxStore(reducer)` so the rest of your app is not aware that this is happening and sees the Flux stores.
 
-- 当重写你的 Store 时，你会发现你应该避免一些明显违反 Flux 模式的使用方法，例如在 Store 中请求 API、或者在 Store 中触发 action。一旦基于 reducer 来构建你的 Flux 代码，它会变得更易于理解。
+- As you rewrite your Stores, you will find that you need to avoid certain Flux anti-patterns such as fetching API inside the Store, or triggering actions inside the Stores. Your Flux code will be easier to follow once you port it to be based on reducers!
 
-- 当你所有的 Flux Store 全部基于 reducer 来实现时，你就可以利用 [`combineReducers(reducers)`](../api/combineReducers.md) 将多个 reducer 合并到一起，然后在应用里使用这个唯一的 Redux Store。
+- When you have ported all of your Flux Stores to be implemented on top of reducers, you can replace the Flux library with a single Redux store, and combine those reducers you already have into one using [`combineReducers(reducers)`](../api/combineReducers.md).
 
-- 现在，剩下的就只是[使用 react-redux](../basics/UsageWithReact.md) 或者类似的库来处理你的 UI 部分。
+- Now all that's left to do is to port the UI to [use React-Redux](../tutorials/fundamentals/part-5-ui-and-react.md) or equivalent.
 
-- 最后，你可以使用一些 Redux 的特性，例如利用 middleware 来进一步简化异步的代码。
+- Finally, you might want to begin using some Redux idioms like middleware to further simplify your asynchronous code.
 
-## 从 Backbone 项目迁移
+## From Backbone
 
-Backbone 的 Model 层与 Redux 有着巨大的差别，因此，我们不建议从 Backbone
-项目迁移到 Redux 。如果可以的话，最好的方法是彻底重写 app 的 Model 层。不过，如果重写不可行，也可以试试使用 [backbone-redux](https://github.com/redbooth/backbone-redux) 来逐步迁移，并使 Redux 的 store 和 Backbone 的 model 层及 collection 保持同步。
+Backbone's model layer is quite different from Redux, so we don't suggest mixing them. If possible, it is best that you rewrite your app's model layer from scratch instead of connecting Backbone to Redux. However, if a rewrite is not feasible, you may use [backbone-redux](https://github.com/redbooth/backbone-redux) to migrate gradually, and keep the Redux store in sync with Backbone models and collections.
+
+If your Backbone codebase is too big for a quick rewrite or you don't want to manage interactions between store and models, use [backbone-redux-migrator](https://github.com/naugtur/backbone-redux-migrator) to help your two codebases coexist while keeping healthy separation. Once your rewrite finishes, Backbone code can be discarded and your Redux application can work on its own once you configure router.

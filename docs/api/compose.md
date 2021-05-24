@@ -1,21 +1,27 @@
+---
+id: compose
+title: compose
+hide_title: true
+---
+
 # `compose(...functions)`
 
-从右到左来组合多个函数。
+Composes functions from right to left.
 
-这是函数式编程中的方法，为了方便，被放到了 Redux 里。  
-当需要把多个 [store 增强器](../Glossary.md#store-enhancer) 依次执行的时候，需要用到它。
+This is a functional programming utility, and is included in Redux as a convenience.
+You might want to use it to apply several [store enhancers](../understanding/thinking-in-redux/Glossary.md#store-enhancer) in a row.
 
-#### 参数
+#### Arguments
 
-1. (_arguments_): 需要合成的多个函数。预计每个函数都接收一个参数。它的返回值将作为一个参数提供给它左边的函数，以此类推。例外是最右边的参数可以接受多个参数，因为它将为由此产生的函数提供签名。（译者注：`compose(funcA, funcB, funcC)` 形象为 `compose(funcA(funcB(funcC())))`）
+1. (_arguments_): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on. The exception is the right-most argument which can accept multiple parameters, as it will provide the signature for the resulting composed function.
 
-#### 返回值
+#### Returns
 
-(_Function_): 从右到左把接收到的函数合成后的最终函数。
+(_Function_): The final function obtained by composing the given functions from right to left.
 
-#### 示例
+#### Example
 
-下面示例演示了如何使用 `compose` 增强 [store](Store.md)，这个 store 与 [`applyMiddleware`](applyMiddleware.md) 和 [redux-devtools](https://github.com/gaearon/redux-devtools) 一起使用。
+This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/reduxjs/redux-devtools) package.
 
 ```js
 import { createStore, applyMiddleware, compose } from 'redux'
@@ -25,13 +31,10 @@ import reducer from '../reducers'
 
 const store = createStore(
   reducer,
-  compose(
-    applyMiddleware(thunk),
-    DevTools.instrument()
-  )
+  compose(applyMiddleware(thunk), DevTools.instrument())
 )
 ```
 
-#### 小贴士
+#### Tips
 
-- `compose` 做的只是让你在写深度嵌套的函数时，避免了代码的向右偏移（译者注：可以参考[上述的译者注](#参数)）。不要觉得它很复杂。
+- All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don't give it too much credit!

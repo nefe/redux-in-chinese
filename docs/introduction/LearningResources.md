@@ -1,375 +1,393 @@
-# 学习资源
+---
+id: learning-resources
+title: Learning Resources
+description: 'Introduction > Learning Resources: Additional articles and resources for learning Redux'
+hide_title: true
+---
 
-Redux 文档旨在教授 Redux 的基本概念，并解释在实际应用程序中使用的关键概念。但是，文档无法涵盖所有内容。令人高兴的是，还有许多其他很好的资源可用于学习 Redux。我们鼓励你仔细查看一下。 其中许多内容涵盖了超出文档范围的主题 , 或以可能更适合您学习方式的方法阐述相同的内容。
+# Learning Resources
 
-此页面包含我们对可用于学习 Redux 的一些最佳外部资源的建议。有关 React，Redux，Javascript 和相关主题的其他大量教程，文章和其他资源，可以查看 [React/Redux Links list](https://github.com/markerikson/react-redux-links)。
+The Redux docs are intended to teach the basic concepts of Redux, as well as explain key concepts for use in real-world applications. However, the docs can't cover everything. Happily, there are many other great resources available for learning Redux. We encourage you to check them out. Many of them cover topics that are beyond the scope of the docs, or describe the same topics in other ways that may work better for your learning style.
 
-## 基础介绍
+This page includes our recommendations for some of the best external resources available to learn Redux. For an additional extensive list of tutorials, articles, and other resources on React, Redux, Javascript, and related topics, see the [React/Redux Links list](https://github.com/markerikson/react-redux-links).
 
-** 教授 Redux 基本概念以及如何使用它的教程 **
+## Basic Introductions
 
-- **Redux 入门 —— 系列视频 **  
-  https://egghead.io/series/getting-started-with-redux  
-  https://github.com/tayiorbeii/egghead.io_redux_course_notes  
-  Redux 的创建者 Dan Abramov 在 30 个短片（2-5 分钟）中展示了各种概念。链接的 Github 仓库包含视频的笔记和转录。
+_Tutorials that teach the basic concepts of Redux and how to use it_
 
-- ** 使用 Redux 的常用方式构建 React 应用程序 —— 系列视频 **  
-  https://egghead.io/series/building-react-applications-with-idiomatic-redux  
-  https://github.com/tayiorbeii/egghead.io_idiomatic_redux_course_notes  
-  Dan Abramov 的第二个视频教程系列，第一个系列的续集。包括在 store 中初始化 state、如何和 React Router 一起使用、使用 “selector” function、状态规范化、使用 Redux 中间件、异步 action creator 等课程。链接的 Github 仓库包含视频的笔记和转录。
+- **Getting Started with Redux - Video Series** <br/>
+  https://app.egghead.io/courses/getting-started-with-redux <br/>
+  https://github.com/tayiorbeii/egghead.io_redux_course_notes <br/>
+  Dan Abramov, the creator of Redux, demonstrates various concepts in 30 short (2-5 minute) videos. The linked Github repo contains notes and transcriptions of the videos.
 
-- **Live React: 热重载 and Time Travel**  
-  http://youtube.com/watch?v=xsSnOQynTHs  
-  Dan Abramov 在最初介绍了 Redux 的会议上的演讲。了解 Redux 如何通过强制执行的约束实现 Time Travel 和热重载。
+- **Building React Applications with Idiomatic Redux - Video Series** <br/>
+  https://app.egghead.io/courses/building-react-applications-with-idiomatic-redux <br/>
+  https://github.com/tayiorbeii/egghead.io_idiomatic_redux_course_notes <br/>
+  Dan Abramov's second video tutorial series, continuing directly after the first. Includes lessons on store initial state, using Redux with React Router, using "selector" functions, normalizing state, use of Redux middleware, async action creators, and more. The linked Github repo contains notes and transcriptions of the videos.
 
-- **Redux 卡通指南 **  
-  https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6  
-  一个 Redux 的高级描述，使用友好的漫画来阐述 Redux 的理念。
+- **Live React: Hot Reloading and Time Travel** <br/>
+  https://youtube.com/watch?v=xsSnOQynTHs <br/>
+  Dan Abramov's original conference talk that introduced Redux. See how constraints enforced by Redux make hot reloading with time travel easy
 
-- **Leveling Up with React: Redux**  
-  https://css-tricks.com/learning-react-redux/  
-  一个非常精心编写的 Redux 及其相关概念的介绍，包含一些漂亮的卡通图表。
+- **Redux Crash Course With React** <br/>
+  https://www.youtube.com/watch?v=93p3LxR9xfM <br/>
+  Traversy Media explains the daunting Redux in such a beautiful way here. All the jargon words such as reducers, state, actions are very well defined by him. Redux may be seem difficult at the start but Traversy paves out a perfect route for beginners.
 
-- **Redux 简介 **  
-  https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/  
-  概述和介绍 Redux 的基本概念。 使用 Redux 的好处，它与 MVC 或 Flux 的区别，以及它与函数式编程的关系。
+- **A Cartoon Guide to Redux** <br/>
+  https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6 <br/>
+  A high-level description of Redux, with friendly cartoons to help illustrate the ideas.
 
-- **Redux 教程 **  
-  https://www.pshrmn.com/tutorials/react/redux/  
-  一个简短明了的教程，介绍了基本的 Redux 术语，展示了如何拆分 reducer 函数，并描述了 Redux store API。
+- **Leveling Up with React: Redux** <br/>
+  https://css-tricks.com/learning-react-redux/ <br/>
+  A very well-written introduction to Redux and its related concepts, with some nifty cartoon-ish diagrams.
 
-- **Redux：从 Twitter 大肆宣传到生产环境 **  
-  http://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/  
-  这是一个制作精良的幻灯片，直观地介绍了 Redux 核心概念、与 React 的联动、项目组织以及带有 thunk 和 sagas 的副作用（side effect）。 用一些绝对 ** 极出色 ** 的动画图表演示了数据如何流经 React + Redux 架构。
+- **An Introduction to Redux** <br/>
+  https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/ <br/>
+  An overview and intro to the basic concepts of Redux. Looks at the benefits of using Redux, how it differs from MVC or Flux, and its relation to functional programming.
 
-- **DevGuides: 介绍 Redux**  
-  http://devguides.io/redux/  
-  一个涵盖 Redux 的几个方面的教程，包括 actions、reducers、与 React 的联动和中间件。
+- **Redux Tutorial** <br/>
+  https://github.com/pshrmn/notes/blob/master/redux/redux.md <br/>
+  A short, clear tutorial that introduces basic Redux terms, shows how to split reducer functions, and describes the Redux store API.
 
-## 在 React 中使用 Redux
+- **Redux: From Twitter Hype to Production** <br/>
+  https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
+  An extremely well-produced slideshow that visually steps through core Redux concepts, usage with React, project organization, and side effects with thunks and sagas. Has some absolutely _fantastic_ animated diagrams demonstrating how data flows through a React+Redux architecture.
 
-** 一些有关 React-Redux 绑定和`connect`函数的文章 **
+- **DevGuides: Introduction to Redux** <br/>
+  http://devguides.io/redux/ <br/>
+  A tutorial that covers several aspects of Redux, including actions, reducers, usage with React, and middleware.
 
-- ** 为什么 Redux 在 React 应用程序中很有用 **  
-  https://www.fullstackreact.com/articles/redux-with-mark-erikson/  
-  解释使用 Redux 和 React 的一些好处，比如在组件和热加载 (Hot Module Reloading) 之间共享数据。
+## Using Redux With React
 
-* **Redux 可以做什么？（什么时候应该使用它？）**  
-  https://daveceddia.com/what-does-redux-do/  
-  关于 Redux 如何解决 React 应用程序中的数据流问题的总结。
+_Explanations of the React-Redux bindings and the `connect` function_
 
-* **Redux 如何工作：一个计数器的例子 **  
-  https://daveceddia.com/how-does-redux-work/  
-  对前一篇文章的一个很好的后续。 它解释了如何使用 Redux 和 React-Redux，首先显示一个 React 组件，该组件在其内部状态中存储一个值，然后重构它以使用 Redux。在此过程中，本文解释了重要的 Redux 术语和概念，以及它们如何组合在一起以使 Redux 数据流正常工作。
+- **Why Redux is Useful in React Apps** <br/>
+  https://www.fullstackreact.com/articles/redux-with-mark-erikson/ <br/>
+  An explanation of some of the benefits of using Redux with React, including sharing data between components and hot module reloading.
 
-* **Redux and React: 简介 **  
-  http://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/  
-  介绍 Redux 的核心概念，解释如何使用 React-Redux 包将 Redux 与 React 一起使用。
+* **What Does Redux Do? (and when should you use it?)** <br/>
+  https://daveceddia.com/what-does-redux-do/ <br/>
+  An excellent summary of how Redux helps solve data flow problems in a React app.
 
-## 基于项目的教程
+* **How Redux Works: A Counter-Example** <br/>
+  https://daveceddia.com/how-does-redux-work/ <br/>
+  A great follow-up to the previous article. It explains how to use Redux and React-Redux, by first showing a React component that stores a value in its internal state, and then refactoring it to use Redux instead. Along the way, the article explains important Redux terms and concepts, and how they all fit together to make the Redux data flow work properly.
 
-** 通过构建项目来教授 Redux 概念的教程，包括更大的 “real world” 类型的应用程序 **
+* **Redux and React: An Introduction** <br/>
+  https://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/ <br/>
+  A great introduction to Redux's core concepts, with explanations of how to use the React-Redux package to use Redux with React.
 
-- ** 实用的 Redux**  
-  http://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/  
-  http://blog.isquaredsoftware.com/series/practical-redux/  
-  一系列正在发布的帖子旨在通过构建示例应用程序来演示一些特定的 Redux 技术，该应用程序基于用于管理 Battletech 活动的 MekHQ 应用程序。由 Redux 共同维护者 Mark Erikson 撰写。涵盖管理关系数据，连接多个组件和列表、功能的复杂 reducer 逻辑，处理表单，显示模态对话框等主题。
+## Project-Based Tutorials
 
-- ** 使用 React + Redux 构建简单的 CRUD 应用程序 **  
-  http://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/  
-  这是一个精彩的含有 8 部分的系列教程，演示了如何构建 CRUD 应用程序，包括路由、AJAX 调用和各种 CRUD 方面。写得很好，还有一些有用的图表。
+_Tutorials that teach Redux concepts by building projects, including larger "real-world"-type applications_
 
-- ** 使用 React + Redux 构建的 Soundcloud 客户端 **  
-  http://www.robinwieruch.de/the-soundcloud-client-in-react-redux/  
-  详细的演示了项目设置、路由、身份验证、获取远程数据以及如何包装有状态库（stateful library）。
+- **Practical Redux** <br/>
+  https://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/ <br/>
+  https://blog.isquaredsoftware.com/series/practical-redux/ <br/>
+  An ongoing series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, based on the MekHQ application for managing Battletech campaigns. Written by Redux co-maintainer Mark Erikson. Covers topics like managing relational data, connecting multiple components and lists, complex reducer logic for features, handling forms, showing modal dialogs, and much more.
 
-- ** 全栈 Redux 教程 **  
-  http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html  
-  这是一个全面、深入的教程，可构建完整的客户端——服务器应用程序。
+- **Building a Simple CRUD App with React + Redux** <br/>
+  https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ <br/>
+  A nifty 8-part series that demonstrates building a CRUD app, including routing, AJAX calls, and the various CRUD aspects. Very well written, with some useful diagrams as well.
 
-- **React，Redux 和 Immutable 入门：一个测试驱动的教程 **  
-  http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/  
-  http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/  
-  另一个坚实、深入的教程，类似于 “全栈 Redux 教程”。 构建一个仅有客户端的 TodoMVC 应用程序，并演示一个良好的项目设置（包括基于 Mocha + JSDOM 的测试配置）。写得很好，涵盖了很多概念，而且非常容易理解。
+- **The Soundcloud Client in React + Redux** <br/>
+  https://www.robinwieruch.de/the-soundcloud-client-in-react-redux/ <br/>
+  A detailed walkthrough demonstrating project setup, routing, authentication, fetching of remote data, and wrapping of a stateful library.
 
-- **Redux Hero：Redux 和 Reselect 简介 **  
-  https://decembersoft.com/posts/redux-hero-part-1-a-hero-is-born-a-fun-introduction-to-redux-js/  
-  通过构建一个小型 RPG 风格的游戏介绍 Redux 和相关的库。
+- **Full-Stack Redux Tutorial** <br/>
+  https://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html <br/>
+  A full-blown, in-depth tutorial that builds up a complete client-server application.
 
-## Redux 实现
+- **Getting Started with React, Redux and Immutable: a Test-Driven Tutorial** <br/>
+  https://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/ <br/>
+  https://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/ <br/>
+  Another solid, in-depth tutorial, similar to the "Full-Stack" tutorial. Builds a client-only TodoMVC app, and demonstrates a good project setup (including a Mocha+JSDOM-based testing configuration). Well-written, covers many concepts, and very easy to follow.
 
-** 通过实现简化版 Redux 来阐述 Redux 内部原理 **
+- **Redux Hero: An Intro to Redux and Reselect** <br/>
+  https://decembersoft.com/posts/redux-hero-part-1-a-hero-is-born-a-fun-introduction-to-redux-js/ <br/>
+  An introduction to Redux and related libraries through building a small RPG-style game
 
-- ** 自己打造一个 Redux**  
-  https://zapier.com/engineering/how-to-build-redux/  
-  这是一篇非常深入的 “构建迷你 Redux” 文章，它不仅涵盖了 Redux 的核心，还涵盖了`connect`和中间件。
+## Redux Implementation
 
-- **Connect.js explained**  
-  https://gist.github.com/gaearon/1d19088790e70ac32ea636c025ba424e  
-  React-Redux 的`connect()`函数的一个非常简化的版本，完成了`connect()`的基本的实现。
+_Explanations of how Redux works internally, by writing miniature reimplementations_
 
-- ** 让我们写一个 Redux 吧 !**  
-  http://www.jamasoftware.com/blog/lets-write-redux/  
-  通过逐步编写 Redux 的简化版本来帮理解 Redux 的概念和实现。
+- **Build Yourself a Redux** <br/>
+  https://zapier.com/engineering/how-to-build-redux/ <br/>
+  An excellent in-depth "build a mini-Redux" article, which covers not only Redux's core, but also `connect` and middleware as well.
 
-## Reducer
+- **Connect.js explained** <br/>
+  https://gist.github.com/gaearon/1d19088790e70ac32ea636c025ba424e <br/>
+  A very simplified version of React Redux's `connect()` function that illustrates the basic implementation
 
-** 讨论如何编写 reducer 函数的文章 **
+- **Let's Write Redux!** <br/>
+  https://www.jamasoftware.com/blog/lets-write-redux/ <br/>
+  Walks through writing a miniature version of Redux step-by-step, to help explain the concepts and implementation.
 
-- ** 利用`combineReducers`**  
-  http://randycoulman.com/blog/2016/11/22/taking-advantage-of-combinereducers/  
-  使用`combineReducers`多次生成状态树的示例，以及关于如何权衡各种 reducer 逻辑的一些想法。
+## Reducers
 
-- ** 高阶 Reducer 的力量 **  
-  http://slides.com/omnidan/hor#/  
-  来自 redux-undo 和其他库的作者的幻灯片演示，解释了高阶 Reducer 的概念以及如何使用它们
+_Articles discussing ways to write reducer functions_
 
-- ** 具有高阶 Reducer 的 Reducer 组成 **  
-  https://medium.com/@mange_vibration/reducer-composition-with-higher-order-reducers-35c3977ed08f  
-  一些很好的例子，关于如何编写可以组合在一起执行更大的特定 Reducer 任务的小函数，例如提供初始状态、过滤、更新特定键等等。
+- **Taking Advantage of `combineReducers`** <br/>
+  https://randycoulman.com/blog/2016/11/22/taking-advantage-of-combinereducers/ <br/>
+  Examples of using `combineReducers` multiple times to produce a state tree, and some thoughts on tradeoffs in various approaches to reducer logic.
 
-- ** 高阶 Reducer —— 只是听起来很吓人 **  
-  https://medium.com/@danielkagan/high-order-reducers-it-just-sounds-scary-2b9e5dbfc705  
-  解释如何将 Reducer 像乐高积木一样组合以创建可重复使用且可测试的 Reducer 逻辑。
+- **The Power of Higher-Order Reducers** <br/>
+  https://slides.com/omnidan/hor#/ <br/>
+  A slideshow from the author of redux-undo and other libraries, explaining the concept of higher-order reducers and how they can be used
 
-## Selector
+- **Reducer composition with Higher Order Reducers** <br/>
+  https://medium.com/@mange_vibration/reducer-composition-with-higher-order-reducers-35c3977ed08f <br/>
+  Some great examples of writing small functions that can be composed together to perform larger specific reducer tasks, such as providing initial state, filtering, updating specific keys, and more.
 
-** 如何以及为何使用 Selector 函数从 state 读取值 **
+- **Higher Order Reducers - It just sounds scary** <br/>
+  https://medium.com/@danielkagan/high-order-reducers-it-just-sounds-scary-2b9e5dbfc705 <br/>
+  Explains how reducers can be composed like Lego bricks to create reusable and testable reducer logic.
 
-- **Redux 的常用方式: 使用 Reselect Selector 实现封装和高性能 **  
-  https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/  
-  一本完整指南，包含如何使用 Redux 的 Selector 函数、如何使用 Reselect 库编写优化 Selector 以及如何提高性能的高级技巧。
+## Selectors
 
-- **ReactCasts #8: Selectors in Redux**  
-  https://www.youtube.com/watch?v=frT3to2ACCw  
-  概述了为什么以及如何使用 Selector 函数从 store 中检索数据，以及如何从 store value 派生其他数据。
+_Explanations of how and why to use selector functions to read values from state_
 
-- ** 用 Reselect 优化 React Redux 应用程序开发 **  
-  https://codebrahma.com/reselect-tutorial-optimizing-react-redux-application-development-with-reselect/  
-  关于 Reselect 的一个很好的教程。涵盖了 “selector 函数” 的概念，如何使用 Reselect 的 API，以及如何使用 memoized selector 来提高性能。
+- **Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance** <br/>
+  https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/ <br/>
+  A complete guide to why you should use selector functions with Redux, how to use the Reselect library to write optimized selectors, and advanced tips for improving performance.
 
-- ** 在 React-Redux 应用程序中使用 Reselect**  
-  https://dashbouquet.com/blog/frontend-development/usage-of-reselect-in-a-react-redux-application  
-  讨论了 memoized selector 对性能的重要性，以及如何使用 Reselect 的良好实践。
+- **ReactCasts #8: Selectors in Redux** <br/>
+  https://www.youtube.com/watch?v=frT3to2ACCw <br/>
+  A great overview of why and how to use selector functions to retrieve data from the store, and derive additional data from store values
 
-- **React, Reselect, and Redux**  
-  https://medium.com/@parkerdan/react-reselect-and-redux-b34017f8194c  
-  解释 Reselect 的 memoized selector 函数在 Redux 应用程序中是如何有用的，以及如何为每个组件实例创建唯一的 selector 实例。
+- **Optimizing React Redux Application Development with Reselect** <br/>
+  https://codebrahma.com/reselect-tutorial-optimizing-react-redux-application-development-with-reselect/ <br/>
+  A good tutorial on Reselect. Covers the concept of "selector functions", how to use Reselect's API, and how to use memoized selectors to improve performance.
 
-## 规范
+- **Usage of Reselect in a React-Redux Application** <br/>
+  https://dashbouquet.com/blog/frontend-development/usage-of-reselect-in-a-react-redux-application <br/>
+  Discusses the importance of memoized selectors for performance, and good practices for using Reselect.
 
-** 如何像数据库一样构建 Redux 存储以获得最佳性能 **
+- **React, Reselect, and Redux** <br/>
+  https://medium.com/@parkerdan/react-reselect-and-redux-b34017f8194c <br/>
+  An explanation of how Reselect's memoized selector functions are useful in Redux apps, and how to create unique selector instances for each component instance.
 
-- ** 查询 Redux Store**  
-  https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f  
-  在 Redux 中组织和存储数据的最佳实践，包括规范化数据和使用 selector 函数。
+## Normalization
 
-- ** 规范 Redux Store 以实现最大代码重用 **  
-  https://medium.com/@adamrackis/normalizing-redux-stores-for-maximum-code-reuse-ae6e3844ae95  
-  关于规范化 Redux 存储以实现一些有用的数据处理方法的想法，以及如何使用 selector 函数来对分层数据进行非规范化的示例。
+_How to structure the Redux store like a database for best performance_
 
-- **Redux Normalizr: 改善你的 State 管理 **  
-  http://www.robinwieruch.de/the-soundcloud-client-in-react-redux-normalizr/  
-  描述如何使用 Normalizr 改进 Redux 中嵌套数据的数据管理的教程。
+- **Querying a Redux Store** <br/>
+  https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f <br/>
+  A look at best practices for organizing and storing data in Redux, including normalizing data and use of selector functions.
 
-- ** 高级 Redux 实体规范化 **  
-  https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5  
-  描述用于跟踪状态中实体子集的 “keyWindow” 概念，类似于 SQL“视图”。标准化数据概念的有用扩展。
+- **Normalizing Redux Stores for Maximum Code Reuse** <br/>
+  https://medium.com/@adamrackis/normalizing-redux-stores-for-maximum-code-reuse-ae6e3844ae95 <br/>
+  Thoughts on how normalized Redux stores enable some useful data handling approaches, with examples of using selector functions to denormalize hierarchical data.
 
-## 中间件
+- **Advanced Redux Entity Normalization** <br/>
+  https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5 <br/>
+  Describes a "keyWindow" concept for tracking subsets of entities in state, similar to an SQL "view". A useful extension to the idea of normalized data.
 
-** 中间件如何工作以及如何编写它们的解释和示例 **
+## Middleware
 
-- ** 探索 Redux 中间件 **  
-  http://blog.krawaller.se/posts/exploring-redux-middleware/  
-  通过一系列小实验了解中间件
+_Explanations and examples of how middleware work and how to write them_
 
-- **Redux 中间件教程 **  
-  http://www.pshrmn.com/tutorials/react/redux-middleware/  
-  概述了什么是中间件，`applyMiddleware`是如何工作的，以及如何编写中间件。
+- **Exploring Redux Middlewares** <br/>
+  https://blog.krawaller.se/posts/exploring-redux-middleware/ <br/>
+  Understanding middlewares through a series of small experiments
 
-- **ReactCasts #6: Redux 中间件 **  
-  https://www.youtube.com/watch?v=T-qtHI1qHIg  
-  一个视频，描述了中间件如何融入 Redux、中间件的用途以及如何实现自定义中间件。
+- **Redux Middleware Tutorial** <br/>
+  https://www.pshrmn.com/tutorials/react/redux-middleware/ <br/>
+  An overview of what middleware is, how `applyMiddleware` works, and how to write middleware.
 
-- **Redux 中间件初学者指南 **  
-  https://www.codementor.io/reactjs/tutorial/beginner-s-guide-to-redux-middleware  
-  中间件用例的有用解释，有大量示例。
+- **ReactCasts #6: Redux Middleware** <br/>
+  https://www.youtube.com/watch?v=T-qtHI1qHIg <br/>
+  A screencast that describes how middleware fit into Redux, their uses, and how to implement a custom middleware
 
-## 副作用 (Side Effect) —— 基础
+- **A Beginner's Guide to Redux Middleware** <br/>
+  https://www.codementor.io/reactjs/tutorial/beginner-s-guide-to-redux-middleware <br/>
+  A useful explanation of middleware use cases, with numerous examples
 
-** 介绍如何在 Redux 中处理异步行为 **
+- **Functional Composition in Javascript** <br/>
+  https://joecortopassi.com/articles/functional-composition-in-javascript/ <br/>
+  Breaking down how the `compose` function works
 
-- **Stack Overflow: Dispatching Redux Actions with a Timeout**  
-  http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559  
-  Dan Abramov 解释了在 Redux 中管理异步行为的基础知识，介绍了一系列渐进式方法（内联异步调用，异步 action creators，thunk 中间件）。
+## Side Effects - Basics
 
-- **Stack Overflow: 为什么我们在 Redux 中需要用于异步流的中间件？**  
-  http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594  
-  Dan Abramov 给出了使用 thunks 和异步中间件的原因，以及一些使用 thunk 的有用模式。
+_Introductions to handling async behavior in Redux_
 
-- ** 什么是 “thunk”？**  
-  https://daveceddia.com/what-is-a-thunk/  
-  快速解释一下 “thunk” 这个词的含义，以及 Redux 的具体含义。
+- **Stack Overflow: Dispatching Redux Actions with a Timeout** <br/>
+  https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559 <br/>
+  Dan Abramov explains the basics of managing async behavior in Redux, walking through a progressive series of approaches (inline async calls, async action creators, thunk middleware).
 
-- **Thunks in Redux: The Basics**  
-  https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60  
-  详细了解一下 thunk 是什么，他们解决了什么，以及如何使用它们。
+- **Stack Overflow: Why do we need middleware for async flow in Redux?** <br/>
+  https://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594 <br/>
+  Dan Abramov gives reasons for using thunks and async middleware, and some useful patterns for using thunks.
 
-## 副作用 (Side Effect) —— 进阶
+- **What the heck is a "thunk"?** <br/>
+  https://daveceddia.com/what-is-a-thunk/ <br/>
+  A quick explanation for what the word "thunk" means in general, and for Redux specifically.
 
-** 用于管理异步行为的进阶工具和技术 **
+- **Thunks in Redux: The Basics** <br/>
+  https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60 <br/>
+  A detailed look at what thunks are, what they solve, and how to use them.
 
-- ** 在 Redux 中进行异步操作的正确方法是什么？**  
-  https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/  
-  查看最流行的 Redux 副作用 (Side Effect) 库，并比较每个库的工作方式。
+## Side Effects - Advanced
 
-- **Redux 的四种异步工具 **  
-  https://medium.com/react-native-training/redux-4-ways-95a130da0cdc  
-  使用 thunks，sagas，observables 和 promise 中间件实现一些基本数据获取的并排比较。
+_Advanced tools and techniques for managing async behavior_
 
-- **Redux 的常用方式: 关于 Thunk、Saga、抽象和可重用性的思考 **
-  http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/  
-  对几个 “thunk 不好” 问题的回应，认为 thunk（和 saga）仍然是管理复杂同步逻辑和异步副作用 (Side Effect) 的有效方法。
+- **What is the right way to do asynchronous operations in Redux?** <br/>
+  https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/ <br/>
+  An excellent look at the most popular libraries for Redux side effects, with comparisons of how each one works.
 
-- **Javascript 利器: Redux-Saga**  
-  http://formidable.com/blog/2017/javascript-power-tools-redux-saga/  
-  http://formidable.com/blog/2017/composition-patterns-in-redux-saga/  
-  http://formidable.com/blog/2017/real-world-redux-saga-patterns/  
-  这是一个精彩的系列，讲述了 Redux-Saga 背后的概念、实现和优势，包括如何使用 ES6 generator 来控制功能流、如何将 saga 组合在一起以实现并发以及实际的 saga 使用案例。
+- **Redux 4 Ways** <br/>
+  https://medium.com/react-native-training/redux-4-ways-95a130da0cdc <br/>
+  Side-by-side comparisons of implementing some basic data fetching using thunks, sagas, observables, and a promise middleware
 
-- ** 探索 Redux Saga**
-  https://medium.com/onfido-tech/exploring-redux-sagas-cc1fca2015ee  
-  这篇文章探讨了如何使用 saga 提供粘合层以在 Redux 应用程序中实现解耦业务逻辑。
+- **Idiomatic Redux: Thoughts on Thunks, Sagas, Abstractions, and Reusability** <br/>
+  https://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/ <br/>
+  A response to several "thunks are bad" concerns, arguing that thunks (and sagas) are still a valid approach for managing complex sync logic and async side effects.
 
-- ** 驯服 Redux 与 Saga**  
-  https://objectpartners.com/2017/11/20/taming-redux-with-sagas/  
-  Redux-Saga 的一个很好的概述，包括 generator functions 的信息、saga 的使用案例、使用 saga 来处理 promise 以及测试 saga。
+- **Javascript Power Tools: Redux-Saga** <br/>
+  https://formidable.com/blog/2017/javascript-power-tools-redux-saga/ <br/>
+  https://formidable.com/blog/2017/composition-patterns-in-redux-saga/ <br/>
+  https://formidable.com/blog/2017/real-world-redux-saga-patterns/ <br/>
+  A fantastic series that teaches the concepts, implementation, and benefits behind Redux-Saga, including how ES6 generators are used to control function flow, how sagas can be composed together to accomplish concurrency, and practical use cases for sagas.
 
-- **Reactive Redux State with RxJS**  
-  https://ivanjov.com/reactive-redux-state-with-rxjs/  
-  描述了 “Reactive Programming” 和 RxJS 库的概念，并展示了如何使用 redux-observable 来获取数据，以及测试示例。
+- **Exploring Redux Sagas** <br/>
+  https://medium.com/onfido-tech/exploring-redux-sagas-cc1fca2015ee <br/>
+  An excellent article that explores how to use sagas to provide a glue layer to implement decoupled business logic in a Redux application.
 
-- ** 使用 redux-observable 处理 Redux 中的异步逻辑 **  
-  https://medium.com/dailyjs/using-redux-observable-to-handle-asynchronous-logic-in-redux-d49194742522  
-  一个扩展的帖子，用于比较基于 observable 和基于 thunk 实现处理线条绘制示例的不同之处。
+- **Taming Redux with Sagas** <br/>
+  https://objectpartners.com/2017/11/20/taming-redux-with-sagas/ <br/>
+  A good overview of Redux-Saga, including info on generator functions, use cases for sagas, using sagas to deal with promises, and testing sagas.
+
+- **Reactive Redux State with RxJS** <br/>
+  https://ivanjov.com/reactive-redux-state-with-rxjs/ <br/>
+  Describes the concept of "Reactive Programming" and the RxJS library, and shows how to use redux-observable to fetch data, along with examples of testing.
+
+- **Using redux-observable to handle asynchronous logic in Redux** <br/>
+  https://medium.com/dailyjs/using-redux-observable-to-handle-asynchronous-logic-in-redux-d49194742522 <br/>
+  An extended post that compares a thunk-based implementation of handling a line-drawing example vs an observable-based implementation.
 
 ## Thinking in Redux
 
-** 更深入地了解 Redux 的使用方式，以及它为何如此工作 **
+_Deeper looks at how Redux is meant to be used, and why it works the way it does_
 
-- ** 你可能不需要 Redux**  
-  https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367  
-  Dan Abramov 的一些是否需要使用 Redux 的看法。
+- **When (and when not) to reach for Redux** <br />
+  https://changelog.com/posts/when-and-when-not-to-reach-for-redux <br />
+  Redux maintainer Mark Erikson describes the problems Redux was created to solve, and how it compares to other commonly used tools.
 
-- **Redux 的常用方式: Redux 之道，第 1 部分——实现和意图 **
-  http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/  
-  深入探讨 Redux 的实际工作方式，它要求您遵循的约束条件，以及其设计和使用背后的意图。
+* **You Might Not Need Redux** <br/>
+  https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367 <br/>
+  Dan Abramov discusses the tradeoffs involved in using Redux.
 
-- **Redux 的常用方式: Redux 之道，第 2 部分——实践和理念 **  
-  http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/  
-  后续探讨了为什么存在常见的 Redux 使用模式，可以使用 Redux 的其他方式，以及这些不同模式和方法的优缺点。
+* **Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent** <br/>
+  https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/ <br/>
+  A deep dive into how Redux actually works, the constraints it asks you to follow, and the intent behind its design and usage.
 
-- **What's So Great About Redux？**  
-  https://medium.freecodecamp.org/whats-so-great-about-redux-ac16f1cc0f8b  
-  https://storify.com/acemarke/redux-pros-cons-and-limitations  
-  https://twitter.com/modernserf/status/886426115874717697  
-  对 Redux 如何与 OOP 和消息传递进行比较的深入而有趣的分析，Redux 的典型使用方式可以转向具有更多样板的类似 Java 的 “setter” 函数，以及对更高级别的 “blessed” 抽象的请求。Redux 让您更容易与新手一起工作和学习。非常值得一读。作者最初写了一个 tweetstorm（它在 Storify 链接中），并写了博客文章以扩展这些想法。最后，他在另一篇较短的推文帖子中对抽象与具体例子进行了更多的思考。
+* **Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy** <br/>
+  https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/ <br/>
+  A follow-up look at why common Redux usage patterns exist, other ways that Redux can be used, and thoughts on the pros and cons of those different patterns and approaches.
 
-## Redux 架构
+* **What's So Great About Redux?** <br/>
+  https://medium.freecodecamp.org/whats-so-great-about-redux-ac16f1cc0f8b <br/>
+  Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading.
 
-** 用于构建大型 Redux 应用程序的模式和实践 **
+## Redux Architecture
 
-- ** 在构建应用程序 state 时避免意外复杂性 **  
-  https://hackernoon.com/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a  
-  一套出色的如何组织 Redux state 结构的指南。
+_Patterns and practices for structuring larger Redux applications_
 
-- **Redux Step by Step: 适用于真实应用程序的简单而强大的工作流程 **  
-  https://hackernoon.com/redux-step-by-step-a-simple-and-robust-workflow-for-real-life-apps-1fdf7df46092  
-  “意外复杂性” 一文的后续部分，讨论组织 Redux state 的原则
+- **Avoiding Accidental Complexity When Structuring Your App State** <br/>
+  https://hackernoon.com/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a <br/>
+  An excellent set of guidelines for organizing your Redux store structure.
 
-- ** 我希望我知道的那些关于 Redux 的事 **  
-  https://medium.com/horrible-hacks/things-i-wish-i-knew-about-redux-9924abf2f9e0  
-  https://www.reddit.com/r/javascript/comments/4taau2/things_i_wish_i_knew_about_redux/  
-  分享了使用 Redux 构建应用程序后获得的一些优秀技巧和经验教训。包括有关连接组件、选择数据、应用程序结构和项目结构的信息。Reddit 上有更多的讨论。
+- **Redux Step by Step: A Simple and Robust Workflow for Real Life Apps** <br/>
+  https://hackernoon.com/redux-step-by-step-a-simple-and-robust-workflow-for-real-life-apps-1fdf7df46092 <br/>
+  A follow-up to the "Accidental Complexity" article, discussing principle
 
-- **React+Redux: 有关如何实现代码干净、可靠和具有可维护的提示和最佳实践 **  
-  https://speakerdeck.com/goopscoop/react-plus-redux-tips-and-best-practices-for-clean-reliable-and-scalable-code  
-  一个出色的幻灯片，提供各种提示和建议，包括简化 action 创建和减少 reducer 中的数据操作，抽象 API 调用，避免 props 传递等等。
+- **Things I Wish I Knew About Redux** <br/>
+  https://medium.com/horrible-hacks/things-i-wish-i-knew-about-redux-9924abf2f9e0 <br/>
+  https://www.reddit.com/r/javascript/comments/4taau2/things_i_wish_i_knew_about_redux/ <br/>
+  A number of excellent tips and lessons learned after building an app with Redux. Includes info on connecting components, selecting data, and app/project structure. Additional discussion on Reddit.
 
-- **Redux 用于大型 Web 应用程序中的状态管理 **
-  https://www.mapbox.com/blog/redux-for-state-management-in-large-web-apps/  
-  优秀的讨论和常用的 Redux 架构示例，以及 Mapbox 如何将这些方法应用于他们的 Mapbox Studio 应用程序。
+- **React+Redux: Tips and Best Practices for Clean, Reliable, & Maintainable Code** <br/>
+  https://speakerdeck.com/goopscoop/react-plus-redux-tips-and-best-practices-for-clean-reliable-and-scalable-code <br/>
+  An excellent slideshow with a wide variety of tips and suggestions, including keeping action creators simple and data manipulation in reducers, abstracting away API calls, avoiding spreading props, and more.
 
-## 应用和示例
+- **Redux for state management in large web apps** <br/>
+  https://blog.mapbox.com/redux-for-state-management-in-large-web-apps-c7f3fab3ce9b <br/>
+  Excellent discussion and examples of idiomatic Redux architecture, and how Mapbox applies those approaches to their Mapbox Studio application.
 
-- **React-Redux RealWorld Example: TodoMVC for the Real World**  
-  https://github.com/GoThinkster/redux-review  
-  使用 Redux 构建的全栈 “real world” 应用程序示例。类似 medium 的社交博客网站 Demo，其中包括 JWT 身份验证，CRUD，收藏文章，关注用户，路由等。RealWorld 项目还包括网站前端和后端的许多其他实现，包括同一项目、API 规范的服务器端和客户端实现的比较。
+## Apps and Examples
 
-- **Project Mini-Mek**  
-  https://github.com/markerikson/project-minimek  
-  一个应用程序示例，演示各种有用的 Redux 技术，“Practical Redux” 博客系列 http://blog.isquaredsoftware.com/series/practical-redux
+- **React-Redux RealWorld Example: TodoMVC for the Real World** <br/>
+  https://github.com/GoThinkster/redux-review <br/>
+  An example full-stack "real world" application built with Redux. Demos a Medium-like social blogging site that includes JWT authentication, CRUD, favoriting articles, following users, routing, and more. The RealWorld project also includes many other implementations of the front and back ends of the site, specifically intended to show how different server and client implementations of the same project and API spec compare with each other.
 
-- **react-redux-yelp-clone**  
-  https://github.com/mohamed-ismat/react-redux-yelp-clone  
-  使用 react 技术栈完成的 “Yelp clone” 应用。它通过使用 Redux 和 Redux-Saga 而不是本地状态，以及 React Router v4、样式组件和其他现代标准来扩展原始版本。基于 React-Boilerplate starter kit。
+- **Project Mini-Mek** <br/>
+  https://github.com/markerikson/project-minimek <br/>
+  A sample app to demonstrate various useful Redux techniques, accompanying the "Practical Redux" blog series at https://blog.isquaredsoftware.com/series/practical-redux
 
-- **WordPress-Calypso**  
-  https://github.com/Automattic/wp-calypso  
-  新的基于 JavaScript 和 API 的 WordPress.com
+- **react-redux-yelp-clone** <br/>
+  https://github.com/mohamed-ismat/react-redux-yelp-clone <br/>
+  An adaptation of the "Yelp Clone" app by FullStackReact. It extends the original by using Redux and Redux Saga instead of local state, as well as React Router v4, styled-components, and other modern standards. Based on the React-Boilerplate starter kit.
 
-- **Sound-Redux**  
-  https://github.com/andrewngu/sound-redux  
-  使用 React/Redux 构建的 Soundcloud 客户端
+- **WordPress-Calypso** <br/>
+  https://github.com/Automattic/wp-calypso <br/>
+  The new JavaScript- and API-powered WordPress.com
 
-- **Webamp**  
-  https://webamp.org  
-  https://github.com/captbaritone/webamp  
-  Winamp2 的浏览器版本，用 React 和 Redux 构建。实际上播放 MP3，并允许您加载本地 MP3 文件。
+- **Sound-Redux** <br/>
+  https://github.com/andrewngu/sound-redux <br/>
+  A Soundcloud client built with React / Redux
 
-- **Tello**  
-  https://github.com/joshwcomeau/Tello  
-  一种简单而愉快的方式来跟踪和管理电视节目
+- **Webamp** <br/>
+  https://webamp.org <br/>
+  https://github.com/captbaritone/webamp <br/>
+  An in-browser recreation of Winamp2, built with React and Redux. Actually plays MP3s, and lets you load in local MP3 files.
 
-- **io-808**  
-  https://github.com/vincentriemer/io-808  
-  试图完全重建基于网络的 TR-808 drum machine
+- **Tello** <br/>
+  https://github.com/joshwcomeau/Tello <br/>
+  A simple and delightful way to track and manage TV shows
 
-## Redux 文档翻译
+- **io-808** <br/>
+  https://github.com/vincentriemer/io-808 <br/>
+  An attempt at a fully recreated web-based TR-808 drum machine
+
+## Redux Docs Translations
 
 - [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
 - [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
 - [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
-- [Redux en Español](http://es.redux.js.org/) - Spanish
+- [Redux en Español](https://es.redux.js.org/) - Spanish
+- [Redux in Korean](https://ko.redux.js.org/) - Korean
 
-## 书籍
+## Books
 
-- **Redux in Action**  
-  https://www.manning.com/books/redux-in-action  
-  这本综合性书籍涵盖了使用 Redux 的许多关键方面，包括 reducers 和 actions 的基础知识以及与 React 的联动、复杂的中间件和副作用、应用程序结构、性能、测试等等。很好地解释了使用 Redux 的许多方法的优点、缺点和如何权衡。由 Redux co-maintainer Mark Erikson 亲自推荐。
+- **Redux in Action** <br/>
+  https://www.manning.com/books/redux-in-action <br/>
+  A comprehensive book that covers many key aspects of using Redux, including the basics of reducers and actions and use with React, complex middlewares and side effects, application structure, performance, testing, and much more. Does a great job of explaining the pros, cons, and tradeoffs of many approaches to using Redux. Personally recommended by Redux co-maintainer Mark Erikson.
 
-- **The Complete Redux Book**  
-  https://leanpub.com/redux-book  
-  如何在生产环境中管理大型 state？为什么我需要 store enhancers？处理表单验证的最佳实践是什么？使用简单的术语和示例代码，获得所有这些问题以及更多问题的答案。了解使用 Redux 构建复杂且可投入生产的 Web 应用程序所需的一切。(提示: 现在永久免费 !)
+- **The Complete Redux Book** <br/>
+  https://leanpub.com/redux-book <br/>
+  How do I manage a large state in production? Why do I need store enhancers? What is the best way to handle form validations? Get the answers to all these questions and many more using simple terms and sample code. Learn everything you need to use Redux to build complex and production-ready web applications. (Note: now permanently free!)
 
-## 课程
+- **Taming the State in React** <br/>
+  https://www.robinwieruch.de/learn-react-redux-mobx-state-management/ <br/>
+  If you have learned React with the previous book of the author called The Road to learn React, Taming the State in React will be the perfect blend to learn about basic and advanced state management in React. You will start out with learning only Redux without React. Afterward, the book shows you how to connect Redux to your React application. The advanced chapters will teach you about normalization, naming, selectors and asynchronous actions. In the end, you will set up and build a real world application with React and Redux.
 
-- **Modern React with Redux, by Stephen Grider (付费)**  
-  https://www.udemy.com/react-redux/  
-  使用本教程能够学习开发应用时如何将 React、Redux 与 React-Router、Webpack、ES6 同时使用的基础知识。本课程将帮助您快速启动并运行，并教您深入理解使用 Redux 时如何构建 React 组件和如何处理应用程序结构。
+## Courses
 
-- **Redux, by Tyler McGinnis (付费)**  
-  https://tylermcginnis.com/courses/redux/  
-  在学习 Redux 时，您需要在足够复杂的应用程序环境中才能感受到 Redux 带来的好处。这就是为什么这门课程很大。一个更好的名字可能会是 **Real World Redux** 。如果您厌倦了类似 “Todo list” 的 Redux 教程，那么您来对了地方。在本课程中，我们将讨论 Redux 在您的应用程序中管理状态的特殊之处。我们将构建一个实际的 “真实世界” 应用程序，以便您可以学到 Redux 如何处理 optimistic updates 和错误捕获等边缘情况。我们还将介绍许多其他适用于 Redux，Firebase 和 CSS Modules 的技术。
+- **Modern React with Redux, by Stephen Grider (paid)** <br/>
+  https://www.udemy.com/react-redux/ <br/>
+  Master the fundamentals of React and Redux with this tutorial as you develop apps with React Router, Webpack, and ES6. This course will get you up and running quickly, and teach you the core knowledge you need to deeply understand and build React components and structure applications with Redux.
 
-- **Learn Redux, by Wes Bos (免费)**  
-  https://learnredux.com/  
-  一个构建 'Reduxstagram' 的视频课程 —— 一个简单的照片应用程序，将简化 Redux，React Router 和 React.js 背后的核心思想。
+- **Redux, by Tyler McGinnis (paid)** <br/>
+  https://tylermcginnis.com/courses/redux/ <br/>
+  When learning Redux, you need to learn it in the context of an app big enough to see the benefits. That's why this course is huge. A better name might be _"Real World Redux"_. If you're sick of "todo list" Redux tutorials, you've come to the right place. In this course we'll talk all about what makes Redux special for managing state in your application. We'll build an actual "real world" application so you can see how Redux handles edge cases like optimistic updates and error handling. We'll also cover many other technologies that work well with Redux, Firebase, and CSS Modules.
 
-## 更多资源
+- **Learn Redux, by Wes Bos (free)** <br/>
+  https://learnredux.com/ <br/>
+  A video course that walks through building 'Reduxstagram' — a simple photo app that will simplify the core ideas behind Redux, React Router and React.js
 
-- [React-Redux Links](https://github.com/markerikson/react-redux-links) 是 React、Redux、ES6 等高质量文章、教程和相关内容的精选列表。
-- [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) 是 Redux 相关库、插件和实用程序的分类集合。
-- [Awesome Redux](https://github.com/xgrommx/awesome-redux) 是与 Redux 相关的库的列表。
-- [DEV Community](https://dev.to/t/redux) 是一个分享 Redux 项目、文章和教程以及讨论并询问有关 Redux 问题的地方。 欢迎各种技术水平的开发人员参加。
+## More Resources
+
+- [React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES6, and more.
+- [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) is a categorized collection of Redux-related libraries, addons, and utilities.
+- [Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
+- [DEV Community](https://dev.to/t/redux) is a place to share Redux projects, articles and tutorials as well as start discussions and ask for feedback on Redux-related topics. Developers of all skill-levels are welcome to take part.

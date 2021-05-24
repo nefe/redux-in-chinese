@@ -1,106 +1,107 @@
-# 生态系统
+---
+id: ecosystem
+title: Ecosystem
+description: 'Introduction > Ecosystem: Links to popular, recommended, and interesting Redux-related libraries'
+hide_title: true
+---
 
-Redux 是一个体小精悍的库，但它相关的内容和 API 都是精挑细选的，目的是衍生出丰富的工具集和可扩展的生态系统。社区已经创建了各种各样的有用的插件、库和工具。使用 Redux 时并不需要您非要使用这些插件，但是它们可以帮助您更容易地实现特性并解决应用程序中的问题。
+# Ecosystem
 
-如果需要关于 Redux 所有内容的列表，推荐移步至 [Awesome Redux](https://github.com/xgrommx/awesome-redux)。它包含了示例、样板代码、中间件、工具库，还有很多其它相关内容。要想学习 React 和 Redux ，[React/Redux Links](https://github.com/markerikson/react-redux-links) 包含了教程和不少有用的资源，[Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) 则列出了 许多 Redux 相关的库及插件。
+Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools. You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
 
-本页将只列出由 Redux 维护者审查过的一部分内容。不要因此打消尝试其它工具的信心！整个生态发展得太快，我们没有足够的时间去关注所有内容。建议只把这些当作“内部推荐”，如果你使用 Redux 创建了很酷的内容，不要犹豫，马上发个 PR 吧。
+For an extensive catalog of libraries, addons, and tools related to Redux, check out the [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) list. Also, the [React/Redux Links](https://github.com/markerikson/react-redux-links) list contains tutorials and other useful resources for anyone learning React or Redux.
 
-## 目录
+This page lists some of the Redux-related addons that the Redux maintainers have vetted personally, or that have shown widespread adoption in the community. Don't let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don't hesitate to submit a PR if you've built something wonderful with Redux.
 
-- [与不同框架绑定](#library-integration-and-bindings)
-- [Reducers](#reducers)
-  - [组合 Reducer](#reducer-combination)
-  - [Reducer 结构](#reducer-composition)
-  - [高阶 Reducers](#higher-order-reducers)
-- [Actions](#actions)
-- [工具集](#utilities)
-- [Store](#store)
-  - [更改订阅](#change-subscriptions)
-  - [批处理](#batching)
-  - [持久化](#persistence)
-- [不可变（Immutable）数据](#immutable-data)
-  - [数据结构](#data-structures)
-  - [不可变更新（Immutable Update）实用程序](#immutable-update-utilities)
-  - [Immutable/Redux 互操作](#immutable-redux-interop)
-- [副作用（Side Effects）](#side-effects)
-  - [广泛使用](#widely-used)
-  - [Promises](#promises)
-- [中间件](#middleware)
-  - [Networks and Sockets](#networks-and-sockets)
-  - [异步行为](#async-behavior)
-  - [分析](#analytics)
-- [实体和集合](#entities-and-collections)
-- [组件 state 和封装](#component-state-and-encapsulation)
-- [开发者工具](#dev-tools)
-  - [Debuggers and Viewers](#debuggers-and-viewers)
-  - [日志](#logging)
-  - [突变检测](#mutation-detection)
-- [测试](#testing)
-- [路由](#routing)
-- [Forms](#forms)
-- [更高级别的抽象](#higher-level-abstractions)
-- [社区公约](#community-conventions)
+## Table of Contents
 
-<a id="library-integration-and-bindings"></a>
+- [Ecosystem](#ecosystem)
+  - [Table of Contents](#table-of-contents)
+  - [Library Integration and Bindings](#library-integration-and-bindings)
+  - [Reducers](#reducers)
+    - [Reducer Combination](#reducer-combination)
+    - [Reducer Composition](#reducer-composition)
+    - [Higher-Order Reducers](#higher-order-reducers)
+  - [Actions](#actions)
+  - [Utilities](#utilities)
+  - [Store](#store)
+    - [Change Subscriptions](#change-subscriptions)
+    - [Batching](#batching)
+    - [Persistence](#persistence)
+  - [Immutable Data](#immutable-data)
+    - [Data Structures](#data-structures)
+    - [Immutable Update Utilities](#immutable-update-utilities)
+    - [Immutable/Redux Interop](#immutableredux-interop)
+  - [Side Effects](#side-effects)
+    - [Widely Used](#widely-used)
+    - [Promises](#promises)
+  - [Middleware](#middleware)
+    - [Networks and Sockets](#networks-and-sockets)
+    - [Async Behavior](#async-behavior)
+    - [Analytics](#analytics)
+  - [Entities and Collections](#entities-and-collections)
+  - [Component State and Encapsulation](#component-state-and-encapsulation)
+  - [Dev Tools](#dev-tools)
+    - [Debuggers and Viewers](#debuggers-and-viewers)
+    - [DevTools Monitors](#devtools-monitors)
+    - [Logging](#logging)
+    - [Mutation Detection](#mutation-detection)
+  - [Testing](#testing)
+  - [Routing](#routing)
+  - [Forms](#forms)
+  - [Higher-Level Abstractions](#higher-level-abstractions)
+  - [Community Conventions](#community-conventions)
 
-## 与不同框架绑定
+## Library Integration and Bindings
 
-**[reduxjs/react-redux](https://github.com/reduxjs/react-redux)**  
-Redux 与 react 的官方绑定库，由 Redux 团队维护
+**[reduxjs/react-redux](https://github.com/reduxjs/react-redux)** <br />
+The official React bindings for Redux, maintained by the Redux team
 
-**[angular-redux/ng-redux](https://github.com/angular-redux/ng-redux)**  
-Redux 与 Angular 1 的绑定库
+**[angular-redux/ng-redux](https://github.com/angular-redux/ng-redux)** <br />
+Angular 1 bindings for Redux
 
-**[angular-redux/store](https://github.com/angular-redux/store)**  
-Redux 与 Angular 2+ 的绑定库
+**[ember-redux/ember-redux](https://github.com/ember-redux/ember-redux)** <br />
+Ember bindings for Redux
 
-**[ember-redux/ember-redux](https://github.com/ember-redux/ember-redux)**  
-Redux 与 Ember 的绑定库
+**[glimmer-redux/glimmer-redux](https://github.com/glimmer-redux/glimmer-redux)** <br />
+Redux bindings for Ember's Glimmer component engine
 
-**[glimmer-redux/glimmer-redux](glimmer-redux/glimmer-redux)**  
-Redux 绑定 Ember 的 Glimmer 组件引擎
-
-**[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)**  
-Redux 与 Polymer 的绑定库
+**[tur-nr/polymer-redux](https://github.com/tur-nr/polymer-redux)** <br />
+Redux bindings for Polymer
 
 **[lastmjs/redux-store-element](https://github.com/lastmjs/redux-store-element)**
-Redux 与自定义组件的绑定库
+Redux bindings for custom elements
 
 ## Reducers
 
-<a id="reducer-combination"></a>
+#### Reducer Combination
 
-#### 组合 Reducer
+**[ryo33/combineSectionReducers](https://gitlab.com/ryo33/combine-section-reducers)** <br />
+An expanded version of `combineReducers`, which allows passing `state` as a third argument to all slice reducers.
 
-**[ryo33/combineSectionReducers](https://github.com/ryo33/combine-section-reducers)**  
-`combineReducers` 的扩展版本，它允许将 `state` 作为第三个参数传递给所有的子 reducer。
-
-**[KodersLab/topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers)**  
-一种 `combineReducers` 变体，定义 reducer 之间的相互依赖用于调用排序和数据传递
+**[KodersLab/topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers)** <br />
+A `combineReducers` variation that allows defining cross-slice dependencies for ordering and data passing
 
 ```js
 var masterReducer = topologicallyCombineReducers(
   { auth, users, todos },
-  // 定义依赖树
+  // define the dependency tree
   { auth: ['users'], todos: ['auth'] }
 )
 ```
 
-<a id="reducer-composition"></a>
+#### Reducer Composition
 
-#### Reducer 结构
-
-**[acdlite/reduce-reducers](https://github.com/acdlite/reduce-reducers)**  
-在同一级别提供 reducer 的顺序组合
+**[acdlite/reduce-reducers](https://github.com/acdlite/reduce-reducers)** <br />
+Provides sequential composition of reducers at the same level
 
 ```js
 const combinedReducer = combineReducers({ users, posts, comments })
 const rootReducer = reduceReducers(combinedReducer, otherTopLevelFeatureReducer)
 ```
 
-**[mhelmer/redux-xforms](https://github.com/mhelmer/redux-xforms)**  
-一组可组合的 reducer 变体。
+**[mhelmer/redux-xforms](https://github.com/mhelmer/redux-xforms)** <br />
+A collection of composable reducer transformers
 
 ```js
 const createByFilter = (predicate, mapActionToKey) =>
@@ -112,8 +113,8 @@ const createByFilter = (predicate, mapActionToKey) =>
   )
 ```
 
-**[adrienjt/redux-data-structures](https://github.com/adrienjt/redux-data-structures)**  
-Reducer 工厂函数，用于常见数据结构：计数器，映射，列表（队列，堆栈），集合
+**[adrienjt/redux-data-structures](https://github.com/adrienjt/redux-data-structures)** <br />
+Reducer factory functions for common data structures: counters, maps, lists (queues, stacks), sets
 
 ```js
 const myCounter = counter({
@@ -122,26 +123,24 @@ const myCounter = counter({
 })
 ```
 
-<a id="higher-order-reducers"></a>
+#### Higher-Order Reducers
 
-#### 高阶 Reducers
+**[omnidan/redux-undo](https://github.com/omnidan/redux-undo)** <br />
+Effortless undo/redo and action history for your reducers
 
-**[omnidan/redux-undo](https://github.com/omnidan/redux-undo)**  
-轻松为 reducer 实现 undo/redo 和 action 的历史记录功能。
+**[omnidan/redux-ignore](https://github.com/omnidan/redux-ignore)** <br />
+Ignore redux actions by array or filter function
 
-**[omnidan/redux-ignore](https://github.com/omnidan/redux-ignore)**  
-通过数组或过滤器函数忽略 redux action
+**[omnidan/redux-recycle](https://github.com/omnidan/redux-recycle)** <br />
+Reset the redux state on certain actions
 
-**[omnidan/redux-recycle](https://github.com/omnidan/redux-recycle)**  
-在某些 action 上重置 redux 状态
-
-**[ForbesLindesay/redux-optimist](https://github.com/ForbesLindesay/redux-optimist)**  
-reducer 增强器，用于启用与类型无关的乐观更新
+**[ForbesLindesay/redux-optimist](https://github.com/ForbesLindesay/redux-optimist)** <br />
+A reducer enhancer to enable type-agnostic optimistic updates
 
 ## Actions
 
-**[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)**  
-Redux 的 Flux 标准 action 实用程序。
+**[reduxactions/redux-actions](https://github.com/reduxactions/redux-actions)** <br />
+Flux Standard Action utilities for Redux
 
 ```js
 const increment = createAction('INCREMENT')
@@ -150,8 +149,8 @@ const store = createStore(reducer)
 store.dispatch(increment())
 ```
 
-**[BerkeleyTrue/redux-create-types](https://github.com/BerkeleyTrue/redux-create-types)**  
-根据命名空间创建标准和异步 action type。
+**[BerkeleyTrue/redux-create-types](https://github.com/BerkeleyTrue/redux-create-types)** <br />
+Creates standard and async action types based on namespaces
 
 ```js
 export const types = createTypes(
@@ -161,8 +160,8 @@ export const types = createTypes(
 // { openModal : "app.openModal", fetch : { start : "app.fetch.start", complete: 'app.fetch.complete' } }
 ```
 
-**[maxhallinan/kreighter](https://github.com/maxhallinan/kreighter)**  
-根据类型和预期字段生成 action creator
+**[maxhallinan/kreighter](https://github.com/maxhallinan/kreighter)** <br />
+Generates action creators based on types and expected fields
 
 ```js
 const formatTitle = (id, title) => ({
@@ -174,12 +173,10 @@ updateBazTitle(1, 'foo bar baz')
 // -> { type: 'UPDATE_BAZ_TITLE', id: 1, title: 'Foo Bar Baz', }
 ```
 
-<a id="utilities"></a>
+## Utilities
 
-## 工具集
-
-**[reduxjs/reselect](https://github.com/reduxjs/reselect)**  
-创建可组合的 memoized 选择器函数，以便从 store state 有效地导出数据
+**[reduxjs/reselect](https://github.com/reduxjs/reselect)** <br />
+Creates composable memoized selector functions for efficiently deriving data from the store state
 
 ```js
 const taxSelector = createSelector(
@@ -188,8 +185,8 @@ const taxSelector = createSelector(
 )
 ```
 
-**[paularmstrong/normalizr](https://github.com/paularmstrong/normalizr)**  
-根据模式规范化嵌套 JSON
+**[paularmstrong/normalizr](https://github.com/paularmstrong/normalizr)** <br />
+Normalizes nested JSON according to a schema
 
 ```js
 const user = new schema.Entity('users')
@@ -201,8 +198,8 @@ const article = new schema.Entity('articles', {
 const normalizedData = normalize(originalData, article)
 ```
 
-**[planttheidea/selectorator](https://github.com/planttheidea/selectorator)**  
-对于常见 selector 用例的 reselect 的抽象化
+**[planttheidea/selectorator](https://github.com/planttheidea/selectorator)** <br />
+Abstractions over Reselect for common selector use cases
 
 ```js
 const getBarBaz = createSelector(
@@ -214,12 +211,10 @@ getBarBaz({ foo: { bar: 'a' }, baz: 'b' }) // "a b"
 
 ## Store
 
-<a id="change-subscriptions"></a>
+#### Change Subscriptions
 
-#### 更改订阅
-
-**[jprichardson/redux-watch](https://github.com/jprichardson/redux-watch)**  
-根据 key path 或 selector 监视状态更改
+**[jprichardson/redux-watch](https://github.com/jprichardson/redux-watch)** <br />
+Watch for state changes based on key paths or selectors
 
 ```js
 let w = watch(() => mySelector(store.getState()))
@@ -230,19 +225,17 @@ store.subscribe(
 )
 ```
 
-**[ashaffer/redux-subscribe](https://github.com/ashaffer/redux-subscribe)**  
-集中订阅基于 path 的 state 更改
+**[ashaffer/redux-subscribe](https://github.com/ashaffer/redux-subscribe)** <br />
+Centralized subscriptions to state changes based on paths
 
 ```js
 store.dispatch( subscribe("users.byId.abcd", "subscription1", () => {} );
 ```
 
-<a id="batching"></a>
+#### Batching
 
-#### 批处理
-
-**[tappleby/redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe)**  
-可以取消订阅通知的 store 增强器
+**[tappleby/redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe)** <br />
+Store enhancer that can debounce subscription notifications
 
 ```js
 const debounceNotify = _.debounce(notify => notify())
@@ -253,44 +246,42 @@ const store = createStore(
 )
 ```
 
-**[manaflair/redux-batch](https://github.com/manaflair/redux-batch)**  
-store 增强器，允许 dispatch action 数组
+**[manaflair/redux-batch](https://github.com/manaflair/redux-batch)** <br />
+Store enhancer that allows dispatching arrays of actions
 
 ```js
 const store = createStore(reducer, reduxBatch)
 store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
 ```
 
-**[laysent/redux-batch-actions-enhancer](https://github.com/laysent/redux-batch-actions-enhancer)**  
-store 增强器，接受批量 action
+**[laysent/redux-batch-actions-enhancer](https://github.com/laysent/redux-batch-actions-enhancer)** <br />
+Store enhancer that accepts batched actions
 
 ```js
 const store = createStore(reducer, initialState, batch().enhancer)
 store.dispatch(createAction({ type: 'INCREMENT' }, { type: 'INCREMENT' }))
 ```
 
-**[tshelburne/redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)**  
-处理批量 action 的高阶 reducer
+**[tshelburne/redux-batched-actions](https://github.com/tshelburne/redux-batched-actions)** <br />
+Higher-order reducer that handles batched actions
 
 ```js
 const store = createStore(enableBatching(reducer), initialState)
 store.dispatch(batchActions([{ type: 'INCREMENT' }, { type: 'INCREMENT' }]))
 ```
 
-<a id="persistence"></a>
+#### Persistence
 
-#### 持久化
-
-**[rt2zz/redux-persist](https://github.com/rt2zz/redux-persist)**  
-使用许多可扩展的选项，持久化和补充 Redux store。
+**[rt2zz/redux-persist](https://github.com/rt2zz/redux-persist)** <br />
+Persist and rehydrate a Redux store, with many extensible options
 
 ```js
 const store = createStore(reducer, autoRehydrate())
 persistStore(store)
 ```
 
-**[react-stack/redux-storage](https://github.com/react-stack/redux-storage)**  
-Redux 的持久层，具有灵活的后端。
+**[react-stack/redux-storage](https://github.com/react-stack/redux-storage)** <br />
+Persistence layer for Redux with flexible backends
 
 ```js
 const reducer = storage.reducer(combineReducers(reducers))
@@ -299,8 +290,8 @@ const storageMiddleware = storage.createMiddleware(engine)
 const store = createStore(reducer, applyMiddleware(storageMiddleware))
 ```
 
-**[redux-offline/redux-offline](https://github.com/redux-offline/redux-offline)**  
-用于 Offline-First 应用程序的持久 store ，支持积极的 UI 更新（optimistic UI）
+**[redux-offline/redux-offline](https://github.com/redux-offline/redux-offline)** <br />
+Persistent store for Offline-First apps, with support for optimistic UIs
 
 ```js
 const store = createStore(reducer, offline(offlineConfig))
@@ -310,54 +301,10 @@ store.dispatch({
 })
 ```
 
-<a id="immutable-data"></a>
+## Immutable Data
 
-## 不可变（Immutable）数据
-
-<a id="data-structures"></a>
-
-#### 数据结构
-
-**[facebook/immutable-js](https://github.com/facebook/immutable-js)**  
-Javascript 的不可变持久数据集合
-
-```js
-const map1 = Map({ a: 1, b: 2, c: 3 })
-const map2 = map1.set('b', 50)
-map1.get('b') // 2
-map2.get('b') // 50
-```
-
-**[rtfeldman/seamless-immutable](https://github.com/rtfeldman/seamless-immutable)**  
-冻结的不可变数组/对象，向后兼容 JS
-
-```js
-const array = Immutable(['totally', 'immutable', { a: 42 }])
-array[0] = 'edited' // does nothing
-```
-
-**[planttheidea/crio](https://github.com/planttheidea/crio)**  
-具有 API 的不可变 JS 对象
-
-```js
-const foo = crio(['foo'])
-const fooBar = foo.push('bar') // new array: ['foo', 'bar']
-```
-
-**[aearly/icepick](https://github.com/aearly/icepick)**  
-用于将冻结的 JS 对象视为持久不可变集合的实用程序。
-
-```js
-const newObj = icepick.assocIn({ c: { d: 'bar' } }, ['c', 'd'], 'baz')
-const obj3 = icepicke.merge(obj1, obj2)
-```
-
-<a id="immutable-update-utilities"></a>
-
-#### 不可变更新（Immutable Update）实用程序
-
-**[mweststrate/immer](https://github.com/mweststrate/immer)**  
-运用代理使用普通的更新代码进行不可变更新
+**[ImmerJS/immer](https://github.com/immerjs/immer)** <br />
+Immutable updates with normal mutative code, using Proxies
 
 ```js
 const nextState = produce(baseState, draftState => {
@@ -366,67 +313,14 @@ const nextState = produce(baseState, draftState => {
 })
 ```
 
-**[kolodny/immutability-helper](https://github.com/kolodny/immutability-helper)**  
-react-addons-update 的直接替代品
+## Side Effects
 
-```js
-const newData = update(myData, {
-  x: { y: { z: { $set: 7 } } },
-  a: { b: { $push: [9] } }
-})
-```
+#### Widely Used
 
-**[mariocasciaro/object-path-immutable](https://github.com/mariocasciaro/object-path-immutable)**  
-更简单的替代 immutability-helpers 和 Immutable.js 的库
+**[gaearon/redux-thunk](https://github.com/gaearon/redux-thunk)** <br />
+Dispatch functions, which are called and given `dispatch` and `getState` as parameters. This acts as a loophole for AJAX calls and other async behavior.
 
-```js
-const newObj = immutable(obj)
-  .set('a.b', 'f')
-  .del(['a', 'c', 0])
-  .value()
-```
-
-**[debitoor/dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)**  
-dot-prop 库的不可变（Immutable）版本，带有一些扩展
-
-```js
-const newState = dotProp.set(state, `todos.${index}.complete`, true)
-const endOfArray = dotProp.get(obj, 'foo.$end')
-```
-
-<a id="immutable-redux-interop"></a>
-
-#### Immutable/Redux 互操作
-
-**[gajus/redux-immutable](https://github.com/gajus/redux-immutable)**  
-与 Immutable.js Maps 一起使用的 combineReducers 等价物
-
-```js
-const initialState = Immutable.Map()
-const rootReducer = combineReducers({})
-const store = createStore(rootReducer, initialState)
-```
-
-**[eadmundo/redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable)**  
-与 combineReducers 等效，与 seamless-immutable value 一起使用
-
-```js
-import { combineReducers } from 'redux-seamless-immutable';
-const rootReducer = combineReducers({ userReducer, posts
-```
-
-<a id="side-effects"></a>
-
-## 副作用（Side Effects）
-
-<a id="widely-used"></a>
-
-#### 广泛使用
-
-**[gaearon/redux-thunk](https://github.com/gaearon/redux-thunk)**  
-调度（dispatch）函数，调用并将 `dispatch` 和 `getState` 作为参数。 这充当了 AJAX 调用和其他异步行为的方法。
-
-**适用于**: 入门、简单的异步和复杂的同步逻辑。
+**Best for**: getting started, simple async and complex synchronous logic.
 
 ```js
 function fetchData(someValue) {
@@ -450,10 +344,10 @@ function addTodosIfAllowed(todoText) {
 }
 ```
 
-**[redux-saga/redux-saga](https://github.com/redux-saga/redux-saga)**  
-使用同步查找生成器函数处理异步逻辑。 Sagas 返回 effect 的描述， 这些 effect 由 saga 中间件执行，并且像 JS 应用程序的“后台线程”。
+**[redux-saga/redux-saga](https://github.com/redux-saga/redux-saga)** <br />
+Handle async logic using synchronous-looking generator functions. Sagas return descriptions of effects, which are executed by the saga middleware, and act like "background threads" for JS applications.
 
-**适用于**: 复杂的异步逻辑，解耦的工作流程
+**Best for**: complex async logic, decoupled workflows
 
 ```js
 function* fetchData(action) {
@@ -480,10 +374,10 @@ function* addTodosIfAllowed(action) {
 
 **[redux-observable/redux-observable](https://github.com/redux-observable/redux-observable)**
 
-使用称为 “epics” 的 RxJS 可观察链处理异步逻辑。
-撰写和取消异步操作以创建副作用等。
+Handle async logic using RxJS observable chains called "epics".
+Compose and cancel async actions to create side effects and more.
 
-**适用于**: 复杂的异步逻辑，解耦的工作流程
+**Best for**: complex async logic, decoupled workflows
 
 ```js
 const loginRequestEpic = action$ =>
@@ -506,9 +400,9 @@ const rootEpic = combineEpics(loginRequestEpic, loginSuccessfulEpic)
 
 **[redux-loop/redux-loop](https://github.com/redux-loop/redux-loop)**
 
-Elm 体系结构的一个端口，用于 Redux，允许您通过从 Reducer 返回它们来自然而纯粹地对您的 effect 进行排序。 reducer 现在返回状态值和副作用描述。
+A port of the Elm Architecture to Redux that allows you to sequence your effects naturally and purely by returning them from your reducers. Reducers now return both a state value and a side effect description.
 
-**适用于**: 试图尽可能地像 Elm 一样使用 Redux + JS
+**Best for**: trying to be as much like Elm as possible in Redux+JS
 
 ```js
 export const reducer = (state = {}, action) => {
@@ -535,9 +429,9 @@ export const reducer = (state = {}, action) => {
 
 **[jeffbski/redux-logic](https://github.com/jeffbski/redux-logic)**
 
-使用 observable 构建的副作用 lib，但允许使用回调、promises、async/await 或 observables。 提供 action 的声明性处理。
+Side effects lib built with observables, but allows use of callbacks, promises, async/await, or observables. Provides declarative processing of actions.
 
-**适用于**: 非常分离的异步逻辑
+**Best for**: very decoupled async logic
 
 ```js
 const loginLogic = createLogic({
@@ -560,12 +454,10 @@ const loginLogic = createLogic({
 })
 ```
 
-<a id="promises"></a>
-
 #### Promises
 
-**[acdlite/redux-promise](https://github.com/acdlite/redux-promise)**  
-调度（Dispatch） promise 作为 action 的有效负载，并在 promise resolve 或 reject 时调度 FSA 兼容（FSA-compliant）的 action 。
+**[acdlite/redux-promise](https://github.com/acdlite/redux-promise)** <br />
+Dispatch promises as action payloads, and have FSA-compliant actions dispatched as the promise resolves or rejects.
 
 ```js
 dispatch({ type: 'FETCH_DATA', payload: myAjaxLib.get('/data') })
@@ -573,8 +465,8 @@ dispatch({ type: 'FETCH_DATA', payload: myAjaxLib.get('/data') })
 // or dispatch {type : "FETCH_DATA", payload : error, error : true} if rejected
 ```
 
-**[lelandrichardson/redux-pack](https://github.com/lelandrichardson/redux-pack)**  
-明智的、声明性的、基于约定的处理 promise，可以指导用户朝着良好的方向发展而不会暴露出全部的调度(dispatch)功能。
+**[lelandrichardson/redux-pack](https://github.com/lelandrichardson/redux-pack)** <br />
+Sensible, declarative, convention-based promise handling that guides users in a good direction without exposing the full power of dispatch.
 
 ```js
 dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
@@ -593,23 +485,19 @@ dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
             });
 ```
 
-<a id="middleware"></a>
-
-## 中间件
-
-<a id="networks-and-sockets"></a>
+## Middleware
 
 #### Networks and Sockets
 
-**[svrcekmichal/redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware)**  
-使用 Axios 获取数据并调度（dispatch）启动 / 成功 / 失败 action。
+**[svrcekmichal/redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware)** <br />
+Fetches data with Axios and dispatches start/success/fail actions
 
 ```js
 export const loadCategories() => ({ type: 'LOAD', payload: { request : { url: '/categories'} } });
 ```
 
-**[agraboso/redux-api-middleware](https://github.com/agraboso/redux-api-middleware)**  
-通过读取 API 调用 action、获取数据和调度 FSA
+**[agraboso/redux-api-middleware](https://github.com/agraboso/redux-api-middleware)** <br />
+Reads API call actions, fetches, and dispatches FSAs
 
 ```js
 const fetchUsers = () => ({
@@ -621,89 +509,66 @@ const fetchUsers = () => ({
 })
 ```
 
-**[itaylor/redux-socket.io](https://github.com/itaylor/redux-socket.io)**  
-socket.io 和 redux 之间的固定连接器。
+**[itaylor/redux-socket.io](https://github.com/itaylor/redux-socket.io)** <br />
+An opinionated connector between socket.io and redux.
 
 ```js
 const store = createStore(reducer, applyMiddleware(socketIoMiddleware))
 store.dispatch({ type: 'server/hello', data: 'Hello!' })
 ```
 
-**[tiberiuc/redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase)**  
-Firebase、React 和 Redux 之间的集成。
+**[tiberiuc/redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase)** <br />
+Integration between Firebase, React, and Redux
 
-<a id="async-behavior"></a>
+#### Async Behavior
 
-#### 异步行为
+**[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)** <br />
+Buffers all actions into a queue until a breaker condition is met, at which point the queue is released
 
-**[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)**  
-将所有操作缓冲到队列中，直到满足断路器条件，此时释放队列
+**[wyze/redux-debounce](https://github.com/wyze/redux-debounce)** <br />
+FSA-compliant middleware for Redux to debounce actions.
 
-**[wyze/redux-debounce](https://github.com/wyze/redux-debounce)**  
-符合 FSA 标准的 Redux 中间件可以实现 action 的防抖。
+**[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)** <br />
+Queue actions when offline and dispatch them when getting back online.
 
-**[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)**  
-离线时将 action 加入队列，并在重新联机时 dispatch 它们。
+#### Analytics
 
-<a id="analytics"></a>
+**[rangle/redux-beacon](https://github.com/rangle/redux-beacon)** <br />
+Integrates with any analytics services, can track while offline, and decouples analytics logic from app logic
 
-#### 分析
+**[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)** <br />
+Watches for Flux Standard Actions with meta analytics values and processes them
 
-**[rangle/redux-beacon](https://github.com/rangle/redux-beacon)**  
-与任何分析服务集成，可以在离线时跟踪，并将分析逻辑与应用逻辑分离。
+## Entities and Collections
 
-**[hyperlab/redux-insights](https://github.com/hyperlab/redux-insights)**  
-使用简单的 API 进行分析和跟踪，以编写自己的适配器
+**[tommikaikkonen/redux-orm](https://github.com/tommikaikkonen/redux-orm)** <br />
+A simple immutable ORM to manage relational data in your Redux store.
 
-**[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)**  
-使用 meta 分析值监视 Flux 标准操作并处理它们
+**[Versent/redux-crud](https://github.com/Versent/redux-crud)** <br />
+Convention-based actions and reducers for CRUD logic
 
-<a id="entities-and-collections"></a>
+**[kwelch/entities-reducer](https://github.com/kwelch/entities-reducer)** <br />
+A higher-order reducer that handles data from Normalizr
 
-## 实体和集合
+**[amplitude/redux-query](https://github.com/amplitude/redux-query)** <br />
+Declare colocated data dependencies with your components, run queries when components mount, perform optimistic updates, and trigger server changes with Redux actions.
 
-**[tommikaikkonen/redux-orm](https://github.com/tommikaikkonen/redux-orm)**  
-一个简单的不可变 ORM，用于管理 Redux sotre 中的关系数据。
+**[cantierecreativo/redux-bees](https://github.com/cantierecreativo/redux-bees)** <br />
+Declarative JSON-API interaction that normalizes data, with a React HOC that can run queries
 
-**[Versent/redux-crud](https://github.com/Versent/redux-crud)**  
-基于约定的 action 和 reducer，用于处理 CRUD 逻辑
+**[GetAmbassador/redux-clerk](https://github.com/GetAmbassador/redux-clerk)** <br />
+Async CRUD handling with normalization, optimistic updates, sync/async action creators, selectors, and an extendable reducer.
 
-**[kwelch/entities-reducer](https://github.com/kwelch/entities-reducer)**  
-处理 Normalizr 数据的高阶 reducer
+**[shoutem/redux-io](https://github.com/shoutem/redux-io)** <br />
+JSON-API abstraction with async CRUD, normalization, optimistic updates, caching, data status, and error handling.
 
-**[amplitude/redux-query](https://github.com/amplitude/redux-query)**  
-声明与组件共存的数据依赖关系，在组件 mount 时运行查询、执行乐观更新以及使用 Redux action 触发服务器更改。
+**[jmeas/redux-resource](https://github.com/jmeas/redux-resource)** <br />
+A tiny but powerful system for managing 'resources': data that is persisted to remote servers.
 
-**[cantierecreativo/redux-bees](https://github.com/cantierecreativo/redux-bees)**  
-声明性 JSON-API 交互，用于规范化数据，与可以运行查询的 React 高阶组件（HOC）交互
+## Component State and Encapsulation
 
-**[GetAmbassador/redux-clerk](https://github.com/GetAmbassador/redux-clerk)**  
-具有规范化、乐观更新、同步/异步 action creator、 selector 和可扩展 reducer 的异步 CRUD 处理。
-
-**[shoutem/redux-io](https://github.com/shoutem/redux-io)**  
-具有异步 CRUD、规范化、乐观更新、缓存、数据状态和错误处理的 JSON-API 抽象。
-
-**[jmeas/redux-resource](https://github.com/jmeas/redux-resource)**  
-用于管理“资源”的小而强大的系统：持久存储到远程服务器的数据。
-
-<a id="component-state-and-encapsulation"></a>
-
-## 组件 state 和封装
-
-**[tonyhb/redux-ui](https://github.com/tonyhb/redux-ui)**  
-用于 UI state 的“块级范围”。 装饰组件以声明数据字段，使这些数据字段成为 props 并可由嵌套子项更新。
-
-```js
-@ui({
-  key: 'some-name',
-  state: { uiVar1: '', uiVar2: (props, state) => state.someValue },
-  reducer: (state, action) => {}
-})
-class YourComponent extends React.Component {}
-```
-
-**[threepointone/redux-react-local](https://github.com/threepointone/redux-react-local)**  
-Redux 中的本地组件 state，用于处理组件 action
+**[threepointone/redux-react-local](https://github.com/threepointone/redux-react-local)** <br />
+Local component state in Redux, with handling for component actions
 
 ```js
 @local({
@@ -712,8 +577,8 @@ Redux 中的本地组件 state，用于处理组件 action
 class Counter extends React.Component {
 ```
 
-**[epeli/lean-redux](https://github.com/epeli/lean-redux)**  
-使 Redux 中的组件的 state 与 setState 一样简单
+**[epeli/lean-redux](https://github.com/epeli/lean-redux)** <br />
+Makes component state in Redux as easy as setState
 
 ```js
 const DynamicCounters = connectLean(
@@ -723,24 +588,8 @@ const DynamicCounters = connectLean(
 )(CounterList);
 ```
 
-**[ioof-holdings/redux-subspace](https://github.com/ioof-holdings/redux-subspace)**  
-为分离的微前端创建独立的 “sub-store”，集成了 React、sagas 和 observables
-
-```js
-const reducer = combineReducers({
-  subApp1: namespaced('subApp1')(counter),
-  subApp2: namespaced('subApp2')(counter)
-})
-
-const subApp1Store = subspace(state => state.subApp1, 'subApp1')(store)
-const subApp2Store = subspace(state => state.subApp2, 'subApp2')(store)
-
-subApp1Store.dispatch({ type: 'INCREMENT' })
-console.log('store state:', store.getState()) // { "subApp1": { value: 2 }, "subApp2": { value: 1 } }
-```
-
-**[DataDog/redux-doghouse](https://github.com/DataDog/redux-doghouse)**  
-旨在通过将 actIon 和 reducer 作用于组件的特定实例，使 Redux 更易于构建可重用组件。
+**[DataDog/redux-doghouse](https://github.com/DataDog/redux-doghouse)** <br />
+Aims to make reusable components easier to build with Redux by scoping actions and reducers to a particular instance of a component.
 
 ```js
 const scopeableActions = new ScopedActionFactory(actionCreators)
@@ -754,150 +603,118 @@ const boundScopeableActions = bindScopedActionFactories(
 const scopedReducers = scopeReducers(reducers)
 ```
 
-<a id="dev-tools"></a>
-
-## 开发者工具
-
-<a id="debuggers-and-viewers"></a>
+## Dev Tools
 
 #### Debuggers and Viewers
 
 **[reduxjs/redux-devtools](https://github.com/reduxjs/redux-devtools)**
 
-Dan Abramov 最初的 Redux DevTools 实现，专为在应用程序内显示 state 和 time-travel 调试而构建
+Dan Abramov's original Redux DevTools implementation, built for in-app display of state and time-travel debugging
 
 **[zalmoxisus/redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension)**
 
-Mihail Diordiev 的浏览器扩展，捆绑了多个 state 监视器视图，并增加了与浏览器自己的开发工具的集成
+Mihail Diordiev's browser extension, which bundles multiple state monitor views and adds integration with the browser's own dev tools
 
 **[infinitered/reactotron](https://github.com/infinitered/reactotron)**
 
-用于检查 React 和 React Native 应用程序的跨平台 Electron 应用程序，包括应用程序状态、API 请求、性能、错误、saga 和操作调度。
+A cross-platform Electron app for inspecting React and React Native apps, including app state, API requests, perf, errors, sagas, and action dispatching.
 
-<a id="DevTools Monitors"></a>
+#### DevTools Monitors
 
-#### 开发者工具监视器
+**[Log Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-log-monitor)** <br />
+The default monitor for Redux DevTools with a tree view
 
-**[Log Monitor](https://github.com/reduxjs/redux-devtools-log-monitor)**  
-Redux DevTools 默认监视器，提供树状视图
+**[Dock Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-dock-monitor)** <br />
+A resizable and movable dock for Redux DevTools monitors
 
-**[Dock Monitor](https://github.com/reduxjs/redux-devtools-dock-monitor)**  
-Redux DevTools 监视器的可调整大小和可移动的底座
+**[Slider Monitor](https://github.com/calesce/redux-slider-monitor)** <br />
+A custom monitor for Redux DevTools to replay recorded Redux actions
 
-**[Slider Monitor](https://github.com/calesce/redux-slider-monitor)**  
-Redux DevTools 的自定义监视器，用于重放录制的 Redux 操作
+**[Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor)** <br />
+A monitor for Redux DevTools that diffs the Redux store mutations between actions
 
-**[Inspector](https://github.com/alexkuz/redux-devtools-inspector)**  
-Redux DevTools 的自定义监视器，可让您过滤操作，检查差异，并在状态中固定深层路径以观察其更改
+**[Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/)** <br />
+Filterable tree view monitor for Redux DevTools
 
-**[Diff Monitor](https://github.com/whetstone/redux-devtools-diff-monitor)**  
-Redux DevTools 的监视器，用于在 action 之间区分 Redux store 突变
+**[Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions)** <br />
+Redux DevTools composable monitor with the ability to filter actions
 
-**[Filterable Log Monitor](https://github.com/bvaughn/redux-devtools-filterable-log-monitor/)**  
-树状可筛选视图的 Redux DevTools 监视器
+#### Logging
 
-**[Chart Monitor](https://github.com/romseguy/redux-devtools-chart-monitor)**  
-Redux DevTools 的图表监视器
+**[evgenyrodionov/redux-logger](https://github.com/evgenyrodionov/redux-logger)** <br />
+Logging middleware that shows actions, states, and diffs
 
-**[Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions)**  
-Redux DevTools 可组合监视器，具有过滤 action 的能力
+**[inakianduaga/redux-state-history](https://github.com/inakianduaga/redux-state-history)** <br />
+Enhancer that provides time-travel and efficient action recording capabilities, including import/export of action logs and action playback.
 
-<a id="logging"></a>
+**[joshwcomeau/redux-vcr](https://github.com/joshwcomeau/redux-vcr)** <br />
+Record and replay user sessions in real-time
 
-#### 日志
+**[socialtables/redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action)** <br />
+Warns about actions that produced no state changes in development
 
-**[evgenyrodionov/redux-logger](https://github.com/evgenyrodionov/redux-logger)**  
-记录显示 action、state 和差异的中间件
+#### Mutation Detection
 
-**[inakianduaga/redux-state-history](https://github.com/inakianduaga/redux-state-history)**  
-提供 time-travel 和高效的 action 录制功能，包括导入 / 导出 action 日志和 action 播放的增强器。
+**[leoasis/redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant)** <br />
+Middleware that throws an error when you try to mutate your state either inside a dispatch or between dispatches.
 
-**[joshwcomeau/redux-vcr](https://github.com/joshwcomeau/redux-vcr)**  
-实时记录和重播用户会话
+**[flexport/mutation-sentinel](https://github.com/flexport/mutation-sentinel)** <br />
+Helps you deeply detect mutations at runtime and enforce immutability in your codebase.
 
-**[socialtables/redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action)**  
-在开发中对改变 state 的 action 发出警告
+**[mmahalwy/redux-pure-connect](https://github.com/mmahalwy/redux-pure-connect)** <br />
+Check and log whether react-redux's connect method is passed `mapState` functions that create impure props.
 
-<a id="mutation-detection"></a>
+## Testing
 
-#### 突变检测
+**[arnaudbenard/redux-mock-store](https://github.com/arnaudbenard/redux-mock-store)** <br />
+A mock store that saves dispatched actions in an array for assertions
 
-**[leoasis/redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant)**  
-当您尝试在调度（dispatch）内或调度（dispatch）之间改变状态时抛出错误的中间件。
+**[Workable/redux-test-belt](https://github.com/Workable/redux-test-belt)** <br />
+Extends the store API to make it easier assert, isolate, and manipulate the store
 
-**[flexport/mutation-sentinel](https://github.com/flexport/mutation-sentinel)**  
-帮助您在运行时深入检测突变并在代码库中强制实现不变性(immutability)。
+**[conorhastings/redux-test-recorder](https://github.com/conorhastings/redux-test-recorder)** <br />
+Middleware to automatically generate reducers tests based on actions in the app
 
-**[mmahalwy/redux-pure-connect](https://github.com/mmahalwy/redux-pure-connect)**  
-检查并记录 react-redux 的 connect 方法是否通过 `mapState` 函数创建了不纯的 props。
+**[wix/redux-testkit](https://github.com/wix/redux-testkit)** <br />
+Complete and opinionated testkit for testing Redux projects (reducers, selectors, actions, thunks)
 
-<a id="testing"></a>
+**[jfairbank/redux-saga-test-plan](https://github.com/jfairbank/redux-saga-test-plan)** <br />
+Makes integration and unit testing of sagas a breeze
 
-## 测试
+## Routing
 
-**[arnaudbenard/redux-mock-store](https://github.com/arnaudbenard/redux-mock-store)**  
-一个模拟 store，用于将 dispatched action 保存在数组中以进行断言
+**[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
+Synchronize React Router 4 state with your Redux store.
 
-**[Workable/redux-test-belt](https://github.com/Workable/redux-test-belt)**  
-扩展 store API 以使其更容易断言、隔离和操纵 store
-
-**[conorhastings/redux-test-recorder](https://github.com/conorhastings/redux-test-recorder)**  
-根据应用程序中的操作自动生成 Reducer 测试的中间件
-
-**[wix/redux-testkit](https://github.com/wix/redux-testkit)**  
-用于测试 Redux 项目的完整且固定的测试工具包（Reducer、selectors、actions、thunk）
-
-**[jfairbank/redux-saga-test-plan](https://github.com/jfairbank/redux-saga-test-plan)**  
-使 saga 的集成和单元测试变得轻而易举
-
-<a id="routing"></a>
-
-## 路由
-
-**[ReactTraining/react-router-redux](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)**  
-保持 state 与路由同步
-
-**[FormidableLabs/redux-little-router](https://github.com/FormidableLabs/redux-little-router)**  
-Redux 应用程序的一个小型路由，可以与 URL 进行通信
-
-**[faceyspacey/redux-first-router](https://github.com/faceyspacey/redux-first-router)**  
-无缝 Redux-first 路由。 在 state 中考虑您的应用，而不是在路由或组件中，同时保持与地址栏同步。 一切都是 state。 连接您的组件，只需调度（dispatch）标准的 action。
-
-<a id="forms"></a>
+**[faceyspacey/redux-first-router](https://github.com/faceyspacey/redux-first-router)** <br />
+Seamless Redux-first routing. Think of your app in states, not routes, not components, while keeping the address bar in sync. Everything is state. Connect your components and just dispatch flux standard actions.
 
 ## Forms
 
-**[erikras/redux-form](https://github.com/erikras/redux-form)**  
-一个功能齐全的库，可以使 React HTML 表单在 Redux 中存储其状态。
+**[erikras/redux-form](https://github.com/erikras/redux-form)** <br />
+A full-featured library to enable a React HTML form to store its state in Redux.
 
-**[davidkpiano/react-redux-form](https://github.com/davidkpiano/react-redux-form)**  
-React Redux Form 是一个 reducer creator 和 action creator 的集合，它们使 React 和 Redux 可以简单而高效地实现最复杂和自定义的 form。
+**[davidkpiano/react-redux-form](https://github.com/davidkpiano/react-redux-form)** <br />
+React Redux Form is a collection of reducer creators and action creators that make implementing even the most complex and custom forms with React and Redux simple and performant.
 
-<a id="higher-level-abstractions"></a>
+## Higher-Level Abstractions
 
-## 更高级别的抽象
+**[keajs/kea](https://github.com/keajs/kea)** <br />
+An abstraction over Redux, Redux-Saga and Reselect. Provides a framework for your app’s actions, reducers, selectors and sagas. It empowers Redux, making it as simple to use as setState. It reduces boilerplate and redundancy, while retaining composability.
 
-**[keajs/kea](https://github.com/keajs/kea)**  
-Redux、Redux-Saga 和 Reselect 的抽象。 为您的应用程序的 action、reducer、selector 和 saga 提供框架。 它赋予 Redux 权限，使其与 setState 一样简单。 它减少了样板和冗余，同时保持了可组合性。
+**[TheComfyChair/redux-scc](https://github.com/TheComfyChair/redux-scc)** <br />
+Takes a defined structure and uses 'behaviors' to create a set of actions, reducer responses and selectors.
 
-**[jumpsuit/jumpstate](https://github.com/jumpsuit/jumpstate)**  
-基于 Redux 的简化版本。 没有 action creator 或显式调度（dispatch），具有内置的简单副作用（side effect）系统。
+**[Bloomca/redux-tiles](https://github.com/Bloomca/redux-tiles)** <br />
+Provides minimal abstraction on top of Redux, to allow easy composability, easy async requests, and sane testability.
 
-**[TheComfyChair/redux-scc](https://github.com/TheComfyChair/redux-scc)**  
-采用定义的结构并使用“行为”来创建一组 actions、reducer responses 和 selectors。
+## Community Conventions
 
-**[Bloomca/redux-tiles](https://github.com/Bloomca/redux-tiles)**  
-在 Redux 之上提供最小的抽象，以实现轻松的可组合性、简单的异步请求和可靠的可测试性。
+**[Flux Standard Action](https://github.com/acdlite/flux-standard-action)** <br />
+A human-friendly standard for Flux action objects
 
-<a id="community-conventions"></a>
+**[Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition)** <br />
+An opinionated standard for nested reducer composition
 
-## 社区公约
-
-**[Flux Standard Action](https://github.com/acdlite/flux-standard-action)**  
-Flux action object 的人性化标准
-
-**[Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition)**  
-嵌套 reducer 组合的固定标准
-
-**[Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)**  
-捆绑 reducer、action type 和 action 的提议
+**[Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)** <br />
+A proposal for bundling reducers, action types and actions
