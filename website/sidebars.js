@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         type: 'category',
-        label: 'Redux Fundamentals',
+        label: 'Redux 进阶',
         items: [
           'tutorials/fundamentals/part-1-overview',
           'tutorials/fundamentals/part-2-concepts-data-flow',

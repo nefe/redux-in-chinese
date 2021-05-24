@@ -1,6 +1,6 @@
 module.exports = {
-  title: 'Redux 中文文档',
-  tagline: 'Redux 是 JS 应用的状态容器，提供可预测的状态管理',
+  title: 'Redux',
+  tagline: 'JS 应用的状态容器，提供可预测的状态管理',
   url: 'https://redux.js.org',
   baseUrl: '/',
   favicon: 'img/favicon/favicon.ico',
@@ -16,7 +16,7 @@ module.exports = {
       disableSwitch: false
     },
     navbar: {
-      title: 'Redux',
+      title: 'Redux 中文文档',
       logo: {
         alt: 'Redux Logo',
         src: 'img/redux.svg'
