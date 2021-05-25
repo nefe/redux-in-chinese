@@ -2,7 +2,7 @@
 id: core-concepts
 title: Core Concepts
 description: "Introduction > Core Concepts: A quick overview of Redux's key idea, reducer functions"
-hide_title: true
+hide_title: false
 ---
 
 # Core Concepts

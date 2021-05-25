@@ -40,13 +40,13 @@ module.exports = {
           position: 'right'
         },
         {
-          label: 'GitHub',
+          label: '源码',
           href: 'https://www.github.com/reduxjs/redux',
           position: 'right'
         },
         {
-          label: '帮助？',
-          to: 'introduction/getting-started#help-and-discussion',
+          label: '纠错',
+          to: 'https://github.com/camsong/redux-in-chinese/issues',
           position: 'right'
         }
       ]

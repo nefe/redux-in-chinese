@@ -9,7 +9,7 @@ import styles from './styles.module.css'
 const features = [
   {
     content: (
-      <p>Redux 让你开发出 <strong>行为稳定可预测</strong>、支持不同环境
+      <p>Redux 让你开发出 <strong>行为稳定可预测</strong>、可运行在不同环境
         （客户端、服务端和原生程序）、且 <strong>易于测试</strong> 的应用。
       </p>
     ),
@@ -148,7 +148,7 @@ function Home() {
               )}
               to={useBaseUrl('introduction/getting-started')}
             >
-              入门
+              入门 Redux
             </Link>
           </div>
         </div>

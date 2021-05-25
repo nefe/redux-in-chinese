@@ -1,9 +1,9 @@
 ---
 id: tutorials-index
 slug: index
-title: 'Redux Tutorials Index'
-sidebar_label: 'Tutorials Index'
-hide_title: true
+title: 教程目录
+sidebar_label: 教程目录
+hide_title: false
 description: 'Overview of the Redux tutorial pages'
 ---
 

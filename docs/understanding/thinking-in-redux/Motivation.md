@@ -2,7 +2,8 @@
 id: motivation
 title: Motivation
 description: 'Introduction > Motivation: What problems does Redux try to solve?'
-hide_title: true
+sidebar_label: '动机'
+hide_title: false
 ---
 
 # Motivation

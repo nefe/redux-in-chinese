@@ -1,11 +1,11 @@
 ---
 id: installation
-title: Installation
-description: 'Introduction > Installation: Installation instructions for Redux and related packages'
-hide_title: true
+title: 安装
+description: '简介 > 安装: Redux 和关联组件库的安装指引'
+hide_title: false
 ---
 
-# Installation
+# 安装
 
 ## Redux Toolkit
 
