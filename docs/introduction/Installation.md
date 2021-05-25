@@ -9,9 +9,9 @@ hide_title: false
 
 ## Redux Toolkit
 
-Redux Toolkit includes the Redux core, as well as other key packages we feel are essential for building Redux applications (such as Redux Thunk and Reselect).
+Redux Toolkit 包含了 Redux 核心，以及我们认为对于构建 Redux 应用程序必不可少的其他关键软件包（例如 Redux Thunk 和 Reselect）。
 
-It's available as a package on NPM for use with a module bundler or in a Node application:
+它提供了 NPM 软件包，安装方式如下：
 
 ```bash
 # NPM
@@ -21,11 +21,11 @@ npm install @reduxjs/toolkit
 yarn add @reduxjs/toolkit
 ```
 
-It's also available as a UMD build, which can be loaded from [the `dist` folder on unpkg](https://unpkg.com/@reduxjs/toolkit/dist/). The UMD builds make Redux Toolkit available as a `window.RTK` global variable.
+它还支持 UMD 包的方式使用，可以通过 [unpkg 上的 `dist` 文件夹](https://unpkg.com/@reduxjs/toolkit/dist/) 来加载。UMD 包让你可以通过 `window.RTK` 全局变量来使用 Redux Toolkit。
 
-## Redux Core
+## Redux 核心
 
-To install the stable version:
+安装稳定版：
 
 ```bash
 # NPM
@@ -35,28 +35,29 @@ npm install redux
 yarn add redux
 ```
 
-If you're not, you can [access these files on unpkg](https://unpkg.com/redux/), download them, or point your package manager to them.
+如果不是，则可以[通过 unpkg 访问这些文件](https://unpkg.com/redux/)，下载它们或将包管理器指向它们。
 
-Most commonly, people consume Redux as a collection of [CommonJS](http://www.commonjs.org/) modules. These modules are what you get when you import `redux` in a [Webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), or a Node environment. If you like to live on the edge and use [Rollup](https://rollupjs.org), we support that as well.
+最常见的是，人们将 Redux 用作 [CommonJS](http://www.commonjs.org/) 模块的集合。这些模块是在 [Webpack](https://webpack.js.org/)
+、[Browserify](http://browserify.org/) 或 Node 环境中导入 `redux` 时获得的。如果你追求最新技术并使用 [Rollup](https://rollupjs.org)，我们也支持。
 
-If you don't use a module bundler, it's also fine. The `redux` npm package includes precompiled production and development [UMD](https://github.com/umdjs/umd) builds in the [`dist` folder](https://unpkg.com/redux/dist/). They can be used directly without a bundler and are thus compatible with many popular JavaScript module loaders and environments. For example, you can drop a UMD build as a [`<script>` tag](https://unpkg.com/redux/dist/redux.js) on the page, or [tell Bower to install it](https://github.com/reduxjs/redux/pull/1181#issuecomment-167361975). The UMD builds make Redux available as a `window.Redux` global variable.
+如果你不想使用模块打包器，也可以。`redux` npm 包已经在 [`dist` 文件夹](https://unpkg.com/redux/dist/)下包含了预编译的生产和开发环境的 [UMD](https://github.com/umdjs/umd) 文件。没有模块打包器一样可以使用，因此与许多流行的 JavaScript 模块加载器和环境兼容。比如，你可以在页面上通过 [`<script>` 标签](https://unpkg.com/redux/dist/redux.js) 来使用 UMD 包，或者[让 Bower 来安装它](https://github.com/reduxjs/redux/pull/1181#issuecomment-167361975)。UMD 包可以让你使用 `window.Redux` 全局变量来访问 Redux。
 
-The Redux source code is written in ES2015 but we precompile both CommonJS and UMD builds to ES5 so they work in [any modern browser](https://caniuse.com/#feat=es5). You don't need to use Babel or a module bundler to [get started with Redux](https://redux.js.org/introduction/examples#counter-vanilla).
+Redux 源码是基于 ES2015 编写，但我们已经预编译到 ES5 形式的 CommonJS and UMD 包。所以可以在[任意现代浏览器](https://caniuse.com/#feat=es5)下使用。并不一定需要 Babel 或者模块打包器才能[使用 Redux](https://redux.js.org/introduction/examples#counter-vanilla).
 
-## Complementary Packages
+## 配套工具
 
-Most likely, you'll also need [the React bindings](https://github.com/reduxjs/react-redux) and [the developer tools](https://github.com/reduxjs/redux-devtools).
+最可能的是，你还需要搭配使用 [React 绑定](https://github.com/reduxjs/react-redux) 和 [开发者工具](https://github.com/reduxjs/redux-devtools).
 
 ```bash
 npm install react-redux
 npm install --save-dev redux-devtools
 ```
 
-Note that unlike Redux itself, many packages in the Redux ecosystem don't provide UMD builds, so we recommend using CommonJS module bundlers like [Webpack](https://webpack.js.org/) and [Browserify](http://browserify.org/) for the most comfortable development experience.
+请注意，与 Redux 不同，Redux 生态系统中的许多软件包都不提供 UMD 包，因此我们建议使用 CommonJS 或模块打包器，例如 [Webpack](https://webpack.js.org/) 或 [Browserify](http://browserify.org/)，以获得最舒适的开发经验。
 
-## Create a React Redux App
+### 创建一个 React Redux 应用
 
-The recommended way to start new apps with React and Redux is by using the [official Redux+JS template](https://github.com/reduxjs/cra-template-redux) for [Create React App](https://github.com/facebook/create-react-app), which takes advantage of [Redux Toolkit](https://redux-toolkit.js.org/) and React Redux's integration with React components.
+官方推荐的创建 React Redux 新应用的方式是使用 [官方 Redux+JS 模版](https://github.com/reduxjs/cra-template-redux)，它基于 [Create React App](https://github.com/facebook/create-react-app)，它利用了 **[Redux Toolkit](https://redux-toolkit.js.org/)** 和 Redux 与 React 组件的集成.
 
 ```sh
 npx create-react-app my-app --template redux

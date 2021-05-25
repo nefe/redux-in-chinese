@@ -1,8 +1,7 @@
 ---
 id: getting-started
-title: 入门 Redux
+title: '入门 Redux'
 description: '简介 > 入门: 从这里开始学习和使用 Redux'
-sidebar_label: '入门 Redux'
 hide_title: false
 ---
 
@@ -26,7 +25,7 @@ RTK 包含了有助于简化许多常见场景的工具，包括 [配置 Store](
 
 无论你是一个完全的新手想要开发第一个 Redux 应用，还是经验老到的老手想要简化已有应用，**[Redux Toolkit](https://redux-toolkit.js.org/)** 都能帮你写出更好的 Redux 代码.
 
-Redux Toolkit 提供一个 NPM 软件包，安装方式如下：
+Redux Toolkit 提供 NPM 软件包，安装方式如下：
 
 ```bash
 # NPM
