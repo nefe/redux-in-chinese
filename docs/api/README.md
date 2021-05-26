@@ -1,7 +1,7 @@
 ---
 id: api-reference
 title: API Reference
-hide_title: true
+hide_title: false
 ---
 
 # API Reference

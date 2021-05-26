@@ -1,7 +1,7 @@
 ---
 id: usage-with-typescript
 title: Usage With TypeScript
-hide_title: true
+hide_title: false
 ---
 
 # Usage with TypeScript

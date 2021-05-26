@@ -1,7 +1,7 @@
 ---
 id: server-rendering
 title: Server Rendering
-hide_title: true
+hide_title: false
 ---
 
 # Server Rendering

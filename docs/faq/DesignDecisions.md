@@ -1,7 +1,7 @@
 ---
 id: design-decisions
 title: Design Decisions
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Design Decisions

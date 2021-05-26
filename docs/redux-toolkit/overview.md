@@ -2,7 +2,7 @@
 id: overview
 title: 'Redux Toolkit: 概览'
 description: 'Redux Toolkit is the recommended way to write Redux logic'
-hide_title: true
+hide_title: false
 ---
 
 ## Redux Toolkit 是什么？

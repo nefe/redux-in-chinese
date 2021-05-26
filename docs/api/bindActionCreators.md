@@ -1,7 +1,7 @@
 ---
 id: bindactioncreators
 title: bindActionCreators
-hide_title: true
+hide_title: false
 ---
 
 # `bindActionCreators(actionCreators, dispatch)`

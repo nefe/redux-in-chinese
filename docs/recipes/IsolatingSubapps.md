@@ -1,7 +1,7 @@
 ---
 id: isolating-redux-sub-apps
 title: Isolating Redux Sub-Apps
-hide_title: true
+hide_title: false
 ---
 
 # Isolating Redux Sub-Apps

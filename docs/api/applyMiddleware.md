@@ -1,7 +1,7 @@
 ---
 id: applymiddleware
 title: applyMiddleware
-hide_title: true
+hide_title: false
 ---
 
 # `applyMiddleware(...middleware)`

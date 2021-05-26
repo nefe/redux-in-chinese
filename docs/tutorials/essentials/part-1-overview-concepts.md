@@ -2,7 +2,7 @@
 id: part-1-overview-concepts
 title: 'Redux Essentials, Part 1: Redux Overview and Concepts'
 sidebar_label: 'Redux Overview and Concepts'
-hide_title: true
+hide_title: false
 description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 

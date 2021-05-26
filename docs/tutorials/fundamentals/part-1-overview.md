@@ -2,7 +2,7 @@
 id: part-1-overview
 title: 'Redux Fundamentals, Part 1: Redux Overview'
 sidebar_label: 'Redux Overview'
-hide_title: true
+hide_title: false
 description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 ---
 

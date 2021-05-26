@@ -1,7 +1,7 @@
 ---
 id: writing-tests
 title: Writing Tests
-hide_title: true
+hide_title: false
 ---
 
 # Writing Tests

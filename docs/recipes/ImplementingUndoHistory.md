@@ -1,7 +1,7 @@
 ---
 id: implementing-undo-history
 title: Implementing Undo History
-hide_title: true
+hide_title: false
 ---
 
 # Implementing Undo History

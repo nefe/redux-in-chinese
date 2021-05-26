@@ -1,7 +1,7 @@
 ---
 id: combinereducers
 title: combineReducers
-hide_title: true
+hide_title: false
 ---
 
 # `combineReducers(reducers)`

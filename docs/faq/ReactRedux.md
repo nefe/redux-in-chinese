@@ -1,7 +1,7 @@
 ---
 id: react-redux
 title: React Redux
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: React Redux

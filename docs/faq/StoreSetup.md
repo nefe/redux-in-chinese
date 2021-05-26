@@ -1,7 +1,7 @@
 ---
 id: store-setup
 title: Store Setup
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Store Setup

@@ -2,7 +2,7 @@
 id: part-4-using-data
 title: 'Redux Essentials, Part 4: Using Redux Data'
 sidebar_label: 'Using Redux Data'
-hide_title: true
+hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
 ---
 

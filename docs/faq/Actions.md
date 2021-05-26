@@ -1,7 +1,7 @@
 ---
 id: actions
 title: Actions
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Actions

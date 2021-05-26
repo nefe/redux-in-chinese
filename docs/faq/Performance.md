@@ -1,7 +1,7 @@
 ---
 id: performance
 title: Performance
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Performance

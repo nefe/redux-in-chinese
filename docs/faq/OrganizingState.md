@@ -1,7 +1,7 @@
 ---
 id: organizing-state
 title: Organizing State
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Organizing State

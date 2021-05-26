@@ -1,7 +1,7 @@
 ---
 id: faq
 title: FAQ Index
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ

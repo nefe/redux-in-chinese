@@ -1,7 +1,7 @@
 ---
 id: code-splitting
 title: Code Splitting
-hide_title: true
+hide_title: false
 ---
 
 # Code Splitting

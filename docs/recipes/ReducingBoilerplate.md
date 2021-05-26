@@ -1,7 +1,7 @@
 ---
 id: reducing-boilerplate
 title: Reducing Boilerplate
-hide_title: true
+hide_title: false
 ---
 
 # Reducing Boilerplate

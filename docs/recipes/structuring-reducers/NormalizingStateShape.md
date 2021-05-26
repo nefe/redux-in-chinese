@@ -2,7 +2,7 @@
 id: normalizing-state-shape
 title: Normalizing State Shape
 description: 'Structuring Reducers > Normalizing State Shape: Why and how to store data items for lookup based on ID'
-hide_title: true
+hide_title: false
 ---
 
 # Normalizing State Shape

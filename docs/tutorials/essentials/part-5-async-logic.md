@@ -2,7 +2,7 @@
 id: part-5-async-logic
 title: 'Redux Essentials, Part 5: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
-hide_title: true
+hide_title: false
 description: 'The official Redux Essentials tutorial: learn how async logic works in Redux apps'
 ---
 

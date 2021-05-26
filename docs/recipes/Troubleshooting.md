@@ -1,7 +1,7 @@
 ---
 id: troubleshooting
 title: Troubleshooting
-hide_title: true
+hide_title: false
 ---
 
 # Troubleshooting

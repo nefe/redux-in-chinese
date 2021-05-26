@@ -1,7 +1,7 @@
 ---
 id: configuring-your-store
 title: Configuring Your Store
-hide_title: true
+hide_title: false
 ---
 
 # Configuring Your Store

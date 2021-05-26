@@ -1,7 +1,7 @@
 ---
 id: createstore
 title: createStore
-hide_title: true
+hide_title: false
 ---
 
 # `createStore(reducer, [preloadedState], [enhancer])`

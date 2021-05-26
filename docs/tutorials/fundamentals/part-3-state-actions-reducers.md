@@ -2,7 +2,7 @@
 id: part-3-state-actions-reducers
 title: 'Redux Fundamentals, Part 3: State, Actions, and Reducers'
 sidebar_label: 'State, Actions, and Reducers'
-hide_title: true
+hide_title: false
 description: 'The official Redux Fundamentals tutorial: learn how reducers update state in response to actions'
 ---
 

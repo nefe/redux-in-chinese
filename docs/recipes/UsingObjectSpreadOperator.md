@@ -1,7 +1,7 @@
 ---
 id: using-object-spread-operator
 title: Using Object Spread Operator
-hide_title: true
+hide_title: false
 ---
 
 # Using Object Spread Operator

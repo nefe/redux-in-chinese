@@ -2,7 +2,7 @@
 id: part-3-data-flow
 title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
-hide_title: true
+hide_title: false
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 

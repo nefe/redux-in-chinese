@@ -1,7 +1,7 @@
 ---
 id: recipe-index
 title: 'Recipes: Index'
-hide_title: true
+hide_title: false
 ---
 
 # Recipes

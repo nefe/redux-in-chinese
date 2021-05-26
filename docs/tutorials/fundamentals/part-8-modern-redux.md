@@ -2,7 +2,7 @@
 id: part-8-modern-redux
 title: 'Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit'
 sidebar_label: 'Modern Redux with Redux Toolkit'
-hide_title: true
+hide_title: false
 description: 'The official Fundamentals tutorial for Redux: learn the modern way to write Redux logic'
 ---
 

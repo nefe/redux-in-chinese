@@ -1,7 +1,7 @@
 ---
 id: immutable-data
 title: Immutable Data
-hide_title: true
+hide_title: false
 ---
 
 # Redux FAQ: Immutable Data
