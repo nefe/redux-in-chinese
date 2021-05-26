@@ -1,27 +1,28 @@
 ---
 id: ecosystem
-title: Ecosystem
-description: 'Introduction > Ecosystem: Links to popular, recommended, and interesting Redux-related libraries'
+title: 生态
+description: '简介 > 生态: 流行、推荐、和有趣的 Redux 周边库'
 hide_title: false
 ---
 
-# Ecosystem
+# 生态
 
-Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools. You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
+Redux 是一个很小的库，但是它的设计和 API 都是经过精心选择的，以至于衍生出工具和扩展的生态系统，并且社区中存在各种各样有用的插件、库和工具。虽然你无需使用任何这些插件即可使用Redux，但它们可以帮助您更轻松地实现功能并解决应用程序中的问题。
 
-For an extensive catalog of libraries, addons, and tools related to Redux, check out the [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) list. Also, the [React/Redux Links](https://github.com/markerikson/react-redux-links) list contains tutorials and other useful resources for anyone learning React or Redux.
+有关与Redux相关的库，附加组件和工具的广泛目录
+访问 [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) 了解更全面的 Redux 库、插件、和工具的目录。此外，[React/Redux Links](https://github.com/markerikson/react-redux-links) 包含了学习 React 或 Redux 的教程和其他有用资料。
 
-This page lists some of the Redux-related addons that the Redux maintainers have vetted personally, or that have shown widespread adoption in the community. Don't let this discourage you from trying the rest of them! The ecosystem is growing too fast, and we have a limited time to look at everything. Consider these the “staff picks”, and don't hesitate to submit a PR if you've built something wonderful with Redux.
+此页面列出了 Redux 维护人员亲自审核的或与社区相关的 Redux 相关插件。不要让这种方法阻止您尝试其余的方法！生态系统增长太快，我们只有有限的时间来无法看到所有内容。考虑这些是“内部人员挑选”，如果您使用 Redux 构建了一些很棒的东西，请毫不犹豫地提交 PR。
 
-## Table of Contents
+## 目录
 
-- [Ecosystem](#ecosystem)
-  - [Table of Contents](#table-of-contents)
-  - [Library Integration and Bindings](#library-integration-and-bindings)
+- [生态](#生态)
+  - [目录](#目录)
+  - [框架集成库与绑定库](#library-integration-and-bindings)
   - [Reducers](#reducers)
     - [Reducer Combination](#reducer-combination)
     - [Reducer Composition](#reducer-composition)
-    - [Higher-Order Reducers](#higher-order-reducers)
+    - [高阶 Reducers](#higher-order-reducers)
   - [Actions](#actions)
   - [Utilities](#utilities)
   - [Store](#store)
@@ -32,27 +33,27 @@ This page lists some of the Redux-related addons that the Redux maintainers have
     - [Data Structures](#data-structures)
     - [Immutable Update Utilities](#immutable-update-utilities)
     - [Immutable/Redux Interop](#immutableredux-interop)
-  - [Side Effects](#side-effects)
-    - [Widely Used](#widely-used)
+  - [副作用](#side-effects)
+    - [广泛使用](#widely-used)
     - [Promises](#promises)
   - [Middleware](#middleware)
-    - [Networks and Sockets](#networks-and-sockets)
-    - [Async Behavior](#async-behavior)
+    - [网络请求](#networks-and-sockets)
+    - [异步操作](#async-behavior)
     - [Analytics](#analytics)
-  - [Entities and Collections](#entities-and-collections)
-  - [Component State and Encapsulation](#component-state-and-encapsulation)
-  - [Dev Tools](#dev-tools)
+  - [实体与集合](#entities-and-collections)
+  - [组件 State 与封装](#component-state-and-encapsulation)
+  - [开发者工具](#dev-tools)
     - [Debuggers and Viewers](#debuggers-and-viewers)
-    - [DevTools Monitors](#devtools-monitors)
+    - [开发者工具监听器](#devtools-monitors)
     - [Logging](#logging)
     - [Mutation Detection](#mutation-detection)
-  - [Testing](#testing)
-  - [Routing](#routing)
-  - [Forms](#forms)
-  - [Higher-Level Abstractions](#higher-level-abstractions)
-  - [Community Conventions](#community-conventions)
+  - [测试](#testing)
+  - [路由](#routing)
+  - [表单](#forms)
+  - [高阶抽象](#higher-level-abstractions)
+  - [社区约定模式](#community-conventions)
 
-## Library Integration and Bindings
+## 框架集成库与绑定库
 
 **[reduxjs/react-redux](https://github.com/reduxjs/react-redux)** <br />
 The official React bindings for Redux, maintained by the Redux team
@@ -123,7 +124,7 @@ const myCounter = counter({
 })
 ```
 
-#### Higher-Order Reducers
+#### 高阶 Reducers
 
 **[omnidan/redux-undo](https://github.com/omnidan/redux-undo)** <br />
 Effortless undo/redo and action history for your reducers
@@ -313,9 +314,9 @@ const nextState = produce(baseState, draftState => {
 })
 ```
 
-## Side Effects
+## 副作用
 
-#### Widely Used
+#### 广泛使用
 
 **[gaearon/redux-thunk](https://github.com/gaearon/redux-thunk)** <br />
 Dispatch functions, which are called and given `dispatch` and `getState` as parameters. This acts as a loophole for AJAX calls and other async behavior.
@@ -487,7 +488,7 @@ dispatch({type : "FETCH_DATA", payload : myAjaxLib.get("/data") });
 
 ## Middleware
 
-#### Networks and Sockets
+#### 网络请求
 
 **[svrcekmichal/redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware)** <br />
 Fetches data with Axios and dispatches start/success/fail actions
@@ -520,7 +521,7 @@ store.dispatch({ type: 'server/hello', data: 'Hello!' })
 **[tiberiuc/redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase)** <br />
 Integration between Firebase, React, and Redux
 
-#### Async Behavior
+#### 异步操作
 
 **[rt2zz/redux-action-buffer](https://github.com/rt2zz/redux-action-buffer)** <br />
 Buffers all actions into a queue until a breaker condition is met, at which point the queue is released
@@ -531,7 +532,7 @@ FSA-compliant middleware for Redux to debounce actions.
 **[mathieudutour/redux-queue-offline](https://github.com/mathieudutour/redux-queue-offline)** <br />
 Queue actions when offline and dispatch them when getting back online.
 
-#### Analytics
+#### 分析
 
 **[rangle/redux-beacon](https://github.com/rangle/redux-beacon)** <br />
 Integrates with any analytics services, can track while offline, and decouples analytics logic from app logic
@@ -539,7 +540,7 @@ Integrates with any analytics services, can track while offline, and decouples a
 **[markdalgleish/redux-analytics](https://github.com/markdalgleish/redux-analytics)** <br />
 Watches for Flux Standard Actions with meta analytics values and processes them
 
-## Entities and Collections
+## 实体与集合
 
 **[tommikaikkonen/redux-orm](https://github.com/tommikaikkonen/redux-orm)** <br />
 A simple immutable ORM to manage relational data in your Redux store.
@@ -565,7 +566,7 @@ JSON-API abstraction with async CRUD, normalization, optimistic updates, caching
 **[jmeas/redux-resource](https://github.com/jmeas/redux-resource)** <br />
 A tiny but powerful system for managing 'resources': data that is persisted to remote servers.
 
-## Component State and Encapsulation
+## 组件 State 与封装
 
 **[threepointone/redux-react-local](https://github.com/threepointone/redux-react-local)** <br />
 Local component state in Redux, with handling for component actions
@@ -603,7 +604,7 @@ const boundScopeableActions = bindScopedActionFactories(
 const scopedReducers = scopeReducers(reducers)
 ```
 
-## Dev Tools
+## 开发者工具
 
 #### Debuggers and Viewers
 
@@ -613,19 +614,19 @@ Dan Abramov's original Redux DevTools implementation, built for in-app display o
 
 **[zalmoxisus/redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension)**
 
-Mihail Diordiev's browser extension, which bundles multiple state monitor views and adds integration with the browser's own dev tools
+Mihail Diordiev's browser extension, which bundles multiple state monitor views and adds integration with the browser's own 开发者工具
 
 **[infinitered/reactotron](https://github.com/infinitered/reactotron)**
 
 A cross-platform Electron app for inspecting React and React Native apps, including app state, API requests, perf, errors, sagas, and action dispatching.
 
-#### DevTools Monitors
+#### 开发者工具监听器
 
 **[Log Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-log-monitor)** <br />
 The default monitor for Redux DevTools with a tree view
 
 **[Dock Monitor](https://github.com/reduxjs/redux-devtools/tree/master/packages/redux-devtools-dock-monitor)** <br />
-A resizable and movable dock for Redux DevTools monitors
+A resizable and movable dock for Redux 开发者工具监听器
 
 **[Slider Monitor](https://github.com/calesce/redux-slider-monitor)** <br />
 A custom monitor for Redux DevTools to replay recorded Redux actions
@@ -639,7 +640,7 @@ Filterable tree view monitor for Redux DevTools
 **[Filter Actions](https://github.com/zalmoxisus/redux-devtools-filter-actions)** <br />
 Redux DevTools composable monitor with the ability to filter actions
 
-#### Logging
+#### 日志
 
 **[evgenyrodionov/redux-logger](https://github.com/evgenyrodionov/redux-logger)** <br />
 Logging middleware that shows actions, states, and diffs
@@ -653,7 +654,7 @@ Record and replay user sessions in real-time
 **[socialtables/redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action)** <br />
 Warns about actions that produced no state changes in development
 
-#### Mutation Detection
+#### 变更检测
 
 **[leoasis/redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant)** <br />
 Middleware that throws an error when you try to mutate your state either inside a dispatch or between dispatches.
@@ -664,7 +665,7 @@ Helps you deeply detect mutations at runtime and enforce immutability in your co
 **[mmahalwy/redux-pure-connect](https://github.com/mmahalwy/redux-pure-connect)** <br />
 Check and log whether react-redux's connect method is passed `mapState` functions that create impure props.
 
-## Testing
+## 测试
 
 **[arnaudbenard/redux-mock-store](https://github.com/arnaudbenard/redux-mock-store)** <br />
 A mock store that saves dispatched actions in an array for assertions
@@ -681,7 +682,7 @@ Complete and opinionated testkit for testing Redux projects (reducers, selectors
 **[jfairbank/redux-saga-test-plan](https://github.com/jfairbank/redux-saga-test-plan)** <br />
 Makes integration and unit testing of sagas a breeze
 
-## Routing
+## 路由
 
 **[supasate/connected-react-router](https://github.com/supasate/connected-react-router)**
 Synchronize React Router 4 state with your Redux store.
@@ -689,7 +690,7 @@ Synchronize React Router 4 state with your Redux store.
 **[faceyspacey/redux-first-router](https://github.com/faceyspacey/redux-first-router)** <br />
 Seamless Redux-first routing. Think of your app in states, not routes, not components, while keeping the address bar in sync. Everything is state. Connect your components and just dispatch flux standard actions.
 
-## Forms
+## 表单
 
 **[erikras/redux-form](https://github.com/erikras/redux-form)** <br />
 A full-featured library to enable a React HTML form to store its state in Redux.
@@ -697,7 +698,7 @@ A full-featured library to enable a React HTML form to store its state in Redux.
 **[davidkpiano/react-redux-form](https://github.com/davidkpiano/react-redux-form)** <br />
 React Redux Form is a collection of reducer creators and action creators that make implementing even the most complex and custom forms with React and Redux simple and performant.
 
-## Higher-Level Abstractions
+## 高阶抽象
 
 **[keajs/kea](https://github.com/keajs/kea)** <br />
 An abstraction over Redux, Redux-Saga and Reselect. Provides a framework for your app’s actions, reducers, selectors and sagas. It empowers Redux, making it as simple to use as setState. It reduces boilerplate and redundancy, while retaining composability.
@@ -708,13 +709,13 @@ Takes a defined structure and uses 'behaviors' to create a set of actions, reduc
 **[Bloomca/redux-tiles](https://github.com/Bloomca/redux-tiles)** <br />
 Provides minimal abstraction on top of Redux, to allow easy composability, easy async requests, and sane testability.
 
-## Community Conventions
+## 社区约定模式
 
 **[Flux Standard Action](https://github.com/acdlite/flux-standard-action)** <br />
-A human-friendly standard for Flux action objects
+Flux 中 action object 的人性化标准
 
 **[Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition)** <br />
-An opinionated standard for nested reducer composition
+嵌套 reducer 组成的武断标准
 
 **[Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)** <br />
-A proposal for bundling reducers, action types and actions
+关于捆绑多个 reducer, action 类型 和 action 的提案
