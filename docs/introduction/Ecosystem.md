@@ -18,7 +18,7 @@ Redux 是一个很小的库，但是它的设计和 API 都是经过精心选择
 
 - [生态](#生态)
   - [目录](#目录)
-  - [框架集成库与绑定库](#library-integration-and-bindings)
+  - [与其他框架绑定](#library-integration-and-bindings)
   - [Reducers](#reducers)
     - [Reducer Combination](#reducer-combination)
     - [Reducer Composition](#reducer-composition)
@@ -33,7 +33,7 @@ Redux 是一个很小的库，但是它的设计和 API 都是经过精心选择
     - [Data Structures](#data-structures)
     - [Immutable Update Utilities](#immutable-update-utilities)
     - [Immutable/Redux Interop](#immutableredux-interop)
-  - [副作用](#side-effects)
+  - [副作用（Side Effects）](#side-effects)
     - [广泛使用](#widely-used)
     - [Promises](#promises)
   - [Middleware](#middleware)
@@ -53,7 +53,7 @@ Redux 是一个很小的库，但是它的设计和 API 都是经过精心选择
   - [高阶抽象](#higher-level-abstractions)
   - [社区约定模式](#community-conventions)
 
-## 框架集成库与绑定库
+## 与其他框架绑定
 
 **[reduxjs/react-redux](https://github.com/reduxjs/react-redux)** <br />
 The official React bindings for Redux, maintained by the Redux team
