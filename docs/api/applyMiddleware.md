@@ -1,8 +1,10 @@
 ---
 id: applymiddleware
 title: applyMiddleware
-hide_title: false
+hide_title: true
 ---
+
+# applyMiddleware
 
 # `applyMiddleware(...middleware)`
 

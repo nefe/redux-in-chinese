@@ -1,9 +1,9 @@
 ---
 id: compose
 title: compose
-hide_title: false
+hide_title: true
 ---
-
+# compose
 # `compose(...functions)`
 
 Composes functions from right to left.

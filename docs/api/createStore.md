@@ -1,9 +1,9 @@
 ---
 id: createstore
 title: createStore
-hide_title: false
+hide_title: true
 ---
-
+# createStore
 # `createStore(reducer, [preloadedState], [enhancer])`
 
 Creates a Redux [store](Store.md) that holds the complete state tree of your app.

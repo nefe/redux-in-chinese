@@ -1,9 +1,9 @@
 ---
 id: combinereducers
 title: combineReducers
-hide_title: false
+hide_title: true
 ---
-
+# combineReducers
 # `combineReducers(reducers)`
 
 As your app grows more complex, you'll want to split your [reducing function](../understanding/thinking-in-redux/Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../understanding/thinking-in-redux/Glossary.md#state).
