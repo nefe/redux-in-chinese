@@ -7,15 +7,15 @@ hide_title: false
 description: 'Overview of the Redux tutorial pages'
 ---
 
-# Redux Tutorials Index
+# 教程目录
 
-We have two different sets of tutorials:
+教程分两部分：
 
-- The [**Redux Essentials tutorial**](./essentials/part-1-overview-concepts) is a "top-down" tutorial that teaches "how to use Redux the right way", using our latest recommended APIs and best practices.
-- The [**Redux Fundamentals tutorial**](./fundamentals/part-1-overview.md) is a "bottom-up" tutorial that teaches "how Redux works" from first principles and without any abstractions, and why standard Redux usage patterns exist.
+- [**Redux 基础教程**](./essentials/part-1-overview-concepts) 是一个“自上而下”的教程，使用推荐的最新 API 和最佳实践来教“如何以正确的方式使用 Redux”。建议从那里开始。
+- [**Redux 进阶教程**](./fundamentals/part-1-overview.md) 是一个“自下而上”的教程，该教程从最初的原理开始，没有任何抽象地讲授“Redux 工作原理”，以及 Redux 标准规范存在背后的原因。
 
 :::tip
 
-**We recommend starting with the [Redux Essentials tutorial](./essentials/part-1-overview-concepts)**, since it covers the key points you need to know about how to get started using Redux to write actual applications.
+**建议从 [Redux 基础教程](./essentials/part-1-overview-concepts)** 开始，因为它包含了入门 Redux 开发实际应用所需要的关键内容。
 
 :::
