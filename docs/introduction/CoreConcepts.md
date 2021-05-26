@@ -1,13 +1,13 @@
 ---
 id: core-concepts
-title: Core Concepts
-description: "Introduction > Core Concepts: A quick overview of Redux's key idea, reducer functions"
+title: 核心概念
+description: "简介 > 核心概念：带你快速了解 Redux 关键思想与 reducer 函数"
 hide_title: false
 ---
 
-# Core Concepts
+# 核心概念
 
-Imagine your app’s state is described as a plain object. For example, the state of a todo app might look like this:
+当使用普通对象来描述应用的 state 时。例如，todo 应用的 state 可能长这样：
 
 ```js
 {
@@ -22,9 +22,9 @@ Imagine your app’s state is described as a plain object. For example, the stat
 }
 ```
 
-This object is like a “model” except that there are no setters. This is so that different parts of the code can’t change the state arbitrarily, causing hard-to-reproduce bugs.
+这个对象就像 “Model”，区别是它并没有 setter（修改器方法）。因此其它的代码不能随意修改它，造成难以复现的 bug。
 
-To change something in the state, you need to dispatch an action. An action is a plain JavaScript object (notice how we don’t introduce any magic?) that describes what happened. Here are a few example actions:
+要想更新 state 中的数据，你需要发起一个 action。action 就是一个普通 JavaScript 对象（注意到没，这儿没有任何魔法？）用来描述发生了什么。下面是一些 action 的示例：
 
 ```js
 { type: 'ADD_TODO', text: 'Go to swimming pool' }
@@ -32,9 +32,9 @@ To change something in the state, you need to dispatch an action. An action is a
 { type: 'SET_VISIBILITY_FILTER', filter: 'SHOW_ALL' }
 ```
 
-Enforcing that every change is described as an action lets us have a clear understanding of what’s going on in the app. If something changed, we know why it changed. Actions are like breadcrumbs of what has happened.
-Finally, to tie state and actions together, we write a function called a reducer. Again, nothing magical about it—it’s just a function that takes state and action as arguments, and returns the next state of the app.
-It would be hard to write such a function for a big app, so we write smaller functions managing parts of the state:
+强制使用 action 来描述所有变化带来的好处是可以清晰地知道应用中到底发生了什么。如果一些东西改变了，就可以知道为什么变。action 就像是描述发生了什么的指示器。
+最终，为了把 action 和 state 串起来，开发一些函数，这就是 reducer。再次地，没有任何魔法，reducer 只是一个接收 state 和 action，并返回新的 state 的函数。
+对于大的应用来说，不大可能仅仅只写一个这样的函数，所以我们编写很多小函数来分别管理 state 的一部分：
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
@@ -61,7 +61,7 @@ function todos(state = [], action) {
 }
 ```
 
-And we write another reducer that manages the complete state of our app by calling those two reducers for the corresponding state keys:
+再开发一个 reducer 调用这两个 reducer，进而来管理整个应用的 state：
 
 ```js
 function todoApp(state = {}, action) {
@@ -72,4 +72,4 @@ function todoApp(state = {}, action) {
 }
 ```
 
-This is basically the whole idea of Redux. Note that we haven’t used any Redux APIs. It comes with a few utilities to facilitate this pattern, but the main idea is that you describe how your state is updated over time in response to action objects, and 90% of the code you write is just plain JavaScript, with no use of Redux itself, its APIs, or any magic.
+这差不多就是 Redux 思想的全部。注意到没我们还没有使用任何 Redux 的 API。Redux 里有一些工具来简化这种模式，但是主要的想法是如何根据这些 action 对象来更新 state，而且 90% 的代码都是纯 JavaScript，没用 Redux、Redux API 和其它魔法。
