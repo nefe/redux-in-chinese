@@ -1,17 +1,17 @@
 ---
 id: examples
-title: Examples
-description: 'Introduction > Examples: Redux interactive example apps'
+title: 示例
+description: '简介 > 示例: 可交互的 Redux 示例应用'
 hide_title: false
 ---
 
-# Examples
+# 示例
 
-Redux is distributed with a few examples in its [source code](https://github.com/reduxjs/redux/tree/master/examples). Most of these examples are also on [CodeSandbox](https://codesandbox.io), an online editor that lets you play with the examples online.
+Redux [源码](https://github.com/reactjs/redux/tree/master/examples) 中同时包含了一些示例。这些示例中的大多数也在[CodeSandbox](https://codesandbox.io)上，它是一个在线编辑器，可让你在线测试示例。
 
-## Counter Vanilla
+## 原生版 Counter
 
-Run the [Counter Vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) example:
+运行 [Counter Vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -20,15 +20,15 @@ cd redux/examples/counter-vanilla
 open index.html
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter-vanilla):
+也可以打开 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter-vanilla):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/counter-vanilla/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-It does not require a build system or a view framework and exists to show the raw Redux API used with ES5.
+该示例不需打包系统或视图层框架，演示了基于 ES5 的原生 Redux API 用法。
 
 ## Counter
 
-Run the [Counter](https://github.com/reduxjs/redux/tree/master/examples/counter) example:
+运行 [Counter](https://github.com/reactjs/redux/tree/master/examples/counter) 示例：
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -38,17 +38,17 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/counter):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/counter/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is the most basic example of using Redux together with React. For simplicity, it re-renders the React component manually when the store changes. In real projects, you will likely want to use the highly performant [React Redux](https://github.com/reduxjs/react-redux) bindings instead.
+这是 Redux 结合 React 使用的最基本示例。出于简化，当 store 发生变化，React 组件会手动重新渲染。在实际的项目中，推荐使用 React 和更高效的 [React Redux](https://github.com/reactjs/react-redux)绑定。
 
-This example includes tests.
+该示例包含测试代码。
 
 ## Todos
 
-Run the [Todos](https://github.com/reduxjs/redux/tree/master/examples/todos) example:
+运行 [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) 示例：
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -58,17 +58,17 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is the best example to get a deeper understanding of how the state updates work together with components in Redux. It shows how reducers can delegate handling actions to other reducers, and how you can use [React Redux](https://github.com/reduxjs/react-redux) to generate container components from your presentational components.
+这个例子可以帮助你深入理解在 Redux 中 state 的更新与组件是如何共同运作的。展示了 reducer 如何委派 action 给其它 reducer，也展示了如何使用 [React Redux](https://github.com/reactjs/react-redux) 从展示组件中生成容器组件。
 
-This example includes tests.
+该示例包含测试代码。
 
-## Todos with Undo
+## 支持撤销的 Todos
 
-Run the [Todos with Undo](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) example:
+运行 [Todos with Undo](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -78,13 +78,13 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-with-undo):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-with-undo):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-with-undo/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
+此示例是前一个示例的变体。它与上一个示例基本相同但额外展示了如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 打包 reducer，仅增加几行代码实现撤销/重做功能。
 
-## Todos w/ Flow
+## Flow 版本的 Todos
 
 Run the [Todos w/ Flow](https://github.com/reduxjs/redux/tree/master/examples/todos-flow) example:
 
@@ -96,15 +96,15 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-flow):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-flow):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-flow/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is like the previous Todos examples, but shows how to use Redux in conjunction with [Flow](https://flow.org/).
+和上一个示例类似，区别是使用了 Redux 与 [Flow](https://flow.org/).
 
 ## TodoMVC
 
-Run the [TodoMVC](https://github.com/reduxjs/redux/tree/master/examples/todomvc) example:
+运行 [TodoMVC](https://github.com/reduxjs/redux/tree/master/examples/todomvc) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -114,17 +114,17 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todomvc/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
+经典的 [TodoMVC](http://todomvc.com/) 示例。与 Todos 示例的目的相同，可以通过这个示例比较和其他框架的异同。
 
-This example includes tests.
+示例中包含了测试代码。
 
-## Shopping Cart
+## 购物车
 
-Run the [Shopping Cart](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) example:
+运行 [Shopping Cart](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -134,15 +134,15 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/shopping-cart/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This example shows important idiomatic Redux patterns that become important as your app grows. In particular, it shows how to store entities in a normalized way by their IDs, how to compose reducers on several levels, and how to define selectors alongside the reducers so the knowledge about the state shape is encapsulated. It also demonstrates logging with [Redux Logger](https://github.com/fcomb/redux-logger) and conditional dispatching of actions with [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware.
+该示例展示了随着应用升级变得愈发重要的常用的 Redux 模式。尤其展示了，如何使用 ID 来标准化存储数据实体，如何在不同层级将多个 reducer 组合使用，如何利用 reducer 定义选择器以封装 state 的相关内容。该示例也展示了使用 [Redux Logger](https://github.com/fcomb/redux-logger) 生成日志，以及使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件进行 action 的条件性分发。
 
-## Tree View
+## 树状视图
 
-Run the [Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view) example:
+运行 [Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -152,17 +152,17 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/tree-view):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/tree-view):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/tree-view/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
+该示例展示了深层嵌套树状视图的渲染，以及为了方便 reducer 更新，state 的标准化写法。优良的渲染表现，来自于容器组件细粒度的、仅针对需要渲染的 tree node 的绑定。
 
-This example includes tests.
+该示例包含测试代码。
 
-## Async
+## 异步
 
-Run the [Async](https://github.com/reduxjs/redux/tree/master/examples/async) example:
+运行 [Async](https://github.com/reactjs/redux/tree/master/examples/async) 示例：
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -172,15 +172,15 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async):
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/async/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/gaearon/redux-thunk) middleware to encapsulate asynchronous side effects.
+该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存过期失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步带来的附带作用。
 
-## Universal
+## 同构
 
-Run the [Universal](https://github.com/reduxjs/redux/tree/master/examples/universal) example:
+运行 [Universal](https://github.com/reactjs/redux/tree/master/examples/universal) 示例:
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -190,11 +190,11 @@ npm install
 npm start
 ```
 
-This is a basic demonstration of [server rendering](../recipes/ServerRendering.md) with Redux and React. It shows how to prepare the initial store state on the server, and pass it down to the client so the client store can boot up from an existing state.
+这是使用 Redux 和 React 的[服务端渲染](../recipes/ServerRendering.md) 的基本演示。 它演示了如何在服务器上准备初始 store state，并将其传递给客户端，以便客户端 store 可以从现有 state 启动。
 
-## Real World
+## 真实场景
 
-Run the [Real World](https://github.com/reduxjs/redux/tree/master/examples/real-world) example:
+运行 [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world) 示例：
 
 ```sh
 git clone https://github.com/reduxjs/redux.git
@@ -204,13 +204,13 @@ npm install
 npm start
 ```
 
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/real-world):
+或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/real-world):
 
 <iframe class="codesandbox" src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/real-world/?runonclick=1" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-This is the most advanced example. It is dense by design. It covers keeping fetched entities in a normalized cache, implementing a custom middleware for API calls, rendering partially loaded data, pagination, caching responses, displaying error messages, and routing. Additionally, it includes Redux DevTools.
+最为复杂的示例。浓缩化的设计，包含了持续性地从标准化缓存中批量获取数据实例，针对 API 调用的自定义中间件的实现，逐步渲染已加载的数据、分页器、缓存响应，展示错误信息，以及路由。同时，包含了调试工具 Redux DevTools 。
 
-## More Examples
+## 更多示例
 
-You can find more examples in the [Redux Apps and Examples](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)
-page of the [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links).
+这里可以找到更多案例 [Redux Apps and Examples](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)
+来自于 [Redux 扩展目录](https://github.com/markerikson/redux-ecosystem-links).
