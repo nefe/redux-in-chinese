@@ -10,7 +10,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 3: State, Actions, and Reducers
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to define state values that contain your app's data
 - How to define action objects that describe what happens in your app
@@ -24,7 +24,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects and using reducer functions that return new state values.
 
@@ -692,7 +692,7 @@ values are the slice reducer functions that know how to update those slices of t
 
 **Remember, the key names you give to `combineReducers` decides what the key names of your state object will be!**
 
-## What You've Learned
+## 你学到了
 
 **State, Actions, and Reducers are the building blocks of Redux**. Every Redux app has state values, creates actions to describe what happened, and uses reducer functions to calculate new state values based on the previous state and an action.
 
@@ -706,7 +706,7 @@ Here's the contents of our app so far:
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
-:::tip Summary
+:::tip 总结
 
 - **Redux apps use plain JS objects, arrays, and primitives as the state values**
   - The root state value should be a plain JS object
@@ -731,7 +731,7 @@ Here's the contents of our app so far:
 
 :::
 
-## What's Next?
+## 下一步
 
 We now have some reducer logic that will update our state, but those reducers won't do anything by themselves. They need
 to be put inside a Redux store, which can call the reducer code with actions when something has happened.

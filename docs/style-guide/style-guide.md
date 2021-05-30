@@ -12,7 +12,7 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 # Redux Style Guide
 
-## Introduction
+## 简介
 
 This is the official style guide for writing Redux code. **It lists our recommended patterns, best practices, and suggested approaches for writing Redux applications.**
 

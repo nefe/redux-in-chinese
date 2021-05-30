@@ -10,14 +10,14 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 1: Redux Overview
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - What Redux is and why you might want to use it
 - The basic pieces that make up a Redux app
 
 :::
 
-## Introduction
+## 简介
 
 Welcome to the Redux Fundamentals tutorial! **This tutorial will introduce you to the core concepts, principles, and patterns for using Redux**. By the time you finish, you should understand the different pieces that make up a Redux app, how data flows when using Redux, and our standard recommended patterns for building Redux apps.
 
@@ -312,14 +312,14 @@ We can summarize the flow of data through a Redux app with this diagram. It repr
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
-## What You've Learned
+## 你学到了
 
 That counter example was small, but it does show all the working pieces of a real Redux app.
 **Everything we'll talk about in the following sections expands on those basic pieces.**
 
 With that in mind, let's review what we've learned so far:
 
-:::tip Summary
+:::tip 总结
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together
@@ -331,7 +331,7 @@ With that in mind, let's review what we've learned so far:
 
 :::
 
-## What's Next?
+## 下一步
 
 Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md),
 where we'll look at how data flows through a Redux app in more detail.

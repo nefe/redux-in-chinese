@@ -10,7 +10,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 7: Standard Redux Patterns
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - Standard patterns used in real-world Redux apps, and why those patterns exist:
   - Action creators for encapsulating action objects
@@ -949,7 +949,7 @@ Now, if we add a todo, we'll see a spinner in the header:
 
 ![Todo app - component loading spinner](/img/tutorials/fundamentals/todos-app-headerLoading.png)
 
-## What You've Learned
+## 你学到了
 
 As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns are not required, and may involve writing more code initially, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
 
@@ -972,7 +972,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip Summary
+:::tip 总结
 
 - **Action creator functions encapsulate preparing action objects and thunks**
   - Action creators can accept arguments and contain setup logic, and return the final action object or thunk function
@@ -990,7 +990,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 :::
 
-## What's Next?
+## 下一步
 
 Writing all this code "by hand" can be time-consuming and difficult. **That's why we recommend that you use our official [Redux Toolkit](https://redux-toolkit.js.org) package to write your Redux logic instead**.
 

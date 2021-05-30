@@ -1,16 +1,16 @@
 ---
 id: part-4-using-data
-title: 'Redux Essentials, Part 4: Using Redux Data'
-sidebar_label: 'Using Redux Data'
+title: 'Redux 基础，第四节：使用数据'
+sidebar_label: '使用数据'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 4: Using Redux Data
+# 第四节：使用数据
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - Using Redux data in multiple React components
 - Organizing logic that dispatches actions
@@ -25,7 +25,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
 
@@ -803,7 +803,7 @@ export const ReactionButtons = ({ post }) => {
 
 Now, every time we click a reaction button, the counter should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`.
 
-## What You've Learned
+## 你学到了
 
 Here's what our app looks like after all these changes:
 
@@ -819,7 +819,7 @@ It's actually starting to look more useful and interesting!
 
 We've covered a lot of information and concepts in this section. Let's recap the important things to remember:
 
-:::tip Summary
+:::tip 总结
 
 - **Any React component can use data from the Redux store as needed**
   - Any component can read any data that is in the Redux store
@@ -836,6 +836,6 @@ We've covered a lot of information and concepts in this section. Let's recap the
 
 :::
 
-## What's Next?
+## 下一步
 
 By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we'll see how to work with data that comes from a server API.

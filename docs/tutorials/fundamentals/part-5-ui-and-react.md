@@ -10,14 +10,14 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 5: UI and React
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How a Redux store works with a UI
 - How to use Redux with React
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 4: Store](./part-4-store.md), we saw how to create a Redux store, dispatch actions, and read the current state. We also looked at how a store works inside, how enhancers and middleware let us customize the store with additional abilities, and how to add the Redux DevTools to let us see what's happening inside our app as actions are dispatched.
 
@@ -528,7 +528,7 @@ Now, if we toggle a todo item, the list of IDs will be considered the same, and 
 
 As mentioned earlier, you can also use a specialized kind of selector function called [a "memoized selector"](part-7-standard-patterns.md) to help improve component rendering, and we'll look at how to use those in another section.
 
-## What You've Learned
+## 你学到了
 
 We now have a working todo app! Our app creates a store, passes the store to the React UI layer using `<Provider>`, and then calls `useSelector` and `useDispatch` to talk to the store in our React components.
 
@@ -553,7 +553,7 @@ Let's see how the app looks now, including the components and sections we skippe
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip Summary
+:::tip 总结
 
 - **Redux stores can be used with any UI layer**
   - UI code always subscribes to the store, gets the latest state, and redraws itself
@@ -572,6 +572,6 @@ Let's see how the app looks now, including the components and sections we skippe
 
 :::
 
-## What's Next?
+## 下一步
 
 Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and AJAX calls fit into the Redux data flow.

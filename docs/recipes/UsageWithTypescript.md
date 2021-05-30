@@ -6,7 +6,7 @@ hide_title: false
 
 # Usage with TypeScript
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - Standard patterns for setting up a Redux app with TypeScript
 - Techniques for correctly typing portions of Redux logic

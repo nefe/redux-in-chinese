@@ -10,7 +10,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to simplify your Redux logic using Redux Toolkit
 - Next steps for learning and using Redux
@@ -795,7 +795,7 @@ We call `todosAdapter.getSelectors`, and pass in a `state => state.todos` select
 
 Notice that our other selectors still use `selectTodos` as an input. That's because it's still returning an array of todo objects this whole time, no matter whether we were keeping the array as the entire `state.todos`, keeping it as a nested array, or storing it as a normalized object and converting to an array. Even as we've made all these changes to how we stored our data, the use of selectors allowed us to keep the rest of our code the same, and the use of memoized selectors has helped the UI perform better by avoiding unnecessary rerenders.
 
-## What You've Learned
+## 你学到了
 
 **Congratulations! You've completed the "Redux Fundamentals" tutorial!**
 
@@ -830,7 +830,7 @@ Let's take one final look at the completed todo application, including all the c
 
 And we'll do a final recap of the key points you learned in this section:
 
-:::tip Summary
+:::tip 总结
 
 - **Redux Toolkit (RTK) is the standard way to write Redux logic**
   - RTK includes APIs that simplify most Redux code

@@ -10,7 +10,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 4: Store
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to create a Redux store
 - How to use the store to update state and listen for updates
@@ -19,7 +19,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers.md), we started writing our example todo app. We
 listed business requirements, defined the **state** structure we need to make the app work, and created a series of action types
@@ -590,7 +590,7 @@ Here's what the "State" and "Diff" tabs look like after we dispatched that "add 
 
 These are very powerful tools that can help us debug our apps and understand exactly what's happening inside.
 
-## What You've Learned
+## 你学到了
 
 As you've seen, the store is the central piece of every Redux application. Stores contain state and handle actions by running reducers, and can be customized to add additional behaviors.
 
@@ -606,7 +606,7 @@ Let's see how our example app looks now:
 
 And as a reminder, here's what we covered in this section:
 
-:::tip Summary
+:::tip 总结
 
 - **Redux apps always have a single store**
   - Stores are created with the Redux `createStore` API
@@ -631,7 +631,7 @@ And as a reminder, here's what we covered in this section:
 
 :::
 
-## What's Next?
+## 下一步
 
 We now have a working Redux store that can run our reducers and update the state when we dispatch actions.
 

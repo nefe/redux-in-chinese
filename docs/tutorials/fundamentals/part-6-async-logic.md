@@ -8,7 +8,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use async l
 
 # Redux Fundamentals, Part 6: Async Logic and Data Fetching
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How the Redux data flow works with async data
 - How to use Redux middleware for async logic
@@ -23,7 +23,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use async l
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 5: UI and React](./part-5-ui-and-react.md), we saw how to use the React-Redux library to let our React components interact with a Redux store, including calling `useSelector` to read Redux state, calling `useDispatch` to give us access to the `dispatch` function, and wrapping our app in a `<Provider>` component to give those hooks access to the store.
 
@@ -429,7 +429,7 @@ Thunk functions can be used for both asynchronous _and_ synchronous logic. Thunk
 
 :::
 
-## What You've Learned
+## 你学到了
 
 We've now succesfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
 
@@ -445,7 +445,7 @@ Here's what the current app looks like:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip Summary
+:::tip 总结
 
 - **Redux middleware were designed to enable writing logic that has side effects**
   - "Side effects" are code that changes state/behavior outside a function, like AJAX calls, modifying function arguments, or generating random values
@@ -458,7 +458,7 @@ Here's what the current app looks like:
 
 :::
 
-## What's Next?
+## 下一步
 
 We've now covered all the core pieces of how to use Redux! You've seen how to:
 

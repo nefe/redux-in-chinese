@@ -1,16 +1,16 @@
 ---
 id: part-3-data-flow
-title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
-sidebar_label: 'Basic Redux Data Flow'
+title: 'Redux 基础，第三节：数据流基础'
+sidebar_label: '数据流基础'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 3: Basic Redux Data Flow
+# 第三节：数据流基础
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to add "slices" of reducer logic to the Redux store with `createSlice`
 - Reading Redux data in components with the `useSelector` hook
@@ -24,7 +24,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. In [Part 2: Redux App Structure](./part-2-app-structure.md), we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
 
@@ -424,11 +424,11 @@ The "Diff" tab should also show us that `state.posts` had one new item added, wh
 
 Notice that our `AddPostForm` component has some React `useState` hooks inside, to keep track of the title and content values the user is typing in. Remember, **the Redux store should only contain data that's considered "global" for the application!** In this case, only the `AddPostForm` will need to know about the latest values for the input fields, so we want to keep that data in React component state instead of trying to keep the temporary data in the Redux store. When the user is done with the form, we dispatch a Redux action to update the store with the final values based on the user input.
 
-## What You've Learned
+## 你学到了
 
 Let's recap what you've learned in this section:
 
-:::tip Summary
+:::tip 总结
 
 - **Redux state is updated by "reducer functions"**:
   - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
@@ -455,6 +455,6 @@ Here's what the app looks like so far:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-## What's Next?
+## 下一步
 
 Now that you know the basic Redux data flow, move on to [Part 4: Using Redux Data](./part-4-using-data.md), where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.

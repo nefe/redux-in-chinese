@@ -1,16 +1,16 @@
 ---
 id: part-6-performance-normalization
-title: 'Redux Essentials, Part 6: Performance and Normalizing Data'
-sidebar_label: 'Performance and Normalizing Data'
+title: 'Redux 基础，第六节：性能与数据范式化'
+sidebar_label: '性能与数据范式化'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 6: Performance and Normalizing Data
+# 第六节：性能与数据范式化
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to create memoized selector functions with `createSelector`
 - Patterns for optimizing component rendering performance
@@ -24,7 +24,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how to write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
@@ -961,7 +961,7 @@ Ironically, we do have a couple places in here where we need to loop over all no
 
 And with that... we're done!
 
-## What You've Learned
+## 你学到了
 
 Congratulations, you've completed the Redux Essentials tutorial! Let's see what the final app looks like in action:
 
@@ -975,7 +975,7 @@ Congratulations, you've completed the Redux Essentials tutorial! Let's see what 
 
 Here's what we covered in this section:
 
-:::tip Summary
+:::tip 总结
 
 - **Memoized selector functions can be used to optimize performance**
   - Redux Toolkit re-exports the `createSelector` function from Reselect, which generates memoized selectors
@@ -999,7 +999,7 @@ Here's what we covered in this section:
 
 :::
 
-## What's Next?
+## 下一步
 
 The concepts we've covered in this tutorial should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
 

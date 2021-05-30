@@ -10,14 +10,14 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux Fundamentals, Part 2: Concepts and Data Flow
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - Key terms and concepts for using Redux
 - How data flows through a Redux app
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 1: Redux Overview](./part-1-overview.md), we talked about what Redux is, why you might want to use it, and listed the other Redux libraries that are typically used with the Redux core. We also saw a small example of what a working Redux app looks like and the pieces that make up the app. Finally, we briefly mentioned some of the terms and concepts used with Redux.
 
@@ -355,9 +355,9 @@ Here's what that data flow looks like visually:
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
-## What You've Learned
+## 你学到了
 
-:::tip Summary
+:::tip 总结
 
 - **Redux's intent can be summarized in three principles**
   - Global app state is kept in a single store
@@ -373,7 +373,7 @@ Here's what that data flow looks like visually:
 
 :::
 
-## What's Next?
+## 下一步
 
 You should now be familiar with the key concepts and terms that describe the different parts of a Redux app.
 

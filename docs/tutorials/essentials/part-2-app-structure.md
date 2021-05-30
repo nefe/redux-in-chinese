@@ -1,23 +1,23 @@
 ---
 id: part-2-app-structure
-title: 'Redux Essentials, Part 2: Redux App Structure'
-sidebar_label: 'Redux App Structure'
+title: 'Redux 基础，第二节：应用的骨架'
+sidebar_label: '应用骨架'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 2: Redux App Structure
+# 第二节：应用的骨架
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - The structure of a typical React + Redux app
 - How to view state changes in the Redux DevTools Extension
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at why Redux is useful, the terms and concepts used to describe different parts of Redux code, and how data flows through a Redux app.
 
@@ -727,11 +727,11 @@ We already created our store in `app/store.js`, so we can import it here. Then, 
 
 Now, any React components that call `useSelector` or `useDispatch` will be talking to the Redux store we gave to the `<Provider>`.
 
-## What You've Learned
+## 你学到了
 
 Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
 
-:::tip Summary
+:::tip 总结
 
 - **We can create a Redux store using the Redux Toolkit `configureStore` API**
   - `configureStore` accepts a `reducer` function as a named argument
@@ -753,7 +753,7 @@ Even though the counter example app is pretty small, it showed all the key piece
 
 :::
 
-## What's Next?
+## 下一步
 
 Now that you've seen all the pieces of a Redux app in action, it's time to write your own! For the rest of this tutorial, you'll be building a larger example app that uses Redux. Along the way, we'll cover all the key ideas you need to know to use Redux the right way.
 

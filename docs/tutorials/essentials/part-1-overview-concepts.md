@@ -1,28 +1,28 @@
 ---
 id: part-1-overview-concepts
-title: 'Redux Essentials, Part 1: Redux Overview and Concepts'
-sidebar_label: 'Redux Overview and Concepts'
+title: 'Redux 基础，第一节：Redux 概述和概念'
+sidebar_label: '基础概念'
 hide_title: false
 description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 1: Redux Overview and Concepts
+# 第一节：Redux 概述和概念
 
-:::tip What You'll Learn
+:::tip 你将会学到
 
-- What Redux is and why you might want to use it
-- Key Redux terms and concepts
-- How data flows through a Redux app
+- Redux 是什么，为什么需要使用它
+- Redux 的关键术语和概念
+- Redux 如何处理数据流
 
 :::
 
-## Introduction
+## 介绍
 
-Welcome to the Redux Essentials tutorial! **This tutorial will introduce you to Redux and teach you how to use it the right way, using our latest recommended tools and best practices**. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
+欢迎来到 Redux 基础教程! **本教程将向您介绍 Redux 并教您如何使用我们最新推荐的工具和最佳实践以正确的方式使用它**. 当您完成时，您应该能够使用您在此处学到的工具和模式开始构建您自己的 Redux 应用程序。
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+在教程的第一节, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
 
 Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
@@ -437,11 +437,11 @@ Here's what that data flow looks like visually:
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
-## What You've Learned
+## 你学到了
 
 Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
 
-:::tip Summary
+:::tip 总结
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together
@@ -460,6 +460,6 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
 
 :::
 
-## What's Next?
+## 下一步
 
 We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.

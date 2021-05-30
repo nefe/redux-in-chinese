@@ -1,16 +1,16 @@
 ---
 id: part-5-async-logic
-title: 'Redux Essentials, Part 5: Async Logic and Data Fetching'
-sidebar_label: 'Async Logic and Data Fetching'
+title: 'Redux 基础，第五节：异步逻辑与数据请求'
+sidebar_label: '异步逻辑与数据请求'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how async logic works in Redux apps'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 5: Async Logic and Data Fetching
+# 第五节：异步逻辑与数据请求
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - How to use the Redux "thunk" middleware for async logic
 - Patterns for handling async request state
@@ -24,7 +24,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## Introduction
+## 简介
 
 In [Part 4: Using Redux Data](./part-4-using-data.md), we saw how to use multiple pieces of data from the Redux store inside of React components, customize the contents of action objects before they're dispatched, and handle more complex update logic in our reducers.
 
@@ -768,7 +768,7 @@ When we call `dispatch(addNewPost())`, the async thunk returns a `Promise` from 
 
 If you want to see what happens when the `addNewPost` API call fails, try creating a new post where the "Content" field only has the word "error" (without quotes). The server will see that and send back a failed response, so you should see a message logged to the console.
 
-## What You've Learned
+## 你学到了
 
 Async logic and data fetching are always a complex topic. As you've seen, Redux Toolkit includes some tools to automate the typical Redux data fetching patterns.
 
@@ -784,7 +784,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 As a reminder, here's what we covered in this section:
 
-:::tip Summary
+:::tip 总结
 
 - **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
   - Selectors are functions that get the Redux `state` as an argument, and return some data
@@ -802,6 +802,6 @@ As a reminder, here's what we covered in this section:
 
 :::
 
-## What's Next?
+## 下一步
 
 We've got one more set of topics to cover for this tutorial. In [Part 6: Performance and Normalizing Data](./part-6-performance-normalization.md), we'll look at how Redux usage affects React performance, and some ways we can optimize our application for improved performance.
