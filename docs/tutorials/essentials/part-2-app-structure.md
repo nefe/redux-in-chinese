@@ -1,27 +1,27 @@
 ---
 id: part-2-app-structure
-title: 'Redux 基础，第二节：应用的骨架'
-sidebar_label: '应用骨架'
+title: 'Redux 基础，第二节：应用的结构'
+sidebar_label: '应用结构'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn the structure of a typical React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# 第二节：应用的骨架
+# 第二节：应用的结构
 
 :::tip 你将学到
 
-- The structure of a typical React + Redux app
-- How to view state changes in the Redux DevTools Extension
+- 一个典型的 React + Redux 应用程序的结构
+- 如何在 Redux DevTools Extension 中查看状态变化
 
 :::
 
 ## 简介
 
-In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at why Redux is useful, the terms and concepts used to describe different parts of Redux code, and how data flows through a Redux app.
+在 [第一节：Redux 概述和概念](./part-1-overview-concepts.md) 中，我们研究了 Redux 为何有用、用于描述 Redux 代码不同部分的术语和概念，以及数据如何在 Redux 应用程序中流动。
 
-Now, let's look at a real working example to see how these pieces fit together.
+现在，让我们看一个真实的工作示例，看看这些部分是如何组合在一起的。
 
 ## The Counter Example App
 
@@ -171,7 +171,7 @@ export default configureStore({
 
 In that example, `state.users`, `state.posts`, and `state.comments` are each a separate "slice" of the Redux state. Since `usersReducer` is responsible for updating the `state.users` slice, we refer to it as a "slice reducer" function.
 
-<DetailedExplanation title="Detailed Explanation: Reducers and State Structure">
+<DetailedExplanation title="细节说明：Reducers and State Structure">
 
 A Redux store needs to have a single "root reducer" function passed in when it's created. So if we have many different slice reducer functions, how do we get a single root reducer instead, and how does this define the contents of the Redux store state?
 
@@ -279,13 +279,13 @@ console.log(newState)
 // {value: 11}
 ```
 
-### Rules of Reducers
+### Reducer 的规则
 
-We said earlier that reducers must **always** follow some special rules:
+上一节讲过，Reducer 必需符合以下规则：
 
-- They should only calculate the new state value based on the `state` and `action` arguments
-- They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects"
+- 仅使用 `state` 和 `action` 参数计算新的状态值
+- 禁止直接修改 `state`。必须通过复制现有的 `state` 并对复制的值进行更改的方式来做 _不可变更新（immutable updates）_。
+- 禁止任何异步逻辑、依赖随机值或导致其他“副作用”的代码
 
 But why are these rules important? There's a few different reasons:
 
@@ -373,7 +373,7 @@ That's a lot easier to read!
 
 But, here's something _very_ important to remember:
 
-:::warning
+:::caution 警告
 
 **You can _only_ write "mutating" logic in Redux Toolkit's `createSlice` and `createReducer` because they use Immer inside! If you write mutating logic in reducers without Immer, it _will_ mutate the state and cause bugs!**
 
@@ -412,7 +412,7 @@ In both of those reducers, we don't actually need to have our code look at the `
 
 On the other hand, the `incrementByAmount` reducer _does_ need to know something: how much it should be adding to the counter value. So, we declare the reducer as having both `state` and `action` arguments. In this case, we know that the amount we typed into the textbox is being put into the `action.payload` field, so we can add that to `state.value`.
 
-:::info Want to Know More?
+:::info 想了解更多？
 
 For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
 
@@ -470,7 +470,7 @@ const fetchUserById = userId => {
 
 We'll see thunks being used in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md)
 
-<DetailedExplanation title="Detailed Explanation: Thunks and Async Logic">
+<DetailedExplanation title="细节说明：Thunks and Async Logic">
 
 We know that we're not allowed to put any kind of async logic in reducers. But, that logic has to live somewhere.
 
@@ -513,7 +513,7 @@ This gives us a way to write whatever sync or async code we want, while still ha
 
 There's one more function in this file, but we'll talk about that in a minute when we look at the `<Counter>` UI component.
 
-:::info Want to Know More?
+:::info 想了解更多？
 
 See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
 

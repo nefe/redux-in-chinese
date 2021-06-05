@@ -13,7 +13,7 @@ hide_title: false
 
 :::
 
-:::important Prerequisites
+:::important 必备能力
 
 - Understanding of [TypeScript syntax and terms](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 - Familiarity with TypeScript concepts like [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) and [utility types](https://www.typescriptlang.org/docs/handbook/utility-types.html)

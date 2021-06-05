@@ -18,10 +18,10 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info Prerequisites
+:::info 必备能力
 
-- Understanding the [Redux data flow and React-Redux APIs from Part 3](./part-3-data-flow.md)
-- Familiarity with [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
+- 理解 [Redux 基础，第三节：数据流基础](./part-3-data-flow.md)
+- 熟悉 [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
 
 :::
 
@@ -31,7 +31,7 @@ In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start f
 
 Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
 
-:::info
+:::info 说明
 
 As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
 
@@ -327,7 +327,7 @@ We just saw that the action creators from `createSlice` normally expect one argu
 
 Right now, we're generating the ID and creating the payload object in our React component, and passing the payload object into `postAdded`. But, what if we needed to dispatch the same action from different components, or the logic for preparing the payload is complicated? We'd have to duplicate that logic every time we wanted to dispatch the action, and we're forcing the component to know exactly what the payload for this action should look like.
 
-:::caution
+:::caution 注意
 
 If an action needs to contain a unique ID or some other random value, always generate that first and put it in the action object. **Reducers should never calculate random values**, because that makes the results unpredictable.
 
@@ -584,7 +584,7 @@ Social media feeds are typically sorted by when the post was created, and show u
 
 Like with the `post.user` field, we'll update our `postAdded` prepare callback to make sure that `post.date` is always included when the action is dispatched. However, it's not another parameter that will be passed in. We want to always use the exact timestamp from when the action is dispatched, so we'll let the prepare callback handle that itself.
 
-:::caution
+:::caution 注意
 
 **Redux actions and state should only contain plain JS values like objects, arrays, and primitives. Don't put class instances, functions, or other non-serializable values into Redux!**.
 
@@ -752,7 +752,7 @@ As we've seen already, `createSlice` lets us write "mutating" logic in our reduc
 
 Notice that **our action object just contains the minimum amount of information needed to describe what happened**. We know which post we need to update, and which reaction name was clicked on. We _could_ have calculated the new reaction counter value and put that in the action, but **it's always better to keep the action objects as small as possible, and do the state update calculations in the reducer**. This also means that **reducers can contain as much logic as necessary to calculate the new state**.
 
-:::info
+:::info 说明
 
 When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/return) for more details.
 

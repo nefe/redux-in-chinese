@@ -18,9 +18,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info Prerequisites
+:::info 必备能力
 
-- Familiarity with using AJAX requests to fetch and update data from a server
+- 熟悉使用 AJAX 请求从服务器获取和更新数据
 
 :::
 
@@ -42,7 +42,7 @@ We'll use the `client` object to make HTTP calls to our in-memory fake REST API 
 
 Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.js` and setting `useSeededRNG` to `false`.
 
-:::info
+:::info 说明
 
 As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
 
@@ -121,7 +121,7 @@ These steps are not _required_, but are commonly used. (If all you care about is
 
 Redux Toolkit provides a `createAsyncThunk` API to implement the creation and dispatching of these actions, and we'll look at how to use it shortly.
 
-<DetailedExplanation title="Detailed Explanation: Dispatching Request Status Actions in Thunks">
+<DetailedExplanation title="细节说明：Dispatching Request Status Actions in Thunks">
 
 If we were to write out the code for a typical async thunk by hand, it might look like this:
 
@@ -424,7 +424,7 @@ console.log(
 
 However, there are times when a slice reducer needs to respond to _other_ actions that weren't defined as part of this slice's `reducers` field. We can do that using the slice `extraReducers` field instead.
 
-<DetailedExplanation title="Detailed Explanation: Adding Extra Reducers to Slices">
+<DetailedExplanation title="细节说明：Adding Extra Reducers to Slices">
 
 The keys in the `extraReducers` object should be Redux action type strings, like `'counter/increment'`. We _could_ write those by hand ourselves, although we'd have to quote the keys if they contain any characters like '/':
 

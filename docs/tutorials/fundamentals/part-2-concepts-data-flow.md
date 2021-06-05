@@ -130,7 +130,7 @@ arr3.push('c')
 
 **Redux expects that all state updates are done immutably**. We'll look at where and how this is important a bit later, as well as some easier ways to write immutable update logic.
 
-:::info Want to Know More?
+:::info 想了解更多？
 
 For more info on how immutability works in JavaScript, see:
 

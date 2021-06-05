@@ -12,15 +12,15 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip 你将学到
 
-- How to create memoized selector functions with `createSelector`
-- Patterns for optimizing component rendering performance
-- How to use `createEntityAdapter` to store and update normalized data
+- 如何使用 `createSelector` 创建记忆化的 selector 函数
+- 优化组件渲染性能的模式
+- 如何使用 `createEntityAdapter` 来存储和更新范式化数据
 
 :::
 
-:::info Prerequisites
+:::info 必备能力
 
-- Completion of the previous sections of this tutorial
+- 完成本教程的前几节
 
 :::
 
@@ -196,7 +196,7 @@ The second argument to our payload creator is a `thunkAPI` object containing sev
 
 (If you're writing a thunk by hand instead of using `createAsyncThunk`, the thunk function will get`(dispatch, getState)` as separate arguments, instead of putting them together in one object.)
 
-:::info
+:::info 说明
 
 For more details on these arguments and how to handle canceling thunks and requests, see [the `createAsyncThunk` API reference page](https://redux-toolkit.js.org/api/createAsyncThunk).
 
@@ -675,7 +675,7 @@ const userId = 'user2'
 const userObject = state.users.entities[userId]
 ```
 
-:::info
+:::info 说明
 
 For more details on why normalizing state is useful, see [Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md) and the Redux Toolkit Usage Guide section on [Managing Normalized Data](https://redux-toolkit.js.org/usage/usage-guide#managing-normalized-data).
 
@@ -1011,4 +1011,4 @@ If you'd like to know more about _why_ Redux exists, what problems it tries to s
 
 If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
 
-**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**
+**感谢您阅读本教程，我们希望您喜欢使用 Redux 构建应用程序！**

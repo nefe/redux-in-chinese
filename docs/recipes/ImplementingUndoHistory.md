@@ -6,7 +6,7 @@ hide_title: false
 
 # Implementing Undo History
 
-:::important Prerequisites
+:::important 必备能力
 
 - Completion of the ["Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md)
 - Understanding of ["reducer composition"](../tutorials/fundamentals/part-3-state-actions-reducers.md#splitting-reducers)

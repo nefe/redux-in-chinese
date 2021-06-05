@@ -22,64 +22,64 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 欢迎来到 Redux 基础教程! **本教程将向您介绍 Redux 并教您如何使用我们最新推荐的工具和最佳实践以正确的方式使用它**. 当您完成时，您应该能够使用您在此处学到的工具和模式开始构建您自己的 Redux 应用程序。
 
-在教程的第一节, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+在教程的第一节，会包含使用 Redux 需要了解的关键术语和概念，然后在[第二节: Redux 应用骨架](./part-2-app-structure.md) 我们将尝试一个基本的 React + Redux 应用程序，以了解各个部分如何组合在一起。
 
-Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
+从 [第三节：Redux 数据流基础](./part-3-data-flow.md) 开始，我们将使用这些知识来构建一个具有一些实际功能的小型社交媒体供稿应用程序，了解这些内容在实践中的实际工作方式，并讨论使用Redux的一些重要模式和指南。
 
-### How to Read This Tutorial
+### 如何阅读本教程
 
-This page will focus on showing you _how_ to use Redux the right way, and explain just enough of the concepts so that you can understand how to build Redux apps correctly.
+本节将重点向您展示**如何**以正确的方式使用 Redux，并介绍恰到好处的概念，以便您了解如何正确构建 Redux 应用程序。
 
-We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already:
+我们试图让这些解释对初学者友好，但你还是需要：
 
-:::important Prerequisites
+:::important 必备能力
 
-- Familiarity with [HTML & CSS](https://internetingishard.com/).
-- Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
+- 熟悉 [HTML & CSS](https://internetingishard.com/).
+- 熟悉 [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
+- 了解 React 术语: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
+- 了解 [JavaScript Promise 异步处理](https://javascript.info/promise-basics) and [发送 AJAX 请求](https://javascript.info/fetch)
 
 :::
 
-**If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux**. We'll be here when you're ready!
+**如果您对这些主题还不熟悉，我们鼓励您先花一些时间熟悉它们，然后再回来学习 Redux**。当您准备好时，我们会在这里！
 
-You should make sure that you have the React and Redux DevTools extensions installed in your browser:
+您应该确保在浏览器中安装了 React 和 Redux DevTools 扩展：
 
-- React DevTools Extension:
+- React DevTools 扩展：
   - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
   - [React DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
 - Redux DevTools Extension:
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
   - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
-## What is Redux?
+## Redux 是什么？
 
-It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?
+它有助于首先理解这个“Redux”的东西是什么。它有什么作用？它帮助我解决什么问题？我为什么要使用它？
 
-**Redux is a pattern and library for managing and updating application state, using events called "actions".** It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
+**Redux 是一个使用叫做“action”的事件来管理和更新应用状态的模式和工具库** 它以集中式Store（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
 
-### Why Should I Use Redux?
+### 为什么要使用 Redux？
 
-Redux helps you manage "global" state - state that is needed across many parts of your application.
+Redux 帮你管理“全局”状态 - 哪些应用程序的许多部分都需要的状态。
 
-**The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur**. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
+**Redux 提供的模式和工具使您更容易理解应用程序中的状态何时、何地、为什么以及如何更新，以及当这些更改发生时您的应用程序逻辑将如何表现**. Redux 指导您编写可预测和可测试的代码，这有助于让您确信您的应用程序将按预期工作。
 
-### When Should I Use Redux?
+### 我什么时候应该使用 Redux？
 
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+Redux 可帮助您处理共享状态的管理，但与任何工具一样，它也有权衡。有更多的概念需要学习，还有更多的代码需要编写。它还为您的代码添加了一些额外代码，并要求您遵循某些限制。这是短期和长期生产力之间的权衡。
 
-Redux is more useful when:
+Redux 在以下情况下更有用：
 
-- You have large amounts of application state that are needed in many places in the app
-- The app state is updated frequently over time
-- The logic to update that state may be complex
-- The app has a medium or large-sized codebase, and might be worked on by many people
+- 在应用的大量地方，都存在大量的状态
+- 应用状态会随着时间的推移而频繁更新
+- 更新该状态的逻辑可能很复杂
+- 中型和大型代码量的应用，很多人协同开发
 
-**Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
+**并非所有应用程序都需要 Redux。 花一些时间思考您正在构建的应用程序类型，并决定哪些工具最能帮助解决您正在处理的问题。**
 
-:::info Want to Know More?
+:::info 想了解更多？
 
-If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
+如果您不确定 Redux 是否适合您的应用程序，这些资源提供了更多指导：
 
 - **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
 - **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
@@ -88,9 +88,9 @@ If you're not sure whether Redux is a good choice for your app, these resources 
 
 :::
 
-### Redux Libraries and Tools
+### Redux 库和工具
 
-Redux is a small standalone JS library. However, it is commonly used with several other packages:
+Redux 是一个小型的独立 JS 库。 但是，它通常与其他几个包一起使用：
 
 #### React-Redux
 
@@ -98,31 +98,31 @@ Redux can integrate with any UI framework, and is most frequently used with Reac
 
 #### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们推荐的编写 Redux 逻辑的方法。 它包含我们认为对于构建 Redux 应用程序必不可少的包和函数。 Redux Toolkit 构建在我们建议的最佳实践中，简化了大多数 Redux 任务，防止了常见错误，并使编写 Redux 应用程序变得更加容易。
 
-#### Redux DevTools Extension
+#### Redux DevTools 扩展
 
-The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) shows a history of the changes to the state in your Redux store over time. This allows you to debug your applications effectively, including using powerful techniques like "time-travel debugging".
+[**Redux DevTools 扩展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
 
-## Redux Terms and Concepts
+## Redux 术语和概念
 
-Before we dive into some actual code, let's talk about some of the terms and concepts you'll need to know to use Redux.
+在我们深入研究一些实际代码之前，让我们先谈谈使用 Redux 需要了解的一些术语和概念。
 
-### State Management
+### State 管理
 
-Let's start by looking at a small React counter component. It tracks a number in component state, and increments the number when a button is clicked:
+让我们从一个小的 React 计数器组件开始。 它跟踪组件状态中的数字，并在单击按钮时增加数字：
 
 ```jsx
 function Counter() {
   // State: a counter value
   const [counter, setCounter] = useState(0)
 
-  // Action: code that causes an update to the state when something happens
+  // Action: 当事件发生后，触发状态更新的代码
   const increment = () => {
     setCounter(prevCounter => prevCounter + 1)
   }
 
-  // View: the UI definition
+  // View: UI 定义
   return (
     <div>
       Value: {counter} <button onClick={increment}>Increment</button>
@@ -131,107 +131,107 @@ function Counter() {
 }
 ```
 
-It is a self-contained app with the following parts:
+这是一个包含以下部分的自包含应用程序：
 
-- The **state**, the source of truth that drives our app;
-- The **view**, a declarative description of the UI based on the current state
-- The **actions**, the events that occur in the app based on user input, and trigger updates in the state
+- **state**：驱动应用的真实数据源头
+- **view**：基于当前状态的 UI 声明性描述
+- **actions**：根据用户输入在应用程序中发生的事件，并触发状态更新
 
-This is a small example of **"one-way data flow"**:
+接下来简要介绍 **"单向数据流（one-way data flow）"**:
 
-- State describes the condition of the app at a specific point in time
-- The UI is rendered based on that state
-- When something happens (such as a user clicking a button), the state is updated based on what occurred
-- The UI re-renders based on the new state
+- 用 state 来描述应用程序在特定时间点的状况
+- 基于 state 来渲染出 View
+- 当发生某些事情时（例如用户单击按钮），state 会根据发生的事情进行更新，生成新的 state
+- 基于新的 state 重新渲染 View
 
-![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
+![单向数据流](/img/tutorials/essentials/one-way-data-flow.png)
 
-However, the simplicity can break down when we have **multiple components that need to share and use the same state**, especially if those components are located in different parts of the application. Sometimes this can be solved by ["lifting state up"](https://reactjs.org/docs/lifting-state-up.html) to parent components, but that doesn't always help.
+然而，当我们有**多个组件需要共享和使用相同state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
 
-One way to solve this is to extract the shared state from the components, and put it into a centralized location outside the component tree. With this, our component tree becomes a big "view", and any component can access the state or trigger actions, no matter where they are in the tree!
+解决这个问题的一种方法是从组件中提取共享 state，并将其放入组件树之外的一个集中位置。这样，我们的组件树就变成了一个大“view”，任何组件都可以访问 state 或触发 action，无论它们在树中的哪个位置！
 
-By defining and separating the concepts involved in state management and enforcing rules that maintain independence between views and states, we give our code more structure and maintainability.
+通过定义和分离 state 管理中涉及的概念并强制执行维护 view 和 state 之间独立性的规则，代码变得更结构化和易于维护。
 
-This is the basic idea behind Redux: a single centralized place to contain the global state in your application, and specific patterns to follow when updating that state to make the code predictable.
+这就是 Redux 背后的基本思想：应用中使用集中式的全局状态来管理，并明确更新状态的模式，以便让代码具有可预测性。
 
-### Immutability
+### 不可变性 Immutability
 
-"Mutable" means "changeable". If something is "immutable", it can never be changed.
+"Mutable" 意为 "可改变的"，而 "immutable 意为永不可改变。
 
-JavaScript objects and arrays are all mutable by default. If I create an object, I can change the contents of its fields. If I create an array, I can change the contents as well:
+JavaScript 的对象（object）和数组（array）默认都是 mutable 的。如果我创建一个对象，我可以更改其字段的内容。如果我创建一个数组，我也可以更改内容：
 
 ```js
 const obj = { a: 1, b: 2 }
-// still the same object outside, but the contents have changed
+// 对外仍然还是那个对象，但它的内容已经变了
 obj.b = 3
 
 const arr = ['a', 'b']
-// In the same way, we can change the contents of this array
+// 同样的，数组的内容改变了
 arr.push('c')
 arr[1] = 'd'
 ```
 
-This is called _mutating_ the object or array. It's the same object or array reference in memory, but now the contents inside the object have changed.
+这就是 _改变_ 对象或数组的例子。内存中还是原来对象或数组的引用，但里面的内容变化了。
 
-**In order to update values immutably, your code must make _copies_ of existing objects/arrays, and then modify the copies**.
+**如果想要不可变的方式来更新，代码必需先_复制_原来的 object/array，然后更新它的复制体**。
 
-We can do this by hand using JavaScript's array / object spread operators, as well as array methods that return new copies of the array instead of mutating the original array:
+JavaScript array/object 的展开运算符（spread operator）可以实现这个目的：
 
 ```js
 const obj = {
   a: {
-    // To safely update obj.a.c, we have to copy each piece
+    // 为了安全的更新 obj.a.c，需要先复制一份
     c: 3
   },
   b: 2
 }
 
 const obj2 = {
-  // copy obj
+  // obj 的备份
   ...obj,
-  // overwrite a
+  // 覆盖 a
   a: {
-    // copy obj.a
+    // obj.a 的备份
     ...obj.a,
-    // overwrite c
+    // 覆盖 c
     c: 42
   }
 }
 
 const arr = ['a', 'b']
-// Create a new copy of arr, with "c" appended to the end
+// 创建 arr 的备份，并把 c 拼接到最后。
 const arr2 = arr.concat('c')
 
-// or, we can make a copy of the original array:
+// 或者，可以对原来的数组创建复制体
 const arr3 = arr.slice()
-// and mutate the copy:
+// 修改复制体
 arr3.push('c')
 ```
 
-**Redux expects that all state updates are done immutably**. We'll look at where and how this is important a bit later, as well as some easier ways to write immutable update logic.
+**Redux 期望所有状态更新都是使用不可变的方式**。 稍后会说明为什么这很重要，以及编写不可变更新逻辑的一些更简单的方法
 
-:::info Want to Know More?
+:::info 想了解更多？
 
-For more info on how immutability works in JavaScript, see:
+想了解 JavaScript 中的 immutability 如何工作，查看:
 
-- [A Visual Guide to References in JavaScript](https://daveceddia.com/javascript-references/)
-- [Immutability in React and Redux: The Complete Guide](https://daveceddia.com/react-redux-immutability-guide/)
+- [JavaScript “引用” 的可视化教程](https://daveceddia.com/javascript-references/)
+- [Immutability in React and Redux：完整教程](https://daveceddia.com/react-redux-immutability-guide/)
 
 :::
 
-### Terminology
+### 术语
 
-There are some important Redux terms that you'll need to be familiar with before we continue:
+在我们继续之前，您需要熟悉一些重要的 Redux 术语：
 
-#### Actions
+#### Action
 
-An **action** is a plain JavaScript object that has a `type` field. **You can think of an action as an event that describes something that happened in the application**.
+**action** 是一个具有 `type` 字段的普通 JavaScript 对象。**你可以将 action 视为描述应用程序中发生了什么的事件**.
 
-The `type` field should be a string that gives this action a descriptive name, like `"todos/todoAdded"`. We usually write that type string like `"domain/eventName"`, where the first part is the feature or category that this action belongs to, and the second part is the specific thing that happened.
+`type` 字段是一个字符串，给这个 action 一个描述性的名字，比如`"todos/todoAdded"`。我们通常把那个类型的字符串写成“域/事件名称”，其中第一部分是这个 action 所属的特征或类别，第二部分是发生的具体事情。
 
-An action object can have other fields with additional information about what happened. By convention, we put that information in a field called `payload`.
+action 对象可以有其他字段，其中包含有关发生的事情的附加信息。按照惯例，我们将该信息放在名为 `payload` 的字段中。
 
-A typical action object might look like this:
+一个典型的 action 对象可能如下所示：
 
 ```js
 const addTodoAction = {
@@ -240,9 +240,9 @@ const addTodoAction = {
 }
 ```
 
-#### Action Creators
+#### Action Creator
 
-An **action creator** is a function that creates and returns an action object. We typically use these so we don't have to write the action object by hand every time:
+**action creator** 是一个创建并返回一个 action 对象的函数。它的作用是让你不必每次都手动编写 action 对象：
 
 ```js
 const addTodo = text => {
@@ -253,64 +253,65 @@ const addTodo = text => {
 }
 ```
 
-#### Reducers
+#### Reducer
 
-A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`. **You can think of a reducer as an event listener which handles events based on the received action (event) type.**
+**reducer** 是一个函数，接收当前的 `state` 和一个 `action` 对象，必要时决定如何更新状态，并返回新状态。函数签名是：`(state, action) => newState`。 **你可以将 reducer 视为一个事件监听器，它根据接收到的 action（事件）类型处理事件。**
 
-:::info
+:::info 说明
 
-"Reducer" functions get their name because they're similar to the kind of callback function you pass to the [`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method.
+"Reducer" 函数的名字来源是因为它和 [`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 函数使用的回调函数很类似。
 
 :::
 
-Reducers must _always_ follow some specific rules:
+Reducer 必需符合以下规则：
 
-- They should only calculate the new state value based on the `state` and `action` arguments
-- They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic, calculate random values, or cause other "side effects"
+- 仅使用 `state` 和 `action` 参数计算新的状态值
+- 禁止直接修改 `state`。必须通过复制现有的 `state` 并对复制的值进行更改的方式来做 _不可变更新（immutable updates）_。
+- 禁止任何异步逻辑、依赖随机值或导致其他“副作用”的代码
 
-We'll talk more about the rules of reducers later, including why they're important and how to follow them correctly.
+稍后我们将更多地讨论 reducer 的规则，包括为什么它们很重要以及如何正确地遵循它们。
 
-The logic inside reducer functions typically follows the same series of steps:
+reducer 函数内部的逻辑通常遵循以下步骤：
 
-- Check to see if the reducer cares about this action
-  - If so, make a copy of the state, update the copy with new values, and return it
-- Otherwise, return the existing state unchanged
+- 检查 reducer 是否关心这个 action
+  - 如果是，则复制 state，使用新值更新 state 副本，然后返回新 state
+- 否则，返回原来的 state 不变
 
-Here's a small example of a reducer, showing the steps that each reducer should follow:
+下面是 reducer 的小例子，展示了每个 reducer 应该遵循的步骤：
 
 ```js
 const initialState = { value: 0 }
 
 function counterReducer(state = initialState, action) {
-  // Check to see if the reducer cares about this action
+  // 检查 reducer 是否关心这个 action
   if (action.type === 'counter/increment') {
-    // If so, make a copy of `state`
+    // 如果是，复制 `state`
     return {
       ...state,
-      // and update the copy with the new value
+      // 使用新值更新 state 副本
       value: state.value + 1
     }
   }
-  // otherwise return the existing state unchanged
+  // 返回原来的 state 不变
   return state
 }
 ```
 
-Reducers can use any kind of logic inside to decide what the new state should be: `if/else`, `switch`, loops, and so on.
+Reducer 可以在内部使用任何类型的逻辑来决定新状态应该是什么，如 `if/else`、`switch`、循环等等。
 
-<DetailedExplanation title="Detailed Explanation: Why Are They Called 'Reducers?'" >
 
-The [`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method lets you take an array of values, process each item in the array one at a time, and return a single final result. You can think of it as "reducing the array down to one value".
+<DetailedExplanation title="细节说明：Reducer 名字的来历" >
 
-`Array.reduce()` takes a callback function as an argument, which will be called one time for each item in the array. It takes two arguments:
+[`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 方法处理数组的方式是，一次处理数组中的每一项，并返回一个最终结果。您可以将其视为“将数组减少到一个值”。
 
-- `previousResult`, the value that your callback returned last time
-- `currentItem`, the current item in the array
+`Array.reduce()` 将回调函数作为参数，该函数将为数组中的每一项调用一次。它需要两个参数：
 
-The first time that the callback runs, there isn't a `previousResult` available, so we need to also pass in an initial value that will be used as the first `previousResult`.
+- `previousResult`，回调函数上次返回的值
+- `currentItem`，数组中的当前项
 
-If we wanted to add together an array of numbers to find out what the total is, we could write a reduce callback that looks like this:
+回调函数第一次运行时，没有可用的 `previousResult`，因此我们还需要传入一个初始值，该值将用作第一个 `previousResult`。
+
+reduce 处理数组相加的代码如下：
 
 ```js
 const numbers = [2, 5, 8]
@@ -331,11 +332,11 @@ console.log(total)
 // 15
 ```
 
-Notice that this `addNumbers` "reduce callback" function doesn't need to keep track of anything itself. It takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
+请注意，这个 `addNumbers` 就是 “reduce 回调函数”，它本身不需要跟踪任何东西。它接受 `previousResult` 和 `currentItem` 参数，用它们做一些事情，并返回一个新的结果值。
 
-**A Redux reducer function is exactly the same idea as this "reduce callback" function!** It takes a "previous result" (the `state`), and the "current item" (the `action` object), decides a new state value based on those arguments, and returns that new state.
+**Redux reducer 函数与这个“reduce 回调函数”函数的想法完全相同！** 它接受上一个结果（`state`）和当前项（`action` 对象），根据这些参数计算出一个新 state，并返回该新 state。
 
-If we were to create an array of Redux actions, call `reduce()`, and pass in a reducer function, we'd get a final result the same way:
+如果我们要创建一个 Redux 操作数组，调用 `reduce()`，并传入一个 reducer 函数，我们会以同样的方式得到最终结果：
 
 ```js
 const actions = [
@@ -351,15 +352,14 @@ console.log(finalResult)
 // {value: 3}
 ```
 
-We can say that **Redux reducers reduce a set of actions (over time) into a single state**. The difference is that with `Array.reduce()` it happens all at once, and with Redux, it happens over the lifetime of your running app.
-
+我们可以说 **Redux reducer 将一组操作（随着时间的推移）减少到单个状态**。不同之处在于，使用 `Array.reduce()` 时它会一次性发生，而使用 Redux 时，它会在您正在运行的应用程序的整个生命周期内发生。
 </DetailedExplanation>
 
 #### Store
 
-The current Redux application state lives in an object called the **store** .
+当前 Redux 应用的状态存在于一个名为 **store** 的对象中。
 
-The store is created by passing in a reducer, and has a method called `getState` that returns the current state value:
+store 是通过传入一个 reducer 来创建的，并且有一个名为 `getState` 的方法，它返回当前状态值：
 
 ```js
 import { configureStore } from '@reduxjs/toolkit'
@@ -372,7 +372,7 @@ console.log(store.getState())
 
 #### Dispatch
 
-The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
+Redux store 有一个方法叫 `dispatch`。**更新 state 的唯一方法是调用 `store.dispatch()` 并传入一个 action 对象**。 store 将执行所有 reducer 函数并计算出更新后的 state，调用 `getState()` 可以获取新 state。
 
 ```js
 store.dispatch({ type: 'counter/increment' })
@@ -381,9 +381,9 @@ console.log(store.getState())
 // {value: 1}
 ```
 
-**You can think of dispatching actions as "triggering an event"** in the application. Something happened, and we want the store to know about it. Reducers act like event listeners, and when they hear an action they are interested in, they update the state in response.
+**dispatch 一个 action 可以形象的理解为 "触发一个事件"**。发生了一些事情，我们希望 store 知道这件事。 Reducer 就像事件监听器一样，当它们收到关注的 action 后，它就会更新 state 作为响应。
 
-We typically call action creators to dispatch the right action:
+我们通常调用 action creator 来调用 action：
 
 ```js
 const increment = () => {
@@ -398,9 +398,9 @@ console.log(store.getState())
 // {value: 2}
 ```
 
-#### Selectors
+#### Selector
 
-**Selectors** are functions that know how to extract specific pieces of information from a store state value. As an application grows bigger, this can help avoid repeating logic as different parts of the app need to read the same data:
+**Selector** 函数可以从 store 状态树中提取指定的片段。随着应用变得越来越大，会遇到应用程序的不同部分需要读取相同的数据，selector 可以避免重复这样的读取逻辑：
 
 ```js
 const selectCounterValue = state => state.value
@@ -410,56 +410,56 @@ console.log(currentValue)
 // 2
 ```
 
-### Redux Application Data Flow
+### Redux 数据流
 
-Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app:
+早些时候，我们谈到了“单向数据流”，它描述了更新应用程序的以下步骤序列：
 
-- State describes the condition of the app at a specific point in time
-- The UI is rendered based on that state
-- When something happens (such as a user clicking a button), the state is updated based on what occurred
-- The UI re-renders based on the new state
+- State 描述了应用程序在特定时间点的状况
+- 基于 state 来渲染 UI
+- 当发生某些事情时（例如用户单击按钮），state 会根据发生的事情进行更新
+- 基于新的 state 重新渲染 UI
 
-For Redux specifically, we can break these steps into more detail:
+具体来说，对于 Redux，我们可以将这些步骤分解为更详细的内容：
 
-- Initial setup:
-  - A Redux store is created using a root reducer function
-  - The store calls the root reducer once, and saves the return value as its initial `state`
-  - When the UI is first rendered, UI components access the current state of the Redux store, and use that data to decide what to render. They also subscribe to any future store updates so they can know if the state has changed.
-- Updates:
-  - Something happens in the app, such as a user clicking a button
-  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/increment'})`
-  - The store runs the reducer function again with the previous `state` and the current `action`, and saves the return value as the new `state`
-  - The store notifies all parts of the UI that are subscribed that the store has been updated
-  - Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
-  - Each component that sees its data has changed forces a re-render with the new data, so it can update what's shown on the screen
+- 初始启动：
+  - 使用最顶层的 root reducer 函数创建 Redux store
+  - store 调用一次 root reducer，并将返回值保存为它的初始 `state`
+  - 当 UI 首次渲染时，UI 组件访问 Redux store 的当前 state，并使用该数据来决定要呈现的内容。同时监听 store 的更新，以便他们可以知道 state 是否已更改。
+- 更新环节：
+  - 应用程序中发生了某些事情，例如用户单击按钮
+  - dispatch 一个 action 到 Redux store，例如 `dispatch({type: 'counter/increment'})`
+  - store 用之前的 `state` 和当前的 `action` 再次运行 reducer 函数，并将返回值保存为新的 `state`
+  - store 通知所有订阅过的 UI，通知它们 store 发生更新
+  - 每个订阅过 store 数据的 UI 组件都会检查它们需要的 state 部分是否被更新。
+  - 发现数据被更新的每个组件都强制使用新数据重新渲染，紧接着更新网页
 
-Here's what that data flow looks like visually:
+动画的方式来表达数据流更新：
 
-![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
+![数据流更新动画](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
 ## 你学到了
 
-Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
+Redux 确实有许多新的术语和概念需要记住。提醒一下，这是我们刚刚介绍的内容：
 
 :::tip 总结
 
-- **Redux is a library for managing global application state**
-  - Redux is typically used with the React-Redux library for integrating Redux and React together
-  - Redux Toolkit is the recommended way to write Redux logic
-- **Redux uses a "one-way data flow" app structure**
-  - State describes the condition of the app at a point in time, and UI renders based on that state
-  - When something happens in the app:
-    - The UI dispatches an action
-    - The store runs the reducers, and the state is updated based on what occurred
-    - The store notifies the UI that the state has changed
-  - The UI re-renders based on the new state
-- **Redux uses several types of code**
-  - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
-  - _Reducers_ are functions that calculate a new state value based on previous state + an action
-  - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+- **Redux 是一个管理全局应用状态的库**
+  - Redux 通常与 React-Redux 库一起使用，把 Redux 和 React 集成在一起
+  - Redux Toolkit 是编写 Redux 逻辑的推荐方式
+- **Redux 使用 "单向数据流"**
+  - State 描述了应用程序在某个时间点的状态，UI 基于该状态渲染
+  - 当应用程序中发生某些事情时：
+    - UI dispatch 一个 action
+    - store 调用 reducer，随后根据发生的事情来更新 state
+    - store 通知 UI state 发生了变化
+  - UI 基于新 state 重新渲染
+- **Redux 有这几种类型的代码**
+  - _Action_ 是有 `type` 字段的纯对象，描述发生了什么
+  - _Reducer_ 是纯函数，基于先前的 state 和 action 来计算新的 state
+  - 每当 dispatch 一个 action 后，_store_ 就会调用 root reducer
 
 :::
 
 ## 下一步
 
-We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.
+我们已经看到了 Redux 应用程序的每个单独部分。接下来，继续阅读 [第 2 部分：Redux 应用程序结构](./part-2-app-structure.md)，我们将在其中查看一个完整的工作示例，以了解各个部分如何组合在一起。

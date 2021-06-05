@@ -25,7 +25,7 @@ In Part 1 of this tutorial, we'll briefly look at a minimal example of a working
 
 Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
 
-### How to Read This Tutorial
+### 如何阅读本教程
 
 **This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist. Fair warning though - learning the concepts is different from putting them into practice in actual apps.
 
@@ -42,10 +42,10 @@ If you're looking to learn more about how Redux is used to write real-world appl
 
 We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already so that we can focus on explaining Redux itself. **This tutorial assumes that you know**:
 
-:::important Prerequisites
+:::important 必备能力
 
-- Familiarity with [HTML & CSS](https://internetingishard.com/).
-- Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
+- 熟悉 [HTML & CSS](https://internetingishard.com/).
+- 熟悉 [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - Understanding of [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
 - Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
 - Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
@@ -88,7 +88,7 @@ Redux is more useful when:
 
 **Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
 
-:::info Want to Know More?
+:::info 想了解更多？
 
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
@@ -99,7 +99,7 @@ If you're not sure whether Redux is a good choice for your app, these resources 
 
 :::
 
-### Redux Libraries and Tools
+### Redux 库和工具
 
 Redux is a small standalone JS library. However, it is commonly used with several other packages:
 

@@ -18,7 +18,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info Prerequisites
+:::info 必备能力
 
 - Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See [**Part 1: Redux Overview and Concepts**](./part-1-overview-concepts.md) for explanations of these terms.)
 
@@ -30,7 +30,7 @@ In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we look
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small social media feed app, which will include a number of features that demonstrate some real-world use cases. This will help you understand how to use Redux in your own applications.
 
-:::caution
+:::caution 注意
 
 The example app is not meant as a complete production-ready project. The goal is to help you learn the Redux APIs and typical usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. Please read through the whole tutorial to see all the concepts in use.
 
@@ -62,7 +62,7 @@ Once you've finished this tutorial, you'll probably want to try working on your 
 
 If you want to know specific details on how to add Redux to a project, see this explanation:
 
-<DetailedExplanation title="Detailed Explanation: Adding Redux to a React Project">
+<DetailedExplanation title="细节说明：Adding Redux to a React Project">
 
 The Redux template for CRA comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
 
@@ -329,7 +329,7 @@ export const { postAdded } = postsSlice.actions
 export default postsSlice.reducer
 ```
 
-:::warning
+:::caution 警告
 
 Remember: **reducer functions must _always_ create new state values immutably, by making copies!** It's safe to call mutating functions like `Array.push()` or modify object fields like `state.someField = someValue` inside of `createSlice()`, because it converts those mutations into safe immutable updates internally using the Immer library, but **don't try to mutate any data outside of `createSlice`!**
 
@@ -341,7 +341,7 @@ Our `AddPostForm` has text inputs and a "Save Post" button, but the button doesn
 
 Our post objects also need to have an `id` field. Right now, our initial test posts are using some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
 
-:::info
+:::info 说明
 
 We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./part-4-using-data.md).
 
