@@ -1,6 +1,6 @@
 ---
 id: part-3-data-flow
-title: 'Redux 基础，第三节：数据流基础'
+title: 'Redux 循序渐进，第三节：数据流基础'
 sidebar_label: '数据流基础'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
@@ -12,35 +12,35 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip 你将学到
 
-- How to add "slices" of reducer logic to the Redux store with `createSlice`
-- Reading Redux data in components with the `useSelector` hook
-- Dispatching actions in components with the `useDispatch` hook
+- 如何使用 `createSlice` 将 reducer 逻辑的“切片”添加到 Redux store
+- 使用 `useSelector` 钩子（hooks）读取组件中的 Redux 数据
+- 使用 `useDispatch` 钩子在组件中 dispatch action
 
 :::
 
 :::info 必备能力
 
-- Familiarity with key Redux terms and concepts like "actions", "reducers", "store", and "dispatching". (See [**Part 1: Redux Overview and Concepts**](./part-1-overview-concepts.md) for explanations of these terms.)
+- 熟悉 Redux 核心术语与概念，如 "actions"、"reducers"、"store"、"dispatching"。(参考 [**第一节：Redux 概述和概念**](./part-1-overview-concepts.md) 有这些术语的介绍)
 
 :::
 
 ## 简介
 
-In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we looked at how Redux can help us build maintainable apps by giving us a single central place to put global app state. We also talked about core Redux concepts like dispatching action objects, using reducer functions that return new state values, and writing async logic using thunks. In [Part 2: Redux App Structure](./part-2-app-structure.md), we saw how APIs like `configureStore` and `createSlice` from Redux Toolkit and `Provider` and `useSelector` from React-Redux work together to let us write Redux logic and interact with that logic from our React components.
+在 [第一节：Redux 概述和概念](./part-1-overview-concepts.md) 中，我们研究了 Redux 如何通过为我们提供一个放置全局应用状态的单一中心位置来帮助我们构建可维护的应用程序。我们还讨论了核心 Redux 概念，例如 dispatch action 对象、使用返回新状态值的 reducer 函数以及使用 thunk 编写异步逻辑。在 [第二节：Redux 应用程序结构](./part-2-app-structure.md) 中，我们看到了像 Redux Toolkit 中的 `configureStore` 和 `createSlice` 以及 React-Redux 中的 `Provider` 和 `useSelector` 这样的 API 共同努力让我们编写 Redux 逻辑并从我们的 React 组件中与该逻辑进行交互。
 
-Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small social media feed app, which will include a number of features that demonstrate some real-world use cases. This will help you understand how to use Redux in your own applications.
+既然您对这些部分是什么有了一些了解，现在是时候将这些知识付诸实践了。我们将开发一个小型社交媒体信息流应用，其中将包含许多演示一些真实用例的功能。这将帮助您了解如何在您自己的应用程序中使用 Redux。
 
 :::caution 注意
 
-The example app is not meant as a complete production-ready project. The goal is to help you learn the Redux APIs and typical usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. Please read through the whole tutorial to see all the concepts in use.
+本示例应用程序并不是一个完整的生产就绪项目。目标是帮助您学习 Redux API 和典型的使用模式，并使用一些有限的示例为您指明正确的方向。此外，前面的代码在后面可能会更新用来展示更好的开发方式。请通读整个教程来学习所有概念。
 
 :::
 
-### Project Setup
+### 项目启动
 
-For this tutorial, we've created a pre-configured starter project that already has React and Redux set up, includes some default styling, and has a fake REST API that will allow us to write actual API requests in our app. You'll use this as the basis for writing the actual application code.
+在本教程中，我们创建了一个预配置的入门项目，该项目已经设置了 React 和 Redux，包括一些默认样式，以及一个允许我们在我们的应用程序中编写实际 API 请求的假 REST API。 您将使用它作为编写实际应用程序代码的基础。
 
-To get started, you can open and fork this CodeSandbox:
+首先，您可以打开并 fork 这个 CodeSandbox：
 
 <iframe
   class="codesandbox"
@@ -445,7 +445,7 @@ Let's recap what you've learned in this section:
 
 :::
 
-Here's what the app looks like so far:
+现在应用长这样：
 
 <iframe
   class="codesandbox"
@@ -457,4 +457,4 @@ Here's what the app looks like so far:
 
 ## 下一步
 
-Now that you know the basic Redux data flow, move on to [Part 4: Using Redux Data](./part-4-using-data.md), where we'll add some additional functionality to our app and see examples of how to work with the data that's already in the store.
+现在你已经了解 Redux 数据流基础，是时候打开 [第 4 节: 使用 Redux 数据](./part-4-using-data.md)，学习给应用添加更多功能并且学习如何与现有 store 中的数据做交互。

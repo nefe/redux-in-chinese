@@ -1,6 +1,6 @@
 ---
 id: part-6-performance-normalization
-title: 'Redux 基础，第六节：性能与数据范式化'
+title: 'Redux 循序渐进，第六节：性能与数据范式化'
 sidebar_label: '性能与数据范式化'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'

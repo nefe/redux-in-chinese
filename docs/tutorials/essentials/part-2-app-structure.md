@@ -23,13 +23,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 现在，让我们看一个真实的工作示例，看看这些部分是如何组合在一起的。
 
-## The Counter Example App
+## 计数器示例应用程序
 
-The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
+我们将看到的示例项目是一个小型计数器应用程序，它允许我们在单击按钮时对数字进行加减运算。它可能不是很令人兴奋，但它展示了一个 React + Redux 应用程序的所有重要部分。
 
-The project has been created using [the official Redux template for Create-React-App](https://github.com/reduxjs/cra-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
+本项目使用 [Create-React-App 的官方 Redux 模板](https://github.com/reduxjs/cra-template-redux) 创建。开箱即用，它已经配置了标准的 Redux 应用程序结构，使用 [Redux Toolkit](https://redux-toolkit.js.org) 创建 Redux 存储和逻辑，以及 [React-Redux]( https://react-redux.js.org) 将 Redux 存储和 React 组件连接在一起。
 
-Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
+这是该项目的实时版本。 您可以通过单击右侧应用程序预览中的按钮来试用它，并浏览左侧的源文件。
 
 <iframe
   class="codesandbox"
@@ -39,21 +39,21 @@ Here's the live version of the project. You can play around with it by clicking 
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-If you'd like to try create this project on your own computer, you can [start a new Create-React-App project](https://create-react-app.dev/docs/getting-started#selecting-a-template) using our Redux template:
+如果你想尝试在自己的电脑上创建这个项目，你可以[开始一个新的 Create-React-App 项目](https://create-react-app.dev/docs/getting-started#selecting-a -template) 使用我们的 Redux 模板：
 
 ```
 npx create-react-app redux-essentials-example --template redux
 ```
 
-### Using the Counter App
+### 使用计数器应用程序
 
-The counter app has already been set up to let us watch what happens inside as we use it.
+计数器应用程序已经设置好，让我们可以在使用时观察内部发生的情况。
 
-Open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
+打开浏览器的 DevTools。 然后，在 DevTools 中选择“Redux”选项卡，然后单击右上角工具栏中的“State”按钮。 您应该会看到如下所示的内容：
 
 ![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
 
-On the right, we can see that our Redux store is starting off with an app state value that looks like this:
+在右侧，我们可以看到我们的 Redux Store 的初始 state 是这样：
 
 ```js
 {
@@ -63,30 +63,30 @@ On the right, we can see that our Redux store is starting off with an app state 
 }
 ```
 
-The DevTools will show us how the store state changes as we use the app.
+DevTools 将向我们展示 Store 中的 state 是如何变化的。
 
-Let's play with the app first to see what it does. Click the "+" button in the app, then look at the "Diff" tab in the Redux DevTools:
+让我们先玩一下这个应用程序，看看它有什么作用。单击应用程序中的“+”按钮，然后查看 Redux DevTools 中的“Diff”选项卡：
 
 ![Redux DevTools: first dispatched action](/img/tutorials/essentials/devtools-first-action.png)
 
-We can see two important things here:
+我们可以在这里看到两个重要的事情：
 
-- When we clicked the "+" button, an action with a type of `"counter/increment"` was dispatched to the store
-- When that action was dispatched, the `state.counter.value` field changed from `0` to `1`
+- 当我们点击“+”按钮时，一个 type 为“counter/increment”的 action 被 dispatch 到 store
+- dispatch action 后，`state.counter.value` 字段开始从 `0` 改到 `1`
 
-Now try these steps:
+现在尝试以下步骤：
 
-- Click the "+" button again. The displayed value should now be 2.
-- Click the "-" button once. The displayed value should now be 1.
-- Click the "Add Amount" button. The displayed value should now be 3.
-- Change the number "2" in the textbox to a "3"
-- Click the "Add Async" button. You should see a progress bar fill the button, and after a couple seconds, the displayed value should change to 6.
+- 再次单击“+”按钮。显示的值现在应该是 2。
+- 单击“-”按钮一次。显示的值现在应该是 1。
+- 单击“添加金额”按钮。显示的值现在应该是 3。
+- 将文本框中的数字“2”更改为“3”
+- 单击“添加异步”按钮。您应该会看到一个进度条填充按钮，几秒钟后，显示的值应更改为 6。
 
-Go back to the Redux DevTools. You should see a total of five actions dispatched, one for each time we clicked a button . Now select the last `"counter/incrementByAmount"` entry from the list on the left, and click the "Action" tab on the right side:
+回到 Redux DevTools。您应该会看到总共 dispatch 了五个 action，每单击一个按钮触发一次。现在从左侧列表中选择最后一个 `"counter/incrementByAmount"` 条目，然后单击右侧的 "Action" 选项卡：
 
 ![Redux DevTools: done clicking buttons](/img/tutorials/essentials/devtools-done-clicking.png)
 
-We can see that this action object looked like this:
+我们可以看到这个 action 对象是这样的：
 
 ```js
 {
@@ -95,21 +95,21 @@ We can see that this action object looked like this:
 }
 ```
 
-And if you click the "Diff" tab, you can see that the `state.counter.value` field changed from a `3` to a `6` in response to that action.
+如果您单击“差异”选项卡，您可以看到 `state.counter.value` 字段响应该 action 从 `3` 更改为 `6`。
 
-The ability to see what is happening inside of our app and how our state is changing over time is very powerful!
+查看我们的应用程序内部发生的事情以及我们的状态如何随时间变化的能力非常强大！
 
-The DevTools have several more commands and options to help you debug your app. Try clicking the "Trace" tab in the upper right. You should see a JavaScript function stack trace in the panel, with several sections of source code showing the lines that were executing when the action reached the store. One line in particular should be highlighted: the line of code where we dispatched this action from the `<Counter>` component:
+DevTools 有更多命令和选项可帮助您调试应用程序。尝试单击右上角的“跟踪 Trace”选项卡。 您应该在面板中看到一个 JavaScript 函数堆栈跟踪，其中有几段源代码显示了当 action 到达 store 时正在执行的行。特别应该突出显示一行：我们从 `<Counter>` 组件 dispatch 此 action 的代码行：
 
 ![Redux DevTools: action stack traces](/img/tutorials/essentials/devtools-action-stacktrace.png)
 
-This makes it easier to trace what part of the code dispatched a specific action.
+这使得跟踪代码的哪一部分 dispatch 了特定 action 变得更加容易。
 
-## Application Contents
+## Application 实现
 
-Now that you know what the app does, let's look at how it works.
+你已经知道了应用的功能，现在看一下代码实现。
 
-Here are the key files that make up this application:
+以下是构成此应用程序的关键文件：
 
 - `/src`
   - `index.js`: the starting point for the app
@@ -121,11 +121,11 @@ Here are the key files that make up this application:
       - `Counter.js`: a React component that shows the UI for the counter feature
       - `counterSlice.js`: the Redux logic for the counter feature
 
-Let's start by looking at how the Redux store is created.
+让我们先看看 Redux store 是如何创建的。
 
-### Creating the Redux Store
+### 创建 Redux Store
 
-Open up `app/store.js`, which should look like this:
+打开 `app/store.js`，代码是这样：
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -138,21 +138,21 @@ export default configureStore({
 })
 ```
 
-The Redux store is created using the `configureStore` function from Redux Toolkit. `configureStore` requires that we pass in a `reducer` argument.
+Redux store 是使用 Redux Toolkit 中的 `configureStore` 函数创建的。`configureStore` 要求我们传入一个 `reducer` 参数。
 
-Our application might be made up of many different features, and each of those features might have its own reducer function. When we call `configureStore`, we can pass in all of the different reducers in an object. The key names in the object will define the keys in our final state value.
+我们的应用程序可能由许多不同的特性组成，每个特性都可能有自己的 reducer 函数。当我们调用`configureStore` 时，我们可以传入一个对象中的所有不同的 reducer。 对象中的键名 key 将定义最终状态树中的键名 key。
 
-We have a file named `features/counter/counterSlice.js` that exports a reducer function for the counter logic. We can import that `counterReducer` function here, and include it when we create the store.
+我们有一个名为 `features/counter/counterSlice.js` 的文件，它为计数器逻辑导出了一个 reducer 函数。 我们可以在此处导入 `counterReducer` 函数，并在创建 store 时包含它。
 
-When we pass in an object like `{counter: counterReducer}`, that says that we want to have a `state.counter` section of our Redux state object, and that we want the `counterReducer` function to be in charge of deciding if and how to update the `state.counter` section whenever an action is dispatched.
+当我们传入一个像 `{counter: counterReducer}` 这样的对象时，它表示我们希望在 Redux 状态对象中有一个 `state.counter` 部分，并且我们希望 `counterReducer` 函数负责决定是否以及如何在 dispatch action 时更新 `state.counter` 部分。
 
-Redux allows store setup to be customized with different kinds of plugins ("middleware" and "enhancers"). `configureStore` automatically adds several middleware to the store setup by default to provide a good developer experience, and also sets up the store so that the Redux DevTools Extension can inspect its contents.
+Redux 允许使用不同类型的插件（“中间件”和“增强器”）自定义 store 设置。`configureStore` 默认会自动在 store setup 中添加几个中间件以提供良好的开发者体验，并且还设置 store 以便 Redux DevTools Extension 可以检查其内容。
 
-#### Redux Slices
+#### Redux 切片（Slice）
 
-**A "slice" is a collection of Redux reducer logic and actions for a single feature in your app**, typically defined together in a single file. The name comes from splitting up the root Redux state object into multiple "slices" of state.
+**“切片”是应用中单个功能的 Redux reducer 逻辑和 action 的集合**, 通常一起定义在一个文件中。该名称来自于将根 Redux 状态对象拆分为多个状态“切片”。
 
-For example, in a blogging app, our store setup might look like:
+比如，在一个博客应用中，store 的配置大致长这样：
 
 ```js
 import { configureStore } from '@reduxjs/toolkit'
@@ -169,13 +169,13 @@ export default configureStore({
 })
 ```
 
-In that example, `state.users`, `state.posts`, and `state.comments` are each a separate "slice" of the Redux state. Since `usersReducer` is responsible for updating the `state.users` slice, we refer to it as a "slice reducer" function.
+例子中，`state.users`，`state.posts`，和 `state.comments` 均是 Redux state 的一个切片“slice”。由于 `usersReducer` 负责更新 `state.users` 切片，我们将其称为“slice reducer”函数。
 
-<DetailedExplanation title="细节说明：Reducers and State Structure">
+<DetailedExplanation title="细节说明：Reducer 与 State 的结构">
 
-A Redux store needs to have a single "root reducer" function passed in when it's created. So if we have many different slice reducer functions, how do we get a single root reducer instead, and how does this define the contents of the Redux store state?
+Redux store 需要在创建时传入一个“root reducer”函数。因此，如果我们有许多不同的 slice reducer 函数，我们如何获得单个 root reducer，以及它如何定义 Redux store 中 state 的内容呢？
 
-If we tried calling all of the slice reducers by hand, it might look like this:
+如果我们尝试手动调用所有 slice 的 reducer，它可能如下所示：
 
 ```js
 function rootReducer(state = {}, action) {
@@ -187,9 +187,9 @@ function rootReducer(state = {}, action) {
 }
 ```
 
-That calls each slice reducer individually, passes in the specific slice of the Redux state, and includes each return value in the final new Redux state object.
+这会单独调用每个 slice reducer，传入 Redux 状态的特定切片，并将每个返回值包含在最终的新 Redux 状态对象中。
 
-Redux has a function called [`combineReducers`](../../api/combineReducers.md) that does this for us automatically. It accepts an object full of slice reducers as its argument, and returns a function that calls each slice reducer whenever an action is dispatched. The result from each slice reducer are all combined together into a single object as the final result. We can do the same thing as the previous example using `combineReducers`:
+Redux 有一个名为 [`combineReducers`](../../api/combineReducers.md) 的函数，它会自动为我们执行此操作。它接受一个全是 slice reducer 的对象作为其参数，并返回一个函数，该函数在调度操作时调用每个 slice reducer。每个 slice reducer 的结果都组合成一个对象作为最终结果。我们可以使用 `combineReducers` 做和前面例子一样的事情：
 
 ```js
 const rootReducer = combineReducers({
@@ -199,9 +199,9 @@ const rootReducer = combineReducers({
 })
 ```
 
-When we pass an object of slice reducers to `configureStore`, it passes those to `combineReducers` for us to generate the root reducer.
+当我们将 slice reducer 的对象传递给 `configureStore` 时，它会将这些对象传递给 `combineReducers` 以便我们生成根 reducer。
 
-As we saw earlier, you can also pass a reducer function directly as the `reducer` argument:
+正如我们之前看到的，你也可以直接传递一个 reducer 函数作为 `reducer` 参数：
 
 ```js
 const store = configureStore({
@@ -211,9 +211,9 @@ const store = configureStore({
 
 </DetailedExplanation>
 
-### Creating Slice Reducers and Actions
+### 创建 Slice Reducer 和 Action
 
-Since we know that the `counterReducer` function is coming from `features/counter/counterSlice.js`, let's see what's in that file, piece by piece.
+既然我们知道`counterReducer` 函数来自 `features/counter/counterSlice.js`，那么让我们一块一块地看看那个文件里有什么。
 
 ```js title="features/counter/counterSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
@@ -245,30 +245,30 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
-Earlier, we saw that clicking the different buttons in the UI dispatched three different Redux action types:
+早些时候，我们看到单击 UI 中的不同按钮会 dispatch 三种不同类型的 Redux action：
 
 - `{type: "counter/increment"}`
 - `{type: "counter/decrement"}`
 - `{type: "counter/incrementByAmount"}`
 
-We know that actions are plain objects with a `type` field, that the `type` field is always a string, and that we typically have "action creator" functions that create and return the action objects. So where are those action objects, type strings, and action creators defined?
+我们知道 action 是带有 `type` 字段的普通对象，`type` 字段总是一个字符串，并且我们通常有 action creator 函数来创建和返回 action 对象。那么在哪里定义 action 对象、类型字符串和 action creator 呢？
 
-We _could_ write those all by hand, every time. But, that would be tedious. Besides, what's _really_ important in Redux is the reducer functions, and the logic they have for calculating new state.
+我们_可以_每次都手写。但是，那会很乏味。此外，Redux 中_真正_重要的是 reducer 函数，以及其中计算新状态的逻辑。
 
-Redux Toolkit has a function called `createSlice`, which takes care of the work of generating action type strings, action creator functions, and action objects. All you have to do is define a name for this slice, write an object that has some reducer functions in it, and it generates the corresponding action code automatically. The string from the `name` option is used as the first part of each action type, and the key name of each reducer function is used as the second part. So, the `"counter"` name + the `"increment"` reducer function generated an action type of `{type: "counter/increment"}`. (After all, why write this by hand if the computer can do it for us!)
+Redux Toolkit 有一个名为 `createSlice` 的函数，它负责生成 action 类型字符串、action creator 函数和 action 对象的工作。您所要做的就是为这个切片定义一个名称，编写一个包含 reducer 函数的对象，它会自动生成相应的 action 代码。`name` 选项的字符串用作每个 action 类型的第一部分，每个 reducer 函数的键名用作第二部分。因此，`"counter"` 名称 + `"increment"` reducer 函数生成了一个 action 类型 `{type: "counter/increment"}`。（毕竟，如果计算机可以为我们做，为什么要手写！）
 
-In addition to the `name` field, `createSlice` needs us to pass in the initial state value for the reducers, so that there is a `state` the first time it gets called. In this case, we're providing an object with a `value` field that starts off at 0.
+除了 `name` 字段，`createSlice` 还需要我们为 reducer 传入初始状态值，以便在第一次调用时就有一个 `state`。在这种情况下，我们提供了一个对象，它有一个从 0 开始的 `value` 字段。
 
-We can see here that there are three reducer functions, and that corresponds to the three different action types that were dispatched by clicking the different buttons.
+我们可以看到这里有三个 reducer 函数，它们对应于通过单击不同按钮 dispatc 的三种不同的 action 类型。
 
-`createSlice` automatically generates action creators with the same names as the reducer functions we wrote. We can check that by calling one of them and seeing what it returns:
+`createSlice` 会自动生成与我们编写的 reducer 函数同名的 action creator。我们可以通过调用其中一个来检查它并查看它返回的内容：
 
 ```js
 console.log(counterSlice.actions.increment())
 // {type: "counter/increment"}
 ```
 
-It also generates the slice reducer function that knows how to respond to all these action types:
+它还生成知道如何响应所有这些 action 类型的 slice reducer 函数：
 
 ```js
 const newState = counterSlice.reducer(
@@ -287,44 +287,44 @@ console.log(newState)
 - 禁止直接修改 `state`。必须通过复制现有的 `state` 并对复制的值进行更改的方式来做 _不可变更新（immutable updates）_。
 - 禁止任何异步逻辑、依赖随机值或导致其他“副作用”的代码
 
-But why are these rules important? There's a few different reasons:
+但为什么这些规则很重要？有几个不同的原因：
 
-- One of the goals of Redux is to make your code predictable. When a function's output is only calculated from the input arguments, it's easier to understand how that code works, and to test it.
-- On the other hand, if a function depends on variables outside itself, or behaves randomly, you never know what will happen when you run it.
-- If a function modifies other values, including its arguments, that can change the way the application works unexpectedly. This can be a common source of bugs, such as "I updated my state, but now my UI isn't updating when it should!"
-- Some of the Redux DevTools capabilities depend on having your reducers follow these rules correctly
+- Redux 的目标之一是使您的代码可预测。当函数的输出仅根据输入参数计算时，更容易理解该代码的工作原理并对其进行测试。
+- 另一方面，如果一个函数依赖于自身之外的变量，或者行为随机，你永远不知道运行它时会发生什么。
+- 如果一个函数 mutate 了其他对象，比如它的参数，这可能会意外地改变应用程序的工作方式。这可能是错误的常见来源，例如“我更新了我的状态，但现在我的 UI 没有在应该更新的时候更新！”
+- Redux DevTools 的一些功能取决于你的 reducer 是否正确遵循这些规则
 
-The rule about "immutable updates" is particularly important, and worth talking about further.
+“不可变更新（Immutable Updates）” 这个规则尤其重要，值得进一步讨论。
 
-### Reducers and Immutable Updates
+### Reducer 与 不可变更新
 
-Earlier, we talked about "mutation" (modifying existing object/array values) and "immutability" (treating values as something that cannot be changed).
+前面讲过 “可变更新 mutation”（更新已有对象/数组的值）与“不可变更新 immutability”（认为值是不可以改变的）
 
-In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
+在 Redux 中，**_永远_ 不允许在 reducer 中更改 state 的原始对象！**
 
 ```js
-// ❌ Illegal - by default, this will mutate the state!
+// ❌ 非法 - 默认情况下，这将更改 state！
 state.value = 123
 ```
 
 :::
 
-There are several reasons why you must not mutate state in Redux:
+不能在 Redux 中更改 state 有几个原因：
 
-- It causes bugs, such as the UI not updating properly to show the latest values
-- It makes it harder to understand why and how the state has been updated
-- It makes it harder to write tests
-- It breaks the ability to use "time-travel debugging" correctly
-- It goes against the intended spirit and usage patterns for Redux
+- 它会导致 bug，例如 UI 未正确更新以显示最新值
+- 更难理解状态更新的原因和方式
+- 编写测试变得更加困难
+- 它打破了正确使用“时间旅行调试”的能力
+- 它违背了 Redux 的预期精神和使用模式
 
-So if we can't change the originals, how do we return an updated state?
+所以如果我们不能更改原件，我们如何返回更新的状态呢？
 
 :::tip
 
-**Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
+**Reducer 中必需要先创建原始值的_副本_，然后可以改变副本。**
 
 ```js
-// ✅ This is safe, because we made a copy
+// ✅ 这样操作是安全的，因为创建了副本
 return {
   ...state,
   value: 123
@@ -333,15 +333,15 @@ return {
 
 :::
 
-We already saw that we can [write immutable updates by hand](./part-1-overview-concepts.md#immutability), by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, if you're thinking that "writing immutable updates by hand this way looks hard to remember and do correctly"... yeah, you're right! :)
+我们已经看到我们可以[手动编写不可变更新](./part-1-overview-concepts.md#immutability)，通过使用 JavaScript 的数组/对象扩展运算符和其他返回原始值副本的函数。但是，如果您认为“以这种方式手动编写不可变更新看起来很难记住和正确执行”……是的，您是对的！:)
 
-Writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
+手动编写不可变的更新逻辑确实繁琐，而且在 reducer 中意外改变状态是 Redux 用户最常犯的一个错误。
 
-**That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
+**这就是为什么 Redux Toolkit 的 `createSlice` 函数可以让您以更简单的方式编写不可变更新！**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
+`createSlice` 内部使用了一个名为 [Immer](https://immerjs.github.io/immer/) 的库。 Immer 使用一种称为 “Proxy” 的特殊 JS 工具来包装您提供的数据，当你尝试 ”mutate“ 这些数据的时候，奇迹发生了，**Immer 会跟踪您尝试进行的所有更改，然后使用该更改列表返回一个安全的、不可变的更新值**，就好像您手动编写了所有不可变的更新逻辑一样。
 
-So, instead of this:
+所以，下面的代码：
 
 ```js
 function handwrittenReducer(state, action) {
@@ -361,7 +361,7 @@ function handwrittenReducer(state, action) {
 }
 ```
 
-You can write code that looks like this:
+可以变成这样：
 
 ```js
 function reducerWithImmer(state, action) {
@@ -369,17 +369,17 @@ function reducerWithImmer(state, action) {
 }
 ```
 
-That's a lot easier to read!
+变得非常易读！
 
-But, here's something _very_ important to remember:
+但，还有一些非常重要的规则要记住：
 
 :::caution 警告
 
-**You can _only_ write "mutating" logic in Redux Toolkit's `createSlice` and `createReducer` because they use Immer inside! If you write mutating logic in reducers without Immer, it _will_ mutate the state and cause bugs!**
+**你_只能_在 Redux Toolkit 的 `createSlice` 和 `createReducer` 中编写 “mutation” 逻辑，因为它们在内部使用 Immer！如果你在没有 Immer 的 reducer 中编写 mutation 逻辑，它_将_改变状态并导致错误！**
 
 :::
 
-With that in mind, let's go back and look at the actual reducers from the counter slice.
+考虑到这一点，让我们回过头来看看计数器 slice 中的实际的 reducer。
 
 ```js title="features/counter/counterSlice.js"
 export const counterSlice = createSlice({
@@ -406,28 +406,28 @@ export const counterSlice = createSlice({
 })
 ```
 
-We can see that the `increment` reducer will always add 1 to `state.value`. Because Immer knows we've made changes to the draft `state` object, we don't have to actually return anything here. In the same way, the `decrement` reducer subtracts 1.
+我们可以看到 `increment` reducer 总是给 `state.value` 加 1。 因为 Immer 知道我们已经对原来的 `state` 对象进行了更改，所以我们实际上不必在此处返回任何内容。 同理，`decrement` reducer 减 1。
 
-In both of those reducers, we don't actually need to have our code look at the `action` object. It will be passed in anyway, but since we don't need it, we can skip declaring `action` as a parameter for the reducers.
+在这两个 reducer 中，我们实际上不需要让我们的代码查看 `action` 对象。它无论如何都会被传入，但由于我们不需要它，我们可以省掉把 `action` 声明为 reducer 的参数。
 
-On the other hand, the `incrementByAmount` reducer _does_ need to know something: how much it should be adding to the counter value. So, we declare the reducer as having both `state` and `action` arguments. In this case, we know that the amount we typed into the textbox is being put into the `action.payload` field, so we can add that to `state.value`.
+另一方面，`incrementByAmount` 这个 reducer 还需要知道更多信息：它应该增加多少计数器值。因此，我们将 reducer 声明为同时具有 `state` 和 `action` 参数。这样，我们知道我们在文本框中输入的金额被放入 `action.payload` 字段，这就是要被添加到 `state.value` 的值。
 
 :::info 想了解更多？
 
-For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
+关于不变性和编写不可变更新的更多信息，请参阅 [“不可变更新模式”文档页面](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) 和 [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)。
 
 :::
 
-### Writing Async Logic with Thunks
+### 用 Thunk 编写异步逻辑
 
-So far, all the logic in our application has been synchronous. Actions are dispatched, the store runs the reducers and calculates the new state, and the dispatch function finishes. But, the JavaScript language has many ways to write code that is asynchronous, and our apps normally have async logic for things like fetching data from an API. We need a place to put that async logic in our Redux apps.
+到目前为止，我们应用程序中的所有逻辑都是同步的。首先 dispatch action，store 调用 reducer 来计算新状态，然后 dispatch 函数完成并结束。但是，JavaScript 语言有很多编写异步代码的方法，我们的应用程序通常具有异步逻辑，比如从 API 请求数据之类的事情。我们需要一个地方在我们的 Redux 应用程序中放置异步逻辑。
 
-A **thunk** is a specific kind of Redux function that can contain asynchronous logic. Thunks are written using two functions:
+**thunk** 是一种特定类型的 Redux 函数，可以包含异步逻辑。Thunk 是使用两个函数编写的：
 
-- An inside thunk function, which gets `dispatch` and `getState` as arguments
-- The outside creator function, which creates and returns the thunk function
+- 一个内部 thunk 函数，它以 `dispatch` 和 `getState` 作为参数
+- 外部创建者函数，它创建并返回 thunk 函数
 
-The next function that's exported from `counterSlice` is an example of a thunk action creator:
+从 `counterSlice` 导出的函数就是一个 thunk action creator 的例子。
 
 ```js title="features/counter/counterSlice.js"
 // The function below is called a thunk and allows us to perform async logic.
@@ -441,40 +441,40 @@ export const incrementAsync = amount => dispatch => {
 }
 ```
 
-We can use them the same way we use a typical Redux action creator:
+我们可以像使用普通 Redux action creator 一样使用它们：
 
 ```js
 store.dispatch(incrementAsync(5))
 ```
 
-However, using thunks requires that the `redux-thunk` _middleware_ (a type of plugin for Redux) be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use thunks here.
+但是，使用 thunk 需要在创建时将 `redux-thunk` _middleware_（一种 Redux 插件）添加到 Redux store 中。幸运的是，Redux Toolkit 的 `configureStore` 函数已经自动为我们配置好了，所以我们可以继续在这里使用 thunk。
 
-When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
+当您需要进行 AJAX 调用以从服务器获取数据时，您可以将该调用放入 thunk 中。这是一个写得有点长的例子，所以你可以看到它是如何定义的：
 
 ```js title="features/counter/counterSlice.js"
-// the outside "thunk creator" function
+// 外部的 thunk creator 函数
 const fetchUserById = userId => {
-  // the inside "thunk function"
+  // 内部的 thunk 函数
   return async (dispatch, getState) => {
     try {
-      // make an async call in the thunk
+      // thunk 内发起异步数据请求
       const user = await userAPI.fetchById(userId)
-      // dispatch an action when we get the response back
+      // 但数据响应完成后 dispatch 一个 action
       dispatch(userLoaded(user))
     } catch (err) {
-      // If something went wrong, handle it here
+      // 如果过程出错，在这里处理
     }
   }
 }
 ```
 
-We'll see thunks being used in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md)
+在 [第五节：异步逻辑和数据请求](./part-5-async-logic.md) 中也使用到了 thunk。
 
-<DetailedExplanation title="细节说明：Thunks and Async Logic">
+<DetailedExplanation title="细节说明：Thunk 和异步逻辑">
 
-We know that we're not allowed to put any kind of async logic in reducers. But, that logic has to live somewhere.
+我们知道我们不允许在 reducer 中放置任何类型的异步逻辑。但是，这种逻辑必须存在于某个地方。
 
-If we have access to the Redux store, we could write some async code and call `store.dispatch()` when we're done:
+如果我们可以访问 Redux 的 store，我们可以编写一些异步代码并在完成后调用 `store.dispatch()`：
 
 ```js
 const store = configureStore({ reducer: counterReducer })
@@ -484,13 +484,13 @@ setTimeout(() => {
 }, 250)
 ```
 
-But, in a real Redux app, we're not allowed to import the store into other files, especially in our React components, because it makes that code harder to test and reuse.
+但是，在真正的 Redux 应用程序中，我们不允许将 store 导入到其他文件中，尤其是在我们的 React 组件中，因为它使代码更难以测试和重用。
 
-In addition, we often need to write some async logic that we know will be used with _some_ store, eventually, but we don't know _which_ store.
+另外，我们经常需要编写一些我们知道最终会与_一些_ store 一起使用的异步逻辑，但我们不知道_是哪块_ store。
 
-The Redux store can be extended with "middleware", which are a kind of add-on or plugin that can add extra abilities. The most common reason to use middleware is to let you write code that can have async logic, but still talk to the store at the same time. They can also modify the store so that we can call `dispatch()` and pass in values that are _not_ plain action objects, like functions or Promises.
+Redux 的 store 可以使用“中间件”进行扩展，中间件是一种可以添加额外功能的附加组件或插件。使用中间件的最常见原因是让您编写具有异步逻辑的代码，但同时仍能与 store 对话。他们还可以修改 store，以便我们可以调用 `dispatch()` 并传入普通 action 对象_以外_的值，例如函数或 Promise。
 
-The Redux Thunk middleware modifies the store to let you pass functions into `dispatch`. In fact, it's short enough we can paste it here:
+Redux Thunk 中间件修改了 store 以让您将函数传递给 `dispatch`。事实上，代码很短，只有下面几行：
 
 ```js
 const thunkMiddleware =
@@ -505,25 +505,25 @@ const thunkMiddleware =
   }
 ```
 
-It looks to see if the "action" that was passed into `dispatch` is actually a function instead of a plain action object. If it's actually a function, it calls the function, and returns the result. Otherwise, since this must be an action object, it passes the action forward to the store.
+它先判断传入 `dispatch` 的 action 是函数还是对象。如果是一个函数，则调用函数，并返回结果。否则，传入的是普通 action 对象，就把这个 action 传递给 store 处理。
 
-This gives us a way to write whatever sync or async code we want, while still having access to `dispatch` and `getState`.
+这就让我们可以用一种方法来处理同步或者异步方法，同时仍然可以调用 `dispatch` 和 `getState`。
 
 </DetailedExplanation>
 
-There's one more function in this file, but we'll talk about that in a minute when we look at the `<Counter>` UI component.
+此文件中还有一个函数，我们稍后会在查看 `<Counter>` UI 组件时讨论它。
 
 :::info 想了解更多？
 
-See [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
+查看 [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
 
 :::
 
-### The React Counter Component
+### React Counter 组件
 
-Earlier, we saw what a standalone React `<Counter>` component looks like. Our React+Redux app has a similar `<Counter>` component, but it does a few things differently.
+前面，我们看到了一个独立的 React `<Counter>` 组件是什么样的。我们的 React+Redux 应用程序有一个类似的 `<Counter>` 组件，但它做了一些不同的事情。
 
-We'll start by looking at the `Counter.js` component file:
+我们将首先查看 `Counter.js` 组件文件：
 
 ```jsx title="features/counter/Counter.js"
 import React, { useState } from 'react'
@@ -563,27 +563,27 @@ export function Counter() {
           -
         </button>
       </div>
-      {/* omit additional rendering output here */}
+      {/* 这里省略了额外的 render 代码 */}
     </div>
   )
 }
 ```
 
-Like with the earlier plain React example, we have a function component called `Counter`, that stores some data in a `useState` hook.
+与之前的简单 React 示例一样，我们有一个名为 `Counter` 的函数组件，它将一些数据存储在 `useState` hooks 中。
 
-However, in our component, it doesn't look like we're storing the actual current counter value as state. There _is_ a variable called `count`, but it's not coming from a `useState` hook.
+然而，在我们的组件中，看起来我们并没有将当前计数器的值存储为 state。而是放到 `count` 变量中，但它不是来自 `useState` hooks。
 
-While React includes several built-in hooks like `useState` and `useEffect`, other libraries can create their own [custom hooks](https://reactjs.org/docs/hooks-custom.html) that use React's hooks to build custom logic.
+虽然 React 包含几个内置 hooks，如 `useState` 和 `useEffect`，其他库可以创建自己的 [自定义 hooks](https://reactjs.org/docs/hooks-custom.html)，使用 React 的 hooks 来构建自定义逻辑。
 
-The [React-Redux library](https://react-redux.js.org/) has [a set of custom hooks that allow your React component to interact with a Redux store](https://react-redux.js.org/api/hooks).
+[React-Redux 库](https://react-redux.js.org/) 有 [一组自定义 hooks，允许你的 React 组件与 Redux store 交互](https://react-redux.js .org/api/hooks）。
 
-#### Reading Data with `useSelector`
+#### 使用 `useSelector` 提取数据
 
-First, the `useSelector` hook lets our component extract whatever pieces of data it needs from the Redux store state.
+首先，`useSelector` 这个 hooks 让我们的组件从 Redux 的 store 状态树中提取它需要的任何数据。
 
-Earlier, we saw that we can write "selector" functions, which take `state` as an argument and return some part of the state value.
+前面讲过，我们可以编写 “selector” 函数，它以 `state` 作为参数并返回状态树的一部分。
 
-Our `counterSlice.js` has this selector function at the bottom:
+`counterSlice.js` 在底部有这个 selector 函数：
 
 ```js title="features/counter/counterSlice.js"
 // The function below is called a selector and allows us to select a value from
@@ -592,7 +592,7 @@ Our `counterSlice.js` has this selector function at the bottom:
 export const selectCount = state => state.counter.value
 ```
 
-If we had access to a Redux store, we could retrieve the current counter value as:
+如果我们可以访问 Redux 的 store，我们可以将当前计数器值检索为：
 
 ```js
 const count = selectCount(store.getState())
@@ -600,33 +600,33 @@ console.log(count)
 // 0
 ```
 
-Our components can't talk to the Redux store directly, because we're not allowed to import it into component files. But, `useSelector` takes care of talking to the Redux store behind the scenes for us. If we pass in a selector function, it calls `someSelector(store.getState())` for us, and returns the result.
+我们的组件不能直接与 Redux store 对话，因为组件文件中不能引入 store。但是，`useSelector` 负责为我们在幕后与 Redux store 对话。 如果我们传入一个 selector 函数，它会为我们调用 `someSelector(store.getState())`，并返回结果。
 
-So, we can get the current store counter value by doing:
+因此，我们可以通过执行以下操作来获取 store 中的计数器值：
 
 ```js
 const count = useSelector(selectCount)
 ```
 
-We don't have to _only_ use selectors that have already been exported, either. For example, we could write a selector function as an inline argument to `useSelector`:
+我们也不是_只能_使用已经导出的 selector。例如，我们可以编写一个选择器函数作为 `useSelector` 的内联参数：
 
 ```js
 const countPlusTwo = useSelector(state => state.counter.value + 2)
 ```
 
-Any time an action has been dispatched and the Redux store has been updated, `useSelector` will re-run our selector function. If the selector returns a different value than last time, `useSelector` will make sure our component re-renders with the new value.
+每当一个 action 被 dispatch 并且 Redux store 被更新时，`useSelector` 将重新运行我们的选择器函数。如果选择器返回的值与上次不同，`useSelector` 将确保我们的组件使用新值重新渲染。
 
-#### Dispatching Actions with `useDispatch`
+#### 使用 `useDispatch` 来 dispatch action
 
-Similarly, we know that if we had access to a Redux store, we could dispatch actions using action creators, like `store.dispatch(increment())`. Since we don't have access to the store itself, we need some way to have access to just the `dispatch` method.
+类似地，我们知道如果我们可以访问 Redux store，我们可以使用 action creator 来 dispatch action，比如 `store.dispatch(increment())`。 由于我们无法访问 store 本身，因此我们需要某种方式来访问 `dispatch` 方法。
 
-The `useDispatch` hook does that for us, and gives us the actual `dispatch` method from the Redux store:
+`useDispatch` hooks 为我们完成了这项工作，并从 Redux store 中为我们提供了实际的 `dispatch` 方法：
 
 ```js
 const dispatch = useDispatch()
 ```
 
-From there, we can dispatch actions when the user does something like clicking on a button:
+从那里，我们可以在用户执行诸如单击按钮之类的操作时 dispatch 对应 action：
 
 ```jsx title="features/counter/Counter.js"
 <button
@@ -638,13 +638,13 @@ From there, we can dispatch actions when the user does something like clicking o
 </button>
 ```
 
-### Component State and Forms
+### 组件 State 与 表单
 
-By now you might be wondering, "Do I always have to put all my app's state into the Redux store?"
+现在你可能想知道，“我是否总是需要将我所有应用程序的状态放入 Redux store？”
 
-The answer is **NO. Global state that is needed across the app should go in the Redux store. State that's only needed in one place should be kept in component state.**
+答案是 **不。整个应用程序所需的全局状态应该放在 Redux store 中。而只在一个地方用到的状态应该放到组件的 state。**
 
-In this example, we have an input textbox where the user can type in the next number to be added to the counter:
+在这个例子中，我们有一个文本输入框 input，用户可以在其中输入要添加到计数器的下一个数字：
 
 ```jsx title="features/counter/Counter.js"
 const [incrementAmount, setIncrementAmount] = useState('2')
@@ -674,32 +674,32 @@ return (
 )
 ```
 
-We _could_ keep the current number string in the Redux store, by dispatching an action in the input's `onChange` handler and keeping it in our reducer. But, that doesn't give us any benefit. The only place that text string is used is here, in the `<Counter>` component. (Sure, there's only one other component in this example: `<App>`. But even if we had a larger application with many components, only `<Counter>` cares about this input value.)
+我们_可以_在 Redux store 中保留当前数字字符串，方法是在输入的 `onChange` 处理程序中 dispatch action 并将其保存在我们的 reducer 中。但是，这并没有给我们带来任何好处。唯一使用文本字符串的地方是这里，在 `<Counter>` 组件中。（当然，在这个例子中只有一个其他组件：`<App>`。但即使我们有一个包含许多组件的更大的应用程序，也只有 `<Counter>` 关心这个输入值。）
 
-So, it makes sense to keep that value in a `useState` hook here in the `<Counter>` component.
+因此，将该值保留在 `<Counter>` 组件中的 `useState` 的 hooks 中是有意义的。
 
-Similarly, if we had a boolean flag called `isDropdownOpen`, no other components in the app would care about that - it should really stay local to this component.
+类似地，如果我们有一个名为 `isDropdownOpen` 的布尔值，应用程序中的其他组件不会关心它——它应该真正保持在这个组件的本地。
 
-**In a React + Redux app, your global state should go in the Redux store, and your local state should stay in React components.**
+**在 React + Redux 应用中，你的全局状态应该放在 Redux store 中，你的本地状态应该保留在 React 组件中。**
 
-If you're not sure where to put something, here are some common rules of thumb for determining what kind of data should be put into Redux:
+如果您不确定该放在哪里，这里有一些常用的经验法则，用于确定应该将哪种数据放入 Redux：
 
-- Do other parts of the application care about this data?
-- Do you need to be able to create further derived data based on this original data?
-- Is the same data being used to drive multiple components?
-- Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
-- Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
-- Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
+- 应用程序的其他部分是否关心这些数据？
+- 您是否需要能够基于这些原始数据创建进一步的派生数据？
+- 是否使用相同的数据来驱动多个组件？
+- 能够将这种状态恢复到给定的时间点（即时间旅行调试）对您是否有价值？
+- 是否要缓存数据（即，如果数据已经存在，则使用它的状态而不是重新请求它）？
+- 您是否希望在热重载 UI 组件（交换时可能会丢失其内部状态）时保持此数据一致？
 
-This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
+这也是一般如何在 Redux 中考虑表单的一个很好的例子。 **大多数表单的 state 不应该保存在 Redux 中。** 相反，在编辑表单的时候把数据存到表单组件中，当用户提交表单的时候再 dispatch action 来更新 store。
 
-One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.js`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It only knows that when you click that button, it dispatches something.
+在我们继续之前要注意的另一件事是：还记得 `counterSlice.js` 中的 `incrementAsync` 这个 thunk 吗？我们在这个组件中使用它。请注意，我们使用它的方式与 dispatch 其他普通的 action 是一样的。这个组件不关心我们是在 dispatch 一个普通的 action 还是异步逻辑。它只知道当你点击那个按钮时，它会执行 dispatch。
 
 ### Providing the Store
 
-We've seen that our components can use the `useSelector` and `useDispatch` hooks to talk to the Redux store. But, since we didn't import the store, how do those hooks know what Redux store to talk to?
+我们已经看到我们的组件可以使用 `useSelector` 和 `useDispatch` 这两个 hooks 与 Redux 的 store 通信。奇怪的是，我们并没有导入 store，那么这些 hooks 怎么知道要与哪个 Redux store 对话呢？
 
-Now that we've seen all the different pieces of this application, it's time to circle back to the starting point of this application and see how the last pieces of the puzzle fit together.
+现在我们已经看到了这个应用程序的全貌，是时候回到这个应用程序的起点，看看拼图的最后部分是如何组合在一起的。
 
 ```jsx title="index.js"
 import React from 'react'
@@ -721,33 +721,34 @@ ReactDOM.render(
 )
 ```
 
-We always have to call `ReactDOM.render(<App />)` to tell React to start rendering our root `<App>` component. In order for our hooks like `useSelector` to work right, we need to use a component called `<Provider>` to pass down the Redux store behind the scenes so they can access it.
+我们总是必须调用 `ReactDOM.render(<App />)` 来告诉 React 开始渲染我们的根 `<App>` 组件。 为了让像 `useSelector` 这样的 hooks 正常工作，我们需要使用一个名为 `<Provider>` 的组件在幕后传递 Redux store，以便他们可以访问它。
 
-We already created our store in `app/store.js`, so we can import it here. Then, we put our `<Provider>` component around the whole `<App>`, and pass in the store: `<Provider store={store}>`.
+我们在这里引用来自 `app/store.js` 中创建的 store。然后，用 `<Provider>` 包裹整个 `<App>`，并传入 store：`<Provider store={store}>`。
 
-Now, any React components that call `useSelector` or `useDispatch` will be talking to the Redux store we gave to the `<Provider>`.
+现在，任何调用 `useSelector` 或 `useDispatch` 的 React 组件都可以访问 `<Provider>` 中的 store。
 
 ## 你学到了
 
-Even though the counter example app is pretty small, it showed all the key pieces of a React + Redux app working together. Here's what we covered:
+尽管 Count 这个应用程序非常小，但它展示了 React + Redux 应用程序协同工作的所有关键部分。 以下是我们介绍的内容：
 
 :::tip 总结
 
-- **We can create a Redux store using the Redux Toolkit `configureStore` API**
-  - `configureStore` accepts a `reducer` function as a named argument
-  - `configureStore` automatically sets up the store with good default settings
-- **Redux logic is typically organized into files called "slices"**
+- **我们可以使用 Redux Toolkit `configureStore` API 创建一个 Redux store**
+  - `configureStore` 接收 `reducer` 函数来作为命名参数
+  - `configureStore` 自动使用默认值来配置 store
+- **在 slice 文件中编写 Redux 逻辑**
   - A "slice" contains the reducer logic and actions related to a specific feature / section of the Redux state
-  - Redux Toolkit's `createSlice` API generates action creators and action types for each individual reducer function you provide
-- **Redux reducers must follow specific rules**
+  - 一个 slice 包含一个特定功能或部分的 state 相关的逻辑和 action
+  - Redux Toolkit 的 `createSlice` API 为您提供的每个 reducer 函数生成 action creator 和 action 类型
+- **Redux reducer 必须遵循一下原则**
   - Should only calculate a new state value based on the `state` and `action` arguments
   - Must make _immutable updates_ by copying the existing state
   - Cannot contain any asynchronous logic or other "side effects"
   - Redux Toolkit's `createSlice` API uses Immer to allow "mutating" immutable updates
-- **Async logic is typically written in special functions called "thunks"**
+- **一般使用 “thunks” 来开发特定的异步逻辑**
   - Thunks receive `dispatch` and `getState` as arguments
   - Redux Toolkit enables the `redux-thunk` middleware by default
-- **React-Redux allows React components to interact with a Redux store**
+- **使用 React-Redux 来做 React 组件和 Redux store 的通信**
   - Wrapping the app with `<Provider store={store}>` enables all components to use the store
   - Global state should go in the Redux store, local state should stay in React components
 
@@ -755,6 +756,6 @@ Even though the counter example app is pretty small, it showed all the key piece
 
 ## 下一步
 
-Now that you've seen all the pieces of a Redux app in action, it's time to write your own! For the rest of this tutorial, you'll be building a larger example app that uses Redux. Along the way, we'll cover all the key ideas you need to know to use Redux the right way.
+现在您已经看到了 Redux 应用程序的所有部分，是时候编写自己的应用程序了！ 在本教程的其余部分，您将构建一个更大的使用 Redux 的示例应用程序。 在此过程中，我们将介绍正确使用 Redux 所需了解的所有关键思想。
 
-Continue on to [Part 3: Basic Redux Data Flow](./part-3-data-flow.md) to get started building the example app.
+继续阅读 [第 3 部分：Redux 数据流基础](./part-3-data-flow.md) 以开始构建示例应用程序。

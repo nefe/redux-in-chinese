@@ -1,6 +1,6 @@
 ---
 id: part-5-async-logic
-title: 'Redux 基础，第五节：异步逻辑与数据请求'
+title: 'Redux 循序渐进，第五节：异步逻辑与数据请求'
 sidebar_label: '异步逻辑与数据请求'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how async logic works in Redux apps'

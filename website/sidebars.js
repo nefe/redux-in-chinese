@@ -12,7 +12,7 @@ module.exports = {
       'tutorials/tutorials-index',
       {
         type: 'category',
-        label: 'Redux 基础',
+        label: 'Redux 循序渐进',
         items: [
           'tutorials/essentials/part-1-overview-concepts',
           'tutorials/essentials/part-2-app-structure',
@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         type: 'category',
-        label: 'Redux 进阶',
+        label: 'Redux 深入浅出',
         items: [
           'tutorials/fundamentals/part-1-overview',
           'tutorials/fundamentals/part-2-concepts-data-flow',

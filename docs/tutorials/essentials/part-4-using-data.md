@@ -1,6 +1,6 @@
 ---
 id: part-4-using-data
-title: 'Redux 基础，第四节：使用数据'
+title: 'Redux 循序渐进，第四节：使用数据'
 sidebar_label: '使用数据'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info 必备能力
 
-- 理解 [Redux 基础，第三节：数据流基础](./part-3-data-flow.md)
+- 理解 [Redux 循序渐进，第三节：数据流基础](./part-3-data-flow.md)
 - 熟悉 [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
 
 :::
