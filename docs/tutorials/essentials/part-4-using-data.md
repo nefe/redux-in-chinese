@@ -12,40 +12,41 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip 你将学到
 
-- Using Redux data in multiple React components
-- Organizing logic that dispatches actions
-- Writing more complex update logic in reducers
+- 在多个 React 组件中使用 Redux 数据
+- 开发逻辑来 dispatch action
+- 在 reducer 中编写更复杂的更新逻辑
 
 :::
 
 :::info 必备能力
 
 - 理解 [Redux 循序渐进，第三节：数据流基础](./part-3-data-flow.md)
-- 熟悉 [the React Router `<Link>` and `<Route>` components for page routing](https://reacttraining.com/react-router/web/api)
+- 熟悉 [使用 React Router 中 `<Link>` 与 `<Route>` 组件来做页面路由](https://reacttraining.com/react-router/web/api)
 
 :::
 
 ## 简介
 
-In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
+在 [第三节：基本数据流](./part-3-data-flow.md) 中，我们看到了如何从一个空的 Redux+React 项目设置开始，添加一个新的状态切片，并创建 React 组件 可以从 Redux store 中读取数据并 dispatch action 来更新该数据。我们还研究了数据如何在应用程序中流动，组件 dispatch action，reducer 处理动作并返回新状态，以及组件读取新状态并重新渲染 UI。
 
-Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
+现在您已经了解了编写 Redux 逻辑的核心步骤，我们将使用这些相同的步骤向我们的社交媒体提要添加一些很实用的新功能：查看单个帖子、编辑现有帖子、详细信息显示帖子作者、发布时间戳和反应按钮。
+
 
 :::info 说明
 
-As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
+提醒一下，代码示例侧重于每个部分的关键概念和更改。请参阅 CodeSandbox 项目和 [项目 repo 中的`tutorial-steps` 分支](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) 以了解应用程序中的完整更改。
 
 :::
 
-## Showing Single Posts
+## 显示单个帖子
 
-Since we have the ability to add new posts to the Redux store, we can add some more features that use the post data in different ways.
+由于我们能够向 Redux store 添加新帖子，因此我们可以添加更多以不同方式使用帖子数据的功能。
 
-Currently, our post entries are being shown in the main feed page, but if the text is too long, we only show an excerpt of the content. It would be helpful to have the ability to view a single post entry on its own page.
+目前，我们的帖子列表正在首页中显示，但如果文本太长，我们只会显示内容的摘录。能够在其自己的页面上查看单个帖子条目会很有帮助。
 
-### Creating a Single Post Page
+### 创建单个帖子的页面
 
-First, we need to add a new `SinglePostPage` component to our `posts` feature folder. We'll use React Router to show this component when the page URL looks like `/posts/123`, where the `123` part should be the ID of the post we want to show.
+首先，我们需要在我们的 `posts` 功能文件夹中添加一个新的 `SinglePostPage` 组件。当页面 URL 是 `/posts/123` 这样的格式时，我们将使用 React Router 来显示这个组件，其中 `123` 部分应该是我们想要显示的帖子的 ID。
 
 ```jsx title="features/posts/SinglePostPage.js"
 import React from 'react'
@@ -61,7 +62,7 @@ export const SinglePostPage = ({ match }) => {
   if (!post) {
     return (
       <section>
-        <h2>Post not found!</h2>
+        <h2>页面未找到！</h2>
       </section>
     )
   }
@@ -77,23 +78,23 @@ export const SinglePostPage = ({ match }) => {
 }
 ```
 
-React Router will pass in a `match` object as a prop that contains the URL information we're looking for. When we set up the route to render this component, we're going to tell it to parse the second part of the URL as a variable named `postId`, and we can read that value from `match.params`.
+React Router 将传入一个 `match` 对象作为包含我们正在寻找的 URL 信息的 prop。当我们设置路由来渲染这个组件时，我们将告诉它解析 URL 的第二部分作为一个名为 `postId` 的变量，我们可以从 `match.params` 中读取该值。
 
-Once we have that `postId` value, we can use it inside a selector function to find the right post object from the Redux store. We know that `state.posts` should be an array of all post objects, so we can use the `Array.find()` function to loop through the array and return the post entry with the ID we're looking for.
+一旦我们有了这个 `postId` 值，我们就可以在 selector 函数中使用它来从 Redux store 中找到正确的 post 对象。我们知道 `state.posts` 应该是所有 post 对象的数组，所以我们可以使用 `Array.find()` 函数循环遍历数组并返回带有我们正在寻找的 ID 的 post 条目。
 
-It's important to note that **the component will re-render any time the value returned from `useSelector` changes to a new reference**. Components should always try to select the smallest possible amount of data they need from the store, which will help ensure that it only renders when it actually needs to.
+重要的是要注意**每当 `useSelector` 返回的值为新引用时，组件就会重新渲染**。所以组件应始终尝试从 store 中选择它们需要的**尽可能少**的数据，这将有助于确保它仅在实际需要时才渲染。
 
-It's possible that we might not have a matching post entry in the store - maybe the user tried to type in the URL directly, or we don't have the right data loaded. If that happens, the `find()` function will return `undefined` instead of an actual post object. Our component needs to check for that and handle it by showing a "Post not found!" message in the page.
+可能我们在 store 中没有匹配的帖子条目 - 也许用户试图直接输入 URL，或者我们没有加载正确的数据。如果发生这种情况，`find()` 函数将返回 `undefined` 而不是实际的 post 对象。我们的组件需要检查并通过显示“找不到帖子！”来处理它。
 
-Assuming we do have the right post object in the store, `useSelector` will return that, and we can use it to render the title and content of the post in the page.
+假设我们在 store 中有正确的 post 对象，`useSelector` 将返回它，我们可以使用它来渲染页面中帖子的标题和内容。
 
-You might notice that this looks fairly similar to the logic we have in the body of our `<PostsList>` component, where we loop over the whole `posts` array to show post excerpts the main feed. We _could_ try to extract a `Post` component that could be used in both places, but there are already some differences in how we're showing a post excerpt and the whole post. It's usually better to keep writing things separately for a while even if there's some duplication, and then we can decide later if the different sections of code are similar enough that we can really extract a reusable component.
+您可能会注意到，这看起来与我们在 `<PostsList>` 组件主体中的逻辑非常相似，其中我们遍历整个 `posts` 数组以显示主要提要的帖子摘录。我们_可以尝试_提取一个可以在两个地方使用的“帖子”组件，但是我们在显示帖子摘录和整个帖子方面已经存在一些差异。即使有一些重复，通常最好还是分开写一段时间，然后我们可以稍后决定不同的代码部分是否足够相似，以至于我们可以真正提取出可重用的组件。
 
-### Adding the Single Post Route
+### 添加单个帖子的路由
 
-Now that we have a `<SinglePostPage>` component, we can define a route to show it, and add links to each post in the front page feed.
+现在我们有一个 `<Single Post Page>` 组件，我们可以定义一个路由来显示它，并在首页提要中添加每个帖子的链接。
 
-We'll import `SinglePostPage` in `App.js`, and add the route:
+我们将在`App.js`中导入`Single Post Page`，并添加路由：
 
 ```jsx title="App.js"
 import { PostsList } from './features/posts/PostsList'
@@ -127,7 +128,7 @@ function App() {
 }
 ```
 
-Then, in `<PostsList>`, we'll update the list rendering logic to include a `<Link>` that routes to that specific post:
+然后，在 `<PostsList>` 中，我们将更新列表渲染逻辑以包含一个路由到该特定帖子的 `<Link>`：
 
 ```jsx title="features/posts/PostsList.js"
 import React from 'react'
@@ -159,7 +160,7 @@ export const PostsList = () => {
 }
 ```
 
-And since we can now click through to a different page, it would also be helpful to have a link back to the main posts page in the `<Navbar>` component as well:
+由于我们现在可以点击进入不同的页面，因此在 `<Navbar>` 组件中提供一个返回主帖子页面的链接也会很有帮助：
 
 ```jsx title="app/Navbar.js"
 import React from 'react'
@@ -171,12 +172,12 @@ export const Navbar = () => {
   return (
     <nav>
       <section>
-        <h1>Redux Essentials Example</h1>
+        <h1>Redux 循序渐进示例</h1>
 
         <div className="navContent">
           // highlight-start
           <div className="navLinks">
-            <Link to="/">Posts</Link>
+            <Link to="/">帖子列表</Link>
           </div>
           // highlight-end
         </div>
@@ -186,32 +187,32 @@ export const Navbar = () => {
 }
 ```
 
-## Editing Posts
+## 编辑帖子
 
-As a user, it's really annoying to finish writing a post, save it, and realize you made a mistake somewhere. Having the ability to edit a post after we created it would be useful.
+作为用户，写完一篇文章，保存它，然后意识到你在某个地方犯了错误，这真的很烦人。 在我们创建帖子后能够编辑它会很有用。
 
-Let's add a new `<EditPostForm>` component that has the ability to take an existing post ID, read that post from the store, lets the user edit the title and post content, and then save the changes to update the post in the store.
+让我们添加一个新的 `<EditPostForm>` 组件，该组件能够获取现有帖子 ID，从 store 读取该帖子，让用户编辑标题和帖子内容，然后保存更改以更新 store 中的帖子。
 
-### Updating Post Entries
+### 更新帖子条目
 
-First, we need to update our `postsSlice` to create a new reducer function and an action so that the store knows how to actually update posts.
+首先，我们需要更新我们的 `postsSlice` 以创建一个新的 reducer 函数和一个动作，以便 store 知道如何更新帖子数据。
 
-Inside of the `createSlice()` call, we should add a new function into the `reducers` object. Remember that the name of this reducer should be a good description of what's happening, because we're going to see the reducer name show up as part of the action type string in the Redux DevTools whenever this action is dispatched. Our first reducer was called `postAdded`, so let's call this one `postUpdated`.
+在 `createSlice()` 函数中，我们应该在 `reducers` 对象中添加一个新函数。请记住，reducer 的名称应该很好地描述了正在发生的事情，因为无论何时调度此 action，我们都会看到 reducer 名称显示为 Redux DevTools 中的 action type 字符串的一部分。我们的第一个 reducer 被称为 `postAdded`，这个就命名为 `postUpdated`。
 
-In order to update a post object, we need to know:
+为了更新 post 对象，我们需要知道：
 
-- The ID of the post being updated, so that we can find the right post object in the state
-- The new `title` and `content` fields that the user typed in
+- 正在更新的帖子的ID，以便我们可以在状态中找到正确的帖子对象
+- 用户输入的新“标题”和“内容”字段
 
-Redux action objects are required to have a `type` field, which is normally a descriptive string, and may also contain other fields with more information about what happened. By convention, we normally put the additional info in a field called `action.payload`, but it's up to us to decide what the `payload` field contains - it could be a string, a number, an object, an array, or something else. In this case, since we have three pieces of information we need, let's plan on having the `payload` field be an object with the three fields inside of it. That means the action object will look like `{type: 'posts/postUpdated', payload: {id, title, content}}`.
+Redux action 对象需要有一个 `type` 字段，它通常是一个描述性字符串，也可能包含其他字段，其中包含有关发生的事情的更多信息。按照惯例，我们通常将附加信息放在名为 `action.payload` 的字段中，但由我们来决定 `payload` 字段包含的内容 - 它可以是字符串、数字、对象、数组或别的东西。在这种情况下，由于我们需要三个信息，让我们计划让 `payload` 字段成为其中包含三个字段的对象。这意味着 action 对象将类似于 `{type: 'posts/postUpdated', payload: {id, title, content}}`。
 
-By default, the action creators generated by `createSlice` expect you to pass in one argument, and that value will be put into the action object as `action.payload`. So, we can pass an object containing those fields as the argument to the `postUpdated` action creator.
+默认情况下，`createSlice` 生成的 action creator 希望你传入一个参数，该值将作为 `action.payload` 放入 action 对象中。因此，我们可以将包含这些字段的对象作为参数传递给 `postUpdated` 这个 action creator。
 
-We also know that the reducer is responsible for determining how the state should actually be updated when an action is dispatched. Given that, we should have the reducer find the right post object based on the ID, and specifically update the `title` and `content` fields in that post.
+我们还知道，reducer 负责确定在调度 action 时实际应该如何更新状态。鉴于此，我们应该让 reducer 根据 ID 找到正确的 post 对象，并专门更新该 post 中的 `title` 和 `content` 字段。
 
-Finally, we'll need to export the action creator function that `createSlice` generated for us, so that the UI can dispatch the new `postUpdated` action when the user saves the post.
+最后，我们需要导出 `createSlice` 为我们生成的 action creator 函数，以便用户保存帖子时 UI 可以 dispatch 新的 `postUpdated` action。
 
-Given all those requirements, here's how our `postsSlice` definition should look after we're done:
+考虑到所有这些要求，修改后的 `postsSlice` 代码如下：
 
 ```js title="features/posts/postsSlice.js"
 const postsSlice = createSlice({
@@ -240,9 +241,9 @@ export const { postAdded, postUpdated } = postsSlice.actions
 export default postsSlice.reducer
 ```
 
-### Creating an Edit Post Form
+### 编辑帖子表单
 
-Our new `<EditPostForm>` component will look similar to the `<AddPostForm>`, but the logic needs to be a bit different. We need to retrieve the right `post` object from the store, then use that to initialize the state fields in the component so the user can make changes. We'll save the changed title and content values back to the store after the user is done. We'll also use React Router's history API to switch over to the single post page and show that post.
+我们新的 `<EditPostForm>` 组件看起来类似于 `<AddPostForm>`，但逻辑需要有点不同。我们需要从 store 中检索正确的 `post` 对象，然后使用它来初始化组件中的状态字段，以便用户可以进行更改。用户完成后，我们会将更改的标题和内容值保存回 store。 我们还将使用 React Router 的历史 API 切换到单个帖子页面并显示该帖子。
 
 ```jsx title="features/posts/EditPostForm.js"
 import React, { useState } from 'react'
@@ -276,9 +277,9 @@ export const EditPostForm = ({ match }) => {
 
   return (
     <section>
-      <h2>Edit Post</h2>
+      <h2>编辑帖子</h2>
       <form>
-        <label htmlFor="postTitle">Post Title:</label>
+        <label htmlFor="postTitle">帖子标题：</label>
         <input
           type="text"
           id="postTitle"
@@ -287,7 +288,7 @@ export const EditPostForm = ({ match }) => {
           value={title}
           onChange={onTitleChanged}
         />
-        <label htmlFor="postContent">Content:</label>
+        <label htmlFor="postContent">内容：</label>
         <textarea
           id="postContent"
           name="postContent"
@@ -296,14 +297,14 @@ export const EditPostForm = ({ match }) => {
         />
       </form>
       <button type="button" onClick={onSavePostClicked}>
-        Save Post
+        保存帖子
       </button>
     </section>
   )
 }
 ```
 
-Like with `SinglePostPage`, we'll need to import it into `App.js` and add a route that will render this component. We should also add a new link to our `SinglePostPage` that will route to `EditPostPage`, like:
+与 `SinglePostPage` 一样，我们需要将它导入 `App.js` 并添加一个路由来渲染这个组件。我们还应该向我们的 `SinglePostPage` 添加一个新链接，该链接将路由到 `EditPostPage`，例如：
 
 ```jsx title="features/post/SinglePostPage.js"
 // highlight-next-line
@@ -321,19 +322,19 @@ export const SinglePostPage = ({ match }) => {
         // highlight-end
 ```
 
-### Preparing Action Payloads
+### 准备 Action Payloads
 
-We just saw that the action creators from `createSlice` normally expect one argument, which becomes `action.payload.` This simplifies the most common usage pattern, but sometimes we need to do more work to prepare the contents of an action object. In the case of our `postAdded` action, we need to generate a unique ID for the new post, and we also need to make sure that the payload is an object that looks like `{id, title, content}`.
+我们刚刚看到 `createSlice` 中的 action creator 通常期望一个参数，它变成了 `action.payload`。这简化了最常见的使用模式，但有时我们需要做更多的工作来准备 action 对象的内容。 在我们的 `postAdded` 操作的情况下，我们需要为新帖子生成一个唯一的 ID，我们还需要确保有效负载是一个看起来像 `{id, title, content}` 的对象。
 
-Right now, we're generating the ID and creating the payload object in our React component, and passing the payload object into `postAdded`. But, what if we needed to dispatch the same action from different components, or the logic for preparing the payload is complicated? We'd have to duplicate that logic every time we wanted to dispatch the action, and we're forcing the component to know exactly what the payload for this action should look like.
+现在，我们正在 React 组件中生成 ID 并创建有效负载对象，并将有效负载对象传递给 `postAdded`。 但是，如果我们需要从不同的组件 dispatch 相同的 action，或者准备负载的逻辑很复杂怎么办？ 每次我们想要 dispatch action 时，我们都必须复制该逻辑，并且我们强制组件确切地知道此 action 的有效负载应该是什么样子。
 
 :::caution 注意
 
-If an action needs to contain a unique ID or some other random value, always generate that first and put it in the action object. **Reducers should never calculate random values**, because that makes the results unpredictable.
+如果 action 需要包含唯一 ID 或其他一些随机值，请始终先生成该随机值并将其放入 action 对象中。 **Reducer 中永远不应该计算随机值**，因为这会使结果不可预测。
 
 :::
 
-If we were writing the `postAdded` action creator by hand, we could have put the setup logic inside of it ourselves:
+如果我们手动编写 `postAdded` 的 action creator，我们可以自己将设置逻辑放在其中：
 
 ```js
 // hand-written action creator
@@ -346,11 +347,11 @@ function postAdded(title, content) {
 }
 ```
 
-But, Redux Toolkit's `createSlice` is generating these action creators for us. That makes the code shorter because we don't have to write them ourselves, but we still need a way to customize the contents of `action.payload`.
+但是，Redux Toolkit 的 `createSlice` 正在为我们生成这些 action creator。这使得代码更短，因为我们不必自己编写它们，但我们仍然需要一种方法来自定义 `action.payload` 的内容。
 
-Fortunately, `createSlice` lets us define a "prepare callback" function when we write a reducer. The "prepare callback" function can take multiple arguments, generate random values like unique IDs, and run whatever other synchronous logic is needed to decide what values go into the action object. It should then return an object with the `payload` field inside. (The return object may also contain a `meta` field, which can be used to add extra descriptive values to the action, and an `error` field, which should be a boolean indicating whether this action represents some kind of an error.)
+幸运的是，`createSlice` 允许我们在编写 reducer 时定义一个 `prepare` 函数。  `prepare` 函数可以接受多个参数，生成诸如唯一 ID 之类的随机值，并运行需要的任何其他同步逻辑来决定哪些值进入 action 对象。然后它应该返回一个包含 `payload` 字段的对象。（返回对象还可能包含一个 `meta` 字段，可用于向 action 添加额外的描述性值，以及一个 `error` 字段，该字段应该是一个布尔值，指示此 action 是否表示某种错误。）
 
-Inside of the `reducers` field in `createSlice`, we can define one of the fields as an object that looks like `{reducer, prepare}`:
+在 `createSlice` 的 `reducers` 字段内，我们可以将其中一个字段定义为一个类似于 `{reducer, prepare}` 的对象：
 
 ```js title="features/posts/postsSlice.js"
 const postsSlice = createSlice({
@@ -378,7 +379,7 @@ const postsSlice = createSlice({
 })
 ```
 
-Now our component doesn't have to worry about what the payload object looks like - the action creator will take care of putting it together the right way. So, we can update the component so that it passes in `title` and `content` as arguments when it dispatches `postAdded`:
+现在我们的组件不必担心 payload 对象是什么样子 - action creator 将负责以正确的方式将它组合在一起。因此，我们可以更新组件代码，以便它在调度 `postAdded` 时传入 `title` 和 `content` 作为参数：
 
 ```jsx title="features/posts/AddPostForm.js"
 const onSavePostClicked = () => {
@@ -391,15 +392,19 @@ const onSavePostClicked = () => {
 }
 ```
 
-## Users and Posts
+## 用户与帖子
 
-So far, we only have one slice of state. The logic is defined in `postsSlice.js`, the data is stored in `state.posts`, and all of our components have been related to the posts feature. Real applications will probably have many different slices of state, and several different "feature folders" for the Redux logic and React components.
+到目前为止，我们只有一个状态切片。 逻辑在 `postsSlice.js` 中定义，数据存储在 `state.posts` 中，我们所有的组件都与 posts 功能相关。真实的应用程序可能会有许多不同的状态切片，以及用于 Redux 逻辑和 React 组件的几个不同的“功能文件夹”。
 
-You can't have a "social media" app if there aren't any other people involved. Let's add the ability to keep track of a list of users in our app, and update the post-related functionality to make use of that data.
+如果没有任何其他人参与，您就无法做出社交媒体。让我们添加在我们的应用程序中跟踪用户列表的功能，并更新与发布相关的功能。
 
-### Adding a Users Slice
+### 添加用户切片
 
-Since the concept of "users" is different than the concept of "posts", we want to keep the code and data for the users separated from the code and data for posts. We'll add a new `features/users` folder, and put a `usersSlice` file in there. Like with the posts slice, for now we'll add some initial entries so that we have data to work with.
+由于“用户”的概念不同于“帖子”的概念，我们希望将用户的代码和数据与帖子的代码和数据分开。我们将添加一个新的 `features/users` 文件夹，并在其中放置一个 `usersSlice` 文件。与帖子切片一样，现在我们将添加一些初始条目，以便我们可以使用数据。
+
+### 添加用户切片
+
+由于“用户”的概念不同于“帖子”的概念，我们希望将用户的代码和数据与帖子的代码和数据分开。我们将添加一个新的 `features/users` 文件夹，并在其中放置一个 `usersSlice` 文件。 与帖子切片一样，现在我们将添加一些初始条目，以便我们可以使用数据。
 
 ```js title="features/users/usersSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
@@ -419,9 +424,9 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 ```
 
-For now, we don't need to actually update the data, so we'll leave the `reducers` field as an empty object. (We'll come back to this in a later section.)
+目前，我们不需要实际更新数据，因此我们将 `reducers` 字段保留为空对象。（我们将在后面的部分中回到这一点。）
 
-As before, we'll import the `usersReducer` into our store file and add it to the store setup:
+和以前一样，我们将 `usersReducer` 导入我们的 store 文件并将其添加到 store 设置中：
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -439,13 +444,13 @@ export default configureStore({
 })
 ```
 
-### Adding Authors for Posts
+### 为帖子添加作者
 
-Every post in our app was written by one of our users, and every time we add a new post, we should keep track of which user wrote that post. In a real app, we'd have some sort of a `state.currentUser` field that keeps track of the current logged-in user, and use that information whenever they add a post.
+我们应用中的每篇文章都是由我们的一个用户撰写的，每次我们添加新文章时，我们都应该跟踪哪个用户写了该文章。 在一个真正的应用程序中，我们会有某种 `state.currentUser` 字段来跟踪当前登录的用户，并在他们添加帖子时使用该信息。
 
-To keep things simpler for this example, we'll update our `<AddPostForm>` component so that we can select a user from a dropdown list, and we'll include that user's ID as part of the post. Once our post objects have a user ID in them, we can use that to look up the user's name and show it in each individual post in the UI.
+为了让这个例子更简单，我们将更新我们的 `<AddPostForm>` 组件，以便我们可以从下拉列表中选择一个用户，我们将把该用户的 ID 作为帖子的一部分。一旦我们的帖子对象中有一个用户 ID，我们就可以使用它来查找用户名并在 UI 中的每个单独帖子中显示它。
 
-First, we need to update our `postAdded` action creator to accept a user ID as an argument, and include that in the action. (We'll also update the existing post entries in `initialState` to have a `post.user` field with one of the example user IDs.)
+首先，我们需要更新我们的 `postAdded` action creator 以接受用户 ID 作为参数，并将其包含在 action 中。（我们还将更新 `initialState` 中的现有帖子条目，使其具有包含示例用户 ID 之一的 `post.user` 字段。）
 
 ```js title="features/posts/postsSlice.js"
 const postsSlice = createSlice({
@@ -474,7 +479,7 @@ const postsSlice = createSlice({
 })
 ```
 
-Now, in our `<AddPostForm>`, we can read the list of users from the store with `useSelector` and show them as a dropdown. We'll then take the ID of the selected user and pass that to the `postAdded` action creator. While we're at it, we can add a bit of validation logic to our form so that the user can only click the "Save Post" button if the title and content inputs have some actual text in them:
+现在，在我们的 `<AddPostForm>` 中，我们可以使用 `useSelector` 从 store 中读取用户列表，并将它们显示为下拉列表。然后我们将获取所选用户的 ID 并将其传递给 `postAdded` 这个 action creator。 在此过程中，我们可以在表单中添加一些验证逻辑，以便用户只能在标题和内容合规时才能单击“保存帖子”按钮：
 
 ```jsx title="features/posts/AddPostForm.js"
 import React, { useState } from 'react'
@@ -555,7 +560,7 @@ export const AddPostForm = () => {
 }
 ```
 
-Now, we need a way to show the name of the post's author inside of our post list items and `<SinglePostPage>`. Since we want to show this same kind of info in more than one place, we can make a `PostAuthor` component that takes a user ID as a prop, looks up the right user object, and formats the user's name:
+现在，我们需要一种方法来在我们的帖子列表项和 `<SinglePostPage>` 中显示帖子作者的姓名。由于我们想要在多个地方显示相同类型的信息，我们可以创建一个 PostAuthor 组件，它将用户 ID 作为 prop，查找正确的用户对象，并格式化用户名：
 
 ```jsx title="features/posts/PostAuthor.js"
 import React from 'react'
@@ -570,27 +575,27 @@ export const PostAuthor = ({ userId }) => {
 }
 ```
 
-Notice that we're following the same pattern in each of our components as we go. Any component that needs to read data from the Redux store can use the `useSelector` hook, and extract the specific pieces of data that it needs. Also, many components can access the same data in the Redux store at the same time.
+请注意，我们在每个组件中都遵循相同的模式。任何需要从 Redux store 读取数据的组件都可以使用 `useSelector` 钩子，并提取它需要的特定数据片段。此外，许多组件可以同时访问 Redux store 中的相同数据。
 
-We can now import the `PostAuthor` component into both `PostsList.js` and `SinglePostPage.js`, and render it as `<PostAuthor userId={post.user} />`, and every time we add a post entry, the selected user's name should show up inside of the rendered post.
+我们现在可以将 `PostAuthor` 组件导入到 `PostsList.js` 和 `SinglePostPage.js` 中，并将其渲染为 `<PostAuthor userId={post.user} />`，并且每次我们添加一个帖子条目时，所选用户的姓名应显示在帖子内。
 
-## More Post Features
+## 更多帖子功能
 
-At this point, we can create and edit posts. Let's add some additional logic to make our posts feed more useful.
+此时，我们可以创建和编辑帖子。让我们添加一些额外的逻辑，使我们的帖子提要更有用。
 
-### Storing Dates for Posts
+### 存储帖子的日期
 
-Social media feeds are typically sorted by when the post was created, and show us the post creation time as a relative description like "5 hours ago". In order to do that, we need to start tracking a `date` field for our post entries.
+社交媒体提要通常按帖子创建时间排序，并向我们显示帖子创建时间作为相对描述，例如“5 小时前”。为此，我们需要开始跟踪帖子条目的“日期”字段。
 
-Like with the `post.user` field, we'll update our `postAdded` prepare callback to make sure that `post.date` is always included when the action is dispatched. However, it's not another parameter that will be passed in. We want to always use the exact timestamp from when the action is dispatched, so we'll let the prepare callback handle that itself.
+与 `post.user` 字段一样，我们将更新我们的 `postAdded` prepare 回调，以确保在 dispatch action 时始终包含 `post.date`。然而，它不是将被传入的另一个参数。我们希望始终使用 dispatch action 时的时间戳，因此我们将让 prepare 回调自己处理它。
 
 :::caution 注意
 
-**Redux actions and state should only contain plain JS values like objects, arrays, and primitives. Don't put class instances, functions, or other non-serializable values into Redux!**.
+**Redux action 和 state 应该只能包含普通的 JS 值，如对象、数组和基本类型。不要将类实例、函数或其他不可序列化的值放入 Redux！**。
 
 :::
 
-Since we can't just put a `Date` class instance into the Redux store, we'll track the `post.date` value as a timestamp string:
+由于我们不能将 Date 类实例放入 Redux store 中，因此我们将跟踪 `post.date` 值作为时间戳字符串：
 
 ```js title="features/posts/postsSlice.js"
     postAdded: {
@@ -612,7 +617,7 @@ Since we can't just put a `Date` class instance into the Redux store, we'll trac
     },
 ```
 
-Like with post authors, we need to show the relative timestamp description in both our `<PostsList>` and `<SinglePostPage>` components. We'll add a `<TimeAgo>` component to handle formatting a timestamp string as a relative description. Libraries like `date-fns` have some useful utility functions for parsing and formatting dates, which we can use here:
+与帖子作者一样，我们需要在 `<PostsList>` 和 `<SinglePostPage>` 组件中显示相对时间戳描述。我们将添加一个 `<TimeAgo>` 组件来处理格式化时间戳字符串作为相对描述。像 `date-fns` 这样的库有一些有用的工具函数来解析和格式化日期，可以在这里使用：
 
 ```jsx title="features/posts/TimeAgo.js"
 import React from 'react'
@@ -634,16 +639,16 @@ export const TimeAgo = ({ timestamp }) => {
 }
 ```
 
-### Sorting the Posts List
+### 为帖子列表排序
 
-Our `<PostsList>` is currently showing all the posts in the same order the posts are kept in the Redux store. Our example has the oldest post first, and any time we add a new post, it gets added to the end of the posts array. That means the newest post is always at the bottom of the page.
+我们的 `<PostsList>` 当前以帖子在 Redux store 中保存的相同顺序显示所有帖子。我们的示例首先包含最旧的帖子，每当我们添加新帖子时，它都会添加到帖子数组的末尾。这意味着最新的帖子总是在页面底部。
 
-Typically, social media feeds show the newest posts first, and you scroll down to see older posts. Even though the data is being kept oldest-first in the store, we can reorder the data in our `<PostsList>` component so that the newest post is first. In theory, since we know that the `state.posts` array is already sorted, we _could_ just reverse the list. But, it's better to go ahead and sort it ourselves just to be sure.
+通常，社交媒体提要首先显示最新帖子，然后向下滚动以查看旧帖子。即使数据在 store 中是旧的在前，仍然可以在 `<PostsList>` 组件中重新排序数据，以便最新的帖子在最前面。理论上，由于我们知道 `state.posts` 数组已经排序，我们_可以_只反转列表。但是，为了确定起见，最好还是自己进行排序。
 
-Since `array.sort()` mutates the existing array, we need to make a copy of `state.posts` and sort that copy. We know that our `post.date` fields are being kept as date timestamp strings, and we can directly compare those to sort the posts in the right order:
+由于 `array.sort()` 改变了现有数组，我们需要制作 `state.posts` 的副本并对该副本进行排序。我们知道我们的 `post.date` 字段被保存为日期时间戳字符串，我们可以直接比较它们以按正确的顺序对帖子进行排序：
 
 ```jsx title="features/posts/PostsList.js"
-// Sort posts in reverse chronological order by datetime string
+// 根据日期时间字符串，对帖子安装时间倒序进行排序
 //highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
@@ -665,7 +670,7 @@ const renderedPosts = orderedPosts.map(post => {
 })
 ```
 
-We also need to add the `date` field to `initialState` in `postsSlice.js`. We'll use `date-fns` here again to subtract minutes from the current date/time so they differ from each other.
+我们还需要将 `date` 字段添加到 `postsSlice.js` 中的 `initialState`。我们将再次使用 `date-fns` 从当前日期/时间中减去分钟，使它们彼此不同。
 
 ```jsx title="features/posts/postsSlice.js"
 import { createSlice, nanoid } from '@reduxjs/toolkit'
@@ -681,20 +686,20 @@ const initialState = [
   },
   {
     // omitted fields
-    content: 'More text',
+    content: '更多',
     // highlight-next-line
     date: sub(new Date(), { minutes: 5 }).toISOString()
   }
 ]
 ```
 
-### Post Reaction Buttons
+### 为帖子添加反应表情
 
-We have one more new feature to add for this section. Right now, our posts are kind of boring. We need to make them more exciting, and what better way to do that than letting our friends add reaction emoji to our posts?
+现在添加一个新功能，我们的帖子有点无聊。我们需要让他们更令人兴奋，还有什么比让我们的朋友在我们的帖子中添加反应表情更好的方法呢？
 
-We'll add a row of emoji reaction buttons at the bottom of each post in `<PostsList>` and `<SinglePostPage>`. Every time a user clicks one of the reaction buttons, we'll need to update a matching counter field for that post in the Redux store. Since the reaction counter data is in the Redux store, switching between different parts of the app should consistently show the same values in any component that uses that data.
+我们将在 `<PostsList>` 和 `<SinglePostPage>` 的每个帖子底部添加一行表情符号反应按钮。每次用户单击一个反应按钮时，我们都需要更新 Redux store 中该帖子的匹配计数器字段。由于反应计数器数据位于 Redux store 中，因此在应用程序的不同部分之间切换应该在使用该数据的任何组件中始终显示相同的值。
 
-Like with post authors and timestamps, we want to use this everywhere we show posts, so we'll create a `<ReactionButtons>` component that takes a `post` as a prop. We'll start by just showing the buttons inside, with the current reaction counts for each button:
+与帖子作者和时间戳一样，我们希望在显示帖子的任何地方使用它，因此我们将创建一个以 `post` 作为 props 的 `<ReactionButtons>` 组件。我们将首先显示里面的按钮，以及每个按钮的当前反应计数：
 
 ```jsx title="features/posts/ReactionButtons.js"
 import React from 'react'
@@ -720,11 +725,11 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-We don't yet have a `post.reactions` field in our data, so we'll need to update the `initialState` post objects and our `postAdded` prepare callback function to make sure that every post has that data inside, like `reactions: {thumbsUp: 0, hooray: 0}`.
+我们的数据中还没有 `post.reactions` 字段，因此我们需要更新 `initialState` 帖子对象和我们的 `postAdded` prepare 回调函数以确保每个帖子都包含该数据，例如 `反应：{thumbsUp：0，hooray：0}`。
 
-Now, we can define a new reducer that will handle updating the reaction count for a post when a user clicks the reaction button.
+现在，我们可以定义一个新的 reducer，当用户单击反应按钮时，它将处理更新帖子的反应计数。
 
-Like with editing posts, we need to know the ID of the post, and which reaction button the user clicked on. We'll have our `action.payload` be an object that looks like `{id, reaction}`. The reducer can then find the right post object, and update the correct reactions field.
+与编辑帖子一样，我们需要知道帖子的 ID，以及用户点击了哪个反应按钮。我们将让我们的 `action.payload` 成为一个看起来像 `{id, react}` 的对象。 然后，reducer 可以找到正确的 post 对象，并更新正确的反应字段。
 
 ```js
 const postsSlice = createSlice({
@@ -748,17 +753,17 @@ const postsSlice = createSlice({
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 ```
 
-As we've seen already, `createSlice` lets us write "mutating" logic in our reducers. If we weren't using `createSlice` and the Immer library, the line `existingPost.reactions[reaction]++` would indeed mutate the existing `post.reactions` object, and this would probably cause bugs elsewhere in our app because we didn't follow the rules of reducers. But, since we _are_ using `createSlice`, we can write this more complex update logic in a simpler way, and let Immer do the work of turning this code into a safe immutable update.
+正如我们已经看到的，`createSlice` 可以让我们在 reducer 中编写“mutable/变异”的逻辑。如果我们不使用 `createSlice` 和 Immer 库，`existingPost.reactions[reaction]++`这行代码确实会改变现有的 `post.reactions` 对象，这可能会导致我们应用程序中其他地方的错误，因为我们没有遵循 reducer 的规则。但是，由于我们_正在_使用 `createSlice`，我们可以以更简单的方式编写这个更复杂的更新逻辑，并让 Immer 完成将这段代码转换为安全不可变更新的工作。
 
-Notice that **our action object just contains the minimum amount of information needed to describe what happened**. We know which post we need to update, and which reaction name was clicked on. We _could_ have calculated the new reaction counter value and put that in the action, but **it's always better to keep the action objects as small as possible, and do the state update calculations in the reducer**. This also means that **reducers can contain as much logic as necessary to calculate the new state**.
+请注意，**action 对象只包含描述发生的事情所需的最少信息**。我们知道我们需要更新哪个帖子，以及点击了哪个反应名称。我们_可以_计算新的反应计数器值并将其放入 action 中，但**保持动作对象尽可能小总是更好，并在 reducer 中进行状态更新计算**。这也意味着 **reducer 中可以包含计算新状态所需的尽可能多的逻辑**。
 
 :::info 说明
 
-When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/return) for more details.
+使用 Immer 时，您可以“mutate/改变”现有的状态对象，或者自己返回一个新的状态值，但不能同时进行。有关更多详细信息，请参阅有关 [Immer 陷阱](https://immerjs.github.io/immer/pitfalls) 和 [返回新数据](https://immerjs.github.io/immer/return) 的 Immer 文档指南。
 
 :::
 
-Our last step is to update the `<ReactionButtons>` component to dispatch the `reactionAdded` action when the user clicks a button:
+最后一步是更新 `<ReactionButtons>` 组件以在用户单击按钮时 dispatch `reactionAdded` action：
 
 ```jsx title="features/posts/ReactionButtons.jsx"
 import React from 'react'
@@ -801,11 +806,11 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-Now, every time we click a reaction button, the counter should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`.
+现在，每次我们点击一个反应按钮时，计数器都会增加。如果我们浏览应用程序的不同部分，我们应该在每次查看此帖子时看到正确的计数器值，即使我们单击 `<PostsList>` 中的反应按钮，然后单独查看该帖子 `<SinglePostPage>`。
 
 ## 你学到了
 
-Here's what our app looks like after all these changes:
+所有这些更改后我们的应用程序长这样：
 
 <iframe
   class="codesandbox"
@@ -815,9 +820,9 @@ Here's what our app looks like after all these changes:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-It's actually starting to look more useful and interesting!
+它实际上开始看起来更有用和有趣了！
 
-We've covered a lot of information and concepts in this section. Let's recap the important things to remember:
+我们在本节中介绍了很多信息和概念。 让我们回顾一下要记住的重要事项：
 
 :::tip 总结
 
@@ -838,4 +843,4 @@ We've covered a lot of information and concepts in this section. Let's recap the
 
 ## 下一步
 
-By now you should be comfortable working with data in the Redux store and React components. So far we've just used data that was in the initial state or added by the user. In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we'll see how to work with data that comes from a server API.
+到现在为止，您应该已经熟练使用 Redux store 和 React 组件中的数据了。到目前为止，我们只使用了处于初始状态或用户添加的数据。 在 [第五节：异步逻辑和数据获取](./part-5-async-logic.md) 中，我们将了解如何处理来自服务器 API 的数据。
