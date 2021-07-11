@@ -50,26 +50,26 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
+您还可以[克隆Github上相同的仓库](https://github.com/reduxjs/redux-esensients-example-app)。在克隆之后，您可以使用 `npm install` 来安装依赖，并使用 `npm start` 来启动。
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/tutorial-steps).
+如果您想看到我们要构建的最终版本，您可以切换到[**`tutorial-steps`分支**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps)，或[打开 CodeSandbox 中的最终版本](https://codesandbox.io/s/github/duxjs/redux-estials-example-app/tree/tutorial-step)。
 
-> We'd like to thank [Tania Rascia](https://www.taniarascia.com/), whose [Using Redux with React](https://www.taniarascia.com/redux-react-guide/) tutorial helped inspire the example in this page. It also uses her [Primitive UI CSS starter](https://taniarascia.github.io/primitive/) for styling.
+> 感谢 [Tania Rascia](https://www.taniarascia.com/), 本节中的例子灵感来源于她的 [在 React 中使用 Redux](https://www.taniarascia.com/redux-react-guide/)。本节的样式还使用了她的 [基本 UI CSS 模版](https://taniarascia.github.io/primitive/)。
 
-#### Creating a New Redux + React Project
+#### 创建 Redux + React 项目
 
-Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux templates for Create-React-App](https://github.com/reduxjs/cra-template-redux) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
+完成本教程后，你可能希望开始自己的项目。**我们建议你使用 [Create-React-App 的 Redux 模版](https://github.com/reduxjs/cra-template-redux) 作为创建 React + Redux 项目的快捷方式**。它内置了配置好的 Redux Tookit 和 React-Redux，使用您在第一节中看到的相同[“计数器”应用程序示例](./part-1-overview-concepts.md)。这使您可以跳转到编写实际应用程序代码，而无需添加Redux软件包并设置商店。
 
-If you want to know specific details on how to add Redux to a project, see this explanation:
+如果您想了解有关如何将 Redux 添加到项目的特定详细信息，请参阅此说明：
 
-<DetailedExplanation title="细节说明：Adding Redux to a React Project">
+<DetailedExplanation title="细节说明：为 React 项目添加 Redux">
 
-The Redux template for CRA comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
+CRA（Create-React-App）的Redux模板附带 Redux Toolkit 并已配置 React-Redux。如果您在没有该模板的情况下从头开始设置新项目，请按照下列步骤操作：
 
-- Add the `@reduxjs/toolkit` and `react-redux` packages
-- Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function
-- Import the Redux store into your application's entry point file (such as `src/index.js`)
-- Wrap your root React component with the `<Provider>` component from React-Redux, like:
+- 添加 `@reduxjs/toolkit` 和 `react-redux` packages
+- 使 用RTK 的 `configureStore` API 创建 Redux store，并传入至少一个 reducer 函数。
+- 在应用程序的入口文件（比如 `src/index.js`）中引入 Redux store。
+- 用 react-redux 中的 `<Provider>` 组件来包裹 React 根组件，比如
 
 ```jsx
 ReactDOM.render(
@@ -82,40 +82,40 @@ ReactDOM.render(
 
 </DetailedExplanation>
 
-#### Exploring the Initial Project
+#### 探索初始项目
 
-Let's take a quick look at what the initial project contains:
+让我们快速查看初始项目包含的内容：
 
 - `/src`
-  - `index.js`: the entry point file for the application. It renders the React-Redux `<Provider>` component and the main `<App>` component.
-  - `App.js`: the main application component. Renders the top navbar and handles client-side routing for the other content.
-  - `index.css`: styles for the complete application
+  - `index.js`: 应用程序的入口点文件，渲染 React-Redux 的 `<Provider>`组件和入口组件 `<app>`。
+  - `App.js`: 应用的入口组件。渲染顶部导航条和处理客户端路由。
+  - `index.css`: 应用所有的样式
   - `/api`
-    - `client.js`: a small AJAX request client that allows us to make GET and POST requests
-    - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
+    - `client.js`: 小的 AJAX 请求客户端，用来发起 GET 和 POST 请求。
+    - `server.js`: 为我们的数据提供假的 REST API。我们的应用程序将在稍后从这些假接口获取数据。
   - `/app`
-    - `Navbar.js`: renders the top header and nav content
-    - `store.js`: creates the Redux store instance
+    - `Navbar.js`: 渲染顶部标题和导航
+    - `store.js`: 创建 Redux store 实例
 
-If you load the app now, you should see the header and a welcome message. We can also open up the Redux DevTools Extension and see that our initial Redux state is entirely empty.
+如果您现在加载应用程序，您应该会看到标题和欢迎消息。我们还可以打开 Redux DevTools Extension，看到我们的初始 Redux 状态完全为空。
 
-With that, let's get started!
+有了这个，让我们开始吧！
 
-## Main Posts Feed
+## 主页的帖子列表
 
-The main feature for our social media feed app will be a list of posts. We'll add several more pieces to this feature as we go along, but to start off, our first goal is to only show the list of post entries on screen.
+我们社交媒体提要应用程序的主要功能将是帖子列表。 随着我们的进展，我们将为此功能添加更多部分，但首先，我们的第一个目标是仅在屏幕上显示帖子条目列表。
 
-### Creating the Posts Slice
+### 创建帖子列表切片
 
-The first step is to create a new Redux "slice" that will contain the data for our posts. Once we have that data in the Redux store, we can create the React components to show that data on the page.
+第一步是创建一个新的 Redux “切片”，其中将包含我们帖子的数据。一旦我们在 Redux store 中拥有该数据，我们就可以创建 React 组件以在页面上显示该数据。
 
-Inside of `src`, create a new `features` folder, put a `posts` folder inside of `features`, and add a new file named `postsSlice.js`.
+在 `src` 目录下，创建 `features` 目录，然后在里面创建 `posts` 目录，并在里面创建 `postSlice.js` 文件。
 
-We're going to use the Redux Toolkit `createSlice` function to make a reducer function that knows how to handle our posts data. Reducer functions need to have some initial data included so that the Redux store has those values loaded when the app starts up.
+我们将使用 Redux Toolkit `createSlice` 函数来创建一个知道如何处理我们的帖子数据的 reducer 函数。 Reducer 函数需要包含一些初始数据，以便 Redux store 在应用程序启动时加载这些值。
 
-For now, we'll create an array with some fake post objects inside so that we can begin adding the UI.
+现在，我们将创建一个包含一些假帖子对象的数组，以便我们可以开始添加 UI。
 
-We'll import `createSlice`, define our initial posts array, pass that to `createSlice`, and export the posts reducer function that `createSlice` generated for us:
+我们将导入 `createSlice`，定义我们的初始 posts 数组，将其传递给 `createSlice`，并导出`createSlice` 为我们生成的 posts reducer 函数：
 
 ```js title="features/posts/postsSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
@@ -134,7 +134,7 @@ const postsSlice = createSlice({
 export default postsSlice.reducer
 ```
 
-Every time we create a new slice, we need to add its reducer function to our Redux store. We already have a Redux store being created, but right now it doesn't have any data inside. Open up `app/store.js`, import the `postsReducer` function, and update the call to `configureStore` so that the `postsReducer` is being passed as a reducer field named `posts`:
+每次我们创建一个新切片时，我们都需要将它的 reducer 函数添加到我们的 Redux store 中。我们已经创建了一个 Redux store，但现在它里面没有任何数据。 打开 `app/store.js`，导入 `postsReducer` 函数，并更新对 `configureStore` 的调用，以便将 `postsReducer` 作为名为 `posts` 的 reducer 字段传递：
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -148,19 +148,19 @@ export default configureStore({
 })
 ```
 
-This tells Redux that we want our top-level state object to have a field named `posts` inside, and all the data for `state.posts` will be updated by the `postsReducer` function when actions are dispatched.
+这告诉 Redux 我们希望我们的根部 state 对象内部有一个名为 `posts` 的字段，并且 `state.posts` 的所有数据都将在 dispatch action 时由 `postsReducer` 函数更新。
 
-We can confirm that this works by opening the Redux DevTools Extension and looking at the current state contents:
+我们可以通过打开 Redux DevTools Extension 并查看当前状态内容来确认这是否有效：
 
-![Initial posts state](/img/tutorials/essentials/example-initial-posts.png)
+![初始的帖子数据](/img/tutorials/essentials/example-initial-posts.png)
 
-### Showing the Posts List
+### 展示帖子列表
 
-Now that we have some posts data in our store, we can create a React component that shows the list of posts. All of the code related to our feed posts feature should go in the `posts` folder, so go ahead and create a new file named `PostsList.js` in there.
+现在我们的商店中有一些帖子数据，我们可以创建一个显示帖子列表的 React 组件。 所有与我们的提要帖子功能相关的代码都应该放在 `posts` 文件夹中，所以继续在那里创建一个名为 `PostsList.js` 的新文件。
 
-If we're going to render a list of posts, we need to get the data from somewhere. React components can read data from the Redux store using the `useSelector` hook from the React-Redux library. The "selector functions" that you write will be called with the entire Redux `state` object as a parameter, and should return the specific data that this component needs from the store.
+如果我们要呈现一个帖子列表，我们需要从某个地方获取数据。React 组件可以使用 React-Redux 库中的 `useSelector` 钩子从 Redux store 中读取数据。您编写的“selector 函数”将使用整个 Redux `state` 对象作为参数被调用，并且应该从 store 中返回该组件需要的特定数据。
 
-Our initial `PostsList` component will read the `state.posts` value from the Redux store, then loop over the array of posts and show each of them on screen:
+我们最初的 `PostsList` 组件将从 Redux store 中读取 `state.posts` 值，然后遍历帖子数组并在屏幕上显示每个帖子：
 
 ```jsx title="features/posts/PostsList.js"
 import React from 'react'
@@ -185,7 +185,7 @@ export const PostsList = () => {
 }
 ```
 
-We then need to update the routing in `App.js` so that we show the `PostsList` component instead of the "welcome" message. Import the `PostsList` component into `App.js`, and replace the welcome text with `<PostsList />`. We'll also wrap it in a React Fragment, because we're going to add something else to the main page soon:
+然后我们需要更新 `App.js` 中的路由，以便我们显示 `PostsList` 组件而不是“欢迎”消息。将`PostsList` 组件导入`App.js`，并将欢迎文本替换为`<PostsList />`。 我们还将把它包装在一个 React Fragment 中，因为我们很快就会向主页添加其他内容：
 
 ```jsx title="App.js"
 import React from 'react'
@@ -228,21 +228,21 @@ function App() {
 export default App
 ```
 
-Once that's added, the main page of our app should now look like this:
+添加后，我们应用程序的主页现在应如下所示：
 
-![Initial posts list](/img/tutorials/essentials/working_post_list.png)
+![初始帖子列表](/img/tutorials/essentials/working_post_list.png)
 
-Progress! We've added some data to the Redux store, and shown it on screen in a React component.
+进步！ 我们已经向 Redux store 添加了一些数据，并在 React 组件的屏幕上显示它。
 
-### Adding New Posts
+### 添加新帖子
 
-It's nice to look at posts people have written, but we'd like to be able to write our own posts. Let's create an "Add New Post" form that lets us write posts and save them.
+很高兴看到人们写的帖子，但我们希望能够编写自己的帖子。让我们创建一个“添加新帖子”表单，让我们可以编写帖子并保存它们。
 
-We'll create the empty form first and add it to the page. Then, we'll connect the form to our Redux store so that new posts are added when we click the "Save Post" button.
+我们将首先创建空表单并将其添加到页面中。 然后，我们会将表单连接到我们的 Redux store，以便在我们单击“保存帖子”按钮时添加新帖子。
 
-#### Adding the New Post Form
+#### 添加新帖子的表单Form
 
-Create `AddPostForm.js` in our `posts` folder. We'll add a text input for the post title, and a text area for the body of the post:
+在我们的 `posts` 文件夹中创建 `AddPostForm.js`。我们将为帖子标题添加一个文本输入，并为帖子正文添加一个文本区域：
 
 ```jsx title="features/posts/AddPostForm.js"
 import React, { useState } from 'react'
@@ -256,9 +256,9 @@ export const AddPostForm = () => {
 
   return (
     <section>
-      <h2>Add a New Post</h2>
+      <h2>添加新帖子</h2>
       <form>
-        <label htmlFor="postTitle">Post Title:</label>
+        <label htmlFor="postTitle">帖子标题:</label>
         <input
           type="text"
           id="postTitle"
@@ -266,21 +266,21 @@ export const AddPostForm = () => {
           value={title}
           onChange={onTitleChanged}
         />
-        <label htmlFor="postContent">Content:</label>
+        <label htmlFor="postContent">内容：</label>
         <textarea
           id="postContent"
           name="postContent"
           value={content}
           onChange={onContentChanged}
         />
-        <button type="button">Save Post</button>
+        <button type="button">保存帖子</button>
       </form>
     </section>
   )
 }
 ```
 
-Import that component into `App.js`, and add it right above the `<PostsList />` component:
+将该组件导入`App.js`，并将其添加到`<PostsList />` 组件的正上方：
 
 ```jsx title="App.js"
 <Route
@@ -296,19 +296,19 @@ Import that component into `App.js`, and add it right above the `<PostsList />` 
 />
 ```
 
-You should see the form show up in the page right below the header.
+您应该会看到该表单显示在页眉正下方。
 
-#### Saving Post Entries
+#### 保存帖子
 
-Now, let's update our posts slice to add new post entries to the Redux store.
+现在，让我们更新我们的帖子切片以向 Redux store 添加新的帖子条目。
 
-Our posts slice is responsible for handling all updates to the posts data. Inside of the `createSlice` call, there's an object called `reducers`. Right now, it's empty. We need to add a reducer function inside of there to handle the case of a post being added.
+我们的帖子切片负责处理帖子数据的所有更新。在 `createSlice` 调用内部，有一个名为 `reducers` 的对象。现在，它是空的。我们需要在里面添加一个 reducer 函数来处理添加帖子的情况。
 
-Inside of `reducers`, add a function named `postAdded`, which will receive two arguments: the current `state` value, and the `action` object that was dispatched. Since the posts slice _only_ knows about the data it's responsible for, the `state` argument will be the array of posts by itself, and not the entire Redux state object.
+在 `reducers` 内部，添加一个名为 `postAdded` 的函数，它将接收两个参数：当前的 `state` 值和被调度的 `action` 对象。由于帖子 `postsSlice` _只_ 知道它负责的数据，所以 `state` 参数将是 posts 数组本身，而不是整个 Redux 状态对象。
 
-The `action` object will have our new post entry as the `action.payload` field, and we'll put that new post object into the `state` array.
+`action` 对象将我们的新帖子条目作为 `action.payload` 字段，我们将把新的帖子对象放入 `state` 数组中。
 
-When we write the `postAdded` reducer function, `createSlice` will automatically generate an "action creator" function with the same name. We can export that action creator and use it in our UI components to dispatch the action when the user clicks "Save Post".
+当我们编写 `postAdded` reducer 函数时，`createSlice` 会自动生成一个同名的 “action creator” 函数。我们可以导出该动作创建者并在我们的 UI 组件中使用它来在用户单击“保存帖子”时分派动作。
 
 ```js title="features/posts/postsSlice.js"
 const postsSlice = createSlice({
@@ -331,25 +331,24 @@ export default postsSlice.reducer
 
 :::caution 警告
 
-Remember: **reducer functions must _always_ create new state values immutably, by making copies!** It's safe to call mutating functions like `Array.push()` or modify object fields like `state.someField = someValue` inside of `createSlice()`, because it converts those mutations into safe immutable updates internally using the Immer library, but **don't try to mutate any data outside of `createSlice`!**
-
+请记住：**reducer 函数必须_总是_通过复制来不可变地创建新的状态值！** 调用诸如 `Array.push()` 之类的变异函数或修改 `createSlice()` 中的诸如 `state.someField = someValue` 之类的对象字段是安全的，因为它使用 Immer 库在内部将这些突变转换为安全的不可变更新，但**不要尝试在 `createSlice` 之外更改任何数据！**
 :::
 
-#### Dispatching the "Post Added" Action
+#### Dispatch "添加帖子" Action
 
-Our `AddPostForm` has text inputs and a "Save Post" button, but the button doesn't do anything yet. We need to add a click handler that will dispatch the `postAdded` action creator and pass in a new post object containing the title and content the user wrote.
+我们的 `AddPostForm` 有文本输入和 “Save Post” 按钮，但该按钮还没有做任何事情。 我们需要添加一个点击处理程序，它将dispatch `postAdded` 并传入一个包含用户编写的标题和内容的新帖子对象。
 
-Our post objects also need to have an `id` field. Right now, our initial test posts are using some fake numbers for their IDs. We could write some code that would figure out what the next incrementing ID number should be, but it would be better if we generated a random unique ID instead. Redux Toolkit has a `nanoid` function we can use for that.
+我们的 post 对象也需要有一个 `id` 字段。现在，我们最初的测试帖子使用了一些假数字作为他们的 ID。 我们可以编写一些代码来确定下一个递增的 ID 编号应该是什么，但是如果我们生成一个随机的唯一 ID 会更好。Redux Toolkit 有一个我们可以使用的 `nanoid` 函数。
 
 :::info 说明
 
-We'll talk more about generating IDs and dispatching actions in [Part 4: Using Redux Data](./part-4-using-data.md).
+我们将在 [第四节：使用 Redux 数据](./part-4-using-data.md) 中详细讨论生成 ID 和 dispatch action。
 
 :::
 
-In order to dispatch actions from a component, we need access to the store's `dispatch` function. We get this by calling the `useDispatch` hook from React-Redux. We also need to import the `postAdded` action creator into this file.
+为了从组件 dispatch action，我们需要访问 store 的 `dispatch` 函数。我们通过调用 React-Redux 中的 `useDispatch` 钩子来获得它。我们还需要将 `postAdded` 动作创建者导入到这个文件中。
 
-Once we have the `dispatch` function available in our component, we can call `dispatch(postAdded())` in a click handler. We can take the title and content values from our React component `useState` hooks, generate a new ID, and put them together into a new post object that we pass to `postAdded()`.
+一旦我们在组件中使用了 `dispatch` 函数，我们就可以在点击处理程序中调用 `dispatch(postAdded())`。 我们可以从我们的 React 组件 `useState` 钩子中获取标题和内容值，生成一个新的 ID，并将它们放在一个新的 post 对象中，我们将其传递给 `postAdded()`。
 
 ```jsx title="features/posts/AddPostForm"
 import React, { useState } from 'react'
@@ -389,12 +388,12 @@ export const AddPostForm = () => {
 
   return (
     <section>
-      <h2>Add a New Post</h2>
+      <h2>添加新帖子</h2>
       <form>
         {/* omit form inputs */}
         // highlight-next-line
         <button type="button" onClick={onSavePostClicked}>
-          Save Post
+          保存帖子
         </button>
       </form>
     </section>
@@ -402,46 +401,46 @@ export const AddPostForm = () => {
 }
 ```
 
-Now, try typing in a title and some text, and click "Save Post". You should see a new item for that post show up in the posts list.
+现在，尝试输入标题和一些文本，然后单击“保存帖子”。 您应该会在帖子列表中看到该帖子的新项目。
 
-**Congratulations! You've just built your first working React + Redux app!**
+**恭喜！你刚刚构建了你的第一个 React + Redux 应用程序！**
 
-This shows the complete Redux data flow cycle:
+这显示了完整的 Redux 数据流周期：
 
-- Our posts list read the initial set of posts from the store with `useSelector` and rendered the initial UI
-- We dispatched the `postAdded` action containing the data for the new post entry
-- The posts reducer saw the `postAdded` action, and updated the posts array with the new entry
-- The Redux store told the UI that some data had changed
-- The posts list read the updated posts array, and re-rendered itself to show the new post
+- 使用 `useSelector` 从 store 读取初始帖子列表并渲染 UI
+- 我们 dispatch 了包含新帖子条目数据的 `postAdded` action
+- `postsReducer` 监听到了 `postAdded` 动作，并用新条目更新了 posts 数组
+- Redux store 告诉 UI 一些数据已经改变
+- 帖子列表读取更新后的帖子数组，并重新渲染 UI 以显示新帖子
 
-All the new features we'll add after this will follow the same basic patterns you've seen here: adding slices of state, writing reducer functions, dispatching actions, and rendering the UI based on data from the Redux store.
+在此之后我们将添加的所有新功能都将遵循相同的这个模式：添加状态切片、编写 reducer 函数、dispatch action 以及基于 Redux store 中的数据渲染 UI。
 
-We can check the Redux DevTools Extension to see the action we dispatched, and look at how the Redux state was updated in response to that action. If we click the `"posts/postAdded"` entry in the actions list, the "Action" tab should look like this:
+我们可以检查 Redux DevTools Extension 以查看我们 dispatch 的 action，并查看 Redux 状态如何更新以响应该操作。如果我们单击操作列表中的 `posts/postAdded` 条目，"Action" 选项卡应如下所示：
 
-![postAdded action contents](/img/tutorials/essentials/example-postAdded-action.png)
+![postAdded action 信息](/img/tutorials/essentials/example-postAdded-action.png)
 
-The "Diff" tab should also show us that `state.posts` had one new item added, which is at index 2.
+“Diff” 选项卡还应该向我们显示 `state.posts` 添加了一个新项目，位于索引 2。
 
-Notice that our `AddPostForm` component has some React `useState` hooks inside, to keep track of the title and content values the user is typing in. Remember, **the Redux store should only contain data that's considered "global" for the application!** In this case, only the `AddPostForm` will need to know about the latest values for the input fields, so we want to keep that data in React component state instead of trying to keep the temporary data in the Redux store. When the user is done with the form, we dispatch a Redux action to update the store with the final values based on the user input.
+请注意，我们的 `AddPostForm` 组件内部有一些 React `useState` 钩子，用于跟踪用户输入的标题和内容值。记住，**Redux store 应该只包含被认为是应用程序“全局”的数据!** 在这种情况下，只有 `AddPostForm` 需要知道输入字段的最新值，因此我们希望将该数据保留在 React 组件状态中，而不是尝试将临时数据保留在 Redux store 中。当用户完成表单时，我们会 dispatch 一个 Redux action，根据用户输入使用最终值更新 store。
 
 ## 你学到了
 
-Let's recap what you've learned in this section:
+让我们回顾一下您在本节中学到的内容：
 
 :::tip 总结
 
-- **Redux state is updated by "reducer functions"**:
-  - Reducers always calculate a new state _immutably_, by copying existing state values and modifying the copies with the new data
-  - The Redux Toolkit `createSlice` function generates "slice reducer" functions for you, and lets you write "mutating" code that is turned into safe immutable updates
-  - Those slice reducer functions are added to the `reducer` field in `configureStore`, and that defines the data and state field names inside the Redux store
-- **React components read data from the store with the `useSelector` hook**
-  - Selector functions receive the whole `state` object, and should return a value
-  - Selectors will re-run whenever the Redux store is updated, and if the data they return has changed, the component will re-render
-- **React components dispatch actions to update the store using the `useDispatch` hook**
-  - `createSlice` will generate action creator functions for each reducer we add to a slice
-  - Call `dispatch(someActionCreator())` in a component to dispatch an action
-  - Reducers will run, check to see if this action is relevant, and return new state if appropriate
-  - Temporary data like form input values should be kept as React component state. Dispatch a Redux action to update the store when the user is done with the form.
+- **Redux state 由 reducer 函数来更新**:
+  - Reducers 总是通过复制现有状态值，并更新副本来_不可变地_生成新状态
+  - Redux Toolkit `createSlice` 函数为您生成“slice reducer”函数，并让您编写“mutable 可变”代码，内部自动将其转变为安全的不可变更新
+  - 这些切片化 reducer 函数被添加到 `configureStore` 中的 `reducer` 字段中，并定义了 Redux store 中的数据和状态字段名称
+- **React 组件使用 `useSelector` 钩子从 store 读取数据**
+  - 选择器函数接收整个 `state` 对象，并且返回需要的部分数据
+  - 每当 Redux store 更新时，选择器将重新运行，如果它们返回的数据发生更改，则组件将重新渲染
+- **React 组件使用 `useDispatch` 钩子 dispatch action 来更新 store**
+  - `createSlice` 将为我们添加到切片的每个 reducer 函数生成 action creator 函数
+  - 在组件中调用 `dispatch(someActionCreator())` 来 dispatch action
+  - Reducers 将运行，检查此 action 是否相关，并在适当时返回新状态
+  - 表单输入值等临时数据应保留为 React 组件状态。当用户完成表单时，dispatch 一个 Redux action 来更新 store。
 
 :::
 
