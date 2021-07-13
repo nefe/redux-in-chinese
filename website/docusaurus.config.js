@@ -2,7 +2,7 @@ module.exports = {
   title: 'Redux 中文官网',
   tagline: 'JS 应用的状态容器，提供可预测的状态管理',
   url: 'https://cn.redux.js.org',
-  baseUrl: '/',
+  baseUrl: '/redux-in-chinese/',
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'camsong',
   projectName: 'redux-in-chinese',
