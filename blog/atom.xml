@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://cn.redux.js.org/blog</id>
+    <id>https://camsong.github.io/blog</id>
     <title>Redux 中文官网 Blog</title>
     <updated>2015-10-25T23:29:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://cn.redux.js.org/blog"/>
+    <link rel="alternate" href="https://camsong.github.io/blog"/>
     <subtitle>Redux 中文官网 Blog</subtitle>
-    <icon>https://cn.redux.js.org/img/favicon/favicon.ico</icon>
+    <icon>https://camsong.github.io/img/favicon/favicon.ico</icon>
 </feed>

@@ -4,8 +4,8 @@
   <ShortName>Redux 中文官网</ShortName>
   <Description>Search Redux 中文官网</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://cn.redux.js.org/redux-in-chinese/img/favicon/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://cn.redux.js.org/redux-in-chinese/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://cn.redux.js.org/redux-in-chinese/opensearch.xml" />
-  <moz:SearchForm>https://cn.redux.js.org/redux-in-chinese/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://camsong.github.io/redux-in-chinese/img/favicon/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://camsong.github.io/redux-in-chinese/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://camsong.github.io/redux-in-chinese/opensearch.xml" />
+  <moz:SearchForm>https://camsong.github.io/redux-in-chinese/</moz:SearchForm>
 </OpenSearchDescription>
