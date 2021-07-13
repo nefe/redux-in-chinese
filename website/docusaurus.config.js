@@ -1,11 +1,11 @@
 module.exports = {
-  title: 'Redux',
+  title: 'Redux 中文官网',
   tagline: 'JS 应用的状态容器，提供可预测的状态管理',
-  url: 'https://redux.js.org',
+  url: 'https://cn.redux.js.org',
   baseUrl: '/',
   favicon: 'img/favicon/favicon.ico',
-  organizationName: 'reduxjs',
-  projectName: 'redux',
+  organizationName: 'camsong',
+  projectName: 'redux-in-chinese',
   themeConfig: {
     image: 'img/redux-logo-landscape.png',
     metadatas: [{ name: 'twitter:card', content: 'summary' }],
@@ -16,7 +16,7 @@ module.exports = {
       disableSwitch: false
     },
     navbar: {
-      title: 'Redux 中文文档',
+      title: 'Redux 中文官网',
       logo: {
         alt: 'Redux Logo',
         src: 'img/redux.svg'
