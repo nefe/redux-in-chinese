@@ -1,8 +1,8 @@
 module.exports = {
   title: 'Redux 中文官网',
   tagline: 'JS 应用的状态容器，提供可预测的状态管理',
-  url: 'https://cn.redux.js.org',
-  baseUrl: '/redux-in-chinese/',
+  url: 'http://cn.redux.js.org',
+  baseUrl: '/',
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'camsong',
   projectName: 'redux-in-chinese',
@@ -41,7 +41,7 @@ module.exports = {
         },
         {
           label: '源码',
-          href: 'https://www.github.com/reduxjs/redux',
+          href: 'https://www.github.com/camsong/redux-in-chinese',
           position: 'right'
         },
         {
@@ -97,7 +97,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/reduxjs/redux'
+              href: 'https://github.com/camsong/redux-in-chinese'
             },
             {
               html: `
