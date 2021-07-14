@@ -1,47 +1,47 @@
 ---
 id: middleware
-title: Middleware
-description: 'History and Design > Middleware: How middleware enable adding additional capabilities to the Redux store'
+title: Middleware 中间件
+description: '原理  > Middleware 中间件：如何使用中间件来扩展 Redux store 的能力'
 hide_title: false
 ---
 
-# Middleware
+# Middleware 中间件
 
-You've seen middleware in action in the ["Redux Fundamentals" tutorial](../../tutorials/fundamentals/part-4-store.md#middleware). If you've used server-side libraries like [Express](https://expressjs.com/) and [Koa](https://koajs.com/), you were also probably already familiar with the concept of _middleware_. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it's composable in a chain. You can use multiple independent third-party middleware in a single project.
+在 ["Redux 深入浅出" 教程中](../../tutorials/fundamentals/part-4-store.md#middleware) 你已经学习过中间件的实践案例。如果你使用过服务端框架像 [Express](https://expressjs.com/) 或 [Koa](https://koajs.com/)，你或许已经熟悉 _middleware_ 的概念。在这些框架中，中间件可以让你在接收请求和生成响应之间放置的一些代码。例如，Express 或 Koa 中间件可能会添加 CORS 标头、记录日志、压缩等。中间件的最大特点是它可以组合成一个链。您可以在一个项目中使用多个不同的中间件。
 
-Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
+Redux 中间件解决的问题与 Express 或 Koa 中间件不同，但在概念上是相似的。**它在 dispatch action 和到达 reducer 的那一刻之间提供了逻辑插入点**。可以使用 Redux 中间件进行日志记录、异常监控、与异步 API 对话、路由等。
 
-This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
+本文分成几部分来让你深入了解它的概念，以及[几个实际例子](#seven-examples)在最后展示中间件的威力。这些例子可能需要来回看，这样你会在无聊和灵感间切换。
 
-## Understanding Middleware
+## 理解 Middleware
 
-While middleware can be used for a variety of things, including asynchronous API calls, it's really important that you understand where it comes from. We'll guide you through the thought process leading to middleware, by using logging and crash reporting as examples.
+虽然中间件可用于多种用途，包括异步 API 调用，但了解它的来源的原因非常重要。我们将通过“日志记录”和“异常监控”作为示例，来一步步引导你知道中间件产生背后的过程。
 
-### Problem: Logging
+### 问题：日志
 
-One of the benefits of Redux is that it makes state changes predictable and transparent. Every time an action is dispatched, the new state is computed and saved. The state cannot change by itself, it can only change as a consequence of a specific action.
+Redux 的好处之一是它使状态的变更变得可预测且透明。每次 dispatch action 时，都会计算并保存新状态。状态不能自行改变，它只能作为特定 action 的结果而改变。
 
-Wouldn't it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
+如果我们记录应用程序中发生的每个 action 调用前后的状态，不是很好吗？当出现问题时，我们可以回溯日志，并找出哪个 action 导致了问题。
 
 <img src='https://i.imgur.com/BjGBlES.png' width='70%' />
 
-How do we approach this with Redux?
+我们如何用 Redux 解决这个问题？
 
-### Attempt #1: Logging Manually
+### 尝试 #1：手动打日志
 
-The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../../api/Store.md#dispatchaction). It's not really a solution, but just a first step towards understanding the problem.
+最简单的解决方案是每次调用 [`store.dispatch(action)`](../../api/Store.md#dispatchaction) 时手动记录 action 和下一个状态。这并不是真正的解决方案，而只是了解问题的第一步。
 
-> ##### Note
+> ##### 注意
 >
-> If you're using [react-redux](https://github.com/reduxjs/react-redux) or similar bindings, you likely won't have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
+> 使用 [react-redux](https://github.com/reduxjs/react-redux) 或类似的绑定，可能无法直接访问组件中的 store 实例。在接下来的几段中，假设您明确地传递了 store。
 
-Say, you call this when creating a todo:
+比如说，这样来创建 todo：
 
 ```js
 store.dispatch(addTodo('Use Redux'))
 ```
 
-To log the action and state, you can change it to something like this:
+要记录 action 和状态，您可以将代码改成这样：
 
 ```js
 const action = addTodo('Use Redux')
@@ -51,11 +51,11 @@ store.dispatch(action)
 console.log('next state', store.getState())
 ```
 
-This produces the desired effect, but you wouldn't want to do it every time.
+这会产生所需的效果，但您不想每次都这样做。
 
-### Attempt #2: Wrapping Dispatch
+### 尝试 #2: 包裹 dispatch
 
-You can extract logging into a function:
+您可以写个函数来记录日志：
 
 ```js
 function dispatchAndLog(store, action) {
@@ -65,17 +65,17 @@ function dispatchAndLog(store, action) {
 }
 ```
 
-You can then use it everywhere instead of `store.dispatch()`:
+然后你可以在任何地方使用它而不是`store.dispatch()`：
 
 ```js
 dispatchAndLog(store, addTodo('Use Redux'))
 ```
 
-We could end this here, but it's not very convenient to import a special function every time.
+我们可以到此结束，但是每次都导入一个特殊函数不是很方便。
 
-### Attempt #3: Monkeypatching Dispatch
+### 尝试 #3: 给 dispatch 做猴子补丁（Monkeypatch）
 
-What if we just replace the `dispatch` function on the store instance? The Redux store is a plain object with [a few methods](../../api/Store.md), and we're writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
+如果我们直接重写 store 实例上的 `dispatch` 函数怎么样？store 本身是带有 [一些方法](../../api/Store.md) 的普通对象，因为是 JavaScript，所以我们可以直接对 `dispatch` 函数进行猴子补丁：
 
 ```js
 const next = store.dispatch
@@ -87,19 +87,19 @@ store.dispatch = function dispatchAndLog(action) {
 }
 ```
 
-This is already closer to what we want! No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
+这已经非常接近我们想要的了！无论我们在何处 dispatch action，它都保证被记录。Monkeypatching 从来都不是正确的，但我们现在可以忍受它。
 
-### Problem: Crash Reporting
+### 问题: 异常监控
 
-What if we want to apply **more than one** such transformation to `dispatch`?
+如果需要对 `dispatch` 做**多个**这样的转换怎么办？
 
-A different useful transformation that comes to my mind is reporting JavaScript errors in production. The global `window.onerror` event is not reliable because it doesn't provide stack information in some older browsers, which is crucial to understand why an error is happening.
+我想到的另一个有用的转换场景是记录生产环境中的 JavaScript 错误。全局 `window.onerror` 事件不可靠，因为它在一些旧浏览器中不提供堆栈信息，这对于理解错误发生的原因至关重要。
 
-Wouldn't it be useful if, any time an error is thrown as a result of dispatching an action, we would send it to a crash reporting service like [Sentry](https://getsentry.com/welcome/) with the stack trace, the action that caused the error, and the current state? This way it's much easier to reproduce the error in development.
+想一下这样会更好，每当 dispatch action 抛出错误时，我们都将错误发送给异常监控服务器，例如 [Sentry](https://getsentry.com/welcome/) 和堆栈，这不是很有用吗？记录导致错误的 action 以及当前状态？这样，在开发环境中重现错误要容易得多。
 
-However, it is important that we keep logging and crash reporting separate. Ideally we want them to be different modules, potentially in different packages. Otherwise we can't have an ecosystem of such utilities. (Hint: we're slowly getting to what middleware is!)
+但是，将日志记录和异常监控分开是很重要的。理想情况下，我们希望它们属于不同的模块，可能在不同的包中。否则，我们就无法在不同的应用中复用。（提示：我们正在慢慢了解什么是中间件！）
 
-If logging and crash reporting are separate utilities, they might look like this:
+如果日志记录和异常监控是分开的工具函数，它们可能长这样：
 
 ```js
 function patchStoreToAddLogging(store) {
@@ -131,18 +131,18 @@ function patchStoreToAddCrashReporting(store) {
 }
 ```
 
-If these functions are published as separate modules, we can later use them to patch our store:
+如果这些函数作为单独的模块发布，我们稍后可以使用它们来装饰我们的 store：
 
 ```js
 patchStoreToAddLogging(store)
 patchStoreToAddCrashReporting(store)
 ```
 
-Still, this isn't nice.
+尽管如此，这并不好。
 
-### Attempt #4: Hiding Monkeypatching
+### 尝试 #4: 隐藏猴子补丁
 
-Monkeypatching is a hack. “Replace any method you like”, what kind of API is that? Let's figure out the essence of it instead. Previously, our functions replaced `store.dispatch`. What if they _returned_ the new `dispatch` function instead?
+打猴子补丁是一种 Hack（不推荐）的方式。“替换任何你喜欢的方法”，那是一种什么样的API？让我们找出它的本质。以前，我们的函数替换了`store.dispatch`。如果他们 _返回_ 新的 `dispatch` 函数怎么样？
 
 ```js
 function logger(store) {
@@ -160,30 +160,30 @@ function logger(store) {
 }
 ```
 
-We could provide a helper inside Redux that would apply the actual monkeypatching as an implementation detail:
+我们可以在 Redux 中提供一个 helper 来帮助我们做猴子补丁：
 
 ```js
 function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
 
-  // Transform dispatch function with each middleware.
+  // 依次调用每个 middleware 来增强 dispatch
   middlewares.forEach(middleware => (store.dispatch = middleware(store)))
 }
 ```
 
-We could use it to apply multiple middleware like this:
+我们可以使用它来调用多个中间件，如下所示：
 
 ```js
 applyMiddlewareByMonkeypatching(store, [logger, crashReporter])
 ```
 
-However, it is still monkeypatching.
-The fact that we hide it inside the library doesn't alter this fact.
+然而，它仍然是猴子补丁。
+我们将它隐藏在库中的事实并没有改变这一事实。
 
-### Attempt #5: Removing Monkeypatching
+### 尝试 #5: 移除猴子补丁
 
-Why do we even overwrite `dispatch`? Of course, to be able to call it later, but there's also another reason: so that every middleware can access (and call) the previously wrapped `store.dispatch`:
+为什么每次都需要覆盖 `dispatch` 呢？很简单，为了以后能够调用它，但还有另外一个原因：这样每个中间件都可以访问（和调用）之前包裹的 `store.dispatch`：
 
 ```js
 function logger(store) {
@@ -199,11 +199,11 @@ function logger(store) {
 }
 ```
 
-It is essential to chaining middleware!
+必须要链式调用中间件！
 
-If `applyMiddlewareByMonkeypatching` doesn't assign `store.dispatch` immediately after processing the first middleware, `store.dispatch` will keep pointing to the original `dispatch` function. Then the second middleware will also be bound to the original `dispatch` function.
+如果 `applyMiddlewareByMonkeypatching` 在处理第一个中间件后没有立即覆盖掉原来的 `store.dispatch`，`store.dispatch` 将继续指向原始的 `dispatch` 函数。那么第二个中间件也会绑定到原来的 `dispatch` 函数上。
 
-But there's also a different way to enable chaining. The middleware could accept the `next()` dispatch function as a parameter instead of reading it from the `store` instance.
+但是还有一种不同的方式来做链式调用。中间件来接受 `next()` 调度函数作为参数，而不是从 `store` 实例中读取它。
 
 ```js
 function logger(store) {
@@ -218,7 +218,7 @@ function logger(store) {
 }
 ```
 
-It's a [“we need to go deeper”](https://knowyourmeme.com/memes/we-need-to-go-deeper) kind of moment, so it might take a while for this to make sense. The function cascade feels intimidating. ES6 arrow functions make this [currying](https://en.wikipedia.org/wiki/Currying) easier on eyes:
+这是一个 [“我们需要更深入”](https://knowyourmeme.com/memes/we-need-to-go-deeper) 的时刻，所以这可能需要一段时间来理解。函数级联感觉很吓人。ES6 箭头函数使这个 [轲里化](https://en.wikipedia.org/wiki/Currying) 更易读：
 
 ```js
 const logger = store => next => action => {
@@ -244,17 +244,17 @@ const crashReporter = store => next => action => {
 }
 ```
 
-**This is exactly what Redux middleware looks like.**
+**这正是 Redux 中间件的样子。**
 
-Now middleware takes the `next()` dispatch function, and returns a dispatch function, which in turn serves as `next()` to the middleware to the left, and so on. It's still useful to have access to some store methods like `getState()`, so `store` stays available as the top-level argument.
+现在中间件接受 `next()` dispatch 函数，并返回新的 dispatch 函数，该函数又充当左侧中间件的 `next()`，依此类推。仍然可以在需要的时候调用 store 方法（如 `getState()`），因此 `store` 作为顶级参数传入在这里仍然可用。
 
-### Attempt #6: Naïvely Applying the Middleware
+### 尝试 #6：简单粗暴的中间件调用方法
 
-Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware()` that first obtains the final, fully wrapped `dispatch()` function, and returns a copy of the store using it:
+为了替代 `applyMiddlewareByMonkeypatching()`，我们可以编写 `applyMiddleware()`，它先计算出最终的、被所有 middleware 包裹后的 `dispatch()` 函数，并使用它返回 store 的副本：
 
 ```js
-// Warning: Naïve implementation!
-// That's *not* Redux API.
+// 注意：这是简单粗暴的中间件调用方法
+// 并 *不是* Redux API 真实的实现方法。
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice()
   middlewares.reverse()
@@ -264,23 +264,23 @@ function applyMiddleware(store, middlewares) {
 }
 ```
 
-The implementation of [`applyMiddleware()`](../../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
+Redux 内置的 [`applyMiddleware()`](../../api/applyMiddleware.md) 的实现是相似的，但**在三个重要方面**不同：
 
-- It only exposes a subset of the [store API](../../api/Store.md) to the middleware: [`dispatch(action)`](../../api/Store.md#dispatchaction) and [`getState()`](../../api/Store.md#getState).
+- 它只向中间件公开 [store API](../../api/Store.md) 的一个子集：[`dispatch(action)`](../../api/Store.md# dispatchaction) 和 [`getState()`](../../api/Store.md#getState)。
 
-- It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. [This is useful for asynchronous middleware](../../tutorials/fundamentals/part-6-async-logic.md). There is one caveat when calling `dispatch` during setup, described below.
+- 确保如果您从中间件调用 `store.dispatch(action)` 而不是 `next(action)`，该 action 实际上将再次遍历整个中间件链，包括当前的中间件，这需要一些技巧。[这对异步中间件很有用](../../tutorials/fundamentals/part-6-async-logic.md)。在配置 Redux 期间调用 `dispatch` 时有一个警告，后面会讲。
 
-- To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
+- 为确保您只能应用一次中间件，它在 `createStore()` 上运行，而不是在 `store` 本身上运行。它的函数签名不是`(store, middlewares) => store`，而是`(...middlewares) => (createStore) => createStore`。
 
-Because it is cumbersome to apply functions to `createStore()` before using it, `createStore()` accepts an optional last argument to specify such functions.
+因为在使用 `createStore()` 之前将函数应用到它是很麻烦的，`createStore()` 的最后一个参数作为可选的来指定这样的函数。
 
-#### Caveat: Dispatching During Setup
+#### 警告：在配置 Redux 期间调用 dispatch
 
-While `applyMiddleware` executes and sets up your middleware, the `store.dispatch` function will point to the vanilla version provided by `createStore`. Dispatching would result in no other middleware being applied. If you are expecting an interaction with another middleware during setup, you will probably be disappointed. Because of this unexpected behavior, `applyMiddleware` will throw an error if you try to dispatch an action before the set up completes. Instead, you should either communicate directly with that other middleware via a common object (for an API-calling middleware, this may be your API client object) or waiting until after the middleware is constructed with a callback.
+当 `applyMiddleware` 执行并配置你的中间件时，`store.dispatch` 函数将指向 `createStore` 提供的最初版本。这个时候的 dispatch 还不会经过任何 middleware。如果您期望在配置期间与另一个中间件进行交互，您可能会感到失望。由于这种意外行为，在配置完成之前如果 dispatch 了 action，`applyMiddleware` 将抛出错误。解法是，你应该通过一个公共对象（例如做 API 请求的中间件，那就直接用 API 请求的对象）直接与其他中间件通信，或者放到中间件配置完后的回调函数中等待执行。
 
-### The Final Approach
+### 最后的实现
 
-Given this middleware we just wrote:
+鉴于这个中间件，我们刚刚写道：
 
 ```js
 const logger = store => next => action => {
@@ -306,7 +306,7 @@ const crashReporter = store => next => action => {
 }
 ```
 
-Here's how to apply it to a Redux store:
+以下是如何将其应用于 Redux store ：
 
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
@@ -319,7 +319,7 @@ const store = createStore(
 )
 ```
 
-That's it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
+就是这样！现在，dispatch 到 store 的所有 action 都会调用 `logger` 和 `crashReporter` 这2个中间件：
 
 ```js
 // Will flow through both logger and crashReporter middleware!
@@ -328,13 +328,13 @@ store.dispatch(addTodo('Use Redux'))
 
 ## Seven Examples
 
-If your head boiled from reading the above section, imagine what it was like to write it. This section is meant to be a relaxation for you and me, and will help get your gears turning.
+如果您在阅读上述部分时头脑发热，请想象一下编写它是什么感觉。本节旨在让您和我放松身心，并有助于让您的头脑开窍。
 
-Each function below is a valid Redux middleware. They are not equally useful, but at least they are equally fun.
+下面的每个函数都是一个有效的 Redux 中间件。它们并不同样有用，但都同样有趣。
 
 ```js
 /**
- * Logs all actions and states after they are dispatched.
+ * 日志打印每个 dispatch 的 action 和调用后的状态
  */
 const logger = store => next => action => {
   console.group(action.type)
@@ -346,7 +346,7 @@ const logger = store => next => action => {
 }
 
 /**
- * Sends crash reports as state is updated and listeners are notified.
+ * 报错的时候发送异常报告
  */
 const crashReporter = store => next => action => {
   try {
@@ -364,8 +364,8 @@ const crashReporter = store => next => action => {
 }
 
 /**
- * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
- * Makes `dispatch` return a function to cancel the timeout in this case.
+ * 一个定时器，使用 { meta: { delay: N } } 安排 action 延迟 N 毫秒后调用。
+ * 让 `dispatch` 返回一个取消定时器的函数。
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
@@ -380,9 +380,8 @@ const timeoutScheduler = store => next => action => {
 }
 
 /**
- * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop
- * frame.  Makes `dispatch` return a function to remove the action from the queue in
- * this case.
+ * 另一个定时器，使用 { meta: { raf: true } } 让 action 在 rAF 循环内调用。
+ * 让 `dispatch` 返回一个删除 action 的函数
  */
 const rafScheduler = store => next => {
   const queuedActions = []
@@ -420,9 +419,9 @@ const rafScheduler = store => next => {
 }
 
 /**
- * Lets you dispatch promises in addition to actions.
- * If the promise is resolved, its result will be dispatched as an action.
- * The promise is returned from `dispatch` so the caller may handle rejection.
+ * 让你可以直接 dispatch promise 作为 action。
+ * 如果 promise 执行成功，它的结果将作为一个 action 发送。
+ * `dispatch` 返回的也是 promise，这样如果出错也能处理。
  */
 const vanillaPromise = store => next => action => {
   if (typeof action.then !== 'function') {
@@ -433,12 +432,12 @@ const vanillaPromise = store => next => action => {
 }
 
 /**
- * Lets you dispatch special actions with a { promise } field.
+ * 允许您 dispatch 带有 { promise } 字段的特殊 action。
  *
- * This middleware will turn them into a single action at the beginning,
- * and a single success (or failure) action when the `promise` resolves.
+ * 这个中间件会在一开始就把它们变成一个单一的 action ，
+ * 以及当 `promise` 成功时再 dispatch 一个成功（或失败）的 action 。
  *
- * For convenience, `dispatch` will return the promise so the caller can wait.
+ * 为方便起见，`dispatch` 将返回 promise 以便调用者可以继续 then。
  */
 const readyStatePromise = store => next => action => {
   if (!action.promise) {
@@ -459,20 +458,20 @@ const readyStatePromise = store => next => action => {
 }
 
 /**
- * Lets you dispatch a function instead of an action.
- * This function will receive `dispatch` and `getState` as arguments.
+ * 让你 dispatch 函数而不是 action 对象。
+ * 此函数将接收 `dispatch` 和 `getState` 作为参数。
  *
- * Useful for early exits (conditions over `getState()`), as well
- * as for async control flow (it can `dispatch()` something else).
+ * 用于提前退出（使用 `getState()` 的条件判断），以及
+ * 用于异步控制流（它可以 `dispatch()` 别的东西）。
  *
- * `dispatch` will return the return value of the dispatched function.
+ * `dispatch` 将返回被调度函数的返回值。
  */
 const thunk = store => next => action =>
   typeof action === 'function'
     ? action(store.dispatch, store.getState)
     : next(action)
 
-// You can use all of them! (It doesn't mean you should.)
+// 您可以使用以上所有中间件！（这并不意味着你应该。）
 const todoApp = combineReducers(reducers)
 const store = createStore(
   todoApp,

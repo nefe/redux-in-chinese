@@ -40,7 +40,7 @@ _(any)_: 应用当前的 state 树。
 
 分发 action。这是触发 state 变化的惟一途径。
 
-将使用当前 [`getState()`](#getState) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getState) 的返回值，同时变化监听器(change listener)会被触发。
+将使用当前 [`getState()`](#getstate) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getstate) 的返回值，同时变化监听器(change listener)会被触发。
 
 > ##### Flux 用户使用注意
 >
@@ -87,7 +87,7 @@ store.dispatch(addTodo('Read about the middleware'))
 
 ### subscribe(listener)
 
-添加一个变化监听器。每当 dispatch action 的时候就会执行，state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。
+添加一个变化监听器。每当 dispatch action 的时候就会执行，state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getstate) 来拿到当前 state。
 
 你可以在变化监听器里面进行 [`dispatch()`](#dispatchaction)，但你需要注意下面的事项：
 
@@ -103,7 +103,7 @@ store.dispatch(addTodo('Read about the middleware'))
 
 #### 参数
 
-1. `listener` (_Function_): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getState) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
+1. `listener` (_Function_): 每当 dispatch action 的时候都会执行的回调。state 树中的一部分可能已经变化。你可以在回调函数里调用 [`getState()`](#getstate) 来拿到当前 state。store 的 reducer 应该是纯函数，因此你可能需要对 state 树中的引用做深度比较来确定它的值是否有变化。
 
 ##### 返回值
 
