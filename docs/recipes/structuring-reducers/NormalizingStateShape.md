@@ -1,15 +1,15 @@
 ---
 id: normalizing-state-shape
-title: Normalizing State Shape
-description: 'Structuring Reducers > Normalizing State Shape: Why and how to store data items for lookup based on ID'
+title: State 范式化
+description: 'Structuring Reducers > State 范式化: Why and how to store data items for lookup based on ID'
 hide_title: false
 ---
 
-# Normalizing State Shape
+# State 范式化
 
-Many applications deal with data that is nested or relational in nature. For example, a blog editor could have many Posts, each Post could have many Comments, and both Posts and Comments would be written by a User. Data for this kind of application might look like:
+事实上，大部分程序处理的数据都是嵌套或互相关联的。例如，一个博客中有多篇文章，每篇文章有多条评论，所有的文章和评论又都是由用户产生的。这种类型应用的数据看上去可能是这样的：
 
-```js
+```javascript
 const blogPosts = [
   {
     id: 'post1',
@@ -54,42 +54,42 @@ const blogPosts = [
 ]
 ```
 
-Notice that the structure of the data is a bit complex, and some of the data is repeated. This is a concern for several reasons:
+上面的数据结构比较复杂，并且有部分数据是重复的。这里还存在一些让人关心的问题：
 
-- When a piece of data is duplicated in several places, it becomes harder to make sure that it is updated appropriately.
-- Nested data means that the corresponding reducer logic has to be more nested and therefore more complex. In particular, trying to update a deeply nested field can become very ugly very fast.
-- Since immutable data updates require all ancestors in the state tree to be copied and updated as well, and new object references will cause connected UI components to re-render, an update to a deeply nested data object could force totally unrelated UI components to re-render even if the data they're displaying hasn't actually changed.
+- 当数据在多处冗余后，需要更新时，很难保证所有的数据都进行更新。
+- 嵌套的数据意味着 reducer 逻辑嵌套更多、复杂度更高。尤其是在打算更新深层嵌套数据时。
+- 不可变的数据在更新时需要状态树的祖先数据进行复制和更新，并且新的对象引用会导致与之 connect 的所有 UI 组件都重复 render。尽管要显示的数据没有发生任何改变，对深层嵌套的数据对象进行更新也会强制完全无关的 UI 组件重复 render
 
-Because of this, the recommended approach to managing relational or nested data in a Redux store is to treat a portion of your store as if it were a database, and keep that data in a _normalized_ form.
+正因为如此，在 Redux Store 中管理关系数据或嵌套数据的推荐做法是将这一部分视为数据库，并且将数据按范式化存储。
 
-## Designing a Normalized State
+## 设计范式化的 State
 
-The basic concepts of normalizing data are:
+范式化的数据包含下面几个概念：
 
-- Each type of data gets its own "table" in the state.
-- Each "data table" should store the individual items in an object, with the IDs of the items as keys and the items themselves as the values.
-- Any references to individual items should be done by storing the item's ID.
-- Arrays of IDs should be used to indicate ordering.
+- 任何类型的数据在 state 中都有自己的 “表”。
+- 任何 “数据表” 应将各个项目存储在对象中，其中每个项目的 ID 作为 key，项目本身作为 value。
+- 任何对单个项目的引用都应该根据存储项目的 ID 来完成。
+- ID 数组应该用于排序。
 
-An example of a normalized state structure for the blog example above might look like:
+上面博客示例中的 state 结构范式化之后可能如下：
 
-```js
+```javascript
 {
     posts : {
         byId : {
             "post1" : {
                 id : "post1",
-				author : "user1",
-				body : "......",
-				comments : ["comment1", "comment2"]
+                author : "user1",
+                body : "......",
+                comments : ["comment1", "comment2"]
             },
             "post2" : {
-				id : "post2",
-				author : "user2",
-				body : "......",
-				comments : ["comment3", "comment4", "comment5"]
+                id : "post2",
+                author : "user2",
+                body : "......",
+                comments : ["comment3", "comment4", "comment5"]
             }
-        },
+        }
         allIds : ["post1", "post2"]
     },
     comments : {
@@ -120,18 +120,18 @@ An example of a normalized state structure for the blog example above might look
                 comment : ".....",
             },
         },
-        allIds : ["comment1", "comment2", "comment3", "comment4", "comment5"]
+        allIds : ["comment1", "comment2", "comment3", "commment4", "comment5"]
     },
     users : {
         byId : {
             "user1" : {
                 username : "user1",
                 name : "User 1",
-            },
+            }
             "user2" : {
                 username : "user2",
                 name : "User 2",
-            },
+            }
             "user3" : {
                 username : "user3",
                 name : "User 3",
@@ -142,27 +142,27 @@ An example of a normalized state structure for the blog example above might look
 }
 ```
 
-This state structure is much flatter overall. Compared to the original nested format, this is an improvement in several ways:
+这种 state 在结构上更加扁平。与原始的嵌套形式相比，有下面几个地方的改进：
 
-- Because each item is only defined in one place, we don't have to try to make changes in multiple places if that item is updated.
-- The reducer logic doesn't have to deal with deep levels of nesting, so it will probably be much simpler.
-- The logic for retrieving or updating a given item is now fairly simple and consistent. Given an item's type and its ID, we can directly look it up in a couple simple steps, without having to dig through other objects to find it.
-- Since each data type is separated, an update like changing the text of a comment would only require new copies of the "comments > byId > comment" portion of the tree. This will generally mean fewer portions of the UI that need to update because their data has changed. In contrast, updating a comment in the original nested shape would have required updating the comment object, the parent post object, the array of all post objects, and likely have caused _all_ of the Post components and Comment components in the UI to re-render themselves.
+- 每个数据项只在一个地方定义，如果数据项需要更新的话不用在多处改变
+- reducer 逻辑不用处理深层次的嵌套，因此看上去可能会更加简单
+- 检索或者更新给定数据项的逻辑变得简单与一致。给定一个数据项的 type 和 ID，不必挖掘其他对象而是通过几个简单的步骤就能查找到它。
+- 每个数据类型都是唯一的，像改评论这样的更新仅仅需要状态树中 “comment > byId > comment” 这部分的复制。这也就意味着在 UI 中只有数据发生变化的一部分才会发生更新。与之前的不同的是，之前嵌套形式的结构需要更新整个 comment 对象，post 对象的父级，以及整个 post 对象的数组。这样就会让所有的 Post 组件和 Comment 组件都再次渲染。
 
-Note that a normalized state structure generally implies that more components are connected and each component is responsible for looking up its own data, as opposed to a few connected components looking up large amounts of data and passing all that data downwards. As it turns out, having connected parent components simply pass item IDs to connected children is a good pattern for optimizing UI performance in a React Redux application, so keeping state normalized plays a key role in improving performance.
+需要注意的是，范式化的 state 意味更多的组件被 connect，每个组件负责查找自己的数据，这和小部分的组件被 connect，然后查找大部分的数据再进行向下传递数据是恰恰相反的。事实证明，connect 父组件只需要将数据项的 Id 传递给 connect 的子对象是在 Redux 应用中优化 UI 性能的良好模式，因此保持范式化的 state 在提高性能方面起着关键作用。
 
-## Organizing Normalized Data in State
+## 组织 State 中的范式化数据
 
-A typical application will likely have a mixture of relational data and non-relational data. While there is no single rule for exactly how those different types of data should be organized, one common pattern is to put the relational "tables" under a common parent key, such as "entities". A state structure using this approach might look like:
+一个典型的应用中通常会有相关联的数据和无关联数据的混合体。虽然我们对这种不同类型的数据应该如何组织没有一个单一的规则，但常见的模式是将关系 “表” 放在一个共同的父 key 中，比如：“entities”。通过这种模式组织的 state 看上去长得像这样：
 
-```js
+```javascript
 {
     simpleDomainData1: {....},
-    simpleDomainData2: {....},
+    simpleDomainData2: {....}
     entities : {
         entityType1 : {....},
         entityType2 : {....}
-    },
+    }
     ui : {
         uiSection1 : {....},
         uiSection2 : {....}
@@ -170,13 +170,13 @@ A typical application will likely have a mixture of relational data and non-rela
 }
 ```
 
-This could be expanded in a number of ways. For example, an application that does a lot of editing of entities might want to keep two sets of "tables" in the state, one for the "current" item values and one for the "work-in-progress" item values. When an item is edited, its values could be copied into the "work-in-progress" section, and any actions that update it would be applied to the "work-in-progress" copy, allowing the editing form to be controlled by that set of data while another part of the UI still refers to the original version. "Resetting" the edit form would simply require removing the item from the "work-in-progress" section and re-copying the original data from "current" to "work-in-progress", while "applying" the edits would involve copying the values from the "work-in-progress" section to the "current" section.
+这样可以通过多种方式进行扩展。比如一个对 entities 要进行大量编辑的应用可能希望在 state 中保持两组 “表”，一个用于存储 “当前”（current） 的项目，一个用于存储 “正在进行中”(work-in-progress) 的项目。当数据项在被编辑的时候，其值可以被复制到 “正在进行中” 的那个表中，任何更新他的动作都将在 “正在进行中” 的表中工作，编辑表单被该组数据控制着，UI 仍然被原始数据控制着。表单的 “重置” 通过移除 “正在进行中” 表的数据项然后从 “当前” 表中复制原始数据到 “正在进行中” 表中就能轻易做到，表单的 “应用” 通过把 “正在进行中” 表的数据复制到 “当前” 表中就能实现。
 
-## Relationships and Tables
+## 表间关系
 
-Because we're treating a portion of our Redux store as a "database", many of the principles of database design also apply here as well. For example, if we have a many-to-many relationship, we can model that using an intermediate table that stores the IDs of the corresponding items (often known as a "join table" or an "associative table"). For consistency, we would probably also want to use the same `byId` and `allIds` approach that we used for the actual item tables, like this:
+因为我们将 Redux Store 视为数据库，所以在很多数据库的设计规则在这里也是适用的。例如，对于多对多的关系，可以设计一张中间表存储相关联项目的 ID（经常被称作 “连接表” 或者 “关联表”）。为了一致起见，我们还会使用相同的 `byId` 和 `allIds` 用于实际的数据项表中。
 
-```js
+```javascript
 {
     entities: {
         authors : { byId : {}, allIds : [] },
@@ -192,7 +192,7 @@ Because we're treating a portion of our Redux store as a "database", many of the
                     id : 2,
                     authorId : 5,
                     bookId : 15,
-                },
+                }
                 3 : {
                     id : 3,
                     authorId : 42,
@@ -206,8 +206,8 @@ Because we're treating a portion of our Redux store as a "database", many of the
 }
 ```
 
-Operations like "Look up all books by this author", can then be accomplished easily with a single loop over the join table. Given the typical amounts of data in a client application and the speed of Javascript engines, this kind of operation is likely to have sufficiently fast performance for most use cases.
+像 “查找这个作者所有的书” 这个操作可以通过在连接表上一个单一的循环来实现。相对于应用中一般情况下数据量和 JavaScript 引擎的运行速度，在大多数情况下，这样操作的性能是足够好的。
 
-## Normalizing Nested Data
+## 嵌套数据范式化
 
-Because APIs frequently send back data in a nested form, that data needs to be transformed into a normalized shape before it can be included in the state tree. The [Normalizr](https://github.com/paularmstrong/normalizr) library is usually used for this task. You can define schema types and relations, feed the schema and the response data to Normalizr, and it will output a normalized transformation of the response. That output can then be included in an action and used to update the store. See the Normalizr documentation for more details on its usage.
+因为 API 经常以嵌套的形式发送返回数据，所以该数据需要在引入状态树之前转化为规范化形态。[Normalizr](https://github.com/paularmstrong/normalizr) 库可以帮助你实现这个。你可以定义 schema 的类型和关系，将 schema 和响应数据提供给 Normalizr，他会输出响应数据的范式化变换。输出可以放在 action 中，用于 store 的更新。有关其用法的更多详细信息，请参阅 Normalizr 文档。

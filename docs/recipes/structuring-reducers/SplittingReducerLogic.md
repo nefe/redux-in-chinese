@@ -1,30 +1,30 @@
 ---
 id: splitting-reducer-logic
-title: Splitting Reducer Logic
-description: 'Structuring Reducers > Splitting Reducer Logic: Terms for different reducer use cases'
+title: 拆分 Reducer 逻辑
+description: 'Structuring Reducers > 拆分 Reducer 逻辑: Terms for different reducer use cases'
 hide_title: false
 ---
 
-# Splitting Up Reducer Logic
+# 拆分 Reducer 逻辑
 
-For any meaningful application, putting _all_ your update logic into a single reducer function is quickly going to become unmaintainable. While there's no single rule for how long a function should be, it's generally agreed that functions should be relatively short and ideally only do one specific thing. Because of this, it's good programming practice to take pieces of code that are very long or do many different things, and break them into smaller pieces that are easier to understand.
+对于任何一个有意义的应用来说，将所有的更新逻辑都放入到单个 reducer 函数中都将会让程序变得不可维护。虽然说对于一个函数应该有多长没有准确的规定，但一般来讲，函数应该比较短，并且只做一件特定的事。因此，把很长的，同时负责很多事的代码拆分成容易理解的小片段是一个很好的编程方式。
 
-Since a Redux reducer is _just_ a function, the same concept applies. You can split some of your reducer logic out into another function, and call that new function from the parent function.
+因为 Redux reducer 也仅仅是一个函数，上面的概念也适用。你可以将 reducer 中的一些逻辑拆分出去，然后在父函数中调用这个新的函数。
 
-These new functions would typically fall into one of three categories:
+这些新的函数通常分为三类：
 
-1. Small utility functions containing some reusable chunk of logic that is needed in multiple places (which may or may not be actually related to the specific business logic)
-2. Functions for handling a specific update case, which often need parameters other than the typical `(state, action)` pair
-3. Functions which handle _all_ updates for a given slice of state. These functions do generally have the typical `(state, action)` parameter signature
+1. 一些小的工具函数，包含一些可重用的逻辑片段
+2. 用于处理特定情况下的数据更新的函数，参数除了 `(state, action)` 之外，通常还包括其它参数
+3. 处理给定 state 切片的所有更新的函数，参数格式通常为 `(state, action)`
 
-For clarity, these terms will be used to distinguish between different types of functions and different use cases:
+为了清楚起见，这些术语将用于区分不同类型的功能和不同的用例：
 
-- **_reducer_**: any function with the signature `(state, action) -> newState` (ie, any function that _could_ be used as an argument to `Array.prototype.reduce`)
-- **_root reducer_**: the reducer function that is actually passed as the first argument to `createStore`. This is the only part of the reducer logic that _must_ have the `(state, action) -> newState` signature.
-- **_slice reducer_**: a reducer that is being used to handle updates to one specific slice of the state tree, usually done by passing it to `combineReducers`
-- **_case function_**: a function that is being used to handle the update logic for a specific action. This may actually be a reducer function, or it may require other parameters to do its work properly.
-- **_higher-order reducer_**: a function that takes a reducer function as an argument, and/or returns a new reducer function as a result (such as `combineReducers`, or `redux-undo`)
+- **reducer:** 任何符合 `(state, action) -> newState` 格式的函数（即，可以用做 `Array.reducer` 参数的任何函数）。
+- **root reducer:** 通常作为 `createStore` 第一个参数的函数。他是唯一的一个在所有的 reducer 函数中必须符合 `(state, action) -> newState` 格式的函数。
+- **slice reducer:** 一个负责处理状态树中一块切片数据的函数，通常会作为 `combineReducers` 函数的参数。
+- **case function:** 一个负责处理特殊 action 的更新逻辑的函数。可能就是一个 reducer 函数，也可能需要其他参数才能正常工作。
+- **higher-order reducer:** 一个以 reducer 函数作为参数，且/或返回一个新的 reducer 函数的函数（比如： `combineReducers`, `redux-undo`）。
 
-The term "_sub-reducer_" has also been used in various discussions to mean any function that is not the root reducer, although the term is not very precise. Some people may also refer to some functions as "_business logic_" (functions that relate to application-specific behavior) or "_utility functions_" (generic functions that are not application-specific).
+在各种讨论中 “sub-reducer” 这个术语通常表示那些不是 root reducer 的任何函数，但这个表述并不是很精确。一些人认为应该表示 "业务逻辑（business logic）" （与应用程序特定行为相关的功能）或者 “工具函数（utility functions）”（非应用程序特定的通用功能）。
 
-Breaking down a complex process into smaller, more understandable parts is usually described with the term **_[functional decomposition](https://stackoverflow.com/questions/947874/what-is-functional-decomposition)_**. This term and concept can be applied generically to any code. However, in Redux it is _very_ common to structure reducer logic using approach #3, where update logic is delegated to other functions based on slice of state. Redux refers to this concept as **_reducer composition_**, and it is by far the most widely-used approach to structuring reducer logic. In fact, it's so common that Redux includes a utility function called [`combineReducers()`](../../api/combineReducers.md), which specifically abstracts the process of delegating work to other reducer functions based on slices of state. However, it's important to note that it is not the _only_ pattern that can be used. In fact, it's entirely possible to use all three approaches for splitting up logic into functions, and usually a good idea as well. The [Refactoring Reducers](./RefactoringReducersExample.md) section shows some examples of this in action.
+将复杂的环境分解为更小，更易于理解的过程就是术语中的 [函数分解(functional decomposition)](http://stackoverflow.com/questions/947874/what-is-functional-decomposition)。这个术语可以用在任何代码中。在 Redux 中，使用第三个方法来构造 reducer 逻辑是非常普遍的，即更新逻辑被委托在基于 state 切片的的其他函数中。Redux 将这个概念称为 **reducer composition**，到目前为止，这个方法是构建 reducer 逻辑最常用的方法。事实上， Redux 包含一个 [`combineReducers()`](../../api/combineReducers.md) 的工具函数，它专门抽象化基于 state 切片的其他 reducer 函数的工作过程。但是你必须明确的是，这并不是唯一模式。实际上，完全可以用所有的三种方法拆分逻辑，通常情况下，这也是一个好主意。[Refactoring Reducers](./RefactoringReducersExample.md) 章节会演示一些实例。

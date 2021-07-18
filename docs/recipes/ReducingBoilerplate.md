@@ -1,65 +1,65 @@
 ---
 id: reducing-boilerplate
-title: Reducing Boilerplate
+title: 减少样板代码
 hide_title: false
 ---
 
-# Reducing Boilerplate
+# 减少样板代码
 
-Redux is in part [inspired by Flux](../understanding/history-and-design/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider how Redux lets us choose how verbose we'd like our code to be, depending on personal style, team preferences, longer term maintainability, and so on.
+Redux 很大部分 [受到 Flux 的启发](../understanding/history-and-design/PriorArt.md)，而最常见的关于 Flux 的抱怨是必须写一大堆的样板代码。在这章中，我们将考虑 Redux 如何根据个人风格，团队偏好，长期可维护性等自由决定代码的繁复程度。
 
 ## Actions
 
-Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data. It's important that **actions being objects you have to dispatch is not boilerplate, but one of the [fundamental design choices](../understanding/thinking-in-redux/ThreePrinciples.md) of Redux**.
+Actions 是用来描述在 app 中发生了什么的普通对象，并且是描述突变数据意图的唯一途径。很重要的一点是 **不得不 dispatch 的 action 对象并非是一个样板代码，而是 Redux 的一个 [基本设计原则](../understanding/thinking-in-redux/ThreePrinciples.md)**.
 
-There are frameworks claiming to be similar to Flux, but without a concept of action objects. In terms of being predictable, this is a step backwards from Flux or Redux. If there are no serializable plain object actions, it is impossible to record and replay user sessions, or to implement [hot reloading with time travel](https://www.youtube.com/watch?v=xsSnOQynTHs). If you'd rather modify data directly, you don't need Redux.
+不少框架声称自己和 Flux 很像，只不过缺少了 action 对象的概念。在可预测性方面，这是从 Flux 或 Redux 的倒退。如果没有可序列化的普通对象 action，便无法记录或重演用户会话，也无法实现 [带有时间旅行的热重载](https://www.youtube.com/watch?v=xsSnOQynTHs)。如果你更喜欢直接修改数据，那你并不需要使用 Redux 。
 
-Actions look like this:
+Action 一般长这样:
 
-```js
+```javascript
 { type: 'ADD_TODO', text: 'Use Redux' }
 { type: 'REMOVE_TODO', id: 42 }
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-It is a common convention that actions have a constant type that helps reducers (or Stores in Flux) identify them. We recommend that you use strings and not [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) for action types, because strings are serializable, and by using Symbols you make recording and replaying harder than it needs to be.
+一个约定俗成的做法是，action 拥有一个不变的 type 帮助 reducer (或 Flux 中的 Stores ) 识别它们。我们建议你使用 string 而不是 [符号（Symbols）](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 作为 action type ，因为 string 是可序列化的，并且使用符号会使记录和重演变得困难。
 
-In Flux, it is traditionally thought that you would define every action type as a string constant:
+在 Flux 中，传统的想法是将每个 action type 定义为 string 常量：
 
-```js
+```javascript
 const ADD_TODO = 'ADD_TODO'
 const REMOVE_TODO = 'REMOVE_TODO'
 const LOAD_ARTICLE = 'LOAD_ARTICLE'
 ```
 
-Why is this beneficial? **It is often claimed that constants are unnecessary, and for small projects, this might be correct.** For larger projects, there are some benefits to defining action types as constants:
+这么做的优势是什么？**人们通常认为常量不是必要的，这句话对于小项目也许正确。** 对于大的项目，将 action types 定义为常量有如下好处：
 
-- It helps keep the naming consistent because all action types are gathered in a single place.
-- Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn't know.
-- The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
-- If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you'll find the mistake sooner.
+- 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
+- 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的 action，而你并不知道。
+- Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
+- 如果你在 import 一个 Action 常量的时候拼写错了，你会得到 `undefined` 。在 dispatch 这个 action 的时候，Redux 会立即抛出这个错误，你也会马上发现错误。
 
-It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
+你的项目约定取决与你自己。开始时，可能在刚开始用内联字符串（inline string），之后转为常量，也许再之后将他们归为一个独立文件。Redux 在这里没有任何建议，选择你自己最喜欢的。
 
 ## Action Creators
 
-It is another common convention that, instead of creating action objects inline in the places where you dispatch the actions, you would create functions generating them.
+另一个约定俗成的做法是通过创建函数生成 action 对象，而不是在你 dispatch 的时候内联生成它们。
 
-For example, instead of calling `dispatch` with an object literal:
+例如，不是使用对象字面量调用 `dispatch` ：
 
-```js
-// somewhere in an event handler
+```javascript
+// event handler 里的某处
 dispatch({
   type: 'ADD_TODO',
   text: 'Use Redux'
 })
 ```
 
-You might write an action creator in a separate file, and import it into your component:
+你其实可以在单独的文件中写一个 action creator ，然后从 component 里 import：
 
 #### `actionCreators.js`
 
-```js
+```javascript
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
@@ -70,18 +70,18 @@ export function addTodo(text) {
 
 #### `AddTodo.js`
 
-```js
+```javascript
 import { addTodo } from './actionCreators'
 
-// somewhere in an event handler
+// event handler 里的某处
 dispatch(addTodo('Use Redux'))
 ```
 
-Action creators have often been criticized as boilerplate. Well, you don't have to write them! **You can use object literals if you feel this better suits your project.** There are, however, some benefits for writing action creators you should know about.
+Action creators 总被当作样板代码受到批评。好吧，其实你并不非得把他们写出来！**如果你觉得更适合你的项目，你可以选用对象字面量** 然而，你应该知道写 action creators 是存在某种优势的。
 
-Let's say a designer comes back to us after reviewing our prototype, and tells us that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/gaearon/redux-thunk) middleware and adding an early exit:
+假设有个设计师看完我们的原型之后回来说，我们最多只允许三个 todo 。我们可以使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 中间件，并添加一个提前退出，把我们的 action creator 重写成回调形式：
 
-```js
+```javascript
 function addTodoWithoutCheck(text) {
   return {
     type: 'ADD_TODO',
@@ -90,11 +90,11 @@ function addTodoWithoutCheck(text) {
 }
 
 export function addTodo(text) {
-  // This form is allowed by Redux Thunk middleware
-  // described below in “Async Action Creators” section.
-  return function (dispatch, getState) {
+  // Redux Thunk 中间件允许这种形式
+  // 在下面的 “异步 Action Creators” 段落中有写
+  return function(dispatch, getState) {
     if (getState().todos.length === 3) {
-      // Exit early
+      // 提前退出
       return
     }
     dispatch(addTodoWithoutCheck(text))
@@ -102,15 +102,15 @@ export function addTodo(text) {
 }
 ```
 
-We just modified how the `addTodo` action creator behaves, completely invisible to the calling code. **We don't have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions. It's very handy when the application is under heavy development, and the requirements change often.
+我们刚修改了 `addTodo` action creator 的行为，使得它对调用它的代码完全不可见。**我们不用担心去每个添加 todo 的地方看一看，以确认他们有了这个检查** Action creator 让你可以解耦额外的分发 action 逻辑与实际发送这些 action 的 components。当你有大量开发工作且需求经常变更的时候，这种方法十分简便易用。
 
-### Generating Action Creators
+### Action Creators 生成器
 
-Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don't need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they're created implicitly so it's a level of indirection and can cause confusion. We recommend creating your action type constants explicitly.
+某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 常量。这个想法是说你不需要同时定义 `ADD_TODO` 常量和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 常量，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 常量。
 
-Writing simple action creators can be tiresome and often ends up generating redundant boilerplate code:
+写简单的 action creator 很容易让人厌烦，且往往最终生成多余的样板代码：
 
-```js
+```javascript
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
@@ -134,11 +134,11 @@ export function removeTodo(id) {
 }
 ```
 
-You can always write a function that generates an action creator:
+你可以写一个用于生成 action creator 的函数：
 
-```js
+```javascript
 function makeActionCreator(type, ...argNames) {
-  return function (...args) {
+  return function(...args) {
     const action = { type }
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index]
@@ -156,17 +156,17 @@ export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'text')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
 
-There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
+一些工具库也可以帮助生成 action creator ，例如 [redux-act](https://github.com/pauldijou/redux-act) 和 [redux-actions](https://github.com/acdlite/redux-actions)。这些库可以有效减少你的样板代码，并紧守例如 [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action) 一类的标准。
 
-## Async Action Creators
+## 异步 Action Creators
 
-[Middleware](../understanding/thinking-in-redux/Glossary.md#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
+[中间件](../understanding/thinking-in-redux/Glossary.md#middleware) 让你在每个 action 对象 dispatch 出去之前，注入一个自定义的逻辑。异步 action 是中间件的最常见的使用场景。
 
-Without any middleware, [`dispatch`](../api/Store.md#dispatchaction) only accepts a plain object, so we have to perform AJAX calls inside our components:
+如果没有中间件，[`dispatch`](../api/Store.md#dispatchaction) 只能接收一个普通对象。因此我们必须在 components 里面进行 AJAX 调用：
 
 #### `actionCreators.js`
 
-```js
+```javascript
 export function loadPostsSuccess(userId, response) {
   return {
     type: 'LOAD_POSTS_SUCCESS',
@@ -193,7 +193,7 @@ export function loadPostsRequest(userId) {
 
 #### `UserInfo.js`
 
-```js
+```javascript
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import {
@@ -204,19 +204,19 @@ import {
 
 class Posts extends Component {
   loadData(userId) {
-    // Injected into props by React Redux `connect()` call:
+    // 调用 React Redux `connect()` 注入的 props ：
     const { dispatch, posts } = this.props
 
     if (posts[userId]) {
-      // There is cached data! Don't do anything.
+      // 这里是被缓存的数据！啥也不做。
       return
     }
 
-    // Reducer can react to this action by setting
-    // `isFetching` and thus letting us show a spinner.
+    // Reducer 可以通过设置 `isFetching` 响应这个 action
+    // 因此让我们显示一个 Spinner 控件。
     dispatch(loadPostsRequest(userId))
 
-    // Reducer can react to these actions by filling the `users`.
+    // Reducer 可以通过填写 `users` 响应这些 actions
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response => dispatch(loadPostsSuccess(userId, response)),
       error => dispatch(loadPostsFailure(userId, error))
@@ -252,27 +252,27 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-However, this quickly gets repetitive because different components request data from the same API endpoints. Moreover, we want to reuse some of this logic (e.g., early exit when there is cached data available) from many components.
+然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个 components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
 
-**Middleware lets us write more expressive, potentially async action creators.** It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can “catch” dispatched Promises and turn them into a pair of request and success/failure actions.
+**中间件让我们能写表达更清晰的、潜在的异步 action creators。** 它允许我们 dispatch 普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经 dispatch 的 Promises 并把他们变为一对请求和成功/失败的 action.
 
-The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+中间件最简单的例子是 [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” 中间件让你可以把 action creators 写成 “thunks”，也就是返回函数的函数。** 这使得控制被反转了：你可以通过参数拿到 `dispatch` ，所以你也能 dispatch 多次 action creator。
 
-> ##### Note
+> ##### 注意
 >
-> Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
+> Thunk 只是一个中间件的例子。中间件不仅仅只能处理 “dispatch 函数”：而是关于你可以使用特定的中间件来 dispatch 任何该中间件可以处理的东西。例子中的 Thunk 中间件添加了一个特定的行为用来 dispatch 函数，但这实际做什么取决于你用的中间件。
 
-Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
+用 [redux-thunk](https://github.com/gaearon/redux-thunk) 重写上面的代码：
 
 #### `actionCreators.js`
 
-```js
+```javascript
 export function loadPosts(userId) {
-  // Interpreted by the thunk middleware:
-  return function (dispatch, getState) {
+  // 用 thunk 中间件解释：
+  return function(dispatch, getState) {
     const { posts } = getState()
     if (posts[userId]) {
-      // There is cached data! Don't do anything.
+      // 这里是数据缓存！啥也不做。
       return
     }
 
@@ -281,7 +281,7 @@ export function loadPosts(userId) {
       userId
     })
 
-    // Dispatch vanilla actions asynchronously
+    // 异步分发原味 action
     fetch(`http://myapi.com/users/${userId}/posts`).then(
       response =>
         dispatch({
@@ -302,7 +302,7 @@ export function loadPosts(userId) {
 
 #### `UserInfo.js`
 
-```js
+```javascript
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadPosts } from './actionCreators'
@@ -337,28 +337,28 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-This is much less typing! If you'd like, you can still have “vanilla” action creators like `loadPostsSuccess` which you'd use from a container `loadPosts` action creator.
+这样打得字少多了！如果你喜欢，你还是可以保留 “原味” action creators 比如从一个容器 `loadPosts` action creator 里用到的 `loadPostsSuccess` 。
 
-**Finally, you can write your own middleware.** Let's say you want to generalize the pattern above and describe your async action creators like this instead:
+**最后，你可以编写你自己的中间件** 你可以把上面的模式泛化，然后代之以这样的异步 action creators ：
 
 ```js
 export function loadPosts(userId) {
   return {
-    // Types of actions to emit before and after
+    // 要在之前和之后发送的 action types
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    // Check the cache (optional):
-    shouldCallAPI: state => !state.posts[userId],
-    // Perform the fetching:
+    // 检查缓存 (可选):
+    shouldCallAPI: state => !state.users[userId],
+    // 进行取：
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
-    // Arguments to inject in begin/end actions
+    // 在 actions 的开始和结束注入的参数
     payload: { userId }
   }
 }
 ```
 
-The middleware that interprets such actions could look like this:
+解释这个 actions 的中间件可以像这样：
 
-```js
+```javascript
 function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
     const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
@@ -412,13 +412,13 @@ function callAPIMiddleware({ dispatch, getState }) {
 }
 ```
 
-After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md), you can write all your API-calling action creators the same way:
+在传给 [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md) 一次以后，你能用相同方式写你的 API 调用 action creators ：
 
-```js
+```javascript
 export function loadPosts(userId) {
   return {
     types: ['LOAD_POSTS_REQUEST', 'LOAD_POSTS_SUCCESS', 'LOAD_POSTS_FAILURE'],
-    shouldCallAPI: state => !state.posts[userId],
+    shouldCallAPI: state => !state.users[userId],
     callAPI: () => fetch(`http://myapi.com/users/${userId}/posts`),
     payload: { userId }
   }
@@ -431,7 +431,7 @@ export function loadComments(postId) {
       'LOAD_COMMENTS_SUCCESS',
       'LOAD_COMMENTS_FAILURE'
     ],
-    shouldCallAPI: state => !state.comments[postId],
+    shouldCallAPI: state => !state.posts[postId],
     callAPI: () => fetch(`http://myapi.com/posts/${postId}/comments`),
     payload: { postId }
   }
@@ -460,11 +460,11 @@ export function addComment(postId, message) {
 
 ## Reducers
 
-Redux reduces the boilerplate of Flux stores considerably by describing the update logic as a function. A function is simpler than an object, and much simpler than a class.
+Redux 用函数描述逻辑更新减少了 Flux stores 里的大量样板代码。函数比对象简单，比类更简单得多。
 
-Consider this Flux store:
+这个 Flux store:
 
-```js
+```javascript
 const _todos = []
 
 const TodoStore = Object.assign({}, EventEmitter.prototype, {
@@ -473,7 +473,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
   }
 })
 
-AppDispatcher.register(function (action) {
+AppDispatcher.register(function(action) {
   switch (action.type) {
     case ActionTypes.ADD_TODO:
       const text = action.text.trim()
@@ -485,7 +485,7 @@ AppDispatcher.register(function (action) {
 export default TodoStore
 ```
 
-With Redux, the same update logic can be described as a reducing function:
+用了 Redux 之后，同样的逻辑更新可以被写成 reducing function：
 
 ```js
 export function todos(state = [], action) {
@@ -499,15 +499,15 @@ export function todos(state = [], action) {
 }
 ```
 
-The `switch` statement is _not_ the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
+`switch` 语句 _不是_ 真正的样板代码。真正的 Flux 样板代码是概念性的：发送更新的需求，用 Dispatcher 注册 Store 的需求，Store 是对象的需求 (当你想要一个哪都能跑的 App 的时候复杂度会提升)。
 
-It's unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can solve this with a single function, as we show below.
+不幸的是很多人仍然靠文档里用没用 `switch` 来选择 Flux 框架。如果你不爱用 `switch` 你可以用一个单独的函数来解决，下面会演示。
 
-### Generating Reducers
+### Reducers 生成器
 
-Let's write a function that lets us express reducers as an object mapping from action types to handlers. For example, if we want our `todos` reducers to be defined like this:
+写一个函数将 reducers 表达为 action types 到 handlers 的映射对象。例如，如果想在 `todos` reducer 里这样定义：
 
-```js
+```javascript
 export const todos = createReducer([], {
   [ActionTypes.ADD_TODO]: (state, action) => {
     const text = action.text.trim()
@@ -516,9 +516,9 @@ export const todos = createReducer([], {
 })
 ```
 
-We can write the following helper to accomplish this:
+我们可以编写下面的辅助函数来完成：
 
-```js
+```javascript
 function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
@@ -530,6 +530,6 @@ function createReducer(initialState, handlers) {
 }
 ```
 
-This wasn't difficult, was it? Redux doesn't provide such a helper function by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to a “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
+不难对吧？鉴于写法多种多样，Redux 没有默认提供这样的辅助函数。可能你想要自动地将普通 JS 对象变成 Immutable 对象，以填满服务器状态的对象数据。可能你想合并返回状态和当前状态。有多种多样的方法来 “获取所有” handler，具体怎么做则取决于项目中你和你的团队的约定。
 
-The Redux reducer API is `(state, action) => newState`, but how you create those reducers is up to you.
+Redux reducer 的 API 是 `(state, action) => newState`，但是怎么创建这些 reducers 由你来定。
