@@ -69,7 +69,7 @@ const features = [
       </svg>
     ),
     imageAlign: 'top',
-    title: '可调式'
+    title: '可调试'
   },
   {
     content: (
