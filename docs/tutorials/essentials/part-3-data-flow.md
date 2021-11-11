@@ -50,7 +50,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-您还可以[克隆Github上相同的仓库](https://github.com/reduxjs/redux-esensients-example-app)。在克隆之后，您可以使用 `npm install` 来安装依赖，并使用 `npm start` 来启动。
+您还可以[克隆Github上相同的仓库](https://github.com/reduxjs/redux-essentials-example-app)。在克隆之后，您可以使用 `npm install` 来安装依赖，并使用 `npm start` 来启动。
 
 如果您想看到我们要构建的最终版本，您可以切换到[**`tutorial-steps`分支**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps)，或[打开 CodeSandbox 中的最终版本](https://codesandbox.io/s/github/duxjs/redux-estials-example-app/tree/tutorial-step)。
 
