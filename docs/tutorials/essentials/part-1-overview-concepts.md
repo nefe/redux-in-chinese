@@ -156,7 +156,7 @@ function Counter() {
 
 ### 不可变性 Immutability
 
-"Mutable" 意为 "可改变的"，而 "immutable 意为永不可改变。
+"Mutable" 意为 "可改变的"，而 "immutable" 意为永不可改变。
 
 JavaScript 的对象（object）和数组（array）默认都是 mutable 的。如果我创建一个对象，我可以更改其字段的内容。如果我创建一个数组，我也可以更改内容：
 
