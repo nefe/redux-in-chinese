@@ -58,7 +58,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 #### 创建 Redux + React 项目
 
-完成本教程后，你可能希望开始自己的项目。**我们建议你使用 [Create-React-App 的 Redux 模版](https://github.com/reduxjs/cra-template-redux) 作为创建 React + Redux 项目的快捷方式**。它内置了配置好的 Redux Tookit 和 React-Redux，使用您在第一节中看到的相同[“计数器”应用程序示例](./part-1-overview-concepts.md)。这使您可以跳转到编写实际应用程序代码，而无需添加Redux软件包并设置商店。
+完成本教程后，你可能希望开始自己的项目。**我们建议你使用 [Create-React-App 的 Redux 模版](https://github.com/reduxjs/cra-template-redux) 作为创建 React + Redux 项目的快捷方式**。它内置了配置好的 Redux Tookit 和 React-Redux，使用您在第一节中看到的相同[“计数器”应用程序示例](./part-1-overview-concepts.md)。这使您可以跳转到编写实际应用程序代码，而无需添加 Redux 软件包并设置 store。
 
 如果您想了解有关如何将 Redux 添加到项目的特定详细信息，请参阅此说明：
 
