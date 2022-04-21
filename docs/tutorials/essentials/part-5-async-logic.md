@@ -60,7 +60,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 - 编写可以访问 `dispatch` 和 `getState` 的额外代码
 - 教 `dispatch` 如何接受除普通 action 对象之外的其他值，例如函数和 promise，通过拦截它们并 dispatch 实际 action 对象来代替
 
-[使用中间件的最常见原因是允许不同类型的异步逻辑与 store 交互](../../faq/Actions.md#how-can-i-represent-side-effects-such-as -ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)。这允许您编写可以 dispatch action 和检查 store 状态的代码，同时使该逻辑与您的 UI 分开。
+[使用中间件的最常见原因是允许不同类型的异步逻辑与 store 交互](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)。这允许您编写可以 dispatch action 和检查 store 状态的代码，同时使该逻辑与您的 UI 分开。
 
 Redux 有多种异步中间件，每一种都允许您使用不同的语法编写逻辑。最常见的异步中间件是 [`redux-thunk`](https://github.com/reduxjs/redux-thunk)，它可以让你编写可能直接包含异步逻辑的普通函数。Redux Toolkit 的 `configureStore` 功能[默认自动设置 thunk 中间件](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware)，[我们推荐使用 thunk 作为 Redux 开发异步逻辑的标准方式](../../style-guide/style-guide.md#use-thunks-for-async-logic)。
 
