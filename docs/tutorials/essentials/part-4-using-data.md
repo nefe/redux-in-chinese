@@ -826,18 +826,18 @@ export const ReactionButtons = ({ post }) => {
 
 :::tip 总结
 
-- **Any React component can use data from the Redux store as needed**
-  - Any component can read any data that is in the Redux store
-  - Multiple components can read the same data, even at the same time
-  - Components should extract the smallest amount of data they need to render themselves
-  - Components can combine values from props, state, and the Redux store to determine what UI they need to render. They can read multiple pieces of data from the store, and reshape the data as needed for display.
-  - Any component can dispatch actions to cause state updates
-- **Redux action creators can prepare action objects with the right contents**
-  - `createSlice` and `createAction` can accept a "prepare callback" that returns the action payload
-  - Unique IDs and other random values should be put in the action, not calculated in the reducer
-- **Reducers should contain the actual state update logic**
-  - Reducers can contain whatever logic is needed to calculate the next state
-  - Action objects should contain just enough info to describe what happened
+- **任意 React 组件都能从 Redux store 中拿到其需要的数据**
+  - 任意组件都能从 Redux Store 中读取任意数据
+  - 多个组件可以读取相同的数据，甚至在同一时刻读
+  - 组件应该根据其渲染所需，从 Redux Store 中读取最小量的数据
+  - 组件可以结合 props, state, Redux store 的数据去渲染。组件可以从 store 中读取多条数据，并根据需要重塑数据以进行显示。
+  - 任意组件都能通过 dispatch actions 引发状态更新（state updates）
+- **Redux action creators 可以使用一个正确的内容模板去构造（prepare）action 对象**
+  - `createSlice` 和 `createAction` 可以接受一个返回 action payload 的 "prepare callback"
+  - 诸如唯一的 ID 和一些随机值应该放在 action 里，而不是在 reducer 中去计算
+- **Reducers 内（仅）应该包含 state 的更新逻辑**
+  - Reducers 内可以包含计算新 state 所需的任意逻辑
+  - Action 对象内应该包含足够描述即将发生什么事的信息
 
 :::
 

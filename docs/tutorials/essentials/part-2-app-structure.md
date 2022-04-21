@@ -737,20 +737,19 @@ ReactDOM.render(
   - `configureStore` 接收 `reducer` 函数来作为命名参数
   - `configureStore` 自动使用默认值来配置 store
 - **在 slice 文件中编写 Redux 逻辑**
-  - A "slice" contains the reducer logic and actions related to a specific feature / section of the Redux state
-  - 一个 slice 包含一个特定功能或部分的 state 相关的逻辑和 action
+  - 一个 slice 包含一个特定功能或部分的 state 相关的 reducer 逻辑和 action
   - Redux Toolkit 的 `createSlice` API 为您提供的每个 reducer 函数生成 action creator 和 action 类型
-- **Redux reducer 必须遵循一下原则**
-  - Should only calculate a new state value based on the `state` and `action` arguments
-  - Must make _immutable updates_ by copying the existing state
-  - Cannot contain any asynchronous logic or other "side effects"
-  - Redux Toolkit's `createSlice` API uses Immer to allow "mutating" immutable updates
+- **Redux reducer 必须遵循以下原则**
+  - 必须依赖 `state` 和 `action` 参数去计算出一个新 state
+  - 必须通过拷贝旧 state 的方式去做 _不可变更新_ (_immutable updates_)
+  - 不能包含任何异步逻辑或其他副作用
+  - Redux Toolkit 的 `createSlice` API 内部使用了 Immer 库才达到表面上直接修改（"mutating"）state 也实现不可变更新（_immutable updates_）的效果
 - **一般使用 “thunks” 来开发特定的异步逻辑**
-  - Thunks receive `dispatch` and `getState` as arguments
-  - Redux Toolkit enables the `redux-thunk` middleware by default
+  - Thunks 接收 `dispatch` 和 `getState` 作为参数
+  - Redux Toolkit 内置并默认启用了 `redux-thunk` 中间件
 - **使用 React-Redux 来做 React 组件和 Redux store 的通信**
-  - Wrapping the app with `<Provider store={store}>` enables all components to use the store
-  - Global state should go in the Redux store, local state should stay in React components
+  - 在应用程序根组件包裹 `<Provider store={store}>` 使得所有组件都能访问到 store 
+  - 全局状态应该维护在 Redux store 内，局部状态应该维护在局部 React 组件内
 
 :::
 
