@@ -1,60 +1,61 @@
 ---
 id: part-1-overview
-title: 'Redux Fundamentals, Part 1: Redux Overview'
-sidebar_label: 'Redux Overview'
+title: 'Redux 深入浅出, 第一节: Redux 概览'
+sidebar_label: 'Redux 概览'
 hide_title: false
 description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 1: Redux Overview
+# Redux 深入浅出, 第一节：Redux 概览
 
-:::tip 你将学到
+:::tip 您将学到
 
-- What Redux is and why you might want to use it
-- The basic pieces that make up a Redux app
+- Redux 是什么以及您为什么要使用 Redux 
+- 构成 Redux 应用的基本部分
 
 :::
 
 ## 简介
 
-Welcome to the Redux Fundamentals tutorial! **This tutorial will introduce you to the core concepts, principles, and patterns for using Redux**. By the time you finish, you should understand the different pieces that make up a Redux app, how data flows when using Redux, and our standard recommended patterns for building Redux apps.
+欢迎来到 Redux 深入浅出教程！**该教程会向您介绍使用 Redux 的核心概念、原则和模式**。当您学完后，您应该了解了构成一个 Redux 应用的不同部分、使用 Redux 时的数据流以及我们用于构建 Redux 应用的标准推荐模式。
 
-In Part 1 of this tutorial, we'll briefly look at a minimal example of a working Redux app to see what the pieces are, and in [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md) we'll look at those pieces in more detail and how data flows in a Redux application.
+在本教程的第一节，我们将简要介绍一个可工作的 Redux 应用的最小示例，以了解构成 Redux 应用的基本部分，在[第二节：Redux 概念与数据流](./part-2-concepts-data-flow.md)里我们会再来探讨这些构成部分的细节以及数据是怎样在 Redux 应用里流动的。
 
-Starting in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers.md), we'll use that knowledge to build a small example app that demonstrates how these pieces fit together and talk about how Redux works in practice. After we finish building the working example app "by hand" so that you can see exactly what's happening, we'll talk about some of the standard patterns and abstractions typically used with Redux. Finally, we'll see how these lower-level examples translate into the higher-level patterns that we recommend for actual usage in real applications.
+在[第三节: State, Actions, and Reducers](./part-3-state-actions-reducers.md)里，我们将利用已学知识构建一个小型的示例应用，演示这些构成部分是怎样组合在一起的，并在实践中讨论 Redux 的工作原理。在我们亲手敲完这个应用的代码后，我们应该确切知道该应用是怎样工作的。接着我们将讨论一些 Redux 标准模式和抽象的典型用法。最后，我们将看到示例里的初级（lower-level）用法如何转换为我们建议在实际应用程序中使用的高级（higher-level）模式。
+
 
 ### 如何阅读本教程
 
-**This tutorial will teach you "how Redux works"**, as well as _why_ these patterns exist. Fair warning though - learning the concepts is different from putting them into practice in actual apps.
 
-**The initial code will be less concise than the way we suggest writing real app code**, but writing it out long-hand is the best way to learn. Once you understand how everything fits together, we'll look at using Redux Toolkit to simplify things. **Redux Toolkit is the recommended way to build production apps with Redux**, and is built on all of the concepts that we will look at throughout this tutorial. Once you understand the core concepts covered here, you'll understand how to use Redux Toolkit more efficiently.
+**本教程会教您 “Redux 的工作原理”**，以及 _为什么_ 有这些模式的存在。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
+
+**初始代码会没有我们在实际应用中推荐的写法那么简洁**，但是不用语法糖（long-hand）的写法是学习的最佳方式。当您理解了所有部分是如何组合在一起的，我们再来用 Redux Toolkit 去简化代码。**Redux Toolkit 是我们推荐的在生产应用中使用 Redux 的方式**，建立在我们将在教程中介绍的所有概念之上。一旦您理解了教程中涵盖的核心概念，您会知道怎样更有效地使用 Redux Toolkit。
 
 :::info
 
-If you're looking to learn more about how Redux is used to write real-world applications, please see:
+如果您想了解有关如何使用 Redux 编写实际应用程序的更多信息，请参阅：
 
-- [**The "Modern Redux" page in this tutorial**](./part-8-modern-redux.md), which shows how to convert the low-level examples from earlier sections into the modern patterns we do recommend for real-world usage
-- [**The "Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md), which teaches "how to use Redux, the right way" for real-world apps, using our latest recommended patterns and practices.
-
+- [**本教程中 “现代化的 Redux” 章节**](./part-8-modern-redux.md)，会演示怎样把前几个章节里示例的初级（low-level）用法转换为我们推荐的实际应用中的现代化模式（modern patterns）用法
+- [**"Redux 循序渐进"**](../essentials/part-1-overview-concepts.md)，会教您在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
 :::
 
-We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already so that we can focus on explaining Redux itself. **This tutorial assumes that you know**:
+我们尽量让教程对初学者友好，但为了我们能专注于讲解 Redux 本身，我们假定您已经有了一些预备知识。**本教程假设您：**
 
 :::important 必备能力
 
 - 熟悉 [HTML & CSS](https://internetingishard.com/).
 - 熟悉 [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- Understanding of [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
-- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
+- 了解 [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
+- 理解 React 的一些术语: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), [Hooks](https://reactjs.org/docs/hooks-intro.html)
+- 了解 [asynchronous JavaScript](https://javascript.info/promise-basics) 和 [making AJAX requests](https://javascript.info/fetch)
 
 :::
 
-**If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux**. We'll be here when you're ready!
+**如果您对这些前置知识还搞不太明白，我们建议您先花一些时间学习它们，学会后再来学 Redux**。您若不离不弃，Redux 必生死相依~
 
-Finally, you should make sure that you have the React and Redux DevTools extensions installed in your browser:
+最后，您应该确保您的浏览器里安装了 React 和 Redux DevTools 的插件：
 
 - React DevTools Extension:
   - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
@@ -63,34 +64,34 @@ Finally, you should make sure that you have the React and Redux DevTools extensi
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
   - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
-## What is Redux?
+## 什么是 Redux ？
 
-It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?
+在一开始解决这个问题有助于我们理解 "Redux"。Redux 做了什么事？它帮助我们解决了什么问题？为什么我要用它？
 
-**Redux is a pattern and library for managing and updating application state, using events called "actions".** It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
+**Redux 是一个使用叫作 "actions" 的事件去管理和更新应用状态的模式和工具库。** 它以集中式 Store（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
 
-### Why Should I Use Redux?
+### 我为什么要用 Redux ？
 
-Redux helps you manage "global" state - state that is needed across many parts of your application.
+Redux 帮助您管理“全局”状态 - 那些应用程序的许多部分都需要的状态。
 
-**The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur**. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
+**Redux 提供的模式和工具使您更容易理解应用程序中的状态何时、何地、为什么以及如何更新，以及当这些更改发生时您的应用程序逻辑将如何表现**。 Redux 指导您编写可预测和可测试的代码，这有助于让您确信您的应用程序将按预期工作。
 
-### When Should I Use Redux?
+### 我什么时候应该用 Redux ？
 
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There's more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+Redux 可帮助您处理共享状态的管理，但与任何工具一样，它也有权衡。有更多的概念需要学习，还有更多的代码需要编写。它还为您的代码添加了一些额外代码，并要求您遵循某些限制。这是短期和长期生产力之间的权衡。
 
-Redux is more useful when:
+Redux 在以下情况下更有用：
 
-- You have large amounts of application state that are needed in many places in the app
-- The app state is updated frequently over time
-- The logic to update that state may be complex
-- The app has a medium or large-sized codebase, and might be worked on by many people
+- 在应用的大量地方，都存在大量的状态
+- 应用状态会随着时间的推移而频繁更新
+- 更新该状态的逻辑可能很复杂
+- 中型和大型代码量的应用，很多人协同开发
 
-**Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
+**并非所有应用程序都需要 Redux。 花一些时间思考您正在构建的应用程序类型，并决定哪些工具最能帮助解决您正在处理的问题。**
 
 :::info 想了解更多？
 
-If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
+如果您不确定 Redux 是否适合您的应用程序，这些资源提供了更多指导：
 
 - **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
 - **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
@@ -101,44 +102,46 @@ If you're not sure whether Redux is a good choice for your app, these resources 
 
 ### Redux 库和工具
 
-Redux is a small standalone JS library. However, it is commonly used with several other packages:
+Redux 是一个小型的独立 JS 库。 但是，它通常与其他几个包一起使用：
 
 #### React-Redux
 
-Redux can integrate with any UI framework, and is most frequently used with React. [**React-Redux**](https://react-redux.js.org/) is our official package that lets your React components interact with a Redux store by reading pieces of state and dispatching actions to update the store.
+Redux 可以结合任何 UI 框架一起使用，最常与 React。[**React-Redux**](https://react-redux.js.org/)是我们的官方库。它让 React 组件与 Redux 有了交互，可以从 store 读取一些 state，可以通过 dispatch actions 来更新 store。
 
 #### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们推荐的编写 Redux 逻辑的方法。 它包含我们认为对于构建 Redux 应用程序必不可少的包和函数。 Redux Toolkit 构建在我们建议的最佳实践中，简化了大多数 Redux 任务，防止了常见错误，并使编写 Redux 应用程序变得更加容易。
 
-#### Redux DevTools Extension
+#### Redux DevTools 拓展
 
-The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) shows a history of the changes to the state in your Redux store over time. This allows you to debug your applications effectively, including using powerful techniques like "time-travel debugging".
+[**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
 
-## Redux Basics
+## Redux 基础
 
-Now that you know what Redux is, let's briefly look at the pieces that make up a Redux app and how it works.
+现在您已经知道了 Redux 是什么，让我们简要介绍一下构成 Redux 应用的各部分及其工作原理。
+
 
 :::info
 
-The rest of the description on this page focuses solely on the Redux core library (the `redux` package). We'll talk about the other Redux-related packages as we go through the rest of the tutorial.
+本页描述的剩余部分仅关注 Redux 核心库（redux package）。我们将在学习本教程的其余部分时讨论其他与 Redux 相关的包。
 
 :::
 
 ### The Redux Store
 
-The center of every Redux application is the **store**. A "store" is a container that holds your application's global **state**.
+所有 Redux 应用的中心都是 **store** 。"store" 是保存应用程序的全局 **state** 的容器。
 
-A store is a JavaScript object with a few special functions and abilities that make it different than a plain global object:
+store 是一个 JavaScript 对象，具有一些特殊的功能和能力，使其与普通的全局对象不同：
 
-- You must never directly modify or change the state that is kept inside the Redux store
-- Instead, the only way to cause an update to the state is to create a plain **action** object that describes "something that happened in the application", and then **dispatch** the action to the store to tell it what happened.
-- When an action is dispatched, the store runs the root **reducer** function, and lets it calculate the new state based on the old state and the action
-- Finally, the store notifies **subscribers** that the state has been updated so the UI can be updated with the new data.
+- 切勿直接修改（modify）或更改（change）保存在 Redux 存储中的状态
+- 相反，导致状态更新的唯一方法是创建一个描述“应用程序中发生的某些事情”的普通 **action** 对象，然后将该 action **dispatch** 到 store 以告诉它发生了什么。
+- 当一个 action 被 dispatch 后，store 会调用根 **reducer** 方法，让其根据 action 和旧 state 计算出新 state
+- 最后，store 会通知 **订阅者(subscribers)** 状态已更新，以便可以使用新数据更新 UI。
 
-### Redux Core Example App
 
-Let's look at a minimal working example of a Redux app - a small counter application:
+### Redux 核心示例应用
+
+让我们看一个 Redux 应用的最小工作示例 - 一个小型计数器应用程序：
 
 <iframe
   class="codesandbox"
@@ -148,19 +151,19 @@ Let's look at a minimal working example of a Redux app - a small counter applica
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-Because Redux is a standalone JS library with no dependencies, this example is written by only loading a single script tag for the Redux library, and uses basic JS and HTML for the UI. In practice, Redux is normally used by [installing the Redux packages from NPM](../../introduction/Installation.md), and the UI is created using a library like [React](https://reactjs.org).
+因为 Redux 是一个无任何依赖的独立的 js 库，所以我们这个示例里只用了一个 script 标签去加载 Redux 库，用了基础的 JS、HTML 去写 UI。但在实践中，Redux 通常是通过[ npm 包的方式引入](../../introduction/Installation.md)的，UI 通常是通过像 [React](https://reactjs.org) 这类的库去创建的。
 
 :::info
 
-[Part 5: UI and React](./part-5-ui-and-react.md) shows how to use Redux and React together.
+[第五节: UI 和 React](./part-5-ui-and-react.md) 将演示怎样结合 React 和 Redux 一起使用.
 
 :::
 
-Let's break this example down into its separate parts to see what's happening.
+接下来我们将此示例代码拆开为单独的部分，分别看看发生了什么。
 
 #### State, Actions, and Reducers
 
-We start by defining an initial **state** value to describe the application:
+我们首先定义一个初始 **state** 值来描述应用程序：
 
 ```js
 // Define an initial state value for the app
@@ -169,13 +172,11 @@ const initialState = {
 }
 ```
 
-For this app, we're going to track a single number with the current value of our counter.
+对于此应用，我们将使用计数器的当前值跟踪（track）单个数字。
 
-Redux apps normally have a JS object as the root piece of the state, with other values inside that object.
+Redux 应用程序通常将 JS 对象作为状态（state）的根（root），该对象中可以包含其他值。
 
-Then, we define a **reducer** function. The reducer receives two arguments, the current `state` and an
-`action` object describing what happened. When the Redux app starts up, we don't have any state yet,
-so we provide the `initialState` as the default value for this reducer:
+接着，我们定义一个 **reducer** 方法。 接收俩参数， 当前的 `state` 和一个描述发生了什么的 `action` 对象。 当 Redux 应用启动时，我们还没有任何状态，所以我们提供一个 `initialState` 作为该 reducer 的默认值。
 
 ```js
 // Create a "reducer" function that determines what the new state
@@ -196,22 +197,14 @@ function counterReducer(state = initialState, action) {
 }
 ```
 
-Action objects always have a `type` field, which is a string you provide that
-acts as a unique name for the action. The `type` should be a readable name so that
-anyone who looks at this code understands what it means. In this case, we use the
-word 'counter' as the first half of our action type, and the second half is a
-description of "what happened". In this case, our 'counter' was 'incremented', so
-we write the action type as `'counter/incremented'`.
+Action 始终具有 `type` 字段，该字段的值是您提供的字符串，充当 action 的唯一名称。`type` 的值应该是一个好理解的名称，以便任何看过这段代码的人都明白它的含义。在这种情况下，我们使用单词 "counter" 作为我们 `type` 值的前半部分，后半部分是一个“发生了什么”的描述。在这种情况下，我们的 "counter" 是“递增的（incremented）”，所以我们将 `type` 编写为 `'counter/incremented'`。
 
-Based on the type of the action, we either need to return a brand-new object to
-be the new `state` result, or return the existing `state` object if nothing should change.
-Note that we update the state _immutably_ by copying the existing state and updating the
-copy, instead of modifying the original object directly.
+根据 Action 的 type，我们要么需要返回一个全新的对象作为新的 `state` 的结果，要么返回现有的 `state` 对象（如果没有任何变化）。请注意，我们通过复制现有 state 并更新副本的方式来 _不可变地_（_immutably_）更新状态，而不是直接修改原始对象。
+
 
 #### Store
 
-Now that we have a reducer function, we can create a **store** instance by
-calling the Redux library `createStore` API.
+现在我们有了一个 reducer 函数，我们可以通过调用 Redux 库 `createStore` API 来创建一个 **store** 实例。
 
 ```js
 // Create a new Redux store with the `createStore` function,
@@ -219,13 +212,11 @@ calling the Redux library `createStore` API.
 const store = Redux.createStore(counterReducer)
 ```
 
-We pass the reducer function to `createStore`, which uses the reducer function
-to generate the initial state, and to calculate any future updates.
+我们将 reducer 函数传递给 "createStore"，它使用 reducer 函数生成初始状态，并计算任何未来的更新。
 
 #### UI
 
-In any application, the user interface will show existing state on screen. When a user
-does something, the app will update its data and then redraw the UI with those values.
+在任何应用程序中，用户界面都将在屏幕上显示现有状态。当用户执行某些操作时，应用将更新其数据，然后使用这些值重绘 UI。
 
 ```js
 // Our "user interface" is some text in a single HTML element
@@ -244,24 +235,17 @@ render()
 store.subscribe(render)
 ```
 
-In this small example, we're only using some basic HTML elements as our UI,
-with a single `<div>` showing the current value.
+在这个小示例中，我们仅使用一些基本的 HTML 元素作为 UI，其中一个 `div` 内显示当前值。
 
-So, we write a function that knows how to get the latest state from the Redux
-store using the `store.getState()` method, then takes that value and updates the UI to show it.
+我们编写了一个 render 函数，该函数知道使用 `store.getState()` 方法从 Redux store 中获取最新状态，然后获取该值并更新 UI 以显示它。
 
-The Redux store lets us call `store.subscribe()` and pass a subscriber callback function that will be called
-every time the store is updated. So, we can pass our `render` function as the subscriber, and know that
-each time the store updates, we can update the UI with the latest value.
+Redux store 允许我们调用 `store.subscribe()` 方法，并传递一个订阅者回调函数，该函数将在每次更新 store 时调用。因此，我们可以将 `render` 函数作为订阅者传递，并且知道每次 store 更新时，我们都可以使用最新值更新 UI。
 
-Redux itself is a standalone library that can be used anywhere. This also means that it can be used with any UI layer.
+Redux 本身是一个独立的库，可以在任何地方使用。这也意味着它可以与任何 UI 层（layer）一起使用。
 
 #### Dispatching Actions
 
-Finally, we need to respond to user input by creating **action** objects that
-describe what happened, and **dispatching** them to the store. When we call `store.dispatch(action)`,
-the store runs the reducer, calculates the updated state, and runs the subscribers
-to update the UI.
+最后，我们需要通过创建描述所发生情况的 **action** 对象，并将其 **dispatching** 到 store 来响应用户输入。当我们调用 `store.dispatch(action)` 时，store 运行 reducer ，计算更新的状态，并执行订阅者来更新UI。
 
 ```js
 // Handle user inputs by "dispatching" action objects,
@@ -293,45 +277,40 @@ document
   })
 ```
 
-Here, we'll dispatch the actions that will make the reducer add 1 or
-subtract 1 from the current counter value.
+这里，我们 dispatch 了一些 action，这些 action 会让 reducer 根据当前计数器的值做加 1 或减 1 操作。
 
-We can also write code that only dispatches an action if a certain
-condition is true, or write some async code that dispatches an action
-after a delay.
+我们也可以写一些逻辑来决定什么时候 dispatch action。比如 if 语句，比如异步任务结束后。
 
-### Data Flow
+### 数据流
 
-We can summarize the flow of data through a Redux app with this diagram. It represents how:
+我们可以使用一张 gif 图来图解 Redux 应用中的数据流。它描绘了：
 
-- actions are dispatched in response to a user interaction like a click
-- the store runs the reducer function to calculate a new state
-- the UI reads the new state to display the new values
+- actions 会在用户交互如点击时被 dispatch
+- store 通过执行 reducer 方法计算出一个新的 state
+- UI 读取最新的 state 来展示最新的值
 
-(Don't worry if these pieces aren't quite clear yet! Keep this picture in your mind as you go through the rest of this tutorial, and you'll see how the pieces fit together.)
+(如果上述各个部分还不太清楚，请不要担心！在学习本教程的其余部分时，请将此图片记在脑海中，您将看到这些部分如何组合在一起。)
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
-## 你学到了
+## 您学到了
 
-That counter example was small, but it does show all the working pieces of a real Redux app.
-**Everything we'll talk about in the following sections expands on those basic pieces.**
+这个计数器示例很小，但它确实展示了真正的 Redux 应用程序的所有工作部分。**我们在之后的章节讨论的所有东西都是基于这些基础部分扩展的**
 
-With that in mind, let's review what we've learned so far:
+考虑到这一点，让我们回顾一下到目前为止我们学到的东西：
 
 :::tip 总结
 
-- **Redux is a library for managing global application state**
-  - Redux is typically used with the React-Redux library for integrating Redux and React together
-  - Redux Toolkit is the recommended way to write Redux logic
-- **Redux uses several types of code**
-  - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
-  - _Reducers_ are functions that calculate a new state value based on previous state + an action
-  - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+- **Redux 是一个用于管理应用程序中全局状态的库**
+  - Redux 通常与 React-Redux 库一起使用，用于将 Redux 和 React 集成在一起
+  - Redux Toolkit 是编写 Redux 逻辑的推荐方式
+- **Redux 使用多种类型的代码**
+  - _Actions_ 是一个有 `type` 字段的普通对象，描述应用程序中“发生了什么”
+  - _Reducers_ 是基于旧 state 和 action 计算出新 state 的方法
+  - 每当一个 action 被 _dispatch_ 时，Redux _store_ 都会执行根（root）reducer
 
 :::
 
 ## 下一步
 
-Now that you know what the basic pieces of a Redux app are, step ahead to [Part 2: Redux Concepts and Data Flow](./part-2-concepts-data-flow.md),
-where we'll look at how data flows through a Redux app in more detail.
+现在您已经知道了构成 Redux 应用的各个基本部分是什么，接着看[第二节：Redux 概念与数据流](./part-2-concepts-data-flow.md)，我们将更详细地了解 Redux 应用中的数据流。
