@@ -1,51 +1,51 @@
 ---
 id: part-7-standard-patterns
-title: 'Redux Fundamentals, Part 7: Standard Redux Patterns'
-sidebar_label: 'Standard Redux Patterns'
+title: 'Redux 深入浅出, 第 7 节: 标准 Redux 模式'
+sidebar_label: '标准 Redux 模式'
 hide_title: false
 description: 'The official Fundamentals tutorial for Redux: learn the standard patterns used in real-world Redux apps'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 7: Standard Redux Patterns
+# Redux 深入浅出, 第 7 节: 标准 Redux 模式
 
 :::tip 你将学到
 
-- Standard patterns used in real-world Redux apps, and why those patterns exist:
-  - Action creators for encapsulating action objects
-  - Memoized selectors for improving performance
-  - Tracking request status via loading enums
-  - Normalizing state for managing collections of items
-  - Working with promises and thunks
+- 实际应用 Redux 时的标准模式，以及为什么这些模式会存在
+  - 使用 Action creators 封装 action 对象
+  - 记忆化 selectors 以提高性能
+  - 通过加载枚举值跟踪请求状态
+  - 规范化状态以管理项目集合
+  - 与 promises 和 thunks 一起工作
 
 :::
 
-:::info Prerequisites
+:::info 前提
 
-- Understanding the topics in all previous sections
+- 理解了之前所有小节的内容
 
 :::
 
-In [Part 6: Async Logic and Data Fetching](./part-6-async-logic.md), we saw how to use Redux middleware to write async logic that can talk to the store. In particular, we used the Redux "thunk" middleware to write functions that can contain reusable async logic, without knowing what Redux store they'll be talking to ahead of time.
+在[第 6 节：异步逻辑和数据请求](./part-6-async-logic.md)，我们看见了怎样使用 Redux 中间件编写异步逻辑来与 store 进行交互。我们使用 Redux "thunk" 中间件来编写可以包含可重用异步逻辑的函数，而无需提前知道他们将要与哪些 Redux store 进行通信。
 
-So far, we've covered the basics of how Redux actually works. However, real world Redux applications use some additional patterns on top of those basics.
+到目前为止，我们已经介绍了 Redux 实际工作原理的基础知识。但是，现实世界的 Redux 应用程序在这些基础知识的基础上使用了一些额外的模式。
 
-It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists, and you'll see some or all of them in almost every Redux codebase.
+重要的是要注意，**这些模式都不是使用 Redux 所必需的！** 但是，这些模式中的每一个都存在很好的理由，并且您将在几乎每个 Redux 代码库中看到部分或全部模式。
 
-In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
+在本节中，我们将重做现有的待办事项应用代码以使用其中一些模式，并讨论为什么它们在 Redux 应用中常用。然后在[**第 8 节**](./part-8-modern-redux.md)，我们将讨论“现代化 Redux”，包括怎样使用我们的官方 [Redux Toolkit](https://redux-toolkit.js.org) 库简化我们已写的 Redux 逻辑。以及为什么**我们建议使用 Redux Toolkit 作为编写 Redux 应用的标准方法**。
 
 ## Action Creators
 
-In our app, we've been writing action objects directly in the code, where they're being dispatched:
+在我们的应用中，我们总是在 dispatch 的地方字面量地直接写 action 对象：
 
 ```js
 dispatch({ type: 'todos/todoAdded', payload: trimmedText })
 ```
 
-However, in practice, well-written Redux apps don't actually write those action objects inline when we dispatch them. Instead, we use "action creator" functions.
+但是，在实践中，编写良好的 Redux 应用在我们 dispatch 这些 action 对象时实际上不会以内联方式编写它们。相反，我们使用 "action creator" 函数。
 
-An **action creator** is a function that creates and returns an action object. We typically use these so we don't have to write the action object by hand every time:
+"action creator" 就是一个创建并返回一个 action object 的函数。我们通常使用它们，因此我们不必每次都手动编写操作对象：
 
 ```js
 const todoAdded = text => {
@@ -56,7 +56,7 @@ const todoAdded = text => {
 }
 ```
 
-We then use them by **calling the action creator**, and then **passing the resulting action object directly to `dispatch`**:
+我们**调用这个 action creator**，然后**把返回值直接传给 `dispatch`**
 
 ```js
 store.dispatch(todoAdded('Buy milk'))
@@ -65,34 +65,34 @@ console.log(store.getState().todos)
 // [ {id: 0, text: 'Buy milk', completed: false}]
 ```
 
-<DetailedExplanation title="Detailed Explanation: Why use Action Creators?">
+<DetailedExplanation title="Detailed Explanation: 为什么使用 Action Creators?">
 
-In our small example todo app, writing action objects by hand every time isn't too difficult. In fact, by switching to using action creators, we've added _more_ work - now we have to write a function _and_ the action object.
+在我们的小型 todo 应用中，每次都直接写 action 对象不是啥难事。实际上，在使用 action creators 的方式后，我们已经做了 _额外_ 的工作了 - 我们已经写了一个函数 _和_ 一个 action 对象。
 
-But, what if we needed to dispatch the same action from many parts of the application? Or what if there's some additional logic that we have to do every time we dispatch an action, like creating a unique ID? We'd end up having to copy-paste the additional setup logic every time we need to dispatch that action.
+但是，假如我们需要在应用程序的多个地方 dispatch 相同的 action ？或者假如当我们每次 dispatch 一个 action 时都要做一些额外的逻辑，比如创建一个唯一的 ID ？我们最终将不得不在每次需要调度该操作时复制粘贴其他设置逻辑。
 
-Action creators have two primary purposes:
+Action creators 操作创建者有两个主要用途：:
 
-- They prepare and format the contents of action objects
-- They encapsulate any additional work needed whenever we create those actions
+- 准备和格式化 action 对象的内容
+- 每当我们创建 action 时，封装所需的任何其他工作
 
-That way, we have a consistent approach for creating actions, whether or not there's any extra work that needs to be done. The same goes for thunks as well.
+这样，我们就有了一致的方法来创建 action，无论是否有任何额外的工作需要完成。thunk 也是一样的目的。
 
 </DetailedExplanation>
 
 ### Using Action Creators
 
-Let's update our todos slice file to use action creators for a couple of our action types.
+让我们更新一下 todosSlice 文件，以便为几种 action 类型使用 action creators。
 
-We'll start with the two main actions we've been using so far: loading the list of todos from the server, and adding a new todo after saving it to the server.
+我们将从到目前为止一直使用的两个主要操作开始：从服务器加载待办事项列表，以及在将其保存到服务器后添加新的待办事项。
 
-Right now, `todosSlice.js` is dispatching an action object directly, like this:
+当下, `todosSlice.js` 里直接 dispatch 一个 action 对象，如下：
 
 ```js
 dispatch({ type: 'todos/todosLoaded', payload: response.todos })
 ```
 
-We'll create a function that creates and returns that same kind of action object, but accepts the array of todos as its argument and puts it into the action as `action.payload`. Then, we can dispatch the action using that new action creator inside of our `fetchTodos` thunk:
+我们将创建一个函数，该函数创建并返回相同类型的 action 对象，但接受 todos 数组作为其参数，并将其作为 `action.payload` 放入 action 中。然后，我们可以使用 `fetchTodos `thunk 中的新 action creator 来 dispatch action：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-start
@@ -111,7 +111,7 @@ export async function fetchTodos(dispatch, getState) {
 }
 ```
 
-We can also do the same thing for the "todo added" action:
+我们也为 "todo added" action 做一样的事情:
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-start
@@ -133,7 +133,7 @@ export function saveNewTodo(text) {
 }
 ```
 
-While we're at it, let's do the same thing for the "color filter changed" action:
+再为 "color filter changed" action 做一样的事情:
 
 ```js title="src/features/filters/filtersSlice.js"
 // highlight-start
@@ -146,7 +146,8 @@ export const colorFilterChanged = (color, changeType) => {
 // highlight-end
 ```
 
-And since this action was being dispatched from the `<Footer>` component, we'll need to import the `colorFilterChanged` action creator over there and use it:
+由于此 action 是从 `<Footer>` 组件 dispatch 的，因此我们需要将 `colorFilterChanged` 导入到该处并使用它：
+
 
 ```js title="src/features/footer/Footer.js"
 import React from 'react'
@@ -186,11 +187,11 @@ const Footer = () => {
 export default Footer
 ```
 
-Notice that the `colorFilterChanged` action creator actually accepts two different arguments, and then combines them together to form the right `action.payload` field.
+请注意，`colorFilterChanged` action creator 实际上接受两个不同的参数，然后将它们组合在一起以形成正确的 `action.payload` 字段。
 
-This doesn't change anything about how the application works, or how the Redux data flow behaves - we're still creating action objects, and dispatching them. But, instead of writing action objects directly in our code all the time, we're now using action creators to prepare those action objects before they're dispatched.
+这不会改变应用程序的工作方式或 Redux 数据流的行为方式 - 我们仍在创建 action 对象并 dispatch 它们。但是，我们现在不是一直直接在代码中编写 action 对象，而是使用 action creator 在 dispatch 这些 action 对象之前对其进行准备。
 
-We can also use action creators with thunk functions, and in fact [we wrapped a thunk in an action creator in the previous section](./part-6-async-logic.md#saving-todo-items) . We specifically wrapped `saveNewTodo` in a "thunk action creator" function so that we could pass in a `text` parameter. While `fetchTodos` doesn't take any parameters, we could still wrap it in an action creator as well:
+我们也可以结合 thunk 函数使用 action creators，实际上[在之前的章节我们已经在 action creator 内包裹了一个 thunk 了](./part-6-async-logic.md#saving-todo-items)。我们专门将 `saveNewTodo` 包装在 "thunk action creator" 函数中，以便我们可以传入 `text` 参数。虽然 `fetchTodos` 不采用任何参数，但我们仍然可以将其包装在操作创建器中：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
@@ -202,7 +203,7 @@ export function fetchTodos() {
 }
 ```
 
-And that means we have to change the place it's dispatched in `index.js` to call the outer thunk action creator function, and pass the returned inner thunk function to `dispatch`:
+这意味着我们必须更改它在 `index.js` 中 dispatch 的位置以调用外部 thunk action creator 函数，并将返回的内部 thunk 函数传递给 `dispatch`：
 
 ```js title="src/index.js"
 import store from './store'
@@ -212,7 +213,7 @@ import { fetchTodos } from './features/todos/todosSlice'
 store.dispatch(fetchTodos())
 ```
 
-We've written thunks using the `function` keyword so far to make it clear what they're doing. However, we can also write them using arrow function syntax instead. Using implicit returns can shorten the code, although it may make it a bit harder to read as well if you're not familiar with arrow functions:
+到目前为止，我们已经使用 `function` 关键字编写了 thunks，以明确他们在做什么。但是，我们也可以使用箭头函数语法来编写它们。使用隐式返回可以缩短代码，尽管如果您不熟悉箭头函数，它也可能使阅读变得有点困难：
 
 ```js title="src/features/todos/todosSlice.js"
 // Same thing as the above example!
@@ -223,65 +224,66 @@ export const fetchTodos = () => async dispatch => {
 }
 ```
 
-Similarly, we _could_ shorten the plain action creators if we wanted to:
+同样，如果我们愿意，我们 _可以_ 缩短 action creators：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
 export const todoAdded = todo => ({ type: 'todos/todoAdded', payload: todo })
 ```
 
-It's up to you to decide whether using arrow functions this way is better or not.
+由您决定以这种方式使用箭头函数是否更好。
 
 :::info
 
-For more details on why action creators are useful, see:
+有关 action creators 为何有用的更多详细信息，请参阅：
 
 - [Idiomatic Redux: Why Use Action Creators?](https://blog.isquaredsoftware.com/2016/10/idiomatic-redux-why-use-action-creators/)
 
 :::
 
-## Memoized Selectors
+## 记忆化 Selectors
 
-We've already seen that we can write "selector" functions, which accept the Redux `state` object as an argument, and return a value:
+我们已经看到我们可以编写 "selector" 函数，它接受 Redux `state` 对象作为参数，并返回一个值：
 
 ```js
 const selectTodos = state => state.todos
 ```
 
-What if we need to _derive_ some data? For example, maybe we want to have an array of only the todo IDs:
+假如我们需要 _派生_ 一些数据怎么办？举个例子，或许我们希望只要一个 todo IDs 组成的数组：
 
 ```js
 const selectTodoIds = state => state.todos.map(todo => todo.id)
 ```
 
-However, `array.map()` always returns a new array reference. We know that the React-Redux `useSelector` hook will re-run its selector function after _every_ dispatched action, and if the selector result changes, it will force the component to re-render.
+然而，`array.map()` 每次都返回的是一个新数组引用（reference）。我们知道 _每次_ dispatch action 后 React-Redux `useSelector` hook 都会重新调用其 selector 函数，如果 selector 返回一个新值，组件一定会重新渲染。
 
-In this example, **calling `useSelector(selectTodoIds)` will _always_ cause the component to re-render after _every_ action, because it's returning a new array reference!**
+在这个例子中，**在 _每个_ action 后调用 `useSelector(selectTodoIds)` 将 _总是_ 造成重渲染，因为总是返回一个新数组引用`**
 
-In Part 5, we saw that [we can pass `shallowEqual` as an argument to `useSelector`](./part-5-ui-and-react.md#selecting-data-in-list-items-by-id). There's another option here, though: we could use "memoized" selectors.
 
-**Memoization** is a kind of caching - specifically, saving the results of an expensive calculation, and reusing those results if we see the same inputs later.
+在第 5 节，我们看到[我们传了 `shallowEqual` 作为参数给 `useSelector`](./part-5-ui-and-react.md#selecting-data-in-list-items-by-id)。现在有另一选择：我们可以使用 “记忆化的（memoized）” selectors。
 
-**Memoized selector functions** are selectors that save the most recent result value, and if you call them multiple times with the same inputs, will return the same result value. If you call them with _different_ inputs than last time, they will recalculate a new result value, cache it, and return the new result.
+**记忆化** 是缓存技术的一种 - 具体来说，保存昂贵计算的结果，如果我们以后看到相同的输入，请重用这些结果。
 
-### Memoizing Selectors with `createSelector`
+**记忆化 selector functions** 是保存最新结果值的 selector，如果使用相同的输入多次调用它们，则将返回相同的结果值。如果使用与上次不同的 _different_ 输入调用它们，它们将重新计算新的结果值，缓存该值，然后返回新结果。
 
-The **[Reselect library](https://github.com/reduxjs/reselect) provides a `createSelector` API that will generate memoized selector functions**. `createSelector` accepts one or more "input selector" functions as arguments, plus an "output selector", and returns the new selector function. Every time you call the selector:
+### 结合 `createSelector` 记忆化 Selectors
 
-- All "input selectors" are called with all of the arguments
-- If any of the input selector return values have changed, the "output selector" will re-run
-- All of the input selector results become arguments to the output selector
-- The final result of the output selector is cached for next time
+**[Reselect library](https://github.com/reduxjs/reselect) 提供了一个能生成记忆化 selector 函数的 `createSelector` API**。该 API 接收一个或多个 "input selector" 函数作为参数，加上一个 "output selector"，并返回新的 selector 函数。每次调用选择器时：
 
-Let's create a memoized version of `selectTodoIds` and use that with our `<TodoList>`.
+- 所有 "input selectors" 都使用所有参数调用
+- 如果任何 input selector 返回值已更改，"output selector" 将重新运行
+- 所有 input selector 的结果都将成为 output selector 的参数
+- output selector 的最终结果将缓存以供下次使用
 
-First, we need to install Reselect:
+让我们来创建一个记忆化版的 `selectTodoIds`，并且在 `<TodoList>` 中使用。
+
+首先我们需要安装 Reselect:
 
 ```bash
 npm install reselect
 ```
 
-Then, we can import and call `createSelector`. Our original `selectTodoIds` function was defined over in `TodoList.js`, but it's more common for selector functions to be written in the relevant slice file. So, let's add this to the todos slice:
+接着我们导入且调用 `createSelector`。我们最初的 `selectTodoIds` 函数是在 `TodoList.js` 中定义的，但更常见的是选择器函数写在相关的切片文件中。因此，让我们将其添加到待办事项切片中：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
@@ -302,7 +304,7 @@ export const selectTodoIds = createSelector(
 // highlight-end
 ```
 
-Then, let's use it in `<TodoList>`:
+接下来, 在 `<TodoList>` 里使用:
 
 ```js title="src/features/todos/TodoList.js"
 import React from 'react'
@@ -324,19 +326,19 @@ const TodoList = () => {
 }
 ```
 
-This actually behaves a bit differently than the `shallowEqual` comparison function does. Any time the `state.todos` array changes, we're going to create a new todo IDs array as a result. That includes any immutable updates to todo items like toggling their `completed` field, since we have to create a new array for the immutable update.
+这实际上与 `shallowEqual` 比较函数的行为略有不同。每当 `state.todos` 数组更改时，我们都会创建一个新的 todo IDs 数组。这包括对待办事项的任何不可变更新，例如切换其 `completed` 字段，因为我们必须为不可变更新创建一个新数组。
 
 :::tip
 
-Memoized selectors are only helpful when you actually derive additional values from the original data. If you are only looking up and returning an existing value, you can keep the selector as a plain function.
+仅当您实际从原始数据派生其他值时，记忆选择器才有用。如果只是查找并返回现有值，则可以将选择器保留为普通函数。
 
 :::
 
-### Selectors with Multiple Arguments
+### 具有多个参数的 Selectors
 
-Our todo app is supposed to have the ability to filter the visible todos based on their completed status. Let's write a memoized selector that returns that filtered list of todos.
+我们的待办事项应用程序应该能够根据其完成状态过滤可见的待办事项。让我们编写一个记忆选择器，返回经过过滤的待办事项列表。 
 
-We know we need the entire `todos` array as one argument to our output selector. We also need to pass in the current completion status filter value as well. We'll add a separate "input selector" to extract each value, and pass the results to the "output selector".
+我们知道我们需要整个 `todos` 数组作为 output selector 的一个参数。我们还需要传入当前完成状态筛选器值。我们将添加一个单独的 "input selector" 来提取每个值，并将结果传递给 "output selector"。
 
 ```js title="src/features/todos/todosSlice.js"
 import { createSelector } from 'reselect'
@@ -364,13 +366,13 @@ export const selectFilteredTodos = createSelector(
 // highlight-end
 ```
 
-:::caution
+:::警告
 
-Note that we've now added an import dependency between two slices - the `todosSlice` is importing a value from the `filtersSlice`. This is legal, but be careful. **If two slices _both_ try to import something from each other, you can end up with a "cyclic import dependency" problem that can cause your code to crash**. If that happens, try moving some common code to its own file and import from that file instead.
+请注意，我们现在在两个切片之间添加了一个导入依赖关系 - `todosSlice` 正在从 `filtersSlice` 导入一个值。这是合法的，但要小心。**如果两个切片 _都在_ 尝试从彼此导入某些内容，则最终可能会遇到“循环导入依赖项”问题，从而导致代码崩溃**。如果发生这种情况，请尝试将一些常用代码移动到其自己的文件中，然后改为从该文件导入。
 
 :::
 
-Now we can use this new "filtered todos" selector as an input to another selector that returns the IDs of those todos:
+现在，我们可以使用这个新的 "filtered todos" 选择器作为另一个选择器的输入，该选择器返回这些待办事项的 ID：
 
 ```js title="src/features/todos/todosSlice.js"
 export const selectFilteredTodoIds = createSelector(
@@ -381,15 +383,15 @@ export const selectFilteredTodoIds = createSelector(
 )
 ```
 
-If we switch `<TodoList>` to use `selectFilteredTodoIds`, we should then be able to mark a couple todo items as completed:
+如果我们在 `<TodoList>` 使用 `selectFilteredTodoIds`，那么我们应该能够将几个待办事项标记为已完成：
 
 ![Todo app - todos marked completed](/img/tutorials/fundamentals/todos-app-markedCompleted.png)
 
-and then filter the list to _only_ show completed todos:
+然后将列表筛选为 _只_ 显示已完成的待办事项：
 
 ![Todo app - todos marked completed](/img/tutorials/fundamentals/todos-app-showCompleted.png)
 
-We can then expand our `selectFilteredTodos` to also include color filtering in the selection as well:
+然后，我们可以扩展我们的 `selectFilteredTodos`，以便在选择中也包括颜色过滤：
 
 ```js title="src/features/todos/todosSlice.js"
 export const selectFilteredTodos = createSelector(
@@ -423,11 +425,11 @@ export const selectFilteredTodos = createSelector(
 )
 ```
 
-Notice that by encapsulating the logic in this selector, our component never needed to change, even as we changed the filtering behavior. Now we can filter by both status and color at once:
+请注意，通过将逻辑封装在此选择器中，即使更改了筛选行为，我们的组件也不需要更改。现在我们可以同时按状态和颜色进行过滤：
 
 ![Todo app - status and color filters](/img/tutorials/fundamentals/todos-app-selectorFilters.png)
 
-Finally, we've got several places where our code is looking up `state.todos`. We're going to be making some changes to how that state is designed as we go through the rest of this section, so we'll extract a single `selectTodos` selector and use that everywhere. We can also move `selectTodoById` over into the `todosSlice`:
+最后，我们的代码在几个地方查找 `state.todos`。在完成本节的其余部分时，我们将对该状态的设计方式进行一些更改，因此我们将提取一个 `selectTodos` 选择器并在任何地方使用它。我们还可以将 `selectTodoById` 移动到 `todosSlice` 中：
 
 ```js title="src/features/todos/todosSlice.js"
 export const selectTodos = state => state.todos
@@ -439,28 +441,28 @@ export const selectTodoById = (state, todoId) => {
 
 :::info
 
-To learn more about how to use Reselect and memoized selectors, see:
+学习更多关于怎样使用 Reselect 和记忆化 selectors ，请看：
 
 - The [Reselect docs](https://github.com/reduxjs/reselect)
 - [Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance](https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/)
 
 :::
 
-## Async Request Status
+## 异步请求状态
 
-We're using an async thunk to fetch the initial list of todos from the server. Since we're using a fake server API, that response comes back immediately. In a real app, the API call might take a while to resolve. In that case, it's common to show some kind of a loading spinner while we wait for the response to complete.
+我们使用异步 thunk 从服务器获取待办事项的初始列表。由于我们使用的是伪造的服务器 API，因此该响应会立即返回。在实际应用中，API 调用可能需要一段时间才能解决。在这种情况下，在我们等待响应完成时，通常会显示某种加载微调器（loading spinner）。
 
-This is usually handled in Redux apps by:
+这通常在 Redux 应用中通过以下方式进行处理：
 
-- Having some kind of "loading state" value to indicate the current status of a request
-- Dispatching a "request started" action _before_ making the API call, which is handled by changing the loading state value
-- Updating the loading state value again when the request completes to indicate that the call is done
+- 具有某种“加载状态”值来指示请求的当前状态
+- _在_ 进行 API 调用 _前_ dispatch "request started" action，该 dispatch 通过更改加载状态值进行处理
+- 请求完成时再次更新加载状态值，以指示调用已完成
 
-The UI layer then shows a loading spinner while the request is in progress, and switches to showing the actual data when the request is complete.
+然后，UI 层在请求进行时显示加载微调器，并在请求完成时切换到显示实际数据。
 
-We're going to update our todos slice to track a loading state value, and dispatch an additional `'todos/todosLoading'` action as part of the `fetchTodos` thunk.
+我们将更新待办事项切片以跟踪加载状态值，并 dispatch 一个额外的 `'todos/todosLoading'` action 作为 `fetchTodos` thunk 的一部分。
 
-Right now, the `state` of our todos reducer is only the array of todos itself. If we want to track the loading state inside the todos slice, we'll need to reorganize the todos state to be an object that has the todos array _and_ the loading state value. That also means rewriting the reducer logic to handle the additional nesting:
+现在，我们的 todosReducer 的 `state` 只是 todos 本身的数组。如果我们想跟踪 todos 切片中的加载状态，我们需要将 todos 状态重新组织为具有 todos 数组 _和_ 加载状态值的对象。这也意味着重写 reducer 逻辑以处理额外的嵌套：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-start
@@ -509,16 +511,16 @@ export default function todosReducer(state = initialState, action) {
 export const selectTodos = state => state.todos.entities
 ```
 
-There's a few important things to note here:
+这里有一些重要的事情需要注意：
 
-- The todos array is now nested as `state.entities` in the `todosReducer` state object. The word "entities" is a term that means "unique items with an ID", which does describe our todo objects.
-- That also means the array is nested in the _entire_ Redux state object as `state.todos.entities`
-- We now have to do extra steps in the reducer to copy the additional level of nesting for correct immutable updates, such as `state` object -> `entities` array -> `todo` object
-- Because the rest of our code is _only_ accessing the todos state via selectors, **we only need to update the `selectTodos` selector** - the rest of the UI will continue to work as expected even though we reshaped our state considerably.
+- todos 数组现在作为 `state.entities` 嵌套在 `todosReducer` 状态对象中。"entities" 这个词是一个术语，意思是“具有 ID 的唯一项目”，它确实描述了我们的待办事项对象。
+- 这也意味着数组嵌套在 _整个_ Redux state 对象中，作为 `state.todos.entities`
+- 我们现在必须在 Reducer 中执行额外的步骤来复制额外的嵌套级别，以进行正确的不可变更新，例如 `state` 对象 -> `entities` 数组 -> `todo` 对象
+- 由于代码的其余部分是 _只_ 通过选择器访问 todos 状态，**我们只需要更新 `selectTodo` 选择器** - 即使我们大大重塑了状态，UI 的其余部分仍将继续按预期工作。
 
-### Loading State Enum Values
+### 加载状态的枚举值
 
-You'll also notice that we've defined the loading state field as a string enum:
+您还会注意到，我们已将加载状态字段定义为字符串枚举：
 
 ```js
 {
@@ -526,29 +528,29 @@ You'll also notice that we've defined the loading state field as a string enum:
 }
 ```
 
-instead of an `isLoading` boolean.
+而不是 `isLoading` 布尔值。
 
-A boolean limits us to two possibilities: "loading" or "not loading". In reality, **it's possible for a request to actually be in _many_ different states**, such as:
+布尔值将我们限制在两种可能性：“加载”或“不加载”。实际上，**请求实际上可能处于 _许多_ 不同的状态**，例如：
 
-- Hasn't started at all
-- In progress
-- Succeeded
-- Failed
-- Succeeded, but now back in a situation where we might want to refetch
+- 根本没有开始
+- 进行中
+- 成功
+- 失败
+- 成功, 但又回到了我们可能想要重新筛选的情况
 
-It's also possible that the app logic should only transition between specific states based on certain actions, and this is harder to implement using booleans.
+还有一种可能是应用逻辑应仅根据某些操作在特定状态之间转换，这更难使用布尔值实现。
 
-Because of this, we recommend **storing loading state as a string enum value instead of boolean flags**.
+因此，我们建议 **将加载状态存储为字符串枚举值，而不是布尔标志**。
 
 :::info
 
-For a detailed explanation of why loading states should be enums, see:
+有关为什么加载状态应为枚举的详细说明，请参阅：
 
 - [Redux Style Guide: treat reducers as state machines](../../style-guide/style-guide.md#treat-reducers-as-state-machines)
 
 :::
 
-Based on that, we'll add a new "loading" action that will set our status to `'loading'`, and update the "loaded" action to reset the state flag to `'idle'`:
+在此基础上，我们将添加一个新的 "loading" action，该操作会将我们的状态设置为 `'loading'`，并更新 "loaded" action 以将状态标志重置 `'idle'`：
 
 ```js title="src/features/todos/todosSlice.js"
 const initialState = {
@@ -591,7 +593,7 @@ export const fetchTodos = () => async dispatch => {
 }
 ```
 
-However, before we try to show this in the UI, we need to modify the fake server API to add an artificial delay to our API calls. Open up `src/api/server.js`, and look for this commented-out line around line 63:
+但是，在我们尝试在 UI 中显示这一点之前，我们需要修改假服务器 API，以向 API 调用添加人为延迟。打开 `src/api/server.js`，然后在第 63 行周围查找此注释掉的行：
 
 ```js title="src/api/server.js"
 new Server({
@@ -605,9 +607,9 @@ new Server({
 })
 ```
 
-If you uncomment that line, the fake server will add a 2-second delay to every API call our app makes, which gives us enough time to actually see a loading spinner being displayed.
+如果您取消注释该行，假服务器将为我们的应用程序进行的每个API调用添加2秒的延迟，这使我们有足够的时间实际看到正在显示的加载微调器。
 
-Now, we can read the loading state value in our `<TodoList>` component, and show a loading spinner instead based on that value.
+现在，我们可以读取 `<TodoList>` 组件中的加载状态值，并根据该值显示加载微调器。
 
 ```js title="src/features/todos/TodoList.js"
 // omit imports
@@ -634,9 +636,9 @@ const TodoList = () => {
 }
 ```
 
-In a real app, we'd also want to handle API failure errors and other potential cases.
+在实际应用中，我们还希望处理 API 故障错误和其他潜在情况。
 
-Here's what the app looks like with that loading status enabled (to see the spinner again, reload the app preview or open it in a new tab):
+以下是启用加载状态后应用的外观（若要再次查看微调器，请重新加载应用预览或在新选项卡（tag）中打开它）：
 
 <iframe
   class="codesandbox"
@@ -648,58 +650,59 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 ## Flux Standard Actions
 
-The Redux store itself does not actually care what fields you put into your action object. It only cares that `action.type` exists and has a value, and normal Redux actions always use a string for `action.type`. That means that you _could_ put any other fields into the action that you want. Maybe we could have `action.todo` for a "todo added" action, or `action.color`, and so on.
+Redux store 本身实际上并不关心您在 action 中放入了哪些字段。它只关心 `action.type` 是否存在并具有值，并且常规的 Redux action 始终使用字符串表示 `action.type`。这意味着您可以将任何其他字段放入所需的 action 中。也许我们可以用 `action.todo` 来表示 "todo add" 动作，或者 `action.color`，依此类推。
 
-However, if every action uses different field names for its data fields, it can be hard to know ahead of time what fields you need to handle in each reducer.
+但是，如果每个 action 对其数据字段使用不同的字段名称，则很难提前知道每个 reducer 中需要处理哪些字段。
 
-That's why the Redux community came up with [the "Flux Standard Actions" convention](https://github.com/redux-utilities/flux-standard-action#motivation), or "FSA". This is a suggested approach for how to organize fields inside of action objects, so that developers always know what fields contain what kind of data. The FSA pattern is widely used in the Redux community, and in fact you've already been using it throughout this whole tutorial.
+这就是为什么 Redux 社区提出["Flux Standard Actions" 约定](https://github.com/redux-utilities/flux-standard-action#motivation), 简称 "FSA"。这是有关如何在 action 对象内部组织字段的建议方法，以便开发人员始终知道哪些字段包含哪些类型的数据。FSA 模式在 Redux 社区中被广泛使用，事实上，您在整个教程中已经使用它。
 
-The FSA convention says that:
+FSA 约定表达了：
 
-- If your action object has any actual data, that "data" value of your action should always go in `action.payload`
-- An action may also have an `action.meta` field with extra descriptive data
-- An action may have an `action.error` field with error information
+- 如果您的 action 对象具有任何实际数据，则 action 的“数据”值应始终位于 `action.payload` 中
+- action 还可以具有包含额外描述性数据的 `action.meta` 字段
+- action 可能具有包含错误信息的 `action.error` 字段
 
-So, _all_ Redux actions MUST:
+所以，_所有_ Redux actions 必须：
 
-- be a plain JavaScript object
-- have a `type` field
+- 是一个普通的 JS 对象
+- 必须有 `type` 字段
 
-And if you write your actions using the FSA pattern, an action MAY
+如果您使用 FSA 模式编写 action，则 action 可能会:
 
-- have a `payload` field
-- have an `error` field
-- have a `meta` field
+- 拥有一个 `payload` 字段
+- 拥有一个 `error` 字段
+- 拥有一个 `meta` 字段
 
 <DetailedExplanation title="Detailed Explanation: FSAs and Errors">
 
-The FSA specification says that:
+FSA 规范规定：
 
-> The optional `error` property MAY be set to `true` if the action represents an error.
-> An action whose `error` is true is analogous to a rejected Promise. By convention, the `payload` SHOULD be an error object.
-> If `error` has any other value besides `true`, including `undefined` and `null`, the action MUST NOT be interpreted as an error.
+> 如果 action 表示错误，则可选的 `error` 属性可以设置为 `true`。
+> `error` 为真的操作类似于 rejected Promise。按照惯例，`payload` 应该是一个错误对象。
+> 如果 `error` 除 `true` 之外还有任何其他值，包括 `undefined` 和 `null`，则该action 不得解释为错误。
 
-The FSA specs also argue against having specific action types for things like "loading succeeded" and "loading failed".
+FSA 规范还反对为 "loading succeeded" 和 "loading failed" 等内容提供特定的 action 类型。
 
-However, in practice, the Redux community has ignored the idea of using `action.error` as a boolean flag, and instead settled on separate action types, like `'todos/todosLoadingSucceeded'` and `'todos/todosLoadingFailed'`. This is because it's much easier to check for those action types than it is to first handle `'todos/todosLoaded'` and _then_ check `if (action.error)`.
+然而，在实践中，Redux 社区忽略了使用 `action.error` 作为布尔标志的想法，而是选择了单独的 action 类型，如 `todos/todosLoadingSucceeded` 和 `todos/todosLoadingFailed`。这是因为检查这些 action 类型比首先处理 `todos/todosLoaded` _再_ 检查 `if （action.error）` 要容易得多。
 
-You can do whichever approach works better for you, but most apps use separate action types for success and failure.
+你可以执行任何一种更适合你的方法，但大多数应用使用单独的 action 类型来表示成功和失败。
 
 </DetailedExplanation>
 
-## Normalized State
+## 规范化 State
 
-So far, we've kept our todos in an array. This is reasonable, because we received the data from the server as an array, and we also need to loop over the todos to show them as a list in the UI.
+到目前为止，我们已将待办事项保存在一个数组中。这是合理的，因为我们从服务器接收数据作为数组，我们还需要循环访问待办事项以在 UI 中将它们显示为列表。
 
-However, in larger Redux apps, it is common to store data in a **normalized state structure**. "Normalization" means:
+但是，在较大的 Redux 应用中，通常将数据存储在**规范化状态结构**中。“规范化”是指：
 
-- Making sure there is only one copy of each piece of data
-- Storing items in a way that allows directly finding items by ID
-- Referring to other items based on IDs, instead of copying the entire item
+- 确保每条数据只有一个副本
+- 以允许按 ID 直接查找项目（items）的方式存储项目
+- 基于 ID 引用其他项目，而不是复制整个项目
 
-For example, in a blogging application, you might have `Post` objects that point to `User` and `Comment` objects. There might be many posts by the same person, so if every `Post` object includes an entire `User`, we would have many copies of the same `User` object. Instead, a `Post` object would have a user ID value as `post.user`, and then we could look up `User` objects by ID as `state.users[post.user]`.
+例如，在博客应用程序中，您可能具有指向 `User` 和 `Comment` 对象的 `Post`  对象。同一个人可能有很多帖子，因此，如果每个 `Post` 对象都包含整个 `User`，我们将拥有同一个 `User` 对象的许多副本。相反，若 `Post` 对象的用户 ID 值为 `post.user`，然后我们可以按 ID 查找 `User` 对象，如 `state.users[post.user]`。
 
-This means we typically organize our data as objects instead of arrays, where the item IDs are the keys and the items themselves are the values, like this:
+
+这意味着我们通常将数据组织为对象而不是数组，其中项目 ID 是键，项目本身是值，如下所示：
 
 ```js
 const rootState = {
@@ -715,7 +718,7 @@ const rootState = {
 }
 ```
 
-Let's convert our todos slice to store the todos in a normalized form. This will require some significant changes to our reducer logic, as well as updating the selectors:
+让我们转换 todos 切片，以规范化的形式存储 todos。这将需要对我们的 reducer 逻辑进行一些重大更改，并更新 selectors：
 
 ```js title="src/features/todos/todosSlice"
 const initialState = {
@@ -848,34 +851,34 @@ export const selectTodoById = (state, todoId) => {
 // highlight-end
 ```
 
-Because our `state.entities` field is now an object instead of an array, we have to use nested object spread operators to update the data instead of array operations. Also, we can't loop over objects the way we loop over arrays, so there's several places where we have to use `Object.values(entities)` to get an array of the todo items so that we can loop over them.
+由于我们的 `state.entities` 字段现在是一个对象而不是数组，因此我们必须使用嵌套对象展开运算符来更新数据而不是数组操作。此外，我们不能像循环数组那样循环访问对象，因此在几个地方，我们必须使用 `Object.values（entities` 来获取待办事项的数组，以便我们可以循环访问它们。
 
-The good news is that because we're using selectors to encapsulate the state lookups, our UI still doesn't have to change. The bad news is that the reducer code is actually longer and more complicated.
+好消息是，由于我们使用 selectors 来封装状态查找，因此我们的 UI 仍然不必更改。坏消息是，reducer 代码实际上更长，更复杂。
 
-Part of the issue here is that **this todo app example is not a large real-world application**. So, normalizing state is not as useful in this particular app, and it's harder to see the potential benefits.
+这里的部分问题是**此待办事项应用程序示例不是大型实际应用程序**。因此，规范化状态在此特定应用中没有那么有用，并且更难看到潜在的好处。
 
-Fortunately, in [Part 8: Modern Redux with Redux Toolkit](part-8-modern-redux.md) we'll see some ways to drastically shorten the reducer logic for managing our normalized state.
+幸运的是，在[第 8 节：基于 Redux Toolkit 的现代化 Redux](part-8-modern-redux.md)中，我们将看到一些方法来大大缩短用于管理规范化状态的 reducer 逻辑。
 
-For now, the important things to understand are:
+目前，要了解的重要事项是：
 
-- Normalization _is_ commonly used in Redux apps
-- The primary benefits are being able to look up individual items by ID and ensure that only one copy of an item exists in the state
+- 规范化在 Redux 应用中 _很_ 常用
+- 主要好处是能够通过 ID 查找单个项目，并确保 state 中只存在项目的一个副本
 
 :::info
 
-For more details on why normalization is useful with Redux, see:
+有关规范化对 Redux 有用的更多详细信息，请参阅：
 
 - [Structuring Reducers: Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md)
 
 :::
 
-## Thunks and Promises
+## Thunks 和 Promises
 
-We have one last pattern to look at for this section. We've already seen how to handle loading state in the Redux store based on dispatched actions. What if we need to look at the results of a thunk in our components?
+对于本节，我们还有最后一个模式要看。我们已经了解了如何基于 dispatch action 在 Redux store 中处理加载状态。如果我们需要查看组件 thunk 的结果，该怎么办？
 
-Whenever you call `store.dispatch(action)`, `dispatch` will actually return the `action` as its result. Middleware can then modify that behavior and return some other value instead.
+每当您调用 `store.dispatch(action)` 时，`dispatch` 实际上会返回 `action` 作为其结果。然后，中间件可以修改该行为并返回一些其他值。
 
-We've already seen that the Redux Thunk middleware lets us pass a function to `dispatch`, calls the function, and then returns the result:
+我们已经看到，Redux Thunk 中间件允许我们将一个函数传递给 `dispatch`，调用该函数，然后返回结果：
 
 ```js title="reduxThunkMiddleware.js"
 const reduxThunkMiddleware = storeAPI => next => action => {
@@ -891,9 +894,9 @@ const reduxThunkMiddleware = storeAPI => next => action => {
 }
 ```
 
-This means that **we can write thunk functions that return a promise, and wait on that promise in our components**.
+这意味着**我们可以编写返回 promise 的 thunk 函数，并在我们的组件中等待 promise 状态变化**。
 
-We already have our `<Header>` component dispatching a thunk to save new todo entries to the server. Let's add some loading state inside the `<Header>` component, then disable the text input and show another loading spinner while we're waiting for the server:
+我们已经有 `<Header>` 组件 dispatching 一个 thunk，以将新的待办事项条目保存到服务器。让我们在 `<Header>` 组件中添加一些加载状态，然后禁用文本输入，并在等待服务器时显示另一个加载微调器：
 
 ```js title="src/features/header/Header.js"
 const Header = () => {
@@ -945,24 +948,24 @@ const Header = () => {
 export default Header
 ```
 
-Now, if we add a todo, we'll see a spinner in the header:
+现在，如果我们添加一个待办事项，我们将在标题中看到一个微调器：
 
 ![Todo app - component loading spinner](/img/tutorials/fundamentals/todos-app-headerLoading.png)
 
 ## 你学到了
 
-As you've seen, there's several additional patterns that are widely used in Redux apps. These patterns are not required, and may involve writing more code initially, but they provide benefits like making logic reusable, encapsulating implementation details, improving app performance, and making it easier to look up data.
+如您所见，还有几种在 Redux 应用中广泛使用的其他模式。这些模式不是必需的，最初可能涉及编写更多代码，但它们提供了一些好处，例如使逻辑可重用、封装实现细节、提高应用性能以及使查找数据更容易。
 
 :::info
 
-For more details on why these patterns exist and how Redux is meant to be used, see:
+有关这些模式存在的原因以及如何使用Redux的更多详细信息，请参阅：
 
 - [Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)
 - [Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)
 
 :::
 
-Here's how our app looks after it's been fully converted to use these patterns:
+以下是我们的应用在完全转换为使用这些模式后的样子：
 
 <iframe
   class="codesandbox"
@@ -974,26 +977,26 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 :::tip 总结
 
-- **Action creator functions encapsulate preparing action objects and thunks**
-  - Action creators can accept arguments and contain setup logic, and return the final action object or thunk function
-- **Memoized selectors help improve Redux app performance**
-  - Reselect has a `createSelector` API that generates memoized selectors
-  - Memoized selectors return the same result reference if given the same inputs
-- **Request status should be stored as an enum, not booleans**
-  - Using enums like `'idle'` and `'loading'` helps track status consistently
-- **"Flux Standard Actions" are the common convention for organizing action objects**
-  - Actions use `payload` for data, `meta` for extra descriptions, and `error` for errors
-- **Normalized state makes it easier to find items by ID**
-  - Normalized data is stored in objects instead of arrays, with item IDs as keys
-- **Thunks can return promises from `dispatch`**
-  - Components can wait for async thunks to complete, then do more work
+- **Action creators 函数可以封装关于 action 对象和 thunks 的逻辑**
+  - Action creators 可以接受参数并包含设置逻辑，并返回最终的 action 对象或 thunk 函数
+- **记忆化 selectors 有助于提高 Redux 应用性能**
+  - Reselect 有一个 `createSelector` API 可以生成记忆化 selectors
+  - 如果给记忆化 selectors 传入相同的参数，将返回相同的结果（引用）
+- **请求状态应存储为枚举值，而不是布尔值**
+  - 使用 `'idle'` 和 `'loading'` 等枚举有助于一致地跟踪状态
+- **"Flux Standard Actions" 是管理 action 对象公认的约定**
+  - Actions 的数据放在 `payload` 字段里，`meta` 放额外的描述，`error` 放错误信息
+- **规范化状态使按 ID 查找项目变得更加容易**
+  - 规范化数据存储在对象而不是数组中，项目 ID 作为键
+- **Thunks 可以从 `dispatch` 中返回 promise 值**
+  - 组件内可以等待异步 thunks 完成，然后做更多的工作
 
 :::
 
 ## 下一步
 
-Writing all this code "by hand" can be time-consuming and difficult. **That's why we recommend that you use our official [Redux Toolkit](https://redux-toolkit.js.org) package to write your Redux logic instead**.
+“手动”编写所有这些代码可能既耗时又困难。**这就是我们推荐你用官方库 [Redux Toolkit](https://redux-toolkit.js.org) 去写 Redux 逻辑的原因**。
 
-Redux Toolkit includes APIs that **help you write all the typical Redux usage patterns, but with less code**. It also helps **prevent common mistakes** like accidentally mutating state.
+Redux Toolkit 包含的 API 可**帮助您编写所有典型的 Redux 使用模式，且代码较少**。它还有助于**防止常见错误**，例如意外改变状态。
 
-In [Part 8: Modern Redux](./part-8-modern-redux.md), we'll cover how to use Redux Toolkit to simplify all the code we've written so far.
+在[第 8 节: 现代化 Redux](./part-8-modern-redux.md), 我们将介绍如何使用 Redux Toolkit 来简化我们迄今为止编写的所有代码。
