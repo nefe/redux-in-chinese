@@ -199,7 +199,7 @@ If you have a bug report or need to leave other feedback, [please file an issue 
 
 ## 你需要使用 Redux 吗？
 
-虽然 Redux 是一个很有加载的管理状态工具，但还是要考虑下它是否适合你的场景。**不要仅仅因为有人说过应该使用 Redux 而使用 - 应该花一些时间来了解使用它的潜在好处和取舍**。
+虽然 Redux 是一个很有价值的管理状态工具，但还是要考虑下它是否适合你的场景。**不要仅仅因为有人说过应该使用 Redux 而使用 - 应该花一些时间来了解使用它的潜在好处和取舍**。
 
 当遇到如下问题时，建议开始使用 Redux：
 
