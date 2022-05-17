@@ -16,7 +16,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 - 优化组件渲染性能的方法
 - 如何使用 `createEntityAdapter` 来存储和更新范式化数据
 
-:::  
+:::
 
 :::info 必备能力
 
@@ -178,23 +178,23 @@ export const selectAllNotifications = state => state.notifications
 
 我们编写了一个名为 `fetchNotifications` 的异步通知，它将从服务器检索新通知列表。作为其中的一部分，我们希望将最新通知的创建时间戳作为请求的一部分，以便服务器知道它应该只返回实际上更新的通知。
 
-我们知道将返回一个通知数组，因此我们可以将它们作为单独的参数传递给 `state.push()` ，数组将添加每个条目。为了防止服务器将它们乱序发送，我们还想确保它们进行了排序，以便最近的通知在数组中的最后一个。 （提醒一下，`array.sort()` 总是会改变现有的数组——这是安全的，因为我们是在  `createSlice` 和 Immer 内使用。）
+我们知道将返回一个通知数组，因此我们可以将它们作为单独的参数传递给 `state.push()` ，数组将添加每个条目。为了防止服务器将它们乱序发送，我们还想确保它们进行了排序，以便最近的通知在数组中的最后一个。 （提醒一下，`array.sort()` 总是会改变现有的数组——这是安全的，因为我们是在 `createSlice` 和 Immer 内使用。）
 
 ### Thunk 参数
 
 看看我们的 `fetchNotifications` thunk，它有一些我们以前没见过的新东西。让我们花点时间来讨论一下 thunk 参数。
 
-我们已经看到，当我们发送它时，我们可以将参数传递给thunk action 的创建者，例如 `dispatch(addPost(newPost))`。特别是 `createAsyncThunk`，只能传递一个参数，无论我们传入的是什么，它都将成为 payload creation 回调的第一个参数。
+我们已经看到，当我们发送它时，我们可以将参数传递给 thunk action 的创建者，例如 `dispatch(addPost(newPost))`。特别是 `createAsyncThunk`，只能传递一个参数，无论我们传入的是什么，它都将成为 payload creation 回调的第一个参数。
 
 payload creator 的第二个参数是一个' thunkAPI '对象，包含几个有用的函数和信息：
 
-- `dispatch` 和 `getState`：`dispatch` 和 `getState` 方法由 Redux store 提供。您可以在 thunk 中使用这些来发起 action，或者从最新的 Redux store中获取 state （例如在发起 另一个 action 后获取更新后的值）。
+- `dispatch` 和 `getState`：`dispatch` 和 `getState` 方法由 Redux store 提供。您可以在 thunk 中使用这些来发起 action，或者从最新的 Redux store 中获取 state （例如在发起 另一个 action 后获取更新后的值）。
 - `extra`：当创建 store 时，用于传递给 thunk 中间件的“额外参数”。这通常时某种 API 的包装器，比如一组知道如何对应用程序的服务器进行 API 调用并返回数据的函数，这样您的 thunk 就不必直接包含所有的 URL 和查询逻辑。
 - `requestId`：该 thunk 调用的唯一随机 ID ，用于跟踪单个请求的状态。
 - `signal`：一个`AbortController.signal` 函数，可用于取消正在进行的请求。
 - `rejectWithValue`：一个用于当 thunk 收到一个错误时帮助自定义 `rejected` action 内容的工具。
 
-（如果您要手写 thunk 而不是使用  `createAsyncThunk`，则 thunk 函数将获取 `(dispatch, getState)` 作为单独的参数，而不是将他们放在一个对象中。）
+（如果您要手写 thunk 而不是使用 `createAsyncThunk`，则 thunk 函数将获取 `(dispatch, getState)` 作为单独的参数，而不是将他们放在一个对象中。）
 
 :::info 说明
 
@@ -318,15 +318,16 @@ function App() {
   )
 }
 ```
+
 到目前为止，“通知” tab 如下所示：
 
 ![Initial Notifications tab](/img/tutorials/essentials/notifications-initial.png)
 
 ### 显示新通知
 
-我们每次单击“刷新通知”时，都会在我们的列表中添加更多的通知条目。在一个真实的应用程序中，当我们查看  UI 的其他部分时，这些数据可能取自服务器。在浏览 `<PostsList>` 或 `<UserPage>` 时我们可以通过单击“刷新通知”来执行类似的操作。但是，现在我们不知道刚收到多少通知，如果我们继续点击按钮，可能会有很多通知我们还没有阅读。让我们添加一些逻辑来跟踪哪些通知是已经阅读的以及哪些通知是“新的”。让我们在导航栏中的“通知” tab 上将“未读”通知的计数显示为徽章，并以不同的颜色显示新通知。
+我们每次单击“刷新通知”时，都会在我们的列表中添加更多的通知条目。在一个真实的应用程序中，当我们查看 UI 的其他部分时，这些数据可能取自服务器。在浏览 `<PostsList>` 或 `<UserPage>` 时我们可以通过单击“刷新通知”来执行类似的操作。但是，现在我们不知道刚收到多少通知，如果我们继续点击按钮，可能会有很多通知我们还没有阅读。让我们添加一些逻辑来跟踪哪些通知是已经阅读的以及哪些通知是“新的”。让我们在导航栏中的“通知” tab 上将“未读”通知的计数显示为徽章，并以不同的颜色显示新通知。
 
-我们的虚假 API 返回的通知条目带有 `isNew` 和 `read` 字段，我们可以在代码中使用这些值。 
+我们的虚假 API 返回的通知条目带有 `isNew` 和 `read` 字段，我们可以在代码中使用这些值。
 
 首先，我们将更新 `notificationsSlice`， 添加一个将所有通知标记为已读的 reducer，以及一些将现有通知标记为“非新”的逻辑：
 
@@ -364,7 +365,7 @@ export const { allNotificationsRead } = notificationsSlice.actions
 export default notificationsSlice.reducer
 ```
 
-在展示 <NotificationsList> 组件时，我们希望将这些通知标记为已读，因为我们点击 tab 查看了这些通知，或者因为我们已经打开它并收到了一些其它的通知。我们可以通过在该组件重新渲染的时候调用 `allNotificationsRead` 来实现这将通知数据标记为已读。为了避免在更新时刷新旧数据，我们将在 `useLayoutEffect` 钩子中执行该操作。我们还想为页面中的所有通知列表条目添加一个额外的类名，用来突出显示它们：
+在展示 `<NotificationsList>` 组件时，我们希望将这些通知标记为已读，因为我们点击 tab 查看了这些通知，或者因为我们已经打开它并收到了一些其它的通知。我们可以通过在该组件重新渲染的时候调用 `allNotificationsRead` 来实现这将通知数据标记为已读。为了避免在更新时刷新旧数据，我们将在 `useLayoutEffect` 钩子中执行该操作。我们还想为页面中的所有通知列表条目添加一个额外的类名，用来突出显示它们：
 
 ```js title="features/notifications/NotificationsList.js"
 import React, { useEffect } from 'react'
@@ -501,7 +502,7 @@ export const Navbar = () => {
 
 我们看到 `<Navbar>` 进行了重新渲染，这是合理的，因为它必须在 tab 上显示更新的“未读通知”标记。 但是，为什么我们的 `<UserPage>` 也会重新渲染呢？
 
-当我们检查 Redux DevTools 中最后发起的几个 action，我们可以看到只有通知  state 进行更新。由于 `<UserPage>` 没有读取任何通知，因此它不应该重新渲染。组件编写一定存在一些问题。
+当我们检查 Redux DevTools 中最后发起的几个 action，我们可以看到只有通知 state 进行更新。由于 `<UserPage>` 没有读取任何通知，因此它不应该重新渲染。组件编写一定存在一些问题。
 
 当我们仔细查看 `<UserPage>`，就会发现一个具体的问题：
 
@@ -556,6 +557,7 @@ export const selectPostsByUser = createSelector(
 )
 // highlight-end
 ```
+
 `createSelector` 将一个或多个“输入 selector ”函数作为参数，外加一个“输出 selector ”函数。 当我们调用 `selectPostsByUser(state, userId)` 时，`createSelector` 会将所有参数传递给每个输入 selector 。无论这些输入 selector 返回什么，都将成为输出 selector 的参数。
 
 在这种情况下，我们知道我们需要将帖子数组和用户 ID 作为输出 selector 的两个参数。我们可以重用现有的 `selectAllPosts` selector 来提取帖子数组。由于用户 ID 是我们传递给 `selectPostsByUser` 的第二个参数，我们可以编写一个只返回 `userId` 的小 selector。
@@ -617,7 +619,7 @@ export const UserPage = ({ match }) => {
 
 在 `<PostsList>` 中有几种方法可以优化这种行为。
 
-首先，我们可以将 <PostExcerpt> 组件包装在 React.memo() 中，这可以确保组件只有在 props 真正更改时才会重新渲染。这实际上还是会很好地运行——尝试一下，看看会发生什么：
+首先，我们可以将 `<PostExcerpt>` 组件包装在 React.memo() 中，这可以确保组件只有在 props 真正更改时才会重新渲染。这实际上还是会很好地运行——尝试一下，看看会发生什么：
 
 ```jsx title="features/posts/PostsList.js
 // highlight-next-line
@@ -689,13 +691,13 @@ Redux Toolkit 的 `createEntityAdapter` API 提供了一种将数据存储在切
 - `createEntityAdapter` 的预构建 reducer 函数处理一些常见的情况，例如“添加所有项”、“更新项”或“删除多个项”
 - `createEntityAdapter` 可以基于项的内容将 ID 保持在排序的数组中，并且仅在添加/删除项或排序规则更改时才更新该数组。
 
-`createEntityAdapter` 接受一个选项对象，该对象可能包含一个 `sortComparer` 函数，该函数将用于通过比较两个项目来保持项目id数组的排序(工作方式与 `array.sort()` 相同)。
+`createEntityAdapter` 接受一个选项对象，该对象可能包含一个 `sortComparer` 函数，该函数将用于通过比较两个项目来保持项目 id 数组的排序(工作方式与 `array.sort()` 相同)。
 
 它返回一个对象，该对象包含 [一组生成的 reducer 函数，用于从实体 state 对象中添加、更新和删除项目](https://redux-toolkit.js.org/api/createEntityAdapter#crud-functions)。这些 reducer 函数既可以用作特定 action 类型的 reducer，也可以用作 `createSlice` 中另一个 reducer 中的 "mutating" 实用函数。
 
 adapter 对象也有一个 `getSelectors` 函数。你可以传入一个 selector，它从 Redux 根 state 返回这个特定的 state 切片，它会生成类似于 `selectAll` 和 `selectById` 的选择器。
 
-最后，adapter 对象有一个 `getInitialState` 函数，它生成一个空的 `{ids: [], entities: {}}` 对象。您可以传递更多字段给  `getInitialState`，这些字段将会被合并。
+最后，adapter 对象有一个 `getInitialState` 函数，它生成一个空的 `{ids: [], entities: {}}` 对象。您可以传递更多字段给 `getInitialState`，这些字段将会被合并。
 
 ### 更新帖子切片
 
@@ -1005,7 +1007,7 @@ Redux 循序渐进教程侧重于“如何正确使用 Redux”，而不是“�
 
 [Recipes](../../recipes/README.md) 部分包含有关许多重要概念的信息，例如 [如何构建 reducer](../../recipes/structuring-reducers/StructuringReducers.md) 和 [我们的样式指南页面](../../style-guide/style-guide) 包含有关推荐模式和最佳实践的重要信息。
 
-如果您想了解更多关于 Redux 存在的原因、它试图解决的问题以及用途，请参阅 Redux 维护者 Mark Erikson 在 [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) 上的帖子和[Redux之道，第2部分：实践与哲学](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)。
+如果您想了解更多关于 Redux 存在的原因、它试图解决的问题以及用途，请参阅 Redux 维护者 Mark Erikson 在 [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) 上的帖子和[Redux 之道，第 2 部分：实践与哲学](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)。
 
 如果您正在寻求有关 Redux 问题的帮助，请加入 [Discord 上 Reactiflux 服务器中的 `#redux` 频道](https://www.reactiflux.com)
 
