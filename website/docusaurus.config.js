@@ -6,6 +6,7 @@ module.exports = {
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'camsong',
   projectName: 'redux-in-chinese',
+  onBrokenLinks: 'warn',
   themeConfig: {
     image: 'img/redux-logo-landscape.png',
     metadatas: [{ name: 'twitter:card', content: 'summary' }],
