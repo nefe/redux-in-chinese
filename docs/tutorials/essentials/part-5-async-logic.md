@@ -445,7 +445,7 @@ console.log(
 
 但是，有时切片的 reducer 需要响应 _没有_ 定义到该切片的 `reducers` 字段中的 action。这个时候就需要使用 slice 中的 `extraReducers` 字段。
 
-`extraReducers` 选项是一个接收名为 `builder` 的参数的函数。 `builder` 对象提供了一些方法，让我们可以定义额外的 case reducer，这些 reducer 将响应在 slice 之外定义的 action。 我们将使用 `builder.addCase(actionCreator, reducer)` 来处理我们异步 thunk dispath 的每个 action。
+`extraReducers` 选项是一个接收名为 `builder` 的参数的函数。 `builder` 对象提供了一些方法，让我们可以定义额外的 case reducer，这些 reducer 将响应在 slice 之外定义的 action。 我们将使用 `builder.addCase(actionCreator, reducer)` 来处理我们异步 thunk dispatch 的每个 action。
 
 <DetailedExplanation title="细节说明：Adding Extra Reducers to Slices">
 

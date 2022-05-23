@@ -281,7 +281,7 @@ store.dispatch({
   }
 })
 
-// dispath 一个 action 以创建一个 Comment 实例作为上个 Post 的子元素
+// dispatch 一个 action 以创建一个 Comment 实例作为上个 Post 的子元素
 store.dispatch({
   type: 'ADD_COMMENT',
   payload: {
