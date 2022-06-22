@@ -259,7 +259,7 @@ Redux Toolkit 有一个名为 `createSlice` 的函数，它负责生成 action �
 
 除了 `name` 字段，`createSlice` 还需要我们为 reducer 传入初始状态值，以便在第一次调用时就有一个 `state`。在这种情况下，我们提供了一个对象，它有一个从 0 开始的 `value` 字段。
 
-我们可以看到这里有三个 reducer 函数，它们对应于通过单击不同按钮 dispatc 的三种不同的 action 类型。
+我们可以看到这里有三个 reducer 函数，它们对应于通过单击不同按钮 dispatch 的三种不同的 action 类型。
 
 `createSlice` 会自动生成与我们编写的 reducer 函数同名的 action creator。我们可以通过调用其中一个来检查它并查看它返回的内容：
 
