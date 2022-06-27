@@ -31,7 +31,7 @@ Redux 除了和 [React](https://facebook.github.io/react/) 一起用外，还支
 
 - Redux 背后的 **[动机](https://cn.redux.js.org/docs/introduction/Motivation)**，**[核心概念](https://cn.redux.js.org/docs/introduction/coreconcepts)** 和 **[三大原则](https://cn.redux.js.org/docs/introduction/threeprinciples)**。
 - **[Redux 文档基础教程](https://cn.redux.js.org/docs/basics)**
-- Redux 作者 Dan Abramov 的 **免费 ["Getting Started with Redux" 系列视频](https://egghead.io/courses/getting-started-with-redux)**
+- Redux 作者 Dan Abramov 的 **免费 ["Getting Started with Redux" 系列视频](https://app.egghead.io/courses/getting-started-with-redux)**
 - Redux 维护者 Mark Erikson 的 **["Redux Fundamentals" 幻灯片](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** 以及 **[Redux 学习推荐资源列表](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)**
 - 如果你喜欢直接浏览和运行代码来学习的话，看看我们的 **[Redux 示例应用](https://cn.redux.js.org/docs/introduction/examples)** 列表，Redux repo 中也有相应的项目，同时提供 CodeSandbox 上的在线可交互示例。
 - **[React/Redux links](https://github.com/markerikson/react-redux-links)** 中的 **[Redux Tutorials](https://github.com/markerikson/react-redux-links/blob/master/redux-tutorials.md)** 部分。下面是一些我们推荐的其中最好的文章：
@@ -184,7 +184,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 #### Redux 入门（Getting Started with Redux）
 
-[Redux 入门](https://egghead.io/courses/getting-started-with-redux) 是由 Redux 作者 Dan Abramov 讲述的包含 30 个视频的课程。它涵盖了本文档的“基础”部分，同时还有不可变（immutability）、测试、Redux 最佳实践、搭配 React 使用的讲解。**这个课程将永久免费。**
+[Redux 入门](https://app.egghead.io/courses/getting-started-with-redux) 是由 Redux 作者 Dan Abramov 讲述的包含 30 个视频的课程。它涵盖了本文档的“基础”部分，同时还有不可变（immutability）、测试、Redux 最佳实践、搭配 React 使用的讲解。**这个课程将永久免费。**
 
 > [“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
 > Sandrino Di Mattia
@@ -203,7 +203,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 还等什么？
 
-#### [开始观看 30 个免费视频！](https://egghead.io/courses/getting-started-with-redux)
+#### [开始观看 30 个免费视频！](https://app.egghead.io/courses/getting-started-with-redux)
 
 > 注意：如果你喜欢 Dan Abromov 的课程，可以考虑[购买订阅](https://egghead.io/pricing)来支持 Egghead。订阅者可以查看视频中所有示例代码，以及更多高级课程，包括深入 Javascript，React，Angular 等等。许多 [Egghead 导师](https://egghead.io/instructors) 也是开源项目作者，所以购买订阅也是感谢他们的辛勤工作的一种方式。
 

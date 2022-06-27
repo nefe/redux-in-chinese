@@ -178,7 +178,7 @@ Redux Toolkit 使我们可以编写更精短的代码，更易于阅读，同时
 ### 附加教程
 
 - Redux 仓库包含几个示例项目，展示了如何使用 Redux 的各个方面。几乎所有示例都具有对应的 CodeSandbox 案例。这是你可以在线使用的交互式代码平台。请参阅 **[案例页面](./Examples.md)**
-- Redux 作者 Dan Abramov 的 **免费 ["Redux 入门" 视频系列](https://egghead.io/courses/getting-started-with-redux)** 和 **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** Egghead.io 上的视频教程
+- Redux 作者 Dan Abramov 的 **免费 ["Redux 入门" 视频系列](https://app.egghead.io/courses/getting-started-with-redux)** 和 **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** Egghead.io 上的视频教程
 - Redux 维护者 Mark Erikson 的 **["Redux Fundamentals" 大会演讲](https://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" 工作坊 PPT**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
 - Dave Ceddia 的文章 [**面向初学者的完整 React Redux 教程**](https://daveceddia.com/redux-tutorial/)
 
