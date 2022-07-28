@@ -2,20 +2,12 @@
   "name": "redux-in-chinese",
   "description": "Redux 中文文档",
   "scripts": {
-    "clean": "rimraf _book",
-    "build": "gitbook build -g camsong/redux-in-chinese",
-    "watch": "gitbook serve",
-    "publish": "npm run clean && npm run build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:camsong/redux-in-chinese gh-pages --force",
-    "offline": "gitbook pdf . offline/redux-in-chinese.pdf && gitbook epub . offline/redux-in-chinese.epub && gitbook mobi . offline/redux-in-chinese.mobi",
-    "postinstall": "opencollective postinstall",
-    "format": "prettier --write \"**/*.md\""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/camsong/redux-in-chinese.git"
+    "url": "https://github.com/nefe/redux-in-chinese.git"
   },
   "keywords": [
-    "flux",
     "redux",
     "reducer",
     "react",
@@ -27,21 +19,12 @@
     "edit",
     "webpack"
   ],
-  "author": "Cam Song <neosoyn@gmail.com> (http://github.com/camsong) & Community members",
+  "author": "Cam Song <neosoyn@gmail.com> (http://github.com/nefe) & Community members",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/camsong/redux-in-chinese/issues"
+    "url": "https://github.com/nefe/redux-in-chinese/issues"
   },
-  "homepage": "https://github.com/camsong/redux-in-chinese",
-  "devDependencies": {
-    "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-advanced-emoji": "^0.2.2",
-    "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-ga": "^1.0.0",
-    "gitbook-plugin-prism": "^2.3.0",
-    "prettier": "^2.0.5",
-    "rimraf": "^3.0.2"
-  },
+  "homepage": "https://github.com/nefe/redux-in-chinese",
   "dependencies": {
     "opencollective": "^1.0.3"
   },

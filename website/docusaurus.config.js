@@ -4,12 +4,12 @@ module.exports = {
   url: 'http://cn.redux.js.org',
   baseUrl: '/',
   favicon: 'img/favicon/favicon.ico',
-  organizationName: 'camsong',
+  organizationName: 'nefe',
   projectName: 'redux-in-chinese',
   onBrokenLinks: 'warn',
   themeConfig: {
     image: 'img/redux-logo-landscape.png',
-    metadatas: [{ name: 'twitter:card', content: 'summary' }],
+    metadata: [{ name: 'twitter:card', content: 'summary' }],
     prism: {
       theme: require('./src/js/monokaiTheme.js')
     },
@@ -42,12 +42,12 @@ module.exports = {
         },
         {
           label: '源码',
-          href: 'https://www.github.com/camsong/redux-in-chinese',
+          href: 'https://www.github.com/nefe/redux-in-chinese',
           position: 'right'
         },
         {
           label: '纠错',
-          to: 'https://github.com/camsong/redux-in-chinese/issues',
+          to: 'https://github.com/nefe/redux-in-chinese/issues',
           position: 'right'
         }
       ]
@@ -98,7 +98,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/camsong/redux-in-chinese'
+              href: 'https://github.com/nefe/redux-in-chinese'
             },
             {
               html: `
@@ -121,12 +121,10 @@ module.exports = {
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and Cam Song.`
     },
     algolia: {
+      appId: 'BH4D9OD16A',
       apiKey: '518c6e3c629811d8daa1d21dc8bcfa37',
       indexName: 'redux',
       algoliaOptions: {}
-    },
-    googleAnalytics: {
-      trackingID: 'UA-66122997-1'
     }
   },
   presets: [
@@ -137,6 +135,12 @@ module.exports = {
           path: '../docs',
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js')
+        },
+        gtag: {
+          trackingID: 'G-M7SNC3FDW9'
+        },
+        googleAnalytics: {
+          trackingID: 'UA-66122997-1'
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')
