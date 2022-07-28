@@ -1,21 +1,21 @@
 ---
 id: updating-normalized-data
-title: Updating Normalized Data
-sidebar_label: Updating Normalized Data
-description: 'Structuring Reducers > Updating Normalized Data: Patterns for updating normalized data'
+title: 管理范式化数据
+description: 'Structuring Reducers > 管理范式化数据: Patterns for updating normalized data'
+hide_title: false
 ---
 
-# Managing Normalized Data
+# 管理范式化数据
 
-As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of handling mutations for Comments on a Post.
+如 [范式化数据](./NormalizingStateShape.md) 章节所提及的，我们经常使用 Normaizr 库将嵌套式数据转化为适合集成到 store 中的范式化数据。但这并不解决针对范式化的数据进一步更新后在应用的其他地方使用的问题。根据喜好有很多种方法可供使用。下面展示一个像文章添加评论的示例。
 
-## Standard Approaches
+## 标准方法
 
-### Simple Merging
+### 简单合并
 
-One approach is to merge the contents of the action into the existing state. In this case, we can use deep recursive merge, not just a shallow copy, to allow for actions with partial items to update stored items. The Lodash `merge` function can handle this for us:
+一种方法是将 action 的内容合并到现有的 state。在这种情况下，我们需要一个对数据的深拷贝（非浅拷贝）。Lodash 的 `merge` 方法可以帮我们处理这个：
 
-```js
+```javascript
 import merge from 'lodash/merge'
 
 function commentsById(state = {}, action) {
@@ -30,16 +30,18 @@ function commentsById(state = {}, action) {
 }
 ```
 
-This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched. It also doesn't handle trying to delete an item.
+这样做会让 reducer 保持最小的工作量，但需要 action creator 在 action dispatch 之前做大量的工作来将数据转化成正确的形态。在删除数据项时这种方式也是不适合的。
 
-### Slice Reducer Composition
+### reducer 切片组合
 
-If we have a nested tree of slice reducers, each slice reducer will need to know how to respond to this action appropriately. We will need to include all the relevant data in the action. We need to update the correct Post object with the comment's ID, create a new Comment object using that ID as a key, and include the Comment's ID in the list of all Comment IDs. Here's how the pieces for this might fit together:
+如果我们有一个由切片 reducer 组成的嵌套数据，每个切片 reducer 都需要知道如何响应这个 action。因为我们需要让 action 囊括所有相关的数据。譬如更新相应的 Post 对象需要生成一个 comment 的 id，然后使用 id 作为 key 创建一个新的 comment 对象，并且让这个 comment 的 id 包括在所有的 comment id 列表中。下面是一个如何组合这样数据的例子：
 
-```js
+> 译者注：结合上章节中范式化之后的 state 阅读
+
+```javascript
 // actions.js
 function addComment(postId, commentText) {
-  // Generate a unique ID for this comment
+  // 为这个 comment 生成一个独一无二的 ID
   const commentId = generateId('comment')
 
   return {
@@ -57,12 +59,12 @@ function addComment(state, action) {
   const { payload } = action
   const { postId, commentId } = payload
 
-  // Look up the correct post, to simplify the rest of the code
+  // 查找出相应的文章，简化其余代码
   const post = state[postId]
 
   return {
     ...state,
-    // Update our Post object with a new "comments" array
+    // 用新的 comments 数据更新 Post 对象
     [postId]: {
       ...post,
       comments: post.comments.concat(commentId)
@@ -80,7 +82,7 @@ function postsById(state = {}, action) {
 }
 
 function allPosts(state = [], action) {
-  // omitted - no work to be done for this example
+  // 省略，这个例子中不需要它
 }
 
 const postsReducer = combineReducers({
@@ -93,10 +95,10 @@ function addCommentEntry(state, action) {
   const { payload } = action
   const { commentId, commentText } = payload
 
-  // Create our new Comment object
+  // 创建一个新的 Comment 对象
   const comment = { id: commentId, text: commentText }
 
-  // Insert the new Comment object into the updated lookup table
+  // 在查询表中插入新的 Comment 对象
   return {
     ...state,
     [commentId]: comment
@@ -115,7 +117,7 @@ function commentsById(state = {}, action) {
 function addCommentId(state, action) {
   const { payload } = action
   const { commentId } = payload
-  // Just append the new Comment's ID to the list of all IDs
+  // 把新 Comment 的 ID 添加在 all IDs 的列表后面
   return state.concat(commentId)
 }
 
@@ -134,15 +136,15 @@ const commentsReducer = combineReducers({
 })
 ```
 
-The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together. Note the delegation involved here. The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item. Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
+这个例子之所有有点长，是因为它展示了不同切片 reducer 和 case reducer 是如何配合在一起使用的。注意这里对 “委托” 的理解。postById reducer 切片将工作委拖给 addComment，addComment 将新的评论 id 插入到相应的数据项中。同时 commentsById 和 allComments 的 reducer 切片都有自己的 case reducer，他们更新评论查找表和所有评论 id 列表的表。
 
-## Other Approaches
+## 其他方法
 
-### Task-Based Updates
+### 基于任务的更新
 
-Since reducers are just functions, there's an infinite number of ways to split up this logic. While using slice reducers is the most common, it's also possible to organize behavior in a more task-oriented structure. Because this will often involve more nested updates, you may want to use an immutable update utility library like [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable) or [object-path-immutable](https://github.com/mariocasciaro/object-path-immutable) to simplify the update statements. Here's an example of what that might look like:
+reducer 仅仅是个函数，因此有无数种方法来拆分这个逻辑。使用切片 reducer 是最常见，但也可以在更面向任务的结构中组织行为。由于通常会涉及到更多嵌套的更新，因此常常会使用 [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable)、[object-path-immutable](https://github.com/mariocasciaro/object-path-immutable) 等库实现不可变更新。
 
-```js
+```javascript
 import posts from "./postsReducer";
 import comments from "./commentsReducer";
 import dotProp from "dot-prop-immutable";
@@ -183,7 +185,7 @@ function addComment(state, action) {
 
 const featureReducers = createReducer({}, {
     ADD_COMMENT : addComment,
-});
+};
 
 const rootReducer = reduceReducers(
     combinedReducer,
@@ -191,79 +193,86 @@ const rootReducer = reduceReducers(
 );
 ```
 
-This approach makes it very clear what's happening for the `"ADD_COMMENTS"` case, but it does require nested updating logic, and some specific knowledge of the state tree shape. Depending on how you want to compose your reducer logic, this may or may not be desired.
+这种方法让 `ADD_COMMENT` 这个 case 要干哪些事更加清楚，但需要更新嵌套逻辑和对特定状态树的了解。最后这取决于你如何组织 reducer 逻辑，或许你根本不需要这样做。
 
 ### Redux-ORM
 
-The [Redux-ORM](https://github.com/redux-orm/redux-orm) library provides a very useful abstraction layer for managing normalized data in a Redux store. It allows you to declare Model classes and define relations between them. It can then generate the empty "tables" for your data types, act as a specialized selector tool for looking up the data, and perform immutable updates on that data.
+[Redux-ORM](https://github.com/tommikaikkonen/redux-orm) 库提供了一个非常有用的抽象层，用于管理 Redux store 中存储的范式化数据。它允许你声明 Model 类并且定义他们之间的关系。然后它可以为你的数据类型生成新“表”，充当用于查找数据的特殊选择器工具，并且对数据执行不可变更新。
 
-There's a couple ways Redux-ORM can be used to perform updates. First, the Redux-ORM docs suggest defining reducer functions on each Model subclass, then including the auto-generated combined reducer function into your store:
+有几种方法可以用 Redux-ORM 执行数据更新。首选，Redux-ORM 文档建议在每个 Model 子类上定义 reducer 函数，然后将自动生成的组合 reducer 函数放到 store 中：
 
-```js
+```javascript
 // models.js
-import { Model, fk, attr, ORM } from 'redux-orm'
+import { Model, many, Schema } from 'redux-orm'
 
 export class Post extends Model {
   static get fields() {
     return {
-      id: attr(),
-      name: attr()
+      // 定义一个多边关系 - 一个 Post 可以有多个 Comments，
+      // 字段名是 “comments”
+      comments: many('Comment')
     }
   }
 
-  static reducer(action, Post, session) {
+  static reducer(state, action, Post) {
     switch (action.type) {
       case 'CREATE_POST': {
+        // 排队创建一个 Post 实例
         Post.create(action.payload)
         break
       }
+      case 'ADD_COMMENT': {
+        const { payload } = action
+        const { postId, commentId } = payload
+        // 排队增加一个 Comment ID 和 Post 实例的联系
+        Post.withId(postId).comments.add(commentId)
+        break
+      }
     }
+
+    // Redux-ORM 将在返回后自动应用排队的更新
   }
 }
 Post.modelName = 'Post'
 
 export class Comment extends Model {
   static get fields() {
-    return {
-      id: attr(),
-      text: attr(),
-      // Define a foreign key relation - one Post can have many Comments
-      postId: fk({
-        to: 'Post', // must be the same as Post.modelName
-        as: 'post', // name for accessor (comment.post)
-        relatedName: 'comments' // name for backward accessor (post.comments)
-      })
-    }
+    return {}
   }
 
-  static reducer(action, Comment, session) {
+  static reducer(state, action, Comment) {
     switch (action.type) {
       case 'ADD_COMMENT': {
-        Comment.create(action.payload)
+        const { payload } = action
+        const { commentId, commentText } = payload
+
+        // 排队创建一个 Comment 实例
+        Comment.create({ id: commentId, text: commentText })
         break
       }
     }
+
+    // Redux-ORM 将在返回后自动应用排队的更新
   }
 }
 Comment.modelName = 'Comment'
 
-// Create an ORM instance and hook up the Post and Comment models
-export const orm = new ORM()
-orm.register(Post, Comment)
+// 创建 Schema 实例，然后和 Post、Comment 数据模型挂钩起来
+export const schema = new Schema()
+schema.register(Post, Comment)
 
 // main.js
 import { createStore, combineReducers } from 'redux'
-import { createReducer } from 'redux-orm'
-import { orm } from './models'
+import { schema } from './models'
 
 const rootReducer = combineReducers({
-  // Insert the auto-generated Redux-ORM reducer.  This will
-  // initialize our model "tables", and hook up the reducer
-  // logic we defined on each Model subclass
-  entities: createReducer(orm)
+  // 插入 Redux-ORM 自动生成的 reducer，这将
+  // 初始化一个数据模型 “表”，并且和我们在
+  // 每个 Model 子类中定义的 reducer 逻辑挂钩起来
+  entities: schema.reducer()
 })
 
-// Dispatch an action to create a Post instance
+// dispatch 一个 action 以创建一个 Post 实例
 store.dispatch({
   type: 'CREATE_POST',
   payload: {
@@ -272,44 +281,39 @@ store.dispatch({
   }
 })
 
-// Dispatch an action to create a Comment instance as a child of that Post
+// dispatch 一个 action 以创建一个 Comment 实例作为上个 Post 的子元素
 store.dispatch({
   type: 'ADD_COMMENT',
   payload: {
-    id: 123,
-    text: 'This is a comment',
-    postId: 1
+    postId: 1,
+    commentId: 123,
+    commentText: 'This is a comment'
   }
 })
 ```
 
-The Redux-ORM library maintains relationships between models for you. Updates are by default applied immutably, simplifying the update process.
+Redux-ORM 库维护要应用的内部更新队列。这些更新是不可变更新，这个库简化了这个更新过程。
 
-Another variation on this is to use Redux-ORM as an abstraction layer within a single case reducer:
+使用 Redux-ORM 的另一个变化是用一个单一的 case reducer 作为抽象层。
 
-```js
-import { orm } from './models'
+```javascript
+import { schema } from './models'
 
-// Assume this case reducer is being used in our "entities" slice reducer,
-// and we do not have reducers defined on our Redux-ORM Model subclasses
+// 假设这个 case reducer 正在我们的 “entities” 切片 reducer 使用，
+// 并且我们在 Redux-ORM 的 Model 子类上没有定义 reducer
 function addComment(entitiesState, action) {
-  // Start an immutable session
-  const session = orm.session(entitiesState)
+  const session = schema.from(entitiesState)
+  const { Post, Comment } = session
+  const { payload } = action
+  const { postId, commentId, commentText } = payload
 
-  session.Comment.create(action.payload)
+  const post = Post.withId(postId)
+  post.comments.add(commentId)
 
-  // The internal state reference has now changed
-  return session.state
+  Comment.create({ id: commentId, text: commentText })
+
+  return session.reduce()
 }
 ```
 
-By using the session interface you can now use relationship accessors to directly access referenced models:
-
-```js
-const session = orm.session(store.getState().entities)
-const comment = session.Comment.first() // Comment instance
-const { post } = comment // Post instance
-post.comments.filter(c => c.text === 'This is a comment').count() // 1
-```
-
-Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.
+总之，Redux-ORM 提供了一组非常有用的抽象，用于定义数据类型之间的关系，在我们的 state 中创建了一个 “表”，检索和反规划关系数据，以及将不可变更新应用于关系数据。

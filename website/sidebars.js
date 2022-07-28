@@ -3,6 +3,7 @@ module.exports = {
     '简介': [
       'introduction/getting-started',
       'introduction/installation',
+      'introduction/why-rtk-is-redux-today',
       'introduction/core-concepts',
       'introduction/learning-resources',
       'introduction/ecosystem',
@@ -10,6 +11,8 @@ module.exports = {
     ],
     '教程': [
       'tutorials/tutorials-index',
+      'tutorials/quick-start',
+      'tutorials/typescript-quick-start',
       {
         type: 'category',
         label: 'Redux 循序渐进',
@@ -19,7 +22,9 @@ module.exports = {
           'tutorials/essentials/part-3-data-flow',
           'tutorials/essentials/part-4-using-data',
           'tutorials/essentials/part-5-async-logic',
-          'tutorials/essentials/part-6-performance-normalization'
+          'tutorials/essentials/part-6-performance-normalization',
+          'tutorials/essentials/part-7-rtk-query-basics',
+          'tutorials/essentials/part-8-rtk-query-advanced'
         ]
       },
       {
@@ -35,38 +40,60 @@ module.exports = {
           'tutorials/fundamentals/part-7-standard-patterns',
           'tutorials/fundamentals/part-8-modern-redux'
         ]
-      }
+      },
+      'tutorials/videos'
     ],
-    '技巧': [
-      'recipes/recipe-index',
-      'recipes/configuring-your-store',
-      'recipes/usage-with-typescript',
-      'recipes/migrating-to-redux',
-      'recipes/using-object-spread-operator',
-      'recipes/reducing-boilerplate',
-      'recipes/server-rendering',
-      'recipes/writing-tests',
-      'recipes/computing-derived-data',
-      'recipes/implementing-undo-history',
-      'recipes/isolating-redux-sub-apps',
-      'recipes/code-splitting',
-      'recipes/troubleshooting',
+    '使用指南': [
+      'usage/index',
       {
         type: 'category',
-        label: '组织 Reducers',
+        label: '配置和代码组织',
+        collapsed: false,
         items: [
-          'recipes/structuring-reducers/structuring-reducers',
-          'recipes/structuring-reducers/prerequisite-concepts',
-          'recipes/structuring-reducers/basic-reducer-structure',
-          'recipes/structuring-reducers/splitting-reducer-logic',
-          'recipes/structuring-reducers/refactoring-reducer-example',
-          'recipes/structuring-reducers/using-combinereducers',
-          'recipes/structuring-reducers/beyond-combinereducers',
-          'recipes/structuring-reducers/normalizing-state-shape',
-          'recipes/structuring-reducers/updating-normalized-data',
-          'recipes/structuring-reducers/reusing-reducer-logic',
-          'recipes/structuring-reducers/immutable-update-patterns',
-          'recipes/structuring-reducers/initializing-state'
+          'usage/configuring-your-store',
+          'usage/code-splitting',
+          'usage/server-rendering',
+          'usage/isolating-redux-sub-apps'
+        ]
+      },
+      {
+        type: 'category',
+        label: '代码质量',
+        collapsed: false,
+        items: [
+          'usage/usage-with-typescript',
+          'usage/writing-tests',
+          'usage/troubleshooting'
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Redux 逻辑和模式',
+        collapsed: false,
+        items: [
+          {
+            type: 'category',
+            label: '组织 Reducers',
+            collapsed: true,
+            items: [
+              'usage/structuring-reducers/structuring-reducers',
+              'usage/structuring-reducers/prerequisite-concepts',
+              'usage/structuring-reducers/basic-reducer-structure',
+              'usage/structuring-reducers/splitting-reducer-logic',
+              'usage/structuring-reducers/refactoring-reducer-example',
+              'usage/structuring-reducers/using-combinereducers',
+              'usage/structuring-reducers/beyond-combinereducers',
+              'usage/structuring-reducers/normalizing-state-shape',
+              'usage/structuring-reducers/updating-normalized-data',
+              'usage/structuring-reducers/reusing-reducer-logic',
+              'usage/structuring-reducers/immutable-update-patterns',
+              'usage/structuring-reducers/initializing-state'
+            ]
+          },
+          'usage/reducing-boilerplate',
+          'usage/deriving-data-selectors',
+          'usage/writing-logic-thunks',
+          'usage/implementing-undo-history'
         ]
       }
     ],

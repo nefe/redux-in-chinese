@@ -1,16 +1,18 @@
 ---
 id: reusing-reducer-logic
-title: Reusing Reducer Logic
-description: 'Structuring Reducers > Reusing Reducer Logic: Patterns for creating reusable reducers'
+title: Reducer 逻辑复用
+description: 'Structuring Reducers > Reducer 逻辑复用: Patterns for creating reusable reducers'
+hide_title: false
 ---
 
-# Reusing Reducer Logic
+# Reducer 逻辑复用
 
-As an application grows, common patterns in reducer logic will start to emerge. You may find several parts of your reducer logic doing the same kinds of work for different types of data, and want to reduce duplication by reusing the same common logic for each data type. Or, you may want to have multiple "instances" of a certain type of data being handled in the store. However, the global structure of a Redux store comes with some trade-offs: it makes it easy to track the overall state of an application, but can also make it harder to "target" actions that need to update a specific piece of state, particularly if you are using `combineReducers`.
 
-As an example, let's say that we want to track multiple counters in our application, named A, B, and C. We define our initial `counter` reducer, and we use `combineReducers` to set up our state:
+随着应用程序的增长，在 reducer 逻辑中开始出现一些常见的模式。你可能会发现一部分 reducer 逻辑对于不同类型的数据做着相同的工作，你想通过对每种数据类型复用相同的公共逻辑来减少重复的代码。或者，你可能想要在 store 中处理某个类型的数据的多个”实例“。然而，Redux store 采用全局结构的设计本身就是一种折衷：优点是易于追踪应用程序的整体状态，但是，也可能更难的”命中“那些需要更新特定一部分状态的 action，特别是当你使用了 `combineReducers`。
 
-```js
+例如，假设想在程序中追踪多个计数器，分别命名为 A，B，和 C。定义初始的 `counter` reducer，然后使用 `combineReducers` 去设置状态。
+
+```javascript
 function counter(state = 0, action) {
   switch (action.type) {
     case 'INCREMENT':
@@ -29,15 +31,15 @@ const rootReducer = combineReducers({
 })
 ```
 
-Unfortunately, this setup has a problem. Because `combineReducers` will call each slice reducer with the same action, dispatching `{type : 'INCREMENT'}` will actually cause _all three_ counter values to be incremented, not just one of them. We need some way to wrap the `counter` logic so that we can ensure that only the counter we care about is updated.
+不幸的是，这样设置有一个问题。因为 `combineReducers` 将会使用相同的 action 调用每一个 reducer，发送 `{type: 'INCREMENT'}` 实际上将会导致所有三个计数器的值被增加，而不仅仅是其中一个。我们需要一些方法去封装 `counter` 的逻辑，以此来保证只有我们关心的计数器被更新。
 
-## Customizing Behavior with Higher-Order Reducers
+## 使用高阶 Reducer 来定制行为
 
-As defined in [Splitting Reducer Logic](SplittingReducerLogic.md), a _higher-order reducer_ is a function that takes a reducer function as an argument, and/or returns a new reducer function as a result. It can also be viewed as a "reducer factory". `combineReducers` is one example of a higher-order reducer. We can use this pattern to create specialized versions of our own reducer functions, with each version only responding to specific actions.
+正如在 [Reducer 逻辑拆分](SplittingReducerLogic.md) 定义的那样，高阶 reducer 是一个接收 reducer 函数作为参数，并返回新的 reducer 函数的函数。它也可以被看作成一个“reducer 工厂”。`combineReducers` 就是一个高阶 reduce 的例子。我们可以使用这种模式来创建特定版本的 reducer 函数，每个版本只响应特定的 action。
 
-The two most common ways to specialize a reducer are to generate new action constants with a given prefix or suffix, or to attach additional info inside the action object. Here's what those might look like:
+创建特定的 reducer 有两种最常见的方式，一个是使用给定的前缀或者后缀生成新的 action 常量，另一个是在 action 对象上附加额外的信息。下面是它们大概的样子：
 
-```js
+```javascript
 function createCounterWithNamedType(counterName = '') {
   return function counter(state = 0, action) {
     switch (action.type) {
@@ -68,9 +70,9 @@ function createCounterWithNameData(counterName = '') {
 }
 ```
 
-We should now be able to use either of these to generate our specialized counter reducers, and then dispatch actions that will affect the portion of the state that we care about:
+现在我们应该可以使用它们任何一个去生成我们特定的计数器 reducer，然后发送 action，并只会影响关心的那部分的 state：
 
-```js
+```javascript
 const rootReducer = combineReducers({
   counterA: createCounterWithNamedType('A'),
   counterB: createCounterWithNamedType('B'),
@@ -80,20 +82,11 @@ const rootReducer = combineReducers({
 store.dispatch({ type: 'INCREMENT_B' })
 console.log(store.getState())
 // {counterA : 0, counterB : 1, counterC : 0}
-
-function incrementCounter(type = 'A') {
-  return {
-    type: `INCREMENT_${type}`
-  }
-}
-store.dispatch(incrementCounter('C'))
-console.log(store.getState())
-// {counterA : 0, counterB : 1, counterC : 1}
 ```
 
-We could also vary the approach somewhat, and create a more generic higher-order reducer that accepts both a given reducer function and a name or identifier:
+我们在某种程度上也可以改变这个方法，创建一个更加通用的高阶 reducer，它可以接收一个给定的 reducer，一个名字或者标识符：
 
-```js
+```javascript
 function counter(state = 0, action) {
   switch (action.type) {
     case 'INCREMENT':
@@ -122,66 +115,31 @@ const rootReducer = combineReducers({
 })
 ```
 
-You could even go as far as to make a generic filtering higher-order reducer:
+甚至还可以写一个通用的高阶 reducer 过滤器：
 
-```js
+```javascript
 function createFilteredReducer(reducerFunction, reducerPredicate) {
-    return (state, action) => {
-        const isInitializationCall = state === undefined;
-        const shouldRunWrappedReducer = reducerPredicate(action) || isInitializationCall;
-        return shouldRunWrappedReducer ? reducerFunction(state, action) : state;
-    }
+  return (state, action) => {
+    const isInitializationCall = state === undefined
+    const shouldRunWrappedReducer =
+      reducerPredicate(action) || isInitializationCall
+    return shouldRunWrappedReducer ? reducerFunction(state, action) : state
+  }
 }
 
 const rootReducer = combineReducers({
-    // check for suffixed strings
-    counterA : createFilteredReducer(counter, action => action.type.endsWith('_A')),
-    // check for extra data in the action
-    counterB : createFilteredReducer(counter, action => action.name === 'B'),
-    // respond to all 'INCREMENT' actions, but never 'DECREMENT'
-    counterC : createFilteredReducer(counter, action => action.type === 'INCREMENT')
-};
+  // 检查后缀
+  counterA: createFilteredReducer(counter, action =>
+    action.type.endsWith('_A')
+  ),
+  // 检查 action 中的额外数据
+  counterB: createFilteredReducer(counter, action => action.name === 'B'),
+  // 响应所有的 'INCREMENT' action，但不响应 'DECREMENT'
+  counterC: createFilteredReducer(
+    counter,
+    action => action.type === 'INCREMENT'
+  )
+})
 ```
 
-These basic patterns allow you to do things like having multiple instances of a smart connected component within the UI, or reuse common logic for generic capabilities such as pagination or sorting.
-
-In addition to generating reducers this way, you might also want to generate action creators using the same approach, and could generate them both at the same time with helper functions. See [Action/Reducer Generators](https://github.com/markerikson/redux-ecosystem-links/blob/master/action-reducer-generators.md) and [Reducers](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md) libraries for action/reducer utilities.
-
-## Collection / Item Reducer Pattern
-
-This pattern allows you to have multiple states and use a common reducer to update each state based on an additional parameter inside the action object.
-
-```js
-function counterReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT" : return state + 1;
-        case "DECREMENT" : return state - 1;
-    }
-}
-
-function countersArrayReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT":
-        case "DECREMENT":
-            return state.map( (counter, index) => {
-                if(index !== action.index) return counter;
-                return counterReducer(counter, action);
-            });
-        default:
-            return state;
-    }
-}
-
-function countersMapReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT":
-        case "DECREMENT":
-            return {
-                ...state,
-                state[action.name] : counterReducer(state[action.name], action)
-            };
-        default:
-            return state;
-    }
-}
-```
+这些基本的模式可以让你在 UI 内处理一个智能连接的 component 的多个实例。对于像分页或者排序这些通用的功能，可以复用相同的逻辑。

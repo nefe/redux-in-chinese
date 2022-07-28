@@ -1,21 +1,21 @@
 ---
 id: refactoring-reducer-example
-title: Refactoring Reducers Example
-sidebar_label: Refactoring Reducers Example
+title: 重构 Reducer 的例子
 description: 'Structuring Reducers > Refactoring Reducers: Examples of ways to refactor reducer logic'
+hide_title: false
 ---
 
-# Refactoring Reducer Logic Using Functional Decomposition and Reducer Composition
+# 重构 Reducer：基于函数分解（Functional Decomposition）和 Reducer 组合
 
-It may be helpful to see examples of what the different types of sub-reducer functions look like and how they fit together. Let's look at a demonstration of how a large single reducer function can be refactored into a composition of several smaller functions.
+看看不同类型的 `sub-reducer` 和如何把他们组合在一起的例子是很有用的。现在让我们看看如何将一个大型的单个 reducer 重构为多个比较小的函数的组合。
 
-> **Note**: this example is deliberately written in a verbose style in order to illustrate the concepts and the process of refactoring, rather than perfectly concise code.
+> 注意：为了说明重构的概念和过程而不是为了编写简洁的代码，这个例子是特意以冗长的风格编写的
 
-#### Initial Reducer
+#### 初遇 Reducer
 
-Let's say that our initial reducer looks like this:
+让我们看看初始 reducer 长什么样：
 
-```js
+```javascript
 const initialState = {
   visibilityFilter: 'SHOW_ALL',
   todos: []
@@ -69,27 +69,26 @@ function appReducer(state = initialState, action) {
 }
 ```
 
-That function is fairly short, but already becoming overly complex. We're dealing with two different areas of concern (filtering vs managing our list of todos), the nesting is making the update logic harder to read, and it's not exactly clear what's going on everywhere.
+这个函数非常短，但已经开始变得比较复杂。我们在处理两个不同的区域（filtering 和 todo 列表），嵌套使得更新逻辑难以阅读，并且会让我们不清楚到底是什么跟什么。
 
-#### Extracting Utility Functions
+#### 提取工具函数（Extracting Utility Functions）
 
-A good first step might be to break out a utility function to return a new object with updated fields. There's also a repeated pattern with trying to update a specific item in an array that we could extract to a function:
+第一步是写一个返回更新了相应区域的新对象。这儿还有一个重复的逻辑是在更新数组中的特定项目，我们也可以将他提成一个函数。
 
-```js
+```javascript
 function updateObject(oldObject, newValues) {
-  // Encapsulate the idea of passing a new object as the first parameter
-  // to Object.assign to ensure we correctly copy data instead of mutating
+  // 用空对象作为第一个参数传递给 Object.assign，以确保是复制数据，而不是去改变原来的数据
   return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
   const updatedItems = array.map(item => {
     if (item.id !== itemId) {
-      // Since we only want to update one item, preserve all others as they are now
+      // 因为我们只想更新一个项目，所以保留所有的其他项目
       return item
     }
 
-    // Use the provided callback to create an updated item
+    // 使用提供的回调来创建新的项目
     const updatedItem = updateItemCallback(item)
     return updatedItem
   })
@@ -131,14 +130,14 @@ function appReducer(state = initialState, action) {
 }
 ```
 
-That reduced the duplication and made things a bit easier to read.
+这样就减少了重复，使得代码的可读性更高。
 
-#### Extracting Case Reducers
+#### 提取 case reducer
 
-Next, we can split each specific case into its own function:
+接下来，把特殊逻辑封装成对应的函数：
 
-```js
-// Omitted
+```javascript
+// 省略了内容
 function updateObject(oldObject, newValues) {}
 function updateItemInArray(array, itemId, updateItemCallback) {}
 
@@ -188,19 +187,19 @@ function appReducer(state = initialState, action) {
 }
 ```
 
-Now it's _very_ clear what's happening in each case. We can also start to see some patterns emerging.
+现在很清楚每个 `case` 发生了什么。我们也可以看到一些模式的雏形。
 
-#### Separating Data Handling by Domain
+#### 按域拆分数据（Separating Data Handling by Domain）
 
-Our app reducer is still aware of all the different cases for our application. Let's try splitting things up so that the filter logic and the todo logic are separated:
+目前的 Reducer 仍然需要关心程序中所有不同的 case。下面尝试把 filter 逻辑和 todo 逻辑分离：
 
-```js
-// Omitted
+```javascript
+// 省略了内容
 function updateObject(oldObject, newValues) {}
 function updateItemInArray(array, itemId, updateItemCallback) {}
 
 function setVisibilityFilter(visibilityState, action) {
-  // Technically, we don't even care about the previous state
+  // 从技术上将，我们甚至不关心之前的状态
   return action.filter
 }
 
@@ -260,14 +259,14 @@ function appReducer(state = initialState, action) {
 }
 ```
 
-Notice that because the two "slice of state" reducers are now getting only their own part of the whole state as arguments, they no longer need to return complex nested state objects, and are now simpler as a result.
+我们注意到，两个 reducer 分别关心 state 中的不同的部分。都只需要把自身关心的数据作为参数，不再需要返回复杂的嵌套型 state 对象了，代码变得更简单。
 
-#### Reducing Boilerplate
+#### 减少样板代码
 
-We're almost done. Since many people don't like switch statements, it's very common to use a function that creates a lookup table of action types to case functions. We'll use the `createReducer` function described in [Reducing Boilerplate](../reducing-boilerplate):
+马上就大功告成了。因为很多人不喜欢使用 switch 这种语法结构，创建一个 action 到 case 查找表示非常通用的做法。可以使用 [缩减样板代码](../reducing-boilerplate) 中提到的 `createReducer` 函数减少样板代码。
 
-```js
-// Omitted
+```javascript
+// 省略了内容
 function updateObject(oldObject, newValues) {}
 function updateItemInArray(array, itemId, updateItemCallback) {}
 
@@ -281,14 +280,14 @@ function createReducer(initialState, handlers) {
   }
 }
 
-// Omitted
+// 省略了内容
 function setVisibilityFilter(visibilityState, action) {}
 
 const visibilityReducer = createReducer('SHOW_ALL', {
   SET_VISIBILITY_FILTER: setVisibilityFilter
 })
 
-// Omitted
+// 省略了内容
 function addTodo(todosState, action) {}
 function toggleTodo(todosState, action) {}
 function editTodo(todosState, action) {}
@@ -307,27 +306,26 @@ function appReducer(state = initialState, action) {
 }
 ```
 
-#### Combining Reducers by Slice
+#### 通过切片组合 Reducer（Combining Reducers by Slice）
 
-As our last step, we can now use Redux's built-in `combineReducers` utility to handle the "slice-of-state" logic for our top-level app reducer. Here's the final result:
+最后一步了，使用 Redux 中 `combineReducers` 这个工具函数去把管理每个 state 切片的逻辑组合起来，形成顶层的 reducer。最终变成这样：
 
-```js
-// Reusable utility functions
+```javascript
+// 可重用的工具函数
 
 function updateObject(oldObject, newValues) {
-  // Encapsulate the idea of passing a new object as the first parameter
-  // to Object.assign to ensure we correctly copy data instead of mutating
+  // 将空对象作为第一个参数传递给 Object.assign，以确保只是复制数据，而不是去改变数据
   return Object.assign({}, oldObject, newValues)
 }
 
 function updateItemInArray(array, itemId, updateItemCallback) {
   const updatedItems = array.map(item => {
     if (item.id !== itemId) {
-      // Since we only want to update one item, preserve all others as they are now
+      // 因为我们只想更新一个项目，所以保留所有的其他项目
       return item
     }
 
-    // Use the provided callback to create an updated item
+    // 使用提供的回调来创建新的项目
     const updatedItem = updateItemCallback(item)
     return updatedItem
   })
@@ -345,13 +343,13 @@ function createReducer(initialState, handlers) {
   }
 }
 
-// Handler for a specific case ("case reducer")
+// 处理特殊 case 的 Handler ("case reducer")
 function setVisibilityFilter(visibilityState, action) {
-  // Technically, we don't even care about the previous state
+  // 从技术上将，我们甚至不关心之前的状态
   return action.filter
 }
 
-// Handler for an entire slice of state ("slice reducer")
+// 处理整个 state 切片的 Handler ("slice reducer")
 const visibilityReducer = createReducer('SHOW_ALL', {
   SET_VISIBILITY_FILTER: setVisibilityFilter
 })
@@ -392,13 +390,13 @@ const todosReducer = createReducer([], {
   EDIT_TODO: editTodo
 })
 
-// "Root reducer"
+// 顶层 reducer
 const appReducer = combineReducers({
   visibilityFilter: visibilityReducer,
   todos: todosReducer
 })
 ```
 
-We now have examples of several kinds of split-up reducer functions: helper utilities like `updateObject` and `createReducer`, handlers for specific cases like `setVisibilityFilter` and `addTodo`, and slice-of-state handlers like `visibilityReducer` and `todosReducer`. We also can see that `appReducer` is an example of a "root reducer".
+现在我们有了分离集中 reducer 的例子：像 `updateObject` 和 `createReducer` 一样的工具函数，像 `setVisibilityFilter` 和 `addTodo` 一样的处理器（Handler），像 `visibilityReducer` 和 `todosReducer` 一样的处理单个切片数据的 Handler。`appReducer` 可以被当作是顶层 reducer。
 
-Although the final result in this example is noticeably longer than the original version, this is primarily due to the extraction of the utility functions, the addition of comments, and some deliberate verbosity for the sake of clarity, such as separate return statements. Looking at each function individually, the amount of responsibility is now smaller, and the intent is hopefully clearer. Also, in a real application, these functions would probably then be split into separate files such as `reducerUtilities.js`, `visibilityReducer.js`, `todosReducer.js`, and `rootReducer.js`.
+这个例子中最后的结果看上去比原始的版本更长，这主要是因为工具函数的提取，注释的添加和一些为了清楚起见的故意冗长（比如单独的 return 语句）。单独的看每个功能，他们承担的责任更小，意图也更加清楚。在真正的应用中，这些函数将会分到单独的文件中，比如：`reducerUtilities.js`，`visibilityReducer.js`，`todosReudcer.js` 和 `rootReducer.js`。

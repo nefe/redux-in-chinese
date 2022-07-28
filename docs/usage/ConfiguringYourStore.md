@@ -1,18 +1,18 @@
 ---
 id: configuring-your-store
 title: Configuring Your Store
-sidebar_label: Configuring Your Store
+hide_title: false
 ---
 
-# Configuring Your Store
+# 配置 Store
 
-In the ["Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md), we introduced the fundamental Redux concepts by building an example Todo list app. As part of that, we talked about [how to create and configure a Redux store](../tutorials/fundamentals/part-4-store.md).
+在["Redux 深入浅出" 教程](../tutorials/fundamentals/part-1-overview.md)这一章节我们构建了一个 Todo list 应用，介绍了一些 Redux 基础知识。其中也讲到了如何配置 Redux store。
 
-We will now explore how to customise the store to add extra functionality. We'll start with the source code from ["Redux Fundamentals" part 5: UI and React](../tutorials/fundamentals/part-5-ui-and-react.md). You can view the source from this stage of the tutorial in [the example app repository on Github](https://github.com/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions), or [in your browser via CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/).
+接下来我们将会探索如何定制 store 来添加额外的功能。我们将会接着基础部分的源代码继续写，你可以在[文档](../tutorials/fundamentals/part-5-ui-and-react.md)，或 [仓库中的示例部分](https://github.com/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions)，或者用 [CodeSandbox 在浏览器中](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/)阅读这些代码。
 
-## Creating the store
+## 创建 store
 
-First, let's look at the original `index.js` file in which we created our store:
+首先我们来看看在原先的 `index.js` 中我们是如何创建 store 的：
 
 ```js
 import React from 'react'
@@ -32,24 +32,24 @@ render(
 )
 ```
 
-In this code, we pass our reducers to the Redux `createStore` function, which returns a `store` object. We then pass this object to the `react-redux` `Provider` component, which is rendered at the top of our component tree.
+代码中，我们将 reducer 传入 Redux 提供的 `createStore` 函数中，它返回了一个 `store` 对象。接着我们将这个对象传入 `react-redux` 提供的 `Provider` 组件中，然后将它挂载在组件树的根部。
 
-This ensures that any time we connect to Redux in our app via `react-redux` `connect`, the store is available to our components.
+这样做可以保证我们在任何时候通过 `react-redux` 的 `connect` 连接到 Redux 时，store 可以在组件中正常使用。
 
-## Extending Redux functionality
+## 拓展 Redux 功能
 
-Most apps extend the functionality of their Redux store by adding middleware or store enhancers _(note: middleware is common, enhancers are less common)_. Middleware adds extra functionality to the Redux `dispatch` function; enhancers add extra functionality to the Redux store.
+大多数的应用都会使用 middleware 或 enhancer 来拓展 Redux store 的功能。**（注：middleware 很常见，enhancer 不太常见）** middleware 拓展了 Redux `dispatch` 函数的功能；enhancer 拓展了 Redux store 的功能。
 
-We will add two middlewares and one enhancer:
+我们将会添加如下两个 middleware 和 一个 enhancer：
 
-- The [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk), which allows simple asynchronous use of dispatch.
-- A middleware which logs dispatched actions and the resulting new state.
-- An enhancer which logs the time taken for the reducers to process each action.
+- [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk)，允许了简单的 dispatch 异步用法。
+- 一个记录 dispatch 的 action 和得到的新 state 的 middleware。
+- 一个记录 reducer 处理每个 action 所用时间的 enhancer。
 
-#### Install `redux-thunk`
+#### 安装 `redux-thunk`
 
-```sh
-npm install redux-thunk
+```
+npm install --save redux-thunk
 ```
 
 #### middleware/logger.js
@@ -91,15 +91,12 @@ const monitorReducerEnhancer =
 export default monitorReducerEnhancer
 ```
 
-Let's add these to our existing `index.js`.
+我们把这些东西添加到 `index.js` 中。
 
-- First, we need to import `redux-thunk` plus our `loggerMiddleware` and `monitorReducerEnhancer`, plus two extra functions provided by Redux: `applyMiddleware` and `compose`.
-- We then use `applyMiddleware` to create a store enhancer which will apply our `loggerMiddleware` and the `thunkMiddleware` to the store's dispatch function.
-- Next, we use `compose` to compose our new `middlewareEnhancer` and our `monitorReducerEnhancer` into one function.
-
-  This is needed because you can only pass one enhancer into `createStore`. To use multiple enhancers, you must first compose them into a single larger enhancer, as shown in this example.
-
-- Finally, we pass this new `composedEnhancers` function into `createStore` as its third argument. _Note: the second argument, which we will ignore, lets you preloaded state into the store._
+- 首先我们引入 `redux-thunk`，我们自己写的 `loggerMiddleware` 和 `monitorReducerEnhancer`，还有两个 Redux 提供的函数：`applyMiddleware` 和 `compose`。
+- 接下来我们用 `applyMiddleware` 来创建一个 store enhancer，通过它我们可以将 `loggerMiddleware` 和 `thunkMiddleware` 应用到 dispatch 函数。
+- 下一步，我们使用 `compose` 将新的 `middlewareEnhancer` 和 `monitorReducerEnhancer` 组合到一起。这一步必须要做，因为 `createStore` 只接受一个 enhancer 作为参数，所以你只能将它俩组合（compose）成一个大的 enhancer，正如示例中所示。
+- 最后，我们将这个 `composedEnhancers` 函数传入 `createStore` 中作为第三个参数。 **注：这里我们忽略掉了 createStore 的第二个参数，你可以通过它给 store 传入一个初始 state。**
 
 ```js
 import React from 'react'
@@ -113,7 +110,10 @@ import monitorReducerEnhancer from './enhancers/monitorReducer'
 import App from './components/App'
 
 const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
-const composedEnhancers = compose(middlewareEnhancer, monitorReducerEnhancer)
+const composedEnhancers = compose(
+  middlewareEnhancer,
+  monitorReducerEnhancer
+)
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
 
@@ -125,17 +125,17 @@ render(
 )
 ```
 
-## Problems with this approach
+## 这种做法的问题
 
-While this code works, for a typical app it is not ideal.
+这些代码的确能正常运行，但对于一个典型（typical）的应用来说还不够理想。
 
-Most apps use more than one middleware, and each middleware often requires some initial setup. The extra noise added to the `index.js` can quickly make it hard to maintain, because the logic is not cleanly organised.
+大多数应用使用的 middleware 大于一个，而且每个 middleware 经常需要一些额外的初始化工作。这些“噪声”的加入会使 `index.js` 很快变得难以维护，因为这些逻辑并没有被清晰合理地组织起来。
 
-## The solution: `configureStore`
+## 解决方案：`configureStore`
 
-The solution to this problem is to create a new `configureStore` function which encapsulates our store creation logic, which can then be located in its own file to ease extensibility.
+这个问题的解决方案是创造一个封装了 store 创建逻辑的新的函数 `configureStore`。它放在一个单独的文件中，所以可以被任意拓展。
 
-The end goal is for our `index.js` to look like this:
+我们的 `index.js` 的最终是这样：
 
 ```js
 import React from 'react'
@@ -154,9 +154,9 @@ render(
 )
 ```
 
-All the logic related to configuring the store - including importing reducers, middleware, and enhancers - is handled in a dedicated file.
+所有配置 store 相关的逻辑（包括引入 reducer、middleware、enhancer），都放置于一个单独用于处理它们的文件中。
 
-To achieve this, `configureStore` function looks like this:
+为了达到这个目标，`configureStore` 函数应该是这样：
 
 ```js
 import { applyMiddleware, compose, createStore } from 'redux'
@@ -179,41 +179,39 @@ export default function configureStore(preloadedState) {
 }
 ```
 
-This function follows the same steps outlined above, with some of the logic split out to prepare for extension, which will make it easier to add more in future:
+这个函数遵循了上述步骤，其中有一些逻辑拆分开来，为后续拓展做好准备。
 
-- Both `middlewares` and `enhancers` are defined as arrays, separate from the functions which consume them.
+- `middlwares` 和 `enhancers` 都被定义为数组，与实际使用它们的函数分离开来。这样做我们可以很容易地为不同情况添加更多的 middleware 或 enhancer。
 
-  This allows us to easily add more middleware or enhancers based on different conditions.
-
-  For example, it is common to add some middleware only when in development mode, which is easily achieved by pushing to the middlewares array inside an if statement:
+  例如，一种很常见的情况是，只有在开发模式下才添加某些 middleware。这个可以在一个 if 条件句中向 middleware 数组添加新的 middleware 来轻松实现：
 
   ```js
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env === 'development') {
     middlewares.push(secretMiddleware)
   }
   ```
 
-- A `preloadedState` variable is passed through to `createStore` in case we want to add this later.
+- 将一个 `preloadedState` 变量传入 `createStore`，以便后续使用。
 
-This also makes our `createStore` function easier to reason about - each step is clearly separated, which makes it more obvious what exactly is happening.
+这样我们调试 `createStore` 也更轻松了——每个步骤都分离的清清楚楚，目前正在发生什么一目了然。
 
-## Integrating the devtools extension
+## 集成 devtools 扩展程序
 
-Another common feature which you may wish to add to your app is the `redux-devtools-extension` integration.
+另外一个你很想在你的应用中加入的功能就是 `redux-devtools-extension` 的集成。
 
-The extension is a suite of tools which give you absolute control over your Redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/reduxjs/redux-devtools/tree/main/extension)
+这个扩展程序是一系列工具的集合，通过它们你可以获得 Redux store 完全的控制：它允许你观察或重放 action，在不同时刻查看 state，直接向 store 中 dispatch 一个 action，......等等很多功能。[点击此处阅读更多](https://github.com/zalmoxisus/redux-devtools-extension)。
 
-There are several ways to integrate the extension, but we will use the most convenient option.
+有很多方案可以集成此扩展程序，但我们会用最方便的那个。
 
-First, we install the package via npm:
+首先，使用 npm 安装：
 
-```sh
+```
 npm install --save-dev redux-devtools-extension
 ```
 
-Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevTools` function imported from `redux-devtools-extension`.
+接下来，我们移除掉从 `redux` 引入的 `compose` 函数，然后用一个从 `redux-devtools-extension` 中引入的 `composeWithDevTools` 函数来替换它。
 
-The final code looks like this:
+最终的代码是这样：
 
 ```js
 import { applyMiddleware, createStore } from 'redux'
@@ -237,21 +235,21 @@ export default function configureStore(preloadedState) {
 }
 ```
 
-And that's it!
+这样就成了！
 
-If we now visit our app via a browser with the devtools extension installed, we can explore and debug using a powerful new tool.
+现在用安装了 devtools 扩展程序的浏览器访问我们的应用，我们即可使用这一强大的工具来探索和调试了。
 
-## Hot reloading
+## 热加载
 
-Another powerful tool which can make the development process a lot more intuitive is hot reloading, which means replacing pieces of code without restarting your whole app.
+还有一个强大的工具可以使你的开发过程更加直观，那就是热加载（hot reloading），它可以在无需重启整个应用的情况下替换代码。
 
-For example, consider what happens when you run your app, interact with it for a while, and then decide to make changes to one of your reducers. Normally, when you make those changes your app will restart, reverting your Redux state to its initial value.
+比如说，你启动了应用程序，使用了一会儿，决定对其中一个 reducer 做一些改动。正常情况下，你做了改动后应用会重启，并且 Redux state 会重置到其初始状态。
 
-With hot module reloading enabled, only the reducer you changed would be reloaded, allowing you to change your code _without_ resetting the state every time. This makes for a much faster development process.
+当使用热加载时，只有你做了更改的 reducer 会被重启。这样一来你就无需在每次修改代码之后重置整个 state，开发过程会更加迅速。
 
-We'll add hot reloading both to our Redux reducers and to our React components.
+我们将 Redux reducer 和 React 组件都启用热加载。
 
-First, let's add it to our `configureStore` function:
+首先，将它引入 `configureStore` 函数：
 
 ```js
 import { applyMiddleware, compose, createStore } from 'redux'
@@ -278,11 +276,11 @@ export default function configureStore(preloadedState) {
 }
 ```
 
-The new code is wrapped in an `if` statement, so it only runs when our app is not in production mode, and only if the `module.hot` feature is available.
+新的代码放置在 `if` 条件句中，所以它只在非生产环境中运行，而且只在能用 `module.hot` 时运行。
 
-Bundlers like Webpack and Parcel support a `module.hot.accept` method to specify which module should be hot reloaded, and what should happen when the module changes. In this case, we're watching the `./reducers` module, and passing the updated `rootReducer` to the `store.replaceReducer` method when it changes.
+像 Webpack 和 Parcel 这样的打包工具支持 `module.hot.accept` 方法，它用于指定哪一个模块（module）应该启用热加载，以及当模块改变时应该做什么。此例中，我们监控 `./reducers` 模块，当这个模块改变时将新计算出的 `rootReducer` 传入 `store.replaceReducer` 函数。
 
-We'll also use the same pattern in our `index.js` to hot reload any changes to our React components:
+在 `index.js` 中，我们也会使用相同的模式来热加载 React 组件：
 
 ```js
 import React from 'react'
@@ -308,26 +306,24 @@ if (process.env.NODE_ENV !== 'production' && module.hot) {
 renderApp()
 ```
 
-The only extra change here is that we have encapsulated our app's rendering into a new `renderApp` function, which we now call to re-render the app.
+这里只有一个地方与刚刚不同，就是我们将应用的渲染封装进了 `renderApp` 函数，调用它将会重新渲染整个应用。
 
-## Simplifying Setup with Redux Toolkit
+## 使用 Redux Starter Kit 简化设置
 
-The Redux core library is deliberately unopinionated. It lets you decide how you want to handle everything, like store
-setup, what your state contains, and how you want to build your reducers.
+Redux 核心库特意设置为最轻量化的。它可以让您决定如何处理所有内容，例如 store
+设置、您的 state 包含的内容、以及您希望如何构建 Reducer。
 
-This is good in some cases, because it gives you flexibility, but that flexibility isn't always needed. Sometimes we
-just want the simplest possible way to get started, with some good default behavior out of the box.
+这在某些情况下是好的，因为它为您提供了灵活性，但我们并不总是需要这种灵活性。有时我们只想要使用一个包含默认配置的开箱即用的方法。
 
-The [Redux Toolkit](https://redux-toolkit.js.org/) package is designed to help simplify several common Redux use cases, including store setup.
-Let's see how it can help improve the store setup process.
+[Redux Starter Kit](https://redux-starter-kit.js.org/) 包旨在帮助简化几个常见的 Redux 用例，包括 store 设置。
+让我们看看它如何帮助改善 store 设置流程。
 
-Redux Toolkit includes a prebuilt [`configureStore` function](https://redux-toolkit.js.org/api/configureStore) like
-the one shown in the earlier examples.
+Redux Starter Kit 包含一个预构建的 [`configureStore` 函数](https://redux-starter-kit.js.org/api/configureStore) ，该函数类似于前面示例展示的同名函数。
 
-The fastest way to use is it is to just pass the root reducer function:
+最快的使用方法是只传递 root reducer 函数：
 
 ```js
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from 'redux-starter-kit'
 import rootReducer from './reducers'
 
 const store = configureStore({
@@ -337,17 +333,17 @@ const store = configureStore({
 export default store
 ```
 
-Note that it accepts an object with named parameters, to make it clearer what you're passing in.
+请注意，它接受具有命名参数的对象，以使您更清楚地展示所传入的内容。
 
-By default, `configureStore` from Redux Toolkit will:
+默认情况下，Redux Starter Kit 中 的 `configureStore` 将：
 
-- Call `applyMiddleware` with [a default list of middleware, including `redux-thunk`](https://redux-toolkit.js.org/api/getDefaultMiddleware), and some development-only middleware that catch common mistakes like mutating state
-- Call `composeWithDevTools` to set up the Redux DevTools Extension
+- 调用 `applyMiddleware` 来使用 [默认的多个中间件, 包括 `redux-thunk`](https://redux-starter-kit.js.org/api/getDefaultMiddleware), 以及一些仅用于开发环境的中间件，例如用来捕获类似 state 变异错误的中间件。
+- 调用 `composeWithDevTools` 来设置 Redux DevTools 扩展
 
-Here's what the hot reloading example might look like using Redux Toolkit:
+以下是使用 Redux Starter Kit 的 hot reloading 示例：
 
 ```js
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from 'redux-starter-kit'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'
@@ -369,8 +365,8 @@ export default function configureAppStore(preloadedState) {
 }
 ```
 
-That definitely simplifies some of the setup process.
+这肯定简化了一些设置过程。
 
-## Next Steps
+## 下一步
 
-Now that you know how to encapsulate your store configuration to make it easier to maintain, you can [look at the Redux Toolkit `configureStore` API](https://redux-toolkit.js.org/api/configureStore), or take a closer look at some of the [extensions available in the Redux ecosystem](../introduction/Ecosystem.md#debuggers-and-viewers).
+现在你已经学会了如何将配置 store 的方法进行封装，让它更易于维护。你现在可以学习[Redux Toolkit `configureStore` API](https://redux-toolkit.js.org/api/configureStore)，或者看一些[Redux 生态系统提供的扩展程序](../introduction/Ecosystem.md#debuggers-and-viewers).

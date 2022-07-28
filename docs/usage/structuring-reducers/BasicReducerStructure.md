@@ -1,44 +1,43 @@
 ---
 id: basic-reducer-structure
-title: Basic Reducer Structure
-sidebar_label: Basic Reducer Structure
-description: 'Structuring Reducers > Basic Reducer Structure: Overview of how reducer functions work with Redux state'
+title: Reducer 的基本结构
+description: '组织 Reducer > Reducer 的基本结构: Overview of how reducer functions work with Redux state'
+hide_title: false
 ---
 
-# Basic Reducer Structure and State Shape
+# Reducer 和 State 的基本结构
 
-## Basic Reducer Structure
+## Reducer 的基本结构
 
-First and foremost, it's important to understand that your entire application really only has **one single reducer function**: the function that you've passed into `createStore` as the first argument. That one single reducer function ultimately needs to do several things:
+首先必须明确的是，整个应用只有一个**单一的 reducer 函数**：这个函数是传给 `createStore` 的第一个参数。一个单一的 reducer 最终需要做以下几件事：
 
-- The first time the reducer is called, the `state` value will be `undefined`. The reducer needs to handle this case by supplying a default state value before handling the incoming action.
-- It needs to look at the previous state and the dispatched action, and determine what kind of work needs to be done
-- Assuming actual changes need to occur, it needs to create new objects and arrays with the updated data and return those
-- If no changes are needed, it should return the existing state as-is.
+- reducer 第一次被调用的时候，`state` 的值是 `undefined`。reducer 需要在 action 传入之前提供一个默认的 state 来处理这种情况。
+- reducer 需要先前的 state 和 dispatch 的 action 来决定需要做什么事。
+- 假设需要更改数据，应该用更新后的数据创建新的对象或数组并返回它们。
+- 如果没有什么更改，应该返回当前存在的 state 本身。
 
-The simplest possible approach to writing reducer logic is to put everything into a single function declaration, like this:
+写 reducer 最简单的方式是把所有的逻辑放在一个单独的函数声明中，就像这样：
 
-```js
+```javascript
 function counter(state, action) {
   if (typeof state === 'undefined') {
-    state = 0 // If state is undefined, initialize it with a default value
+    state = 0 // 如果 state 是 undefined，用这个默认值初始化 store
   }
-
   if (action.type === 'INCREMENT') {
     return state + 1
   } else if (action.type === 'DECREMENT') {
     return state - 1
   } else {
-    return state // In case an action is passed in we don't understand
+    return state // 未识别 action 会经过这里
   }
 }
 ```
 
-Notice that this simple function fulfills all the basic requirements. It returns a default value if none exists, initializing the store; it determines what sort of update needs to be done based on the type of the action, and returns new values; and it returns the previous state if no work needs to be done.
+这个简单的函数满足上面提到的所有基本要求。在最开始会返回一个默认的值初始化 store；根据 action 的 type 决定 state 是哪种类型的更新，最后返回新的 state；如果没有什么要发生，会返回先前的 state。
 
-There are some simple tweaks that can be made to this reducer. First, repeated `if`/`else` statements quickly grow tiresome, so it's very common to use `switch` statements instead. Second, we can use ES6's default parameter values to handle the initial "no existing data" case. With those changes, the reducer would look like:
+这里有一些对这个 reducer 的简单调整。首先，重复的 `if/else` 语句看上去是很烦人的，可以使用 `switch` 语句代替他。其次，我们可以使用 ES6 的默认参数来处理初始 state 不存在的情况。有了这些变化，reducer 看上去会长成这样：
 
-```js
+```javascript
 function counter(state = 0, action) {
   switch (action.type) {
     case 'INCREMENT':
@@ -51,15 +50,15 @@ function counter(state = 0, action) {
 }
 ```
 
-This is the basic structure that a typical Redux reducer function uses.
+这是典型 Redux reducer 的基本结构。
 
-## Basic State Shape
+## State 的基本结构
 
-Redux encourages you to think about your application in terms of the data you need to manage. The data at any given point in time is the "_state_" of your application, and the structure and organization of that state is typically referred to as its "_shape_". The shape of your state plays a major role in how you structure your reducer logic.
+Redux 鼓励你根据要管理的数据来思考你的应用程序。数据就是你应用的 state，state 的结构和组织方式通常会称为 "shape"。在你组织 reducer 的逻辑时，state 的 shape 通常扮演一个重要的角色。
 
-A Redux state usually has a plain Javascript object as the top of the state tree. (It is certainly possible to have another type of data instead, such as a single number, an array, or a specialized data structure, but most libraries assume that the top-level value is a plain object.) The most common way to organize data within that top-level object is to further divide data into sub-trees, where each top-level key represents some "domain" or "slice" of related data. For example, a basic Todo app's state might look like:
+Redux state 中顶层的状态树通常是一个普通的 JavaScript 对象（当然也可以是其他类型的数据，比如：数字、数据或者其他专门的数据结构，但大多数库的顶层值都是一个普通对象）。在顶层对象中组织数据最常见的方式是将数据划分为子树，每个顶层的 key 对应着和特定域或者切片相关联的数据。例如，Todo 应用的 state 通常长这样：
 
-```js
+```javascript
 {
   visibilityFilter: 'SHOW_ALL',
   todos: [
@@ -75,21 +74,21 @@ A Redux state usually has a plain Javascript object as the top of the state tree
 }
 ```
 
-In this example, `todos` and `visibilityFilter` are both top-level keys in the state, and each represents a "slice" of data for some particular concept.
+在这个例子中，`todos` 和 `visibilityFilter` 都是 state 的顶层 Key，他们分别代表着一个某个特定概念的数据切片。
 
-Most applications deal with multiple types of data, which can be broadly divided into three categories:
+大多数应用会处理多种数据类型，通常可以分为以下三类：
 
-- _Domain data_: data that the application needs to show, use, or modify (such as "all of the Todos retrieved from the server")
-- _App state_: data that is specific to the application's behavior (such as "Todo #5 is currently selected", or "there is a request in progress to fetch Todos")
-- _UI state_: data that represents how the UI is currently displayed (such as "The EditTodo modal dialog is currently open")
+- 域数据（Domain data）: 应用需要展示、使用或者修改的数据（比如 从服务器检索到的所有 todos
+- 应用状态（App state）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行一个获取 Todos 的请求”）
+- UI 状态（UI state）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
 
-Because the store represents the core of your application, you should **define your state shape in terms of your domain data and app state, not your UI component tree**. As an example, a shape of `state.leftPane.todoList.todos` would be a bad idea, because the idea of "todos" is central to the whole application, not just a single part of the UI. The `todos` slice should be at the top of the state tree instead.
+Store 代表着应用核心，因此应该用域数据（Domain data）和应用状态数据（App state）定义 State，而不是用 UI 状态（UI state）。举个例子，`state.leftPane.todoList.todos` 这样的结构就是一个坏主意，因为整个应用的核心是 “todos” 而不仅仅是 UI 的一个模块。 `todos` 这个切片才应该是 state 结构的顶层。
 
-There will _rarely_ be a 1-to-1 correspondence between your UI tree and your state shape. The exception to that might be if you are explicitly tracking various aspects of UI data in your Redux store as well, but even then the shape of the UI data and the shape of the domain data would likely be different.
+UI 树和状态树之间很少有 1 对 1 的关系。除非你想明确的跟踪你的 Redux Store 中存储的 UI 数据的各个方面，但即使是这样，UI 数据的结构和域数据的结构也是不一样的。
 
-A typical app's state shape might look roughly like:
+一个典型的应用 state 大致会长这样：
 
-```js
+```javascript
 {
     domainData1 : {},
     domainData2 : {},

@@ -1,18 +1,19 @@
 ---
 id: usage-with-typescript
 title: Usage With TypeScript
+hide_title: false
 ---
 
 # Usage with TypeScript
 
-:::tip What You'll Learn
+:::tip 你将学到
 
 - Standard patterns for setting up a Redux app with TypeScript
 - Techniques for correctly typing portions of Redux logic
 
 :::
 
-:::important Prerequisites
+:::important 必备能力
 
 - Understanding of [TypeScript syntax and terms](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 - Familiarity with TypeScript concepts like [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) and [utility types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
@@ -56,7 +57,7 @@ Since those are types, it's safe to export them directly from your store setup f
 import { configureStore } from '@reduxjs/toolkit'
 // ...
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     posts: postsReducer,
     comments: commentsReducer,
@@ -240,13 +241,6 @@ export const exampleMiddleware: Middleware<
 
 The dispatch generic should likely only be needed if you are dispatching additional thunks within the middleware.
 
-In cases where `type RootState = ReturnType<typeof store.getState>` is used, a [circular type reference between the middleware and store definitions](https://github.com/reduxjs/redux/issues/4267) can be avoided by switching the type definition of `RootState` to:
-
-```ts
-const rootReducer = combineReducers({ ... });
-type RootState = ReturnType<typeof rootReducer>;
-```
-
 ### Type Checking Redux Thunks
 
 [Redux Thunk](https://github.com/reduxjs/redux-thunk) is the standard middleware for writing sync and async logic that interacts with the Redux store. A thunk function receives `dispatch` and `getState` as its parameters. Redux Thunk has a built in `ThunkAction` type which we can use to define types for those arguments:
@@ -311,11 +305,7 @@ While [React Redux](https://react-redux.js.org) is a separate library from Redux
 
 For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
 
-If you are using TypeScript, the React Redux types are maintained separately in DefinitelyTyped, but included as a dependency of the react-redux package, so they should be installed automatically. If you still need to install them manually, run:
-
-```sh
-npm install @types/react-redux
-```
+As mentioned above, React Redux doesn't ship with its own type definitions. If you are using TypeScript you should install the [`@types/react-redux` type definitions](https://npm.im/@types/react-redux) from npm.
 
 ### Typing the `useSelector` hook
 
@@ -339,7 +329,7 @@ This can also be done inline as well:
 const isOn = useSelector((state: RootState) => state.isOn)
 ```
 
-However, prefer creating a pre-typed `useAppSelector` hook with the correct type of `state` built-in instead.
+However, prefer creating a pre-typed `useSelector` hook with the correct type of `state` built-in instead.
 
 ### Typing the `useDispatch` hook
 
