@@ -1,8 +1,6 @@
 {
   "name": "redux-in-chinese",
   "description": "Redux 中文文档",
-  "scripts": {
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nefe/redux-in-chinese.git"
@@ -24,12 +22,5 @@
   "bugs": {
     "url": "https://github.com/nefe/redux-in-chinese/issues"
   },
-  "homepage": "https://github.com/nefe/redux-in-chinese",
-  "dependencies": {
-    "opencollective": "^1.0.3"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/redux-in-chinese"
-  }
+  "homepage": "https://github.com/nefe/redux-in-chinese"
 }
