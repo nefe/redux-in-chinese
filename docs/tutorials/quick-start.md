@@ -6,7 +6,7 @@ sidebar_label: 快速开始
 
 # Redux Toolkit 快速开始
 
-:::tip What You'll Learn
+:::tip 你将学习到什么
 
 - How to set up and use Redux Toolkit with React-Redux
 
