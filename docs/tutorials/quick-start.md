@@ -1,7 +1,7 @@
 ---
 id: quick-start
 title: 快速开始
-sidebar_label: Quick Start
+sidebar_label: 快速开始
 ---
 
 # Redux Toolkit 快速开始
