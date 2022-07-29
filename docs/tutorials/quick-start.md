@@ -1,10 +1,10 @@
 ---
 id: quick-start
-title: Quick Start
+title: 快速开始
 sidebar_label: Quick Start
 ---
 
-# Redux Toolkit Quick Start
+# Redux Toolkit 快速开始
 
 :::tip What You'll Learn
 
