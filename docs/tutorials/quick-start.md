@@ -8,7 +8,7 @@ sidebar_label: 快速开始
 
 :::tip 你将学习到什么
 
-- How to set up and use Redux Toolkit with React-Redux
+- 如何 to set up and use Redux Toolkit with React-Redux
 
 :::
 
