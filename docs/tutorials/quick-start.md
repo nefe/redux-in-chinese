@@ -26,9 +26,9 @@ sidebar_label: 快速开始
 
 ### 如何阅读该教程
 
-本页将聚焦于如何通过 Redux Toolkit 和你将使用的主要 APIs 来设置一个 Redux 应用。了解 Redux 是什么，它是如何工作的以及如何使用 Redux Toolkit 的完整示例的说明，[请参阅“教程索引”页面中链接的教程](./tutorials-index.md).
+本页将聚焦于如何通过 Redux Toolkit 以及你将使用到的主要 APIs 来设置一个 Redux 应用。了解 Redux 是什么，它是如何工作的以及如何使用 Redux Toolkit 的完整示例的说明，[请参阅“教程索引”页面中链接的教程](./tutorials-index.md).
 
-本教程，我们假设你正在使用 Redux Toolkit 和 React , 但是你也可以使用其他 UI 层。 这些示例是基于[典型的 Create-React-App 文件夹结构](https://create-react-app.dev/docs/folder-structure)所有应用的代码都在 `src` 中，但这些模式可以适应您正在使用的任何项目或文件夹设置。
+对于本教程，我们假设您将 Redux Toolkit 与 React 一起使用，但您也可以将其与其他 UI 层一起使用。 这些示例是基于[典型的 Create-React-App 文件夹结构](https://create-react-app.dev/docs/folder-structure)所有应用的代码都在 `src` 中，但这些模式可以适应您正在使用的任何项目或文件夹设置。
 
 [Create-React-App 的 Redux+JS 模版](https://github.com/reduxjs/cra-template-redux)已经配置了相同的项目设置。
 
@@ -58,7 +58,7 @@ export default configureStore({
 
 ### 为 React 提供 Redux Store
 
-一旦 store 创建后，我们可以使它变得为我们的 React 组件可用，将它传递给包裹了我们的应用的 React-Redux `<Provider>` 定义在 `src/index.js`。引入 我们刚刚创建的 Redux store ，传递给包裹你的`<App>`的 `<Provider>`， 并且传递给 store 的 prop。
+一旦 store 创建后，我们可以使它为我们的 React 组件可用，将 React-Redux `<Provider>` 放置在 `src/index.js` 中的应用周围。引入 我们刚刚创建的 Redux store ，在你的 <App> 周围放置一个 <Provider>，并将 store 作为 prop 传递：
 
 ```js title="index.js"
 import React from 'react'
@@ -117,9 +117,9 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
-### Add Slice Reducers to the Store
+### 将 Slice Reducers 添加到 Store
 
-Next, we need to import the reducer function from the counter slice and add it to our store. By defining a field inside the `reducer` parameter, we tell the store to use this slice reducer function to handle all updates to that state.
+下一步，我们需要从计数切片中引入 reducer 函数，并将它添加到我们的 store 中。通过在 reducer 参数中定义一个字段，我们告诉 store 使用这个 slice reducer 函数来处理对该状态的所有更新。
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -134,9 +134,10 @@ export default configureStore({
 })
 ```
 
-### Use Redux State and Actions in React Components
+### 在 React 组件中使用 Redux 状态和操作
 
-Now we can use the React-Redux hooks to let React components interact with the Redux store. We can read data from the store with `useSelector`, and dispatch actions using `useDispatch`. Create a `src/features/counter/Counter.js` file with a `<Counter>` component inside, then import that component into `App.js` and render it inside of `<App>`.
+现在我们可以使用 React-Redux 钩子让 React 组件与 Redux store 交互。我们可以使用 `useSelector` 从 store 中读取数据，
+使用 `useDispatch` 派发动作。创建一个包含 `<Counter>` 组件的 `src/features/counter/Counter.js` 文件，然后将该组件导入 `App.js` 并在 `<App>` 中渲染它。
 
 ```jsx title="features/counter/Counter.js"
 import React from 'react'
@@ -171,36 +172,38 @@ export function Counter() {
 ```
 
 Now, any time you click the "Increment" and "Decrement" buttons:
+现在，每当你点击”递增“和“递减”按钮。
 
-- The corresponding Redux action will be dispatched to the store
-- The counter slice reducer will see the actions and update its state
-- The `<Counter>` component will see the new state value from the store and re-render itself with the new data
+- 对应的 Redux action 会被派发到 store
 
-## What You've Learned
+* 计数器切片对应的 reducer 将看到动作并更新其状态
+* `<Counter>`组件将从 store 中看到新的状态，并使用新数据重新渲染组件。
 
-That was a brief overview of how to set up and use Redux Toolkit with React. Recapping the details:
+## 你学到了什么
+
+这是关于如何通过 React 设置和使用 Redux Toolkit 的简要概述。 回顾细节：
 
 :::tip Summary
 
-- **Create a Redux store with `configureStore`**
-  - `configureStore` accepts a `reducer` function as a named argument
-  - `configureStore` automatically sets up the store with good default settings
-- **Provide the Redux store to the React application components**
-  - Put a React-Redux `<Provider>` component around your `<App />`
-  - Pass the Redux store as `<Provider store={store}>`
-- **Create a Redux "slice" reducer with `createSlice`**
-  - Call `createSlice` with a string name, an initial state, and named reducer functions
-  - Reducer functions may "mutate" the state using Immer
-  - Export the generated slice reducer and action creators
-- **Use the React-Redux `useSelector/useDispatch` hooks in React components**
-  - Read data from the store with the `useSelector` hook
-  - Get the `dispatch` function with the `useDispatch` hook, and dispatch actions as needed
+- **使用`configureStore`创建一个 Redux store**
+  - `configureStore` 接受 `reducer` 函数作为命名参数
+  - `configureStore` 使用的好用的默认设置自动设置 store
+- **为 React 应用程序组件提供 Redux store**
+  - 在你的 `<App />` 周围放置一个 React-Redux `<Provider>` 组件
+  * 传递 Redux store 如 `<Provider store={store}>`
+- **使用 `createSlice` 创建一个 Redux "slice" reducer**
+  - 使用字符串名称、一个初始状态和命名的 reducer 函数调用“createSlice”
+  * Reducer 函数可以使用 Immer 来“改变”状态
+  * 导出生成的 slice reducer 和 action creators
+- **在 React 组件中使用 React-Redux `useSelector/useDispatch` 钩子**
+  - 使用 `useSelector` 钩子从 store 中读取数据
+  * 使用 `useDispatch` 钩子获取 `dispatch` 函数，并根据需要派发 actions
 
 :::
 
-### Full Counter App Example
+### 完整的计数器应用示例
 
-Here's the complete counter application as a running CodeSandbox:
+这里有运行在 CodeSandbox 完整的计数器应用程序
 
 <iframe
   class="codesandbox"
@@ -210,6 +213,6 @@ Here's the complete counter application as a running CodeSandbox:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-## What's Next?
+## 下一步是什么
 
-We recommend going through [**the "Redux Essentials" and "Redux Fundamentals" tutorials in the Redux core docs**](./tutorials-index.md), which will give you a complete understanding of how Redux works, what Redux Toolkit does, and how to use it correctly.
+我们建议阅读 [**Redux 核心文档中的“Redux 要点”和“Redux 基础知识”教程**](./tutorials-index.md), 这将使您全面了解 Redux 的工作原理、Redux Toolkit 的作用以及如何正确使用它。
