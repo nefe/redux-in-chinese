@@ -28,7 +28,7 @@ _Action_ 是一个简单对象（纯对象），用来表示即将要改变 stat
 
 Action 必须有一个 `type` 字段代表需要被执行的 action 类别。Type 可以被定义为常量并从其他 module 导入。比起用 [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 表示 `type`，最好用 string 类型来表示，因为 string 可以被序列化。
 
-除了 `type` 字段，其他 action 对象的数据结构结构完全取决于你自己。感兴趣的话，推荐你参考 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ，了解 action 的数据结构应该怎么组织比较好。
+除了 `type` 字段，其他 action 对象的数据结构完全取决于你自己。感兴趣的话，推荐你参考 [Flux Standard Action](https://github.com/acdlite/flux-standard-action) ，了解 action 的数据结构应该怎么组织比较好。
 
 还有就是请看后面的 [异步 action](#异步-action)。
 
@@ -55,7 +55,7 @@ type BaseDispatch = (a: Action) => Action
 type Dispatch = (a: Action | AsyncAction) => any
 ```
 
-_dispatching 函数_ (或简言之 _dispatch 函数_) 是一个接收 action 或者[异步 action](#异步-action)作为参数的函数，该函数可以向 store 中分发若干个 action，不分发、一个或者多个 action 都可以。
+_dispatching 函数_ (或简言之 _dispatch 函数_) 是一个接收 action 或者[异步 action](#异步-action)作为参数的函数，该函数可以向 store 中分发若干个 action，即可以不分发、分发一个或多个 action。
 
 我们要区分一般的 dispatch 函数以及由 store 实例提供的没有 middleware 的 base [`dispatch`](api/Store.md#dispatch) function。
 
@@ -90,7 +90,7 @@ type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 
-Middleware 是一个高阶函数，它用来构建[dispatch 函数](#dispatching-function)并返回一个新的 dispatch 函数，通常将[异步 action](#异步-action) 转换成 action。
+Middleware 是一个高阶函数，它用来组合[dispatch 函数](#dispatching-function)并返回一个新的 dispatch 函数，通常将[异步 action](#异步-action) 转换成 action。
 
 Middleware 利用复合函数使其可以组合其他函数，可用于记录 action 日志、产生其他诸如变化路由的副作用，或将异步的 API 调用变为一组同步的 action。
 
