@@ -2,8 +2,11 @@
 id: combinereducers
 title: combineReducers
 hide_title: true
+description: 'API > combineReducers: merging slice reducers to create combined state'
 ---
-# combineReducers
+
+&nbsp;
+
 # `combineReducers(reducers)`
 
 随着应用变得越来越复杂，可以考虑将 [reducer 函数](../understanding/thinking-in-redux/Glossary.md#reducer) 拆分成多个单独的函数，拆分后的每个函数负责独立管理 [state](../understanding/thinking-in-redux/Glossary.md#state) 的一部分。
@@ -17,7 +20,7 @@ hide_title: true
 
 ```
 rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
-// rootReducer 将返回如下的 state 对象
+// 这将返回如下的 state 对象
 {
   potato: {
     // ... potatoes, 和一些其他由 potatoReducer 管理的 state 对象 ...
@@ -33,7 +36,7 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 通常的做法是命名 reducer，然后 state 再去分割那些信息，这样你可以使用 ES6 的简写方法：`combineReducers({ counter, todos })`。这与 `combineReducers({ counter: counter, todos: todos })` 是等价的。
 
 > ##### Flux 用户使用须知
-
+>
 > 本函数可以帮助你组织多个 reducer，使它们分别管理自身相关联的 state。类似于 Flux 中的多个 store 分别管理不同的 state。在 Redux 中，只有一个 store，但是 `combineReducers` 让你拥有多个 reducer，同时保持各自负责逻辑块的独立性。
 
 #### 参数
@@ -48,7 +51,7 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 
 #### 注意
 
-本函数设计的时候有点偏主观，就是为了避免新手犯一些常见错误。也因些我们故意设定一些规则，但如果你自己手动编写根 redcuer 时并不需要遵守这些规则。
+本函数设计的时候有点偏主观，就是为了避免新手犯一些常见错误。也因些我们故意设定一些规则，但如果你自己手动编写根 redcuer 时，并不需要遵守这些规则。
 
 每个传入 `combineReducers` 的 reducer 都需满足以下规则：
 
@@ -58,7 +61,7 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 
 - 如果传入的 `state` 就是 `undefined`，一定要返回对应 reducer 的初始 state。根据上一条规则，初始 state 禁止使用 `undefined`。使用 ES6 的默认参数值语法来设置初始 state 很容易，但你也可以手动检查第一个参数是否为 `undefined`。
 
-虽然 `combineReducers` 自动帮你检查 reducer 是否符合以上规则，但你也应该牢记，并尽量遵守。即使你通过 `Redux.createStore(combineReducers(...), initialState)` 指定初始 state，`combineReducers` 也会尝试通过传递 `undefined` 的 `state` 来检测你的 reducer 是否符合规则。因此，即使你在代码中不打算实际接收值为 `undefined` 的 `state`，也必须保证你的 reducer 在接收到 `undefined` 时能够正常工作。
+虽然 `combineReducers` 自动帮你检查 reducer 是否符合以上规则，但你也应该牢记，并尽量遵守。即使你通过 `Redux.createStore(combineReducers(...), initialState)` 指定初始 state，`combineReducers` 也会尝试通过传递 `undefined` 的 `state` 来检测你的 reducer 是否符合规则。因此，即使你在代码中不打算实际接收值为 `undefined` 的 `state`，也**必须**保证你的 reducer 在接收到 `undefined` 时能够正常工作。
 
 #### 示例
 

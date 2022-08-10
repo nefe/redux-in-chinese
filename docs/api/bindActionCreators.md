@@ -2,9 +2,11 @@
 id: bindactioncreators
 title: bindActionCreators
 hide_title: true
+description: 'API > bindActionCreators: wrapping action creators for dispatching'
 ---
 
-# bindActionCreators
+&nbsp;
+
 # `bindActionCreators(actionCreators, dispatch)`
 
 把一个 value 为不同 [action creator](../understanding/thinking-in-redux/Glossary.md#action-creator) 的对象，转成拥有同名 key 的对象。同时使用 [`dispatch`](Store.md#dispatchaction) 对每个 action creator 进行包装，以便可以直接调用它们。
@@ -13,7 +15,7 @@ hide_title: true
 
 惟一会使用到 `bindActionCreators` 的场景是当你需要把 action creator 往下传到一个组件上，却不想让这个组件觉察到 Redux 的存在，而且不希望把 [`dispatch`](Store.md#dispatchaction) 或 Redux store 传给它。
 
-为方便起见，你也可以传入一个函数作为第一个参数，它会返回一个函数。
+为方便起见，你也可以传入一个 action creator 作为第一个参数，并且得到一个 dispatch 包装函数作为返回值。
 
 #### 参数
 
@@ -59,52 +61,44 @@ console.log(TodoActionCreators)
 //   removeTodo: Function
 // }
 
-class TodoListContainer extends Component {
-  constructor(props) {
-    super(props)
+function TodoListContainer(props) {
+  // react-redux 注入:
+  const { dispatch, todos } = props
 
-    const { dispatch } = props
+  // 这是一个很好的 bindActionCreators 用例:
+  // 你希望子组件完全不知道 Redux.
+  // 我们现在创建这些函数的绑定版本，以便我们可以
+  // 之后将它们传给子组件.
 
-    // 这是一个很好的 bindActionCreators 的使用示例：
-    // 你想让你的子组件完全不感知 Redux 的存在。
-    // 我们在这里对 action creator 绑定 dispatch 方法，
-    // 以便稍后将其传给子组件。
+  const boundActionCreators = useMemo(
+    () => bindActionCreators(TodoActionCreators, dispatch),
+    [dispatch]
+  )
+  console.log(boundActionCreators)
+  // {
+  //   addTodo: Function,
+  //   removeTodo: Function
+  // }
 
-    this.boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
-    console.log(this.boundActionCreators)
-    // {
-    //   addTodo: Function,
-    //   removeTodo: Function
-    // }
-  }
-
-  componentDidMount() {
-    // 由 react-redux 注入的 dispatch：
-    let { dispatch } = this.props
-
-    // 注意：这样是行不通的：
+  useEffect(() => {
+    // 注意： 这不起作用:
     // TodoActionCreators.addTodo('Use Redux')
 
-    // 你只是调用了创建 action 的方法。
-    // 你必须要同时 dispatch action。
+    // 你只是在调用一个创建 action 的函数.
+    // 你也必须 dispatch 一个 action!
 
-    // 这样做是可行的：
+    // 这将起作用:
     let action = TodoActionCreators.addTodo('Use Redux')
     dispatch(action)
-  }
+  }, [])
 
-  render() {
-    // 由 react-redux 注入的 todos：
-    let { todos } = this.props
+  return <TodoList todos={todos} {...this.boundActionCreators} />
 
-    return <TodoList todos={todos} {...this.boundActionCreators} />
+  //  bindActionCreators 的替代方法
+  // 只有向下传递 dispatch 函数, 但是你的子组件
+  // 需要 import action creators 并了解它们.
 
-    // 另一替代 bindActionCreators 的做法是
-    // 直接把 dispatch 函数当作 prop 传递给子组件，但这时你的子组件需要
-    // 引入 action creator 并且感知它们
-
-    // return <TodoList todos={todos} dispatch={dispatch} />;
-  }
+  // return <TodoList todos={todos} dispatch={dispatch} />
 }
 
 export default connect(state => ({ todos: state.todos }))(TodoListContainer)
@@ -112,6 +106,6 @@ export default connect(state => ({ todos: state.todos }))(TodoListContainer)
 
 #### 小贴士
 
-- 你或许要问：为什么不直接把 action creator 绑定到 store 实例上，就像传统的 Flux 那样？问题在于，这对于需要在服务端进行渲染的同构应用会有问题。多数情况下，你的每个请求都需要一个独立的 store 实例，这样你可以为它们提供不同的数据，但是在定义的时候绑定 action creator，你就只能使用一个唯一的 store 实例来对应所有请求了。
+- 你或许会问：为什么不直接把 action creator 绑定到 store 实例上，就像传统的 Flux 那样？问题在于，这对于需要在服务端进行渲染的同构应用会有问题。多数情况下，你的每个请求都需要一个独立的 store 实例，这样你可以为它们提供不同的数据，但是在定义的时候绑定 action creator，你就只能使用一个唯一的 store 实例来对应所有请求了。
 
-- 如果你使用 ES5，无法使用 `import * as` 语法，你可以把 `require('./TodoActionCreators')` 作为第一个参数传给 `bindActionCreators`。惟一要注意的是作为 `actionCreators` 参数的对象它的 value 需要是函数。模块加载系统并不重要。
+- 如果你使用 ES5，无法使用 `import * as` 语法，你可以把 `require('./TodoActionCreators')` 作为第一个参数传给 `bindActionCreators`。惟一要注意的是作为 `actionCreators` 参数的对象，它的 value 需要是函数。模块系统并不重要。

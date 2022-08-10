@@ -2,9 +2,10 @@
 id: applymiddleware
 title: applyMiddleware
 hide_title: true
+description: 'API > applyMiddleware: extending the Redux store'
 ---
 
-# applyMiddleware
+&nbsp;
 
 # `applyMiddleware(...middleware)`
 
@@ -51,7 +52,7 @@ store.dispatch({
   type: 'ADD_TODO',
   text: 'Understand the middleware'
 })
-// (将打印如下信息:)
+// (middleware将打印如下信息:)
 // will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
 // state after dispatch: [ 'Use Redux', 'Understand the middleware' ]
 ```
@@ -109,7 +110,7 @@ store.dispatch(withdrawMoney(100))
 // 下面就是一个 thunk。
 function makeASandwichWithSecretSauce(forPerson) {
   // 控制反转！
-  // 返回一个接收 `dispatch` 的函数。
+  // 返回一个接收 `dispatch` 的函数以便我们稍后分派。
   // Thunk middleware 知道如何把异步的 thunk action 转为普通 action。
   return function(dispatch) {
     return fetchSecretSauce().then(
@@ -219,10 +220,10 @@ export default connect(state => ({
   )
   ```
 
-  这样做有利于打包时去掉不需要的模块，减小打包文件大小。
+  这样做有利于打包时去掉不需要的模块，减小打包文件的大小。
 
 - 有想过 `applyMiddleware` 本质是什么吗？它肯定是比 middleware 还强大的扩展机制。实际上，`applyMiddleware` 只是被称为 Redux 最强大的扩展机制的 [store enhancer](../understanding/thinking-in-redux/Glossary.md#store-enhancer) 中的一个范例而已。你不太可能需要实现自己的 store enhancer。另一个 store enhancer 示例是 [redux-devtools](https://github.com/reduxjs/redux-devtools)。Middleware 并没有 store enhancer 强大，但开发起来却是更容易的。
 
-- Middleware 听起来比实际难一些。真正理解 middleware 的唯一办法是了解现有的 middleware 是如何工作的，并尝试自己实现。需要的功能可能错综复杂，但是你会发现大部分 middleware 实际上很小，只有 10 行左右，是通过对它们的组合使用来达到最终的目的。
+- Middleware 听起来比实际要复杂一些。真正理解 middleware 的唯一办法是了解现有的 middleware 是如何工作的，并尝试自己实现。需要的功能可能错综复杂，但是你会发现大部分 middleware 实际上很小，只有 10 行左右，是通过对它们的嵌套和组合使用来达到最终的目的。
 
 - 想要使用多个 store enhancer，可以使用 [`compose()`](./compose.md) 方法。
