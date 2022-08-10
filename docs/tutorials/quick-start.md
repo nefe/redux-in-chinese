@@ -83,9 +83,9 @@ ReactDOM.render(
 
 添加一个名为 `src/features/counter/counterSlice.js` 的文件。在该文件中从 Redux Toolkit 引入 `createSlice` API。
 
-创建切片需要一个字符串名称来标识切片、一个初始状态值以及一个或多个定义了该如何更新 state reducer 函数。一旦一个 slice 被创建，我们可以导出生成的 Redux action creators 和整个切片的 reducer 函数。
+创建切片需要一个字符串名称来标识切片、一个初始状态值以及一个或多个定义了该如何更新 state 的 reducer 函数。一旦一个 slice 被创建，我们可以导出生成的 Redux action creators 和整个切片的 reducer 函数。
 
-Redux 要求[我们通过创建数据副本和更新数据副本来不可变地写入所有状态更新](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#immutability)。然而，Redux Toolkit `createSlice` 和 `createReducer` 在内部使用 Immer 允许我们[编写“可变”的更新逻辑，变成正确的不可变更新](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux#immutable-updates-with-immer)。
+Redux 要求[我们通过创建数据副本和更新数据副本，来实现不可变地写入所有状态更新](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#immutability)。不过 Redux Toolkit `createSlice` 和 `createReducer` 在内部使用 Immer 允许我们[编写“可变”的更新逻辑，变成正确的不可变更新](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux#immutable-updates-with-immer)。
 
 ```js title="features/counter/counterSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
@@ -98,9 +98,9 @@ export const counterSlice = createSlice({
   reducers: {
     increment: state => {
       // Redux Toolkit 允许我们在 reducers 写 "可变" 逻辑。它
-      // 并不少真正的改变 state 值，因为它使用了 Immer 库
-      // 可以检测到一个草稿 state 的变化并且生产一个全新的
-      // 不可变 state 是基于这些变化
+      // 并不是真正的改变状态值，因为它使用了 Immer 库
+      // 可以检测到一个“草稿状态“ 的变化并且基于这些变化生产一个全新的
+      // 不可变的状态
       state.value += 1
     },
     decrement: state => {
@@ -111,13 +111,13 @@ export const counterSlice = createSlice({
     }
   }
 })
-// 每个场景下的 reducer 函数 生成对应的 Action creators
+// 每个 case reducer 函数会生成对应的 Action creators
 export const { increment, decrement, incrementByAmount } = counterSlice.actions
 
 export default counterSlice.reducer
 ```
 
-### 将 Slice Reducers 添加到 Store
+### 将 Slice Reducers 添加到 Store 中
 
 下一步，我们需要从计数切片中引入 reducer 函数，并将它添加到我们的 store 中。通过在 reducer 参数中定义一个字段，我们告诉 store 使用这个 slice reducer 函数来处理对该状态的所有更新。
 
@@ -136,8 +136,7 @@ export default configureStore({
 
 ### 在 React 组件中使用 Redux 状态和操作
 
-现在我们可以使用 React-Redux 钩子让 React 组件与 Redux store 交互。我们可以使用 `useSelector` 从 store 中读取数据，
-使用 `useDispatch` 派发动作。创建一个包含 `<Counter>` 组件的 `src/features/counter/Counter.js` 文件，然后将该组件导入 `App.js` 并在 `<App>` 中渲染它。
+现在我们可以使用 React-Redux 钩子让 React 组件与 Redux store 交互。我们可以使用 `useSelector` 从 store 中读取数据，使用 `useDispatch` 派发动作。创建一个包含 `<Counter>` 组件的 `src/features/counter/Counter.js` 文件，然后将该组件导入 `App.js` 并在 `<App>` 中渲染它。
 
 ```jsx title="features/counter/Counter.js"
 import React from 'react'
@@ -171,13 +170,11 @@ export function Counter() {
 }
 ```
 
-Now, any time you click the "Increment" and "Decrement" buttons:
 现在，每当你点击”递增“和“递减”按钮。
 
 - 对应的 Redux action 会被派发到 store
-
-* 计数器切片对应的 reducer 将看到动作并更新其状态
-* `<Counter>`组件将从 store 中看到新的状态，并使用新数据重新渲染组件。
+- 在计数器切片对应的 reducer 中将看到动作并更新其状态
+- `<Counter>`组件将从 store 中看到新的状态，并使用新数据重新渲染组件。
 
 ## 你学到了什么
 
