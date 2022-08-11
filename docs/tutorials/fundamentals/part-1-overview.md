@@ -10,16 +10,16 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 # Redux 深入浅出, 第一节：Redux 概览
 
-:::tip 您将学到
+:::tip 你将学到
 
-- Redux 是什么以及您为什么要使用 Redux
-- 构成 Redux 应用的基本部分
+- Redux 是什么以及你为什么要使用 Redux。
+- 构成 Redux 应用的基本部分。
 
 :::
 
 ## 简介
 
-欢迎来到 Redux 深入浅出教程！**该教程会向您介绍使用 Redux 的核心概念、原则和模式**。当您学完后，您应该了解了构成一个 Redux 应用的不同部分、使用 Redux 时的数据流以及我们用于构建 Redux 应用的标准推荐模式。
+欢迎来到 Redux 深入浅出教程！**该教程会向你介绍使用 Redux 的核心概念、原则和模式**。当你学完后，你应该了解了构成一个 Redux 应用的不同部分、使用 Redux 时的数据流以及我们用于构建 Redux 应用的标准推荐模式。
 
 在本教程的第一节，我们将简要介绍一个可工作的 Redux 应用的最小示例，以了解构成 Redux 应用的基本部分，在[第二节：Redux 概念与数据流](./part-2-concepts-data-flow.md)里我们会再来探讨这些构成部分的细节以及数据是怎样在 Redux 应用里流动的。
 
@@ -27,33 +27,33 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ### 如何阅读本教程
 
-**本教程会教您 “Redux 的工作原理”**，以及 _为什么_ 有这些模式的存在。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
+**本教程会教你 “Redux 的工作原理”**，以及 _为什么_ 有这些模式的存在。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
 
-**初始代码会没有我们在实际应用中推荐的写法那么简洁**，但是不用语法糖（long-hand）的写法是学习的最佳方式。当您理解了所有部分是如何组合在一起的，我们再来用 Redux Toolkit 去简化代码。**Redux Toolkit 是我们推荐的在生产应用中使用 Redux 的方式**，建立在我们将在教程中介绍的所有概念之上。一旦您理解了教程中涵盖的核心概念，您会知道怎样更有效地使用 Redux Toolkit。
+**初始代码会没有我们在实际应用中推荐的写法那么简洁**，但是不用语法糖（long-hand）的写法是学习的最佳方式。当你理解了所有部分是如何组合在一起的，我们再来用 Redux Toolkit 去简化代码。**Redux Toolkit 是我们推荐的在生产应用中使用 Redux 的方式**，建立在我们将在教程中介绍的所有概念之上。一旦你理解了教程中涵盖的核心概念，你会知道怎样更有效地使用 Redux Toolkit。
 
 :::info
 
-如果您想了解有关如何使用 Redux 编写实际应用程序的更多信息，请参阅：
+如果你想了解有关如何使用 Redux 编写实际应用程序的更多信息，请参阅：
 
 - [**本教程中 “Modern Redux” 章节**](./part-8-modern-redux.md)，会演示怎样把前几个章节里示例的初级（low-level）用法转换为我们推荐的实际应用中的现代化模式（modern patterns）用法
-- [**"Redux 循序渐进"**](../essentials/part-1-overview-concepts.md)，会教您在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
+- [**"Redux 循序渐进"**](../essentials/part-1-overview-concepts.md)，会教你在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
   :::
 
-我们尽量让教程对初学者友好，但为了我们能专注于讲解 Redux 本身，我们假定您已经有了一些预备知识。**本教程假设您：**
+我们尽量让教程对初学者友好，但为了我们能专注于讲解 Redux 本身，我们假定你已经有了一些预备知识。**本教程假设你：**
 
 :::important 必备能力
 
-- 熟悉 [HTML & CSS](https://internetingishard.com/).
-- 熟悉 [ES6 语法和特性](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- 了解 [数组和对象扩展运算符](https://javascript.info/rest-parameters-spread#spread-syntax)
+- 熟悉 [HTML & CSS](https://internetingishard.com/)。
+- 熟悉 [ES6 语法和特性](https://www.taniarascia.com/es6-syntax-and-feature-overview/)。
+- 了解 [数组和对象扩展运算符](https://javascript.info/rest-parameters-spread#spread-syntax)。
 - 理解 React 的一些术语: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), [Hooks](https://reactjs.org/docs/hooks-intro.html)
 - 了解 [异步 JavaScript](https://javascript.info/promise-basics) 和 [发送 AJAX 请求](https://javascript.info/fetch)
 
 :::
 
-**如果您对这些前置知识还搞不太明白，我们建议您先花一些时间学习它们，学会后再来学 Redux**。您若不离不弃，Redux 必生死相依~
+**如果你对这些前置知识还搞不太明白，我们建议你先花一些时间学习它们，学会后再来学 Redux**。你若不离不弃，Redux 必生死相依~
 
-最后，您应该确保您的浏览器里安装了 React 和 Redux DevTools 的插件：
+最后，你应该确保你的浏览器里安装了 React 和 Redux DevTools 的插件：
 
 - React DevTools 拓展:
   - [ 适用于 Chrome 的 React DevTools 拓展](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
@@ -70,13 +70,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ### 我为什么要用 Redux ？
 
-Redux 帮助您管理“全局”状态 - 那些应用程序的许多部分都需要的状态。
+Redux 帮助你管理“全局”状态 - 那些应用程序的许多部分都需要的状态。
 
-**Redux 提供的模式和工具使您更容易理解应用程序中的状态何时、何地、为什么以及如何更新，以及当这些更改发生时您的应用程序逻辑将如何表现**。 Redux 指导您编写可预测和可测试的代码，这有助于让您确信您的应用程序将按预期工作。
+**Redux 提供的模式和工具使你更容易理解应用程序中的状态何时、何地、为什么以及如何更新，以及当这些更改发生时你的应用程序逻辑将如何表现**。 Redux 指导你编写可预测和可测试的代码，这有助于让你确信你的应用程序将按预期工作。
 
 ### 我什么时候应该用 Redux ？
 
-Redux 可帮助您处理共享状态的管理，但与任何工具一样，它也有权衡。有更多的概念需要学习，还有更多的代码需要编写。它还为您的代码添加了一些额外代码，并要求您遵循某些限制。这是短期和长期生产力之间的权衡。
+Redux 可帮助你处理共享状态的管理，但与任何工具一样，它也有权衡。有更多的概念需要学习，还有更多的代码需要编写。它还为你的代码添加了一些额外代码，并要求你遵循某些限制。这是短期和长期生产力之间的权衡。
 
 Redux 在以下情况下更有用：
 
@@ -85,13 +85,13 @@ Redux 在以下情况下更有用：
 - 更新该状态的逻辑可能很复杂
 - 中型和大型代码量的应用，很多人协同开发
 
-**并非所有应用程序都需要 Redux。 花一些时间思考您正在构建的应用程序类型，并决定哪些工具最能帮助解决您正在处理的问题。**
+**并非所有应用程序都需要 Redux。 花一些时间思考你正在构建的应用程序类型，并决定哪些工具最能帮助解决你正在处理的问题。**
 
 :::info 想了解更多？
 
-如果您不确定 Redux 是否适合您的应用程序，这些资源提供了更多指导：
+如果你不确定 Redux 是否适合你的应用程序，这些资源提供了更多指导：
 
-- **[何时（何时不）使用 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[When (and when not) to reach for Redux 何时（何时不）使用 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
 - **[Redux 之道，第一部分-实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[Redux FAQ: 我应该在什么时候使用 Redux？](../../faq/General.md#when-should-i-use-redux)**
 - **[你可能不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
@@ -112,11 +112,11 @@ Redux 可以结合任何 UI 框架一起使用，最常与 React。[**React-Redu
 
 #### Redux DevTools 拓展
 
-[**Redux DevTools 拓展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
+[**Redux DevTools 拓展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许你有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
 
 ## Redux 基础
 
-现在您已经知道了 Redux 是什么，让我们简要介绍一下构成 Redux 应用的各部分及其工作原理。
+现在你已经知道了 Redux 是什么，让我们简要介绍一下构成 Redux 应用的各部分及其工作原理。
 
 :::info
 
@@ -151,7 +151,7 @@ store 是一个 JavaScript 对象，具有一些特殊的功能和能力，使�
 
 :::info
 
-[第五节: UI 和 React](./part-5-ui-and-react.md) 将演示怎样结合 React 和 Redux 一起使用.
+[第五节: UI 和 React](./part-5-ui-and-react.md) 将演示怎样结合 React 和 Redux 一起使用。
 
 :::
 
@@ -190,7 +190,7 @@ function counterReducer(state = initialState, action) {
 }
 ```
 
-Action 始终具有 `type` 字段，该字段的值是您提供的字符串，充当 action 的唯一名称。`type` 的值应该是一个好理解的名称，以便任何看过这段代码的人都明白它的含义。在这种情况下，我们使用单词 "counter" 作为我们 `type` 值的前半部分，后半部分是一个“发生了什么”的描述。在这种情况下，我们的 "counter" 是“递增的（incremented）”，所以我们将 `type` 编写为 `'counter/incremented'`。
+Action 始终具有 `type` 字段，该字段的值是你提供的字符串，充当 action 的唯一名称。`type` 的值应该是一个好理解的名称，以便任何看过这段代码的人都明白它的含义。在这种情况下，我们使用单词 "counter" 作为我们 `type` 值的前半部分，后半部分是一个“发生了什么”的描述。在这种情况下，我们的 "counter" 是“递增的（incremented）”，所以我们将 `type` 编写为 `'counter/incremented'`。
 
 根据 Action 的 type，我们要么需要返回一个全新的对象作为新的 `state` 的结果，要么返回现有的 `state` 对象（如果没有任何变化）。请注意，我们通过复制现有 state 并更新副本的方式来 _不可变地_（_immutably_）更新状态，而不是直接修改原始对象。
 
@@ -211,10 +211,10 @@ const store = Redux.createStore(counterReducer)
 在任何应用程序中，用户界面都将在屏幕上显示现有状态。当用户执行某些操作时，应用将更新其数据，然后使用这些值重绘 UI。
 
 ```js
-// 我们的“user interface”是单个 HTML 元素中的一些文本
+// “user interface”是单个 HTML 元素中的文本
 const valueEl = document.getElementById('value')
 
-// 每当store状态改变，通过读取最后的store状态并显示新数据进行更新UI
+// store 状态改变，通过读取最后一次的 store 状态并显示新数据进行更新 UI
 function render() {
   const state = store.getState()
   valueEl.innerHTML = state.value.toString()
@@ -223,7 +223,7 @@ function render() {
 // 通过初始数据进行更新UI
 render()
 
-// 并订阅（subscribe）将来数据变化时重绘
+// 进行订阅（subscribe），可以在将来数据变化时重绘
 store.subscribe(render)
 ```
 
@@ -240,7 +240,7 @@ Redux 本身是一个独立的库，可以在任何地方使用。这也意味�
 最后，我们需要通过创建描述所发生情况的 **action** 对象，并将其 **dispatching** 到 store 来响应用户输入。当我们调用 `store.dispatch(action)` 时，store 运行 reducer ，计算更新的状态，并执行订阅者来更新 UI。
 
 ```js
-// 通过“dispatching”动作对象来处理用户输入，
+// 通过“ dispatching ”动作对象来处理用户输入，
 // 这些动作对象应该描述应用程序中“发生了什么”
 document.getElementById('increment').addEventListener('click', function () {
   store.dispatch({ type: 'counter/incremented' })
@@ -253,7 +253,7 @@ document.getElementById('decrement').addEventListener('click', function () {
 document
   .getElementById('incrementIfOdd')
   .addEventListener('click', function () {
-    // 我们可以编写逻辑来根据状态决定做什么
+    // 可以编写逻辑来根据状态来做什么
     if (store.getState().value % 2 !== 0) {
       store.dispatch({ type: 'counter/incremented' })
     }
@@ -262,7 +262,7 @@ document
 document
   .getElementById('incrementAsync')
   .addEventListener('click', function () {
-    // 我们还可以编写与 store 交互的异步逻辑
+    // 还可以编写与 store 交互的异步逻辑
     setTimeout(function () {
       store.dispatch({ type: 'counter/incremented' })
     }, 1000)
@@ -281,11 +281,11 @@ document
 - store 通过执行 reducer 方法计算出一个新的 state
 - UI 读取最新的 state 来展示最新的值
 
-(如果上述各个部分还不太清楚，请不要担心！在学习本教程的其余部分时，请将此图片记在脑海中，您将看到这些部分如何组合在一起。)
+(如果上述各个部分还不太清楚，请不要担心！在学习本教程的其余部分时，请将此图片记在脑海中，你将看到这些部分如何组合在一起。)
 
 ![Redux data flow diagram](/img/tutorials/essentials/ReduxDataFlowDiagram.gif)
 
-## 您学到了
+## 你学到了
 
 这个计数器示例很小，但它确实展示了真正的 Redux 应用程序的所有工作部分。**我们在之后的章节讨论的所有东西都是基于这些基础部分扩展的**
 
@@ -305,4 +305,4 @@ document
 
 ## 下一步
 
-现在您已经知道了构成 Redux 应用的各个基本部分是什么，接着看[第二节：Redux 概念与数据流](./part-2-concepts-data-flow.md)，我们将更详细地了解 Redux 应用中的数据流。
+现在你已经知道了构成 Redux 应用的各个基本部分是什么，接着看[第二节：Redux 概念与数据流](./part-2-concepts-data-flow.md)，我们将更详细地了解 Redux 应用中的数据流。
