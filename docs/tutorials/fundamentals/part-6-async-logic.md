@@ -16,7 +16,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use async l
 
 :::
 
-:::info Prerequisites
+:::info 预置知识
 
 - Familiarity with using AJAX requests to fetch and update data from a server
 - Understanding asynchronous logic in JS, including Promises

@@ -15,7 +15,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info Prerequisites
+:::info 预置知识
 
 - Completion of the previous sections of this tutorial to understand Redux Toolkit usage patterns
 
