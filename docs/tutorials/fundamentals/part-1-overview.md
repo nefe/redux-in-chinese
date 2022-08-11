@@ -12,7 +12,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip 您将学到
 
-- Redux 是什么以及您为什么要使用 Redux 
+- Redux 是什么以及您为什么要使用 Redux
 - 构成 Redux 应用的基本部分
 
 :::
@@ -25,9 +25,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 在[第三节: State, Actions, and Reducers](./part-3-state-actions-reducers.md)里，我们将利用已学知识构建一个小型的示例应用，演示这些构成部分是怎样组合在一起的，并在实践中讨论 Redux 的工作原理。在我们亲手敲完这个应用的代码后，我们应该确切知道该应用是怎样工作的。接着我们将讨论一些 Redux 标准模式和抽象的典型用法。最后，我们将看到示例里的初级（lower-level）用法如何转换为我们建议在实际应用程序中使用的高级（higher-level）模式。
 
-
 ### 如何阅读本教程
-
 
 **本教程会教您 “Redux 的工作原理”**，以及 _为什么_ 有这些模式的存在。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
 
@@ -37,19 +35,19 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 如果您想了解有关如何使用 Redux 编写实际应用程序的更多信息，请参阅：
 
-- [**本教程中 “现代化的 Redux” 章节**](./part-8-modern-redux.md)，会演示怎样把前几个章节里示例的初级（low-level）用法转换为我们推荐的实际应用中的现代化模式（modern patterns）用法
+- [**本教程中 “Modern Redux” 章节**](./part-8-modern-redux.md)，会演示怎样把前几个章节里示例的初级（low-level）用法转换为我们推荐的实际应用中的现代化模式（modern patterns）用法
 - [**"Redux 循序渐进"**](../essentials/part-1-overview-concepts.md)，会教您在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
-:::
+  :::
 
 我们尽量让教程对初学者友好，但为了我们能专注于讲解 Redux 本身，我们假定您已经有了一些预备知识。**本教程假设您：**
 
 :::important 必备能力
 
 - 熟悉 [HTML & CSS](https://internetingishard.com/).
-- 熟悉 [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- 了解 [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
+- 熟悉 [ES6 语法和特性](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
+- 了解 [数组和对象扩展运算符](https://javascript.info/rest-parameters-spread#spread-syntax)
 - 理解 React 的一些术语: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- 了解 [asynchronous JavaScript](https://javascript.info/promise-basics) 和 [making AJAX requests](https://javascript.info/fetch)
+- 了解 [异步 JavaScript](https://javascript.info/promise-basics) 和 [发送 AJAX 请求](https://javascript.info/fetch)
 
 :::
 
@@ -57,12 +55,12 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 最后，您应该确保您的浏览器里安装了 React 和 Redux DevTools 的插件：
 
-- React DevTools Extension:
-  - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
-  - [React DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
-- Redux DevTools Extension:
-  - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
-  - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
+- React DevTools 拓展:
+  - [ 适用于 Chrome 的 React DevTools 拓展](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+  - [适用于 Firefox 的 React DevTools 拓展 ](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
+- Redux DevTools 拓展:
+  - [适用于 Chrome 的 Redux DevTools 拓展 ](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
+  - [适用于 Firefox 的 Redux DevTools 拓展 ](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
 ## 什么是 Redux ？
 
@@ -93,10 +91,10 @@ Redux 在以下情况下更有用：
 
 如果您不确定 Redux 是否适合您的应用程序，这些资源提供了更多指导：
 
-- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-- **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
-- **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+- **[何时（何时不）使用 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[Redux 之道，第一部分-实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- **[Redux FAQ: 我应该在什么时候使用 Redux？](../../faq/General.md#when-should-i-use-redux)**
+- **[你可能不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
 :::
 
@@ -114,12 +112,11 @@ Redux 可以结合任何 UI 框架一起使用，最常与 React。[**React-Redu
 
 #### Redux DevTools 拓展
 
-[**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
+[**Redux DevTools 拓展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
 
 ## Redux 基础
 
 现在您已经知道了 Redux 是什么，让我们简要介绍一下构成 Redux 应用的各部分及其工作原理。
-
 
 :::info
 
@@ -127,7 +124,7 @@ Redux 可以结合任何 UI 框架一起使用，最常与 React。[**React-Redu
 
 :::
 
-### The Redux Store
+### Redux Store
 
 所有 Redux 应用的中心都是 **store** 。"store" 是保存应用程序的全局 **state** 的容器。
 
@@ -137,7 +134,6 @@ store 是一个 JavaScript 对象，具有一些特殊的功能和能力，使�
 - 相反，导致状态更新的唯一方法是创建一个描述“应用程序中发生的某些事情”的普通 **action** 对象，然后将该 action **dispatch** 到 store 以告诉它发生了什么。
 - 当一个 action 被 dispatch 后，store 会调用根 **reducer** 方法，让其根据 action 和旧 state 计算出新 state
 - 最后，store 会通知 **订阅者(subscribers)** 状态已更新，以便可以使用新数据更新 UI。
-
 
 ### Redux 核心示例应用
 
@@ -161,12 +157,12 @@ store 是一个 JavaScript 对象，具有一些特殊的功能和能力，使�
 
 接下来我们将此示例代码拆开为单独的部分，分别看看发生了什么。
 
-#### State, Actions, and Reducers
+#### State, Actions 和 Reducers
 
 我们首先定义一个初始 **state** 值来描述应用程序：
 
 ```js
-// Define an initial state value for the app
+// 为应用定义初始状态值
 const initialState = {
   value: 0
 }
@@ -179,19 +175,16 @@ Redux 应用程序通常将 JS 对象作为状态（state）的根（root），�
 接着，我们定义一个 **reducer** 方法。 接收俩参数， 当前的 `state` 和一个描述发生了什么的 `action` 对象。 当 Redux 应用启动时，我们还没有任何状态，所以我们提供一个 `initialState` 作为该 reducer 的默认值。
 
 ```js
-// Create a "reducer" function that determines what the new state
-// should be when something happens in the app
+// 创建一个“reducer”函数来确定应用程序中发生某些事情时的新状态
 function counterReducer(state = initialState, action) {
-  // Reducers usually look at the type of action that happened
-  // to decide how to update the state
+  // Reducers 通常会查看发生的action 的 type 来决定如何更新状态
   switch (action.type) {
     case 'counter/incremented':
       return { ...state, value: state.value + 1 }
     case 'counter/decremented':
       return { ...state, value: state.value - 1 }
     default:
-      // If the reducer doesn't care about this action type,
-      // return the existing state unchanged
+      // 如果 reducer 不关心这个action type，原样返回现有状态
       return state
   }
 }
@@ -201,14 +194,13 @@ Action 始终具有 `type` 字段，该字段的值是您提供的字符串，�
 
 根据 Action 的 type，我们要么需要返回一个全新的对象作为新的 `state` 的结果，要么返回现有的 `state` 对象（如果没有任何变化）。请注意，我们通过复制现有 state 并更新副本的方式来 _不可变地_（_immutably_）更新状态，而不是直接修改原始对象。
 
-
 #### Store
 
 现在我们有了一个 reducer 函数，我们可以通过调用 Redux 库 `createStore` API 来创建一个 **store** 实例。
 
 ```js
-// Create a new Redux store with the `createStore` function,
-// and use the `counterReducer` for the update logic
+// 通过 createStore 方法创建一个新的 Redux，
+// 使用 counterReducer 进行更新逻辑
 const store = Redux.createStore(counterReducer)
 ```
 
@@ -219,19 +211,19 @@ const store = Redux.createStore(counterReducer)
 在任何应用程序中，用户界面都将在屏幕上显示现有状态。当用户执行某些操作时，应用将更新其数据，然后使用这些值重绘 UI。
 
 ```js
-// Our "user interface" is some text in a single HTML element
+// 我们的“user interface”是单个 HTML 元素中的一些文本
 const valueEl = document.getElementById('value')
 
-// Whenever the store state changes, update the UI by
-// reading the latest store state and showing new data
+// 每当store状态改变，通过读取最后的store状态并显示新数据进行更新UI
 function render() {
   const state = store.getState()
   valueEl.innerHTML = state.value.toString()
 }
 
-// Update the UI with the initial data
+// 通过初始数据进行更新UI
 render()
-// And subscribe to redraw whenever the data changes in the future
+
+// 并订阅（subscribe）将来数据变化时重绘
 store.subscribe(render)
 ```
 
@@ -245,11 +237,11 @@ Redux 本身是一个独立的库，可以在任何地方使用。这也意味�
 
 #### Dispatching Actions
 
-最后，我们需要通过创建描述所发生情况的 **action** 对象，并将其 **dispatching** 到 store 来响应用户输入。当我们调用 `store.dispatch(action)` 时，store 运行 reducer ，计算更新的状态，并执行订阅者来更新UI。
+最后，我们需要通过创建描述所发生情况的 **action** 对象，并将其 **dispatching** 到 store 来响应用户输入。当我们调用 `store.dispatch(action)` 时，store 运行 reducer ，计算更新的状态，并执行订阅者来更新 UI。
 
 ```js
-// Handle user inputs by "dispatching" action objects,
-// which should describe "what happened" in the app
+// 通过“dispatching”动作对象来处理用户输入，
+// 这些动作对象应该描述应用程序中“发生了什么”
 document.getElementById('increment').addEventListener('click', function () {
   store.dispatch({ type: 'counter/incremented' })
 })
@@ -261,7 +253,7 @@ document.getElementById('decrement').addEventListener('click', function () {
 document
   .getElementById('incrementIfOdd')
   .addEventListener('click', function () {
-    // We can write logic to decide what to do based on the state
+    // 我们可以编写逻辑来根据状态决定做什么
     if (store.getState().value % 2 !== 0) {
       store.dispatch({ type: 'counter/incremented' })
     }
@@ -270,7 +262,7 @@ document
 document
   .getElementById('incrementAsync')
   .addEventListener('click', function () {
-    // We can also write async logic that interacts with the store
+    // 我们还可以编写与 store 交互的异步逻辑
     setTimeout(function () {
       store.dispatch({ type: 'counter/incremented' })
     }, 1000)
