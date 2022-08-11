@@ -58,7 +58,7 @@ export default configureStore({
 
 ### 为 React 提供 Redux Store
 
-一旦 store 创建后，我们可以使它为我们的 React 组件可用，将 React-Redux `<Provider>` 放置在 `src/index.js` 中的应用周围。引入 我们刚刚创建的 Redux store ，在你的 <App> 周围放置一个 <Provider>，并将 store 作为 prop 传递：
+一旦 store 创建后，我们可以使它为我们的 React 组件可用，将 React-Redux `<Provider>` 放置在 `src/index.js` 中的应用周围。引入 我们刚刚创建的 Redux store ，在你的 `<App>` 周围放置一个 `<Provider>`，并将 store 作为 prop 传递：
 
 ```js title="index.js"
 import React from 'react'
