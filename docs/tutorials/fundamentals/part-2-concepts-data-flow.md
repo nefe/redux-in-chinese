@@ -33,15 +33,15 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ```jsx
 function Counter() {
-  // State: a counter value
+  // State: 计数器值
   const [counter, setCounter] = useState(0)
 
-  // Action: code that causes an update to the state when something happens
+  // Action: 发生某些事情时导致状态更新的代码
   const increment = () => {
     setCounter(prevCounter => prevCounter + 1)
   }
 
-  // View: the UI definition
+  // View: 定义UI
   return (
     <div>
       Value: {counter} <button onClick={increment}>Increment</button>
@@ -65,7 +65,7 @@ function Counter() {
 
 ![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
 
-然而，当我们有**多个组件需要共享和使用相同state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
+然而，当我们有**多个组件需要共享和使用相同 state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
 
 解决这个问题的一种方法是从组件中提取共享 state，并将其放入组件树之外的一个集中位置。这样，我们的组件树就变成了一个大“view”，任何组件都可以访问 state 或触发 action，无论它们在树中的哪个位置！
 
@@ -204,7 +204,6 @@ function counterReducer(state = initialState, action) {
 ```
 
 Reducer 可以在内部使用任何类型的逻辑来决定新状态应该是什么，如 `if/else`、`switch`、循环等等。
-
 
 <DetailedExplanation title="细节说明：Reducer 名字的来历" >
 
