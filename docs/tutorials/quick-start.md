@@ -12,7 +12,7 @@ sidebar_label: 快速开始
 
 :::
 
-:::info 先决条件
+:::info 预置知识
 
 - 熟悉 [ES6 语法和特性](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - React 术语知识: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
@@ -22,13 +22,13 @@ sidebar_label: 快速开始
 
 ## 介绍
 
-欢迎来到 Redux Toolkit 快速开始教程! **本教程会向你简要介绍 Redux Tookit 并且教你如何开始正确使用它**
+欢迎来到 Redux Toolkit 快速开始教程 ! **本教程会向你简要介绍 Redux Tookit 并且教你如何开始正确使用它**。
 
 ### 如何阅读该教程
 
 本页将聚焦于如何通过 Redux Toolkit 以及你将使用到的主要 APIs 来设置一个 Redux 应用。了解 Redux 是什么，它是如何工作的以及如何使用 Redux Toolkit 的完整示例的说明，[请参阅“教程索引”页面中链接的教程](./tutorials-index.md).
 
-对于本教程，我们假设您将 Redux Toolkit 与 React 一起使用，但您也可以将其与其他 UI 层一起使用。 这些示例是基于[典型的 Create-React-App 文件夹结构](https://create-react-app.dev/docs/folder-structure)所有应用的代码都在 `src` 中，但这些模式可以适应您正在使用的任何项目或文件夹设置。
+对于本教程，我们假设你将 Redux Toolkit 与 React 一起使用，但你也可以将其与其他 UI 库框架一起使用。 这些示例是基于[典型的 Create-React-App 文件夹结构](https://create-react-app.dev/docs/folder-structure)所有应用的代码都在 `src` 中，但这些模式可以适应你正在使用的任何项目或文件夹设置。
 
 [Create-React-App 的 Redux+JS 模版](https://github.com/reduxjs/cra-template-redux)已经配置了相同的项目设置。
 
@@ -44,7 +44,7 @@ npm install @reduxjs/toolkit react-redux
 
 ### 创建一个 Redux Store
 
-创建一个名为 `src/app/store.js` 文件。从 Redux Toolkit 引入 `configureStore` API。我们从创建一个空的 Redux store 开始，并且导出它:
+创建 `src/app/store.js` 文件。从 Redux Toolkit 引入 `configureStore` API。我们从创建一个空的 Redux store 开始，并且导出它:
 
 ```js title="app/store.js"
 import { configureStore } from '@reduxjs/toolkit'
@@ -54,7 +54,7 @@ export default configureStore({
 })
 ```
 
-创建完 Redux store，也自动配置了 Redux DevTools 插件，以便你可以在开发时进行检查 store 。
+上面代码创建了 Redux store ，并且自动配置了 Redux DevTools 扩展 ，这样你就可以在开发时调试 store。
 
 ### 为 React 提供 Redux Store
 
@@ -79,11 +79,11 @@ ReactDOM.render(
 )
 ```
 
-### 创建一个 Redux 状态切片
+### 创建一个 Redux State Slice
 
-添加一个名为 `src/features/counter/counterSlice.js` 的文件。在该文件中从 Redux Toolkit 引入 `createSlice` API。
+创建 `src/features/counter/counterSlice.js` 文件。在该文件中从 Redux Toolkit 引入 `createSlice` API。
 
-创建切片需要一个字符串名称来标识切片、一个初始状态值以及一个或多个定义了该如何更新 state 的 reducer 函数。一旦一个 slice 被创建，我们可以导出生成的 Redux action creators 和整个切片的 reducer 函数。
+创建 slice 需要一个字符串名称来标识切片、一个初始 state 以及一个或多个定义了该如何更新 state 的 reducer 函数。slice 创建后 ，我们可以导出 slice 中生成的 Redux action creators 和 reducer 函数。
 
 Redux 要求[我们通过创建数据副本和更新数据副本，来实现不可变地写入所有状态更新](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow#immutability)。不过 Redux Toolkit `createSlice` 和 `createReducer` 在内部使用 Immer 允许我们[编写“可变”的更新逻辑，变成正确的不可变更新](https://redux.js.org/tutorials/fundamentals/part-8-modern-redux#immutable-updates-with-immer)。
 
@@ -212,4 +212,4 @@ export function Counter() {
 
 ## 下一步是什么
 
-我们建议阅读 [**Redux 核心文档中的“Redux 要点”和“Redux 基础知识”教程**](./tutorials-index.md), 这将使您全面了解 Redux 的工作原理、Redux Toolkit 的作用以及如何正确使用它。
+我们建议阅读 [**Redux 核心文档中的“Redux 要点”和“Redux 基础知识”教程**](./tutorials-index.md), 这将使你全面了解 Redux 的工作原理、Redux Toolkit 的作用以及如何正确使用它。

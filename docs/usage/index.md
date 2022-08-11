@@ -8,7 +8,7 @@ sidebar_label: Usage Guides Index
 
 The Usage Guides section provides practical guidance on how to correctly use Redux in real-world applications, including project setup and architecture, patterns, practices, and techniques.
 
-:::info Prerequisites
+:::info 预置知识
 
 The pages in this category assume you understand the core Redux terms and concepts explained in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md), including actions, reducers, stores, immutability, React-Redux, and async logic.
 

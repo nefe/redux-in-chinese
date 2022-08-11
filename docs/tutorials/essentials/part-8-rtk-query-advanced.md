@@ -16,7 +16,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info Prerequisites
+:::info 预置知识
 
 - Completion of [Part 7](./part-7-rtk-query-basics.md) to understand RTK Query setup and basic usage
 
