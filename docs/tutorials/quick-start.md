@@ -26,7 +26,7 @@ sidebar_label: 快速开始
 
 ### 如何阅读该教程
 
-本页将聚焦于如何通过 Redux Toolkit 以及你将使用到的主要 APIs 来设置一个 Redux 应用。了解 Redux 是什么，它是如何工作的以及如何使用 Redux Toolkit 的完整示例的说明，[请参阅“教程索引”页面中链接的教程](./tutorials-index.md).
+本页将聚焦于如何通过 Redux Toolkit 以及你将使用到的主要 APIs 来设置 Redux 应用。了解 Redux 是什么，它是如何工作的以及如何使用 Redux Toolkit 的完整示例的说明，[请参阅“教程索引”页面中链接的教程](./tutorials-index.md).
 
 对于本教程，我们假设你将 Redux Toolkit 与 React 一起使用，但你也可以将其与其他 UI 库框架一起使用。 这些示例是基于[典型的 Create-React-App 文件夹结构](https://create-react-app.dev/docs/folder-structure)所有应用的代码都在 `src` 中，但这些模式可以适应你正在使用的任何项目或文件夹设置。
 
@@ -42,7 +42,7 @@ sidebar_label: 快速开始
 npm install @reduxjs/toolkit react-redux
 ```
 
-### 创建一个 Redux Store
+### 创建 Redux Store
 
 创建 `src/app/store.js` 文件。从 Redux Toolkit 引入 `configureStore` API。我们从创建一个空的 Redux store 开始，并且导出它:
 
@@ -58,7 +58,7 @@ export default configureStore({
 
 ### 为 React 提供 Redux Store
 
-一旦 store 创建后，我们可以使它为我们的 React 组件可用，将 React-Redux `<Provider>` 放置在 `src/index.js` 中的应用周围。引入 我们刚刚创建的 Redux store ，在你的 `<App>` 周围放置一个 `<Provider>`，并将 store 作为 prop 传递：
+创建 store 后，便可以在 React 组件中使用它。 在 src/index.js 中引入我们刚刚创建的 store , 通过 React-Redux 的 `<Provider>`将 `<App>` 包裹起来,并将 store 作为 prop 传入。
 
 ```js title="index.js"
 import React from 'react'
@@ -79,7 +79,7 @@ ReactDOM.render(
 )
 ```
 
-### 创建一个 Redux State Slice
+### 创建 Redux State Slice
 
 创建 `src/features/counter/counterSlice.js` 文件。在该文件中从 Redux Toolkit 引入 `createSlice` API。
 
@@ -99,7 +99,7 @@ export const counterSlice = createSlice({
     increment: state => {
       // Redux Toolkit 允许我们在 reducers 写 "可变" 逻辑。它
       // 并不是真正的改变状态值，因为它使用了 Immer 库
-      // 可以检测到一个“草稿状态“ 的变化并且基于这些变化生产一个全新的
+      // 可以检测到“草稿状态“ 的变化并且基于这些变化生产全新的
       // 不可变的状态
       state.value += 1
     },
@@ -136,7 +136,7 @@ export default configureStore({
 
 ### 在 React 组件中使用 Redux 状态和操作
 
-现在我们可以使用 React-Redux 钩子让 React 组件与 Redux store 交互。我们可以使用 `useSelector` 从 store 中读取数据，使用 `useDispatch` 派发动作。创建一个包含 `<Counter>` 组件的 `src/features/counter/Counter.js` 文件，然后将该组件导入 `App.js` 并在 `<App>` 中渲染它。
+现在我们可以使用 React-Redux 钩子让 React 组件与 Redux store 交互。我们可以使用 `useSelector` 从 store 中读取数据，使用 `useDispatch` dispatch actions。创建包含 `<Counter>` 组件的 `src/features/counter/Counter.js` 文件，然后将该组件导入 `App.js` 并在 `<App>` 中渲染它。
 
 ```jsx title="features/counter/Counter.js"
 import React from 'react'
@@ -172,29 +172,29 @@ export function Counter() {
 
 现在，每当你点击”递增“和“递减”按钮。
 
-- 对应的 Redux action 会被派发到 store
-- 在计数器切片对应的 reducer 中将看到动作并更新其状态
-- `<Counter>`组件将从 store 中看到新的状态，并使用新数据重新渲染组件。
+- 会 dispatch 对应的 Redux action 到 store
+- 在计数器切片对应的 reducer 中将看到 action 并更新其状态
+- `<Counter>`组件将从 store 中看到新的状态，并使用新数据重新渲染组件
 
 ## 你学到了什么
 
 这是关于如何通过 React 设置和使用 Redux Toolkit 的简要概述。 回顾细节：
 
-:::tip Summary
+:::tip 总结
 
-- **使用`configureStore`创建一个 Redux store**
+- **使用`configureStore`创建 Redux store**
   - `configureStore` 接受 `reducer` 函数作为命名参数
   - `configureStore` 使用的好用的默认设置自动设置 store
 - **为 React 应用程序组件提供 Redux store**
-  - 在你的 `<App />` 周围放置一个 React-Redux `<Provider>` 组件
-  * 传递 Redux store 如 `<Provider store={store}>`
-- **使用 `createSlice` 创建一个 Redux "slice" reducer**
-  - 使用字符串名称、一个初始状态和命名的 reducer 函数调用“createSlice”
+  - 使用 React-Redux `<Provider>` 组件包裹你的 `<App />`
+  - 传递 Redux store 如 `<Provider store={store}>`
+- **使用 `createSlice` 创建 Redux "slice" reducer**
+  - 使用字符串名称、初始状态和命名的 reducer 函数调用“createSlice”
   * Reducer 函数可以使用 Immer 来“改变”状态
   * 导出生成的 slice reducer 和 action creators
 - **在 React 组件中使用 React-Redux `useSelector/useDispatch` 钩子**
   - 使用 `useSelector` 钩子从 store 中读取数据
-  * 使用 `useDispatch` 钩子获取 `dispatch` 函数，并根据需要派发 actions
+  * 使用 `useDispatch` 钩子获取 `dispatch` 函数，并根据需要 dispatch actions
 
 :::
 
