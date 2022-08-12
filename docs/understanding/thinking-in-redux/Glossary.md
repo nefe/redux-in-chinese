@@ -48,16 +48,16 @@ Reducer 是 Redux 之中最重要的概念。
 
 **不要在 reducer 中调用 API 接口请求**
 
-## Dispatch 函数
+## dispatch function
 
 ```js
 type BaseDispatch = (a: Action) => Action
 type Dispatch = (a: Action | AsyncAction) => any
 ```
 
-_dispatching 函数_ (或简言之 _dispatch 函数_) 是一个接收 action 或者[异步 action](#异步-action)作为参数的函数，该函数可以向 store 中分发若干个 action，即可以不分发、分发一个或多个 action。
+_dispatching 函数_ (或简言之 _dispatch function_) 是一个接收 action 或者[异步 action](#异步-action)作为参数的函数，该函数可以向 store 中 dispatch 若干个 action，即可以不 dispatch、dispatch 一个或多个 action。
 
-我们要区分一般的 dispatch 函数以及由 store 实例提供的没有 middleware 的 base [`dispatch`](api/Store.md#dispatch) function。
+我们要区分一般的 dispatch function 以及由 store 实例提供的没有 middleware 的 base [`dispatch`](api/Store.md#dispatch) function。
 
 Base dispatch function **总是**同步地将 action 与上一次从 store 返回的 state 传递给 reducer，然后计算出新的 state。它要求 action 是一个可以被 reducer 消费的普通对象。
 
@@ -90,7 +90,7 @@ type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 
-Middleware 是一个高阶函数，它用来组合[dispatch 函数](#dispatching-function)并返回一个新的 dispatch 函数，通常将[异步 action](#异步-action) 转换成 action。
+Middleware 是一个高阶函数，它用来组合[dispatch function](#dispatching-function)并返回一个新的 dispatch function，通常将[异步 action](#异步-action) 转换成 action。
 
 Middleware 利用复合函数使其可以组合其他函数，可用于记录 action 日志、产生其他诸如变化路由的副作用，或将异步的 API 调用变为一组同步的 action。
 
@@ -123,7 +123,7 @@ Store 就是存储着应用的 state tree 的对象。
 type StoreCreator = (reducer: Reducer, preloadedState: ?State) => Store
 ```
 
-Store creator 是一个创建 Redux store 的函数。就像 dispatch 函数那样，我们必须区分 base store creator 和 store creator，前者是从 Redux 包导出的 [`createStore(reducer, initialState)`](api/createStore.md)，后者是 store enhancer 返回的 store creator。
+Store creator 是一个创建 Redux store 的函数。就像 dispatch function 那样，我们必须区分 base store creator 和 store creator，前者是从 Redux 包导出的 [`createStore(reducer, initialState)`](api/createStore.md)，后者是 store enhancer 返回的 store creator。
 
 ## Store enhancer
 

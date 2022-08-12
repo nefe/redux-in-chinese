@@ -14,6 +14,6 @@ hide_title: false
 
 如果以上还不够糟糕，那想想**前端开发领域里变得越来越普遍的新需求**。作为一名前端开发者，我们可能要最优化更新、服务端渲染，在路由变化之前请求到数据等等。我们要掌管以前从未有过的复杂工作，难免会问一句：[是时候放弃了吗？](https://www.quirksmode.org/blog/archives/2015/07/stop_pushing_th.html) 答案当然是否定的。
 
-复杂度很难降下来，因为 **我们总是混淆了两个概念**，这两个概念对我们来说很难理解：**变化和异步**。我把它们比作[曼妥思和可乐](https://en.wikipedia.org/wiki/Diet_Coke_and_Mentos_eruption)。两者如果分开都是极好的，但是混在一起就是一团糟。有一些库，比如[React](https://facebook.github.io/react) 尝试在视图层面通过禁止异步操作和直接的 DOM 操作来解决这个问题。但美中不足的是 React 把 state 管理这件事情交给了开发者自己，这就是 Redux 的用武之地。
+复杂度很难降下来，因为 **我们总是混淆了两个概念**，这两个概念对我们来说很难理解：**Mutation 和异步**。我把它们比作[曼妥思和可乐](https://en.wikipedia.org/wiki/Diet_Coke_and_Mentos_eruption)。两者如果分开都是极好的，但是混在一起就是一团糟。有一些库，比如[React](https://facebook.github.io/react) 尝试在视图层面通过禁止异步操作和直接的 DOM 操作来解决这个问题。但美中不足的是 React 把 state 管理这件事情交给了开发者自己，这就是 Redux 的用武之地。
 
 跟随 [Flux](https://facebook.github.io/flux)、[CQRS](https://martinfowler.com/bliki/CQRS.html) 和 [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) 的脚步，通过限制更新操作的发生时间和方式，**Redux 试图让 state 的变化变得可预测**。这些限制条件体现在 Redux 的[三大原则](ThreePrinciples.md)中。

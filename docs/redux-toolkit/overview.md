@@ -39,7 +39,7 @@ Redux 核心库是故意设计成非定制化的样子（unopinionated）。怎�
 
 ## 为什么需要使用 Redux Toolkit
 
-通过遵循我们推荐的最佳实践，提供良好的默认行为，捕获错误并让你编写更简单的代码，**React Toolkit** 使得编写好的 Redux 应用程序以及加快开发速度变得更加容易。 Redux 工具包对**所有 Redux 用户都有帮助**，无论技能水平或者经验如何。可以在新项目开始时添加它，也可以在现有项目中将其用作增量迁移的一部分。
+通过遵循我们推荐的最佳实践，提供良好的默认行为，捕获错误并让你编写更简单的代码，**React Toolkit** 使得编写好的 Redux 应用程序以及加快开发速度变得更加容易。 Redux Toolkit 对**所有 Redux 用户都有帮助**，无论技能水平或者经验如何。可以在新项目开始时添加它，也可以在现有项目中将其用作增量迁移的一部分。
 
 请注意，**你不是*必须*用到 Redux Toolkit 才能使用 Redux**。有许多现有的应用使用其他 Redux 封装库，或者**纯手写** Redux 逻辑。**如果你希望使用其他方法，请继续！**
 
@@ -51,11 +51,11 @@ Redux 核心库是故意设计成非定制化的样子（unopinionated）。怎�
 
 Redux Toolkit 包含：
 
-- [`configureStore()`](https://redux-toolkit.js.org/api/configureStore)：封装了`createStore`，简化配置项，提供一些现成的默认配置项。它可以自动组合切片 slice 的 reducer，可以添加任何 Redux 中间件，默认情况下包含 `redux-thunk`，并开启了 Redux DevTools 扩展。
-- [`createReducer()`](https://redux-toolkit.js.org/api/createReducer) 让你自动做 action type 到 reducer 的对应，而不是编写 switch...case 语句。另外，它会自动使用 [`immer` 库](https://github.com/immerjs/immer)来让你使用普通的 mutable 代码编写更简单的 immutable 更新，例如 `state.todos[3].completed = true`。
+- [`configureStore()`](https://redux-toolkit.js.org/api/configureStore)：封装了`createStore`，简化配置项，提供一些现成的默认配置项。它可以自动组合 slice 的 reducer，可以添加任何 Redux 中间件，默认情况下包含 `redux-thunk`，并开启了 Redux DevTools 扩展。
+- [`createReducer()`](https://redux-toolkit.js.org/api/createReducer) 帮你将 action type 映射到 reducer 函数，而不是编写 switch...case 语句。另外，它会自动使用 [`immer` 库](https://github.com/immerjs/immer)来让你使用普通的 mutable 代码编写更简单的 immutable 更新，例如 `state.todos[3].completed = true`。
 - [`createAction()`](https://redux-toolkit.js.org/api/createAction) 生成给定 action type 字符串的 action creator 函数。该函数本身已定义了 `toString()`，因此可以代替常量类型使用。
-- [`createSlice()`](https://redux-toolkit.js.org/api/createSlice) 接受一组 reducer 函数的对象，一个 slice 切片名和初始状态 initial state，并自动生成具有相应 action creator 和 action type 的 slice reducer。
-- [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk): 接受一个 action type 字符串和一个返回值为 promise 的函数, 并生成一个 thunk 函数 ，这个 thunk 函数可以基于之前那个 promise， dispatch 一组 type 为 `pending/fulfilled/rejected` 的 action。
+- [`createSlice()`](https://redux-toolkit.js.org/api/createSlice) 接收一组 reducer 函数的对象，一个 slice 切片名和初始状态 initial state，并自动生成具有相应 action creator 和 action type 的 slice reducer。
+- [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk): 接收一个 action type 字符串和一个返回值为 promise 的函数, 并生成一个 thunk 函数，这个 thunk 函数可以基于之前那个 promise ，dispatch 一组 type 为 `pending/fulfilled/rejected` 的 action。
 - [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter): 生成一系列可复用的 reducer 和 selector，从而管理 store 中的规范化数据。
 - [`createSelector`](https://redux-toolkit.js.org/api/createSelector) 来源于 [Reselect](https://github.com/reduxjs/reselect) 库，重新 export 出来以方便使用。
 

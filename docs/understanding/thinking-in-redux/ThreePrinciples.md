@@ -57,7 +57,7 @@ store.dispatch({
 
 **为了描述 action 如何改变 state tree，你需要编写纯的 [reducers](./Glossary.md#reducer)。**
 
-Reducer 是纯函数，它接收之前的 state 和 action，并返回新的 state。记住，一定要返回一个新的对象，而不是修改之前的 state。你一开始可以只有单个 reducer，但随着应用的增长，你可以把大的 redercer 划分为一个个小的 reducers，分别管理着 state tree 的不同部分。由于 reducer 只是函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来处理一些通用任务，如分页器。
+Reducer 是纯函数，它接收之前的 state 和 action，并返回新的 state。记住，一定要返回一个新的对象，而不是修改之前的 state。你一开始可以只有单个 reducer，但随着应用复杂度的增长，你可以把大的 reducer 划分为一个个小的 reducers，分别管理着 state tree 的不同部分。由于 reducer 只是函数，你可以控制它们被调用的顺序，传入附加数据，甚至编写可复用的 reducer 来处理一些通用任务，如分页器。
 
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
