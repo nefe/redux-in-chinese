@@ -6,9 +6,9 @@ hide_title: false
 
 # API 参考
 
-Redux 的 API 非常少。Redux定义了一系列的约定（contract）来供你实现（例如 [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)），同时提供了少量的辅助函数来把这些约定整合到一起。
+Redux 的 API 非常少。Redux 为你定义了一系列的约定（例如 [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)），同时提供了少量的辅助函数来把这些约定整合到一起。
 
-这一章节会介绍所有的 Redux API。记住，Redux 只关心如何管理 state。在实际的项目中，你还需要使用 UI 绑定库如 [react-redux](https://github.com/gaearon/react-redux)。
+这一章会介绍所有的 Redux API。记住，Redux 只关心如何管理 state。在实际的项目中，你还需要使用如 [react-redux](https://github.com/gaearon/react-redux)这样的 UI 绑定库。
 
 ### 顶级暴露的方法
 

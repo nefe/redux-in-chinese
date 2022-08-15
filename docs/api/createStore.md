@@ -14,7 +14,7 @@ description: 'API > createStore: creating a core Redux store'
 
 #### 参数
 
-1. `reducer` _(Function)_: 一个返回下一个 [state 树](../understanding/thinking-in-redux/Glossary.md#state) 的 [reducing 函数](../understanding/thinking-in-redux/Glossary.md#reducer) ,给定当前 state 树和要处理的 [action](../understanding/thinking-in-redux/Glossary.md#action).
+1. `reducer` _(Function)_: 接收两个参数，分别是当前的 state 树和要处理的 [action](../understanding/thinking-in-redux/Glossary.md#action)，返回新的 [state 树](../understanding/thinking-in-redux/Glossary.md#state)。
 
 2. [`preloadedState`] _(any)_: 初始时的 state。你可以决定是否把服务端传来的 state 水合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 [`combineReducers`](combineReducers.md) 创建 `reducer`，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 `reducer` 可理解的内容。
 

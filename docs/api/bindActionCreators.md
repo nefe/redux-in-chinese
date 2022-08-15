@@ -15,7 +15,7 @@ description: 'API > bindActionCreators: wrapping action creators for dispatching
 
 惟一会使用到 `bindActionCreators` 的场景是当你需要把 action creator 往下传到一个组件上，却不想让这个组件觉察到 Redux 的存在，而且不希望把 [`dispatch`](Store.md#dispatchaction) 或 Redux store 传给它。
 
-为方便起见，你也可以传入一个 action creator 作为第一个参数，并且得到一个 dispatch 包装函数作为返回值。
+为方便起见，你也可以传入 action creator 作为第一个参数，并且得到一个 dispatch 函数作为返回值。
 
 #### 参数
 
@@ -84,10 +84,10 @@ function TodoListContainer(props) {
     // 注意： 这不起作用:
     // TodoActionCreators.addTodo('Use Redux')
 
-    // 你只是在调用一个创建 action 的函数.
-    // 你也必须 dispatch 一个 action!
+    // 你只是在调用一个创建 action 的函数。
+    // 你也必须同时 dispatch 一个 action！
 
-    // 这将起作用:
+    // 这将起到作用:
     let action = TodoActionCreators.addTodo('Use Redux')
     dispatch(action)
   }, [])
@@ -106,6 +106,6 @@ export default connect(state => ({ todos: state.todos }))(TodoListContainer)
 
 #### 小贴士
 
-- 你或许会问：为什么不直接把 action creator 绑定到 store 实例上，就像传统的 Flux 那样？问题在于，这对于需要在服务端进行渲染的同构应用会有问题。多数情况下，你的每个请求都需要一个独立的 store 实例，这样你可以为它们提供不同的数据，但是在定义的时候绑定 action creator，你就只能使用一个唯一的 store 实例来对应所有请求了。
+- 你或许要问：为什么不直接把 action creator 绑定到 store 实例上，就像传统的 Flux 那样？问题在于，这对于需要在服务端进行渲染的同构应用会有问题。多数情况下，你的每个请求都需要一个独立的 store 实例，这样你可以为它们提供不同的数据，但是如果在定义的时候绑定 action creator，你就只能使用一个唯一的 store 实例来对应所有请求了。
 
 - 如果你使用 ES5，无法使用 `import * as` 语法，你可以把 `require('./TodoActionCreators')` 作为第一个参数传给 `bindActionCreators`。惟一要注意的是作为 `actionCreators` 参数的对象，它的 value 需要是函数。模块系统并不重要。
