@@ -27,7 +27,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ### 如何阅读本教程
 
-**本教程会教你 “Redux 的工作原理”**，以及 _为什么_ 有这些模式的存在。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
+**本教程会教你 “Redux 的工作原理”**，以及 _为什么_ 需要有这些模式。温馨提示 - 学习概念不同于在实际应用程序中将其付诸实践。
 
 **初始代码会没有我们在实际应用中推荐的写法那么简洁**，但是不用语法糖（long-hand）的写法是学习的最佳方式。当你理解了所有部分是如何组合在一起的，我们再来用 Redux Toolkit 去简化代码。**Redux Toolkit 是我们推荐的在生产应用中使用 Redux 的方式**，建立在我们将在教程中介绍的所有概念之上。一旦你理解了教程中涵盖的核心概念，你会知道怎样更有效地使用 Redux Toolkit。
 
@@ -199,7 +199,7 @@ Action 始终具有 `type` 字段，该字段的值是你提供的字符串，�
 现在我们有了一个 reducer 函数，我们可以通过调用 Redux 库 `createStore` API 来创建一个 **store** 实例。
 
 ```js
-// 通过 createStore 方法创建一个新的 Redux，
+// 通过 createStore 方法创建一个新的 Redux store，
 // 使用 counterReducer 进行更新逻辑
 const store = Redux.createStore(counterReducer)
 ```

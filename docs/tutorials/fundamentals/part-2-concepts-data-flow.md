@@ -325,7 +325,7 @@ console.log(currentValue)
 
 ### 使用 Reducer 纯函数进行更改
 
-若要指定如何基于 action 更新状态树，请编写 **reducer** 函数。Reducers 是纯函数，它们采用旧 state 和 action，并返回新 state。与任何其他函数一样，你可以将 Reducer 拆分为较小的函数以帮助完成工作，或者为常见任务编写可重用的 Reducer。
+若要指定如何基于 action 更新状态树，请编写 **reducer** 函数。Reducers 是纯函数，它接收旧 state 和 action，并返回新 state。与任何其他函数一样，你可以将 Reducer 拆分为较小的函数以帮助完成工作，或者为常见任务编写可重用的 Reducer。
 
 ## Redux 数据流
 
