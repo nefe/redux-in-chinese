@@ -188,7 +188,7 @@ const todoAppState = {
 
 **Actions** 是具有 `type` 字段的普通 JavaScript 对象。如前所述，**你可以将 actions 视为描述应用程序中所发生的事情**。
 
-就像我们根据应用程序的需求设计 state 结构一样，我们也应该能够列出一些描述正在发生的事情的 actions 列表：
+以下是列出的一些 actions 列表，他们描述所发生的事情：
 
 - 根据用户输入的文本添加新的待办事项条目
 - 切换待办事项的完成状态
@@ -200,9 +200,9 @@ const todoAppState = {
 - 添加新的滤色器
 - 移除滤色器
 
-我们通常会将描述该领域正在发生的事情所需的任何额外数据放入其中 `action.payload`。这可以是一个数字、一个字符串或一个内部包含多个字段的对象。
+我们通常会将描述该领域正在发生的事情所需的任何额外数据放入 `action.payload` 中；这可以是一个数字、一个字符串或一个内部包含多个字段的对象。
 
-Redux 存储并不关心该 `action.type` 字段的实际文本是什么。但是，你的代码将查看 `action.type` 以判断是否需要更新。此外，你会在调试时经常查看 Redux DevTools 拓展中的 actions 类型字符串，以了解你的应用程序中发生了什么。因此，请选择能够清楚地描述正在发生事情的 actions 类型 - 当你稍后查看它们时会更容易理解它们！
+Redux store 并不关心该 `action.type` 字段的实际文本是什么。但是，你的代码将查看 `action.type` 以判断是否需要更新。此外，你会在调试时经常查看 Redux DevTools 拓展中的 actions 类型字符串，以了解你的应用程序中发生了什么。因此，请选择能够清楚地描述正在发生事情的 actions 类型 - 当你稍后查看它们时会更容易理解它们！
 
 基于可能发生的事情列表，可以创建应用程序将使用的 actions 列表：
 
@@ -248,7 +248,7 @@ const initialState = {
 
 // 使用 initialState 作为默认值
 export default function appReducer(state = initialState, action) {
-  // reducer 通常会查看 action type 字段来决定发生什么
+  // reducer 通常会根据 action type 字段来决定发生什么
   switch (action.type) {
     // 根据不同 type 的 action 在这里做一些事情
     default:
