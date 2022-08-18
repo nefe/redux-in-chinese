@@ -391,7 +391,7 @@ export const NotificationsList = () => {
   const users = useSelector(selectAllUsers)
 
   // highlight-start
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(allNotificationsRead())
   })
   // highlight-end
