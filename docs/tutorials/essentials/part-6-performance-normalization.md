@@ -152,7 +152,7 @@ export const fetchNotifications = createAsyncThunk(
     const response = await client.get(
       `/fakeApi/notifications?since=${latestTimestamp}`
     )
-    return response.notifications
+    return response.data
   }
 )
 
