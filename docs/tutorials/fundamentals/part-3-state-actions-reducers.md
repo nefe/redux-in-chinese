@@ -14,19 +14,19 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 - 如何定义包含应用数据的 state
 - 如何定义描述你的应用程序中发生事情的 action 对象
-- 如何编写基于现有状态和动作计算更新状态的 reducer 函数
+- 如何编写基于现有 state 和 action 计算更新状态的 reducer 函数
 
 :::
 
 :::info 预置知识
 
-- 熟悉 Redux 的关键术语和概念，如 “ actions ” 、 “ reducers ” 、“ store ” 和 “ dispatching ”。（有关这些术语的解释，请参阅 **[第 2 部分：Redux 概念和数据流。](./part-2-concepts-data-flow.md)** )
+- 熟悉 Redux 的关键术语和概念，如 actions、reducers、 store 和 dispatching 。（有关这些术语的解释，请参阅 **[第 2 部分：Redux 概念和数据流。](./part-2-concepts-data-flow.md)** )
 
 :::
 
 ## 简介
 
-在 [第 2 部分：Redux 概念和数据流](./part-2-concepts-data-flow.md)中，我们研究了 Redux 如何通过放置全局程序状态的单一位置来帮助我们构建可维护的应用程序。我们还讨论了 Redux 的核心概念，例如调度 action 对象和使用返回新状态值的 reducer 函数。
+在[第 2 部分：Redux 概念和数据流](./part-2-concepts-data-flow.md)中，研究了 Redux 如何通过放置全局程序状态的单一位置来帮助我们构建可维护的应用程序。还讨论了 Redux 的核心概念，例如调度 action 对象和使用返回新状态值的 reducer 函数。
 
 现在你已经对这部分有所了解，是时候将这些知识付诸实践了。我们将构建一个小型示例应用，来了解这些模块是如何协同工作。
 
@@ -38,9 +38,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ### 项目设置
 
-对于本教程，我们创建了一个预配置的启动项目，该项目已经设置了 React，包括一些默认样式，并且有一个假 REST API，允许我们在应用程序中编写实际的 API 请求。你将以此作为编写实际应用程序代码的基础。
+对于本教程，我们创建了一个预配置的启动项目，该项目已经设置了 React，包括一些默认样式，并且有一个假 REST API，允许在应用程序中编写实际的 API 请求。将以此作为编写实际应用程序代码的基础。
 
-首先，你可以打开 and fork this CodeSandbox：
+首先，你可以打开并 fork CodeSandbox：
 
 <iframe
   class="codesandbox"
@@ -50,22 +50,22 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-你也可以[从这个 Github repo 克隆这个项目](https://github.com/reduxjs/redux-fundamentals-example-app)。 克隆 repo 后，可以运行 `npm install` 和 `npm start`。
+也可以[从这个 Github repo 克隆这个项目](https://github.com/reduxjs/redux-fundamentals-example-app)。克隆 repo 后，可以运行 `npm install` 和 `npm start`。
 
-如果你想查看最终版本，你可以查看[分支 **`tutorial-steps`**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps)，或[查看此 CodeSandbox 中的最终版本](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps)。
+如果你想查看最终版本，可以查看[分支 **`tutorial-steps`**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps)，或[查看此 CodeSandbox 中的最终版本](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps)。
 
 #### 创建一个新的 Redux + React 项目
 
-完成本教程后，你可能想要尝试进行自己的项目。**我们建议使用[Create-React-App 的 Redux 模版](https://github.com/reduxjs/cra-template-redux)作为创建新的 Redux + React 项目的最快方式**。 它附带 Redux Toolkit 和 React-Redux ，使用[你在第 1 部分中看到的 “ 计数器 ” 应用程序示例的最新版本](./part-1-overview.md)。你可以直接开始编写实际的应用程序代码，无需添加 Redux 包和设置 Store。
+完成本教程后，你可能想要尝试进行自己的项目。**我们建议使用[Create-React-App 的 Redux 模版](https://github.com/reduxjs/cra-template-redux)作为创建新的 Redux + React 项目的最快方式**。 它附带 Redux Toolkit 和 React-Redux，使用[你在第 1 部分中看到的 “ 计数器 ” 应用程序示例的最新版本](./part-1-overview.md)。你可以直接开始编写实际的应用程序代码，无需添加 Redux 包和设置 Store。
 
-如果你想了解如何将 Redux 添加到项目中的具体细节，请参阅以下说明：
+如果想了解如何将 Redux 添加到项目中的具体细节，请参阅以下说明：
 
 <DetailedExplanation title="详解：将 Redux 添加到 React 项目">
 
-CRA 的 Redux 模板附带 Redux Toolkit 和已配置的 React-Redux。如果你想从头开始设置新项目，请按照以下步骤操作：
+CRA 的 Redux 模板附带 Redux Toolkit 和已配置的 React-Redux。如果想从头开始设置新项目，请按照以下步骤操作：
 
 - 添加 `@reduxjs/toolkit` 和 `react-redux` 包
-- 使用 RTK 的 API 创建 Redux 存储 `configureStore`， 并传入至少一个 reducer 函数
+- 使用 RTK 的 API 创建 Redux 存储 `configureStore`，并传入至少一个 reducer 函数
 - 将 Redux Store 导入应用程序的入口文件（例如 `src/index.js`)
 - 用 React-Redux 中的组件 `<Provider>` 包装你的根 React 组件，例如：
 
@@ -73,7 +73,7 @@ CRA 的 Redux 模板附带 Redux Toolkit 和已配置的 React-Redux。如果你
 ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>，
+  </Provider>,
   document.getElementById('root')
 )
 ```
@@ -82,26 +82,26 @@ ReactDOM.render(
 
 #### 探究初始项目
 
-这个初始项目基于[标准的 Create-React-App](https://create-react-app.dev/docs/getting-started) 项目模版， 并进行了一些修改。
+这个初始项目基于[标准的 Create-React-App](https://create-react-app.dev/docs/getting-started) 项目模版，并进行了一些修改。
 
-让我们快速看一下初始项目包含的内容：
+初始项目包含的内容：
 
 - `/src`
   - `index.js`: 应用程序的入口文件。呈现 `<App>` 组件。
   - `App.js`: 主要的应用程序组件。
   - `index.css`: 完整应用程序的样式。
   - `/api`
-    - `client.js`: 一个小型的 AJAX 请求客户端，允许我们发出 GET 和 POST 请求。
+    - `client.js`: 一个小型的 AJAX 请求客户端，可以发出 GET 和 POST 请求。
     - `server.js`: 为数据提供一个虚假的 REST API。稍后会从这些假端点获取数据。
   - `/exampleAddons`: 包含一些额外的 Redux 插件，将在教程后面使用它们来展示事情是如何工作的。
 
-如果你现在运行，你应该会看到一条欢迎消息，但应用程序的其余部分是空的。
+运行程序，将会看到一条欢迎消息，但应用程序的其余部分是空的。
 
 有了这个，让我们开始吧！
 
 ## 启动 Todo 示例应用程序
 
-示例应用程序是一个小型 “ 待办事项 ” 应用程序。可能之前你已经看过 todo 应用程序示例 - 它是很好的示例，因为它展示了在一个正常的应用程序中如何执行诸如跟踪项目列表、处理用户输入以及在数据更改时更新 UI 等所有事情。
+示例应用程序是一个小型“待办事项”应用程序。可能之前你已经看过 todo 应用程序示例 - 它展示了在一个正常的应用程序中如何执行诸如跟踪项目列表、处理用户输入以及在数据更改时更新 UI 等所有事情。
 
 ### 定义要求
 
@@ -111,14 +111,14 @@ ReactDOM.render(
   - 一个输入框，让用户输入新待办事项的文本
   - 所有现有待办事项的列表
   - 页脚部分，显示未完成的待办事项数量，并显示过滤选项
-- 待办事项列表项应该有一个复选框来切换它们的 “ 完成 ” 状态。我们还应该能够为预定义的颜色列表添加颜色编码的类别标签，并删除待办事项。
-- 计数器应该复数活动待办事项的数量：“ 0 个项目 ”、“ 1 个项目 ”、“ 3 个项目 ” 等
+- 待办事项列表项应该有一个复选框来切换“完成”状态。还应该能够为预定义的颜色列表添加颜色编码的类别标签，并删除待办事项。
+- 计数器应该复数活动待办事项的数量：“0 个项目”、“1 个项目”、“3 个项目”等
 - 应该有按钮将所有待办事项标记为已完成，并通过删除它们来清除所有已完成的待办事项
 - 应该有两种方法可以过滤列表中显示的待办事项：
-  - 基于显示 “ All ”、“ Active ” 和 “ Completed ” 待办事项进行过滤
+  - 基于显示 All 、 Active 和 Completed 待办事项进行过滤
   - 基于选择一种或多种颜色进行过滤，并显示标签与这些颜色匹配的任何待办事项
 
-稍后我们将添加更多需求，但这足以让我们开始。
+稍后将添加更多需求。
 
 最终目标是一个应该如下所示的应用程序：
 
@@ -126,44 +126,44 @@ ReactDOM.render(
 
 ### 设计 State
 
-React 和 Redux 的核心原则之一是 **你的 UI 应该基于你的 state**。因此，设计应用程序的一种方法是首先考虑描述应用程序工作所需的所有状态。尝试使用尽可能少的 state 来描述你的 UI 也是一个好主意，这样你需要跟踪和更新的数据更少。
+React 和 Redux 的核心原则之一是 **UI 应该基于 state**。因此，设计应用程序的一种方法是首先考虑描述应用程序工作所需的所有状态。尝试使用尽可能少的 state 来描述 UI，这样需要跟踪和更新的数据更少。
 
-从概念上讲，此应用程序有两个主要方面：
+从概念上讲，此应用程序有两个主要功能：
 
 - 当前待办事项的实际列表
 - 当前的过滤选项
 
-我们还需要跟踪用户在 “ 添加待办事项 ” 输入框中输入的数据，但这并不重要，我们稍后会处理。
+还需要跟踪用户在“添加待办事项”输入框中输入的数据，但这并不重要，稍后会处理。
 
 对于每个待办事项，我们需要存储一些信息：
 
 - 用户输入的文本
-- 表示是否完成的 boolean 标志
+- 表示是否完成的布尔值
 - 唯一的 ID 值
 - 颜色类别（如果已选择）
 
-我们的过滤行为可能可以用一些枚举值来描述：
+过滤行为可能可以用一些枚举值来描述：
 
-- 已完成状态：“ 全部（All）”、“ 活动（Active）” 和 “ 已完成（Completed）”
+- 已完成状态：“全部（All）”、“活动（Active）” 和 “已完成（Completed）”
 - 颜色：” Red “、“ Yellow ”、“ Green ”、“ Blue ”、“ Orange ”、“ Purple ”
 
-查看这些值，可以说待办事项是 “ app state ”（ 应用程序使用的核心数据 ），而过滤值是 “ UI state ”（ 描述应用程序当前正在执行的操作的状态 ）。考虑这些不同种类的类别有助于理解不同的状态是如何被使用的。
+查看这些值，可以说待办事项是 “app state”（ 应用程序使用的核心数据 ），而过滤值是 “ UI state ”（ 描述应用程序当前正在执行的操作的状态 ）。考虑这些不同种类的类别有助于理解不同的状态是如何被使用的。
 
 ### 设计 State 结构
 
-使用 Redux，**我们的应用程序状态始终保存在纯 JavaScript 对象和数组**中. 这意味着你不能将其他东西放入 Redux 状态 - 没有类实例、内置 JS 类型（如// Map、函数或任何其他非纯 JS 数据）
+使用 Redux，**我们的应用程序状态始终保存在纯 JavaScript 对象和数组**中. 这意味着你不能将其他东西放入 Redux 状态 - 不要有类实例、内置 JS 类型（如 ’Map‘、’Set‘、‘Promise’、‘Date’、函数或任何其他非普通 JS 数据）
 
-**根 Redux 状态值经常作为一个普通的 JS 对象**，其中嵌套了其他数据。
+**Redux 根结点 state 通常作为一个普通 JS 对象**，其中嵌套了其他数据。
 
 基于这些信息，现在应该能够描述需要在 Redux 状态中拥有值的种类：
 
 - 首先，需要一个待办事项对象数组。每个项目都应具有以下字段：
   - `id`: 唯一编号
   - `text`: 用户输入的文本
-  - `completed`: 一个 boolean 标志
+  - `completed`: 一个布尔值
   - `color`: 可选的颜色类别
 - 然后，需要描述的过滤选项：
-  - 当前 “ 已完成 ” 过滤器值
+  - 当前“已完成”过滤器值
   - 当前选定颜色类别的数组
 
 因此，以下是应用程序状态的示例：
@@ -182,11 +182,11 @@ const todoAppState = {
 }
 ```
 
-需要注意的是**在 Redux 之外有其他状态值也是可以的！**. 到目前为止，这个示例足够小，我们确实将所有状态都保存在 Redux 中，但是正如稍后将看到的，某些数据是不需要保存在 Redux 中（例如 “ 这个下拉列表是否打开 ？” 或 “ 表单输入的当前值 ” ）。
+需要注意的是**在 Redux 之外有其他状态值也是可以的！**到目前为止，这个示例足够小，我们确实将所有状态都保存在 Redux 中，但是正如稍后将看到的，某些数据是不需要保存在 Redux 中（例如 “ 这个下拉列表是否打开 ？” 或 “ 表单输入的当前值 ” ）。
 
 ### 设计 Actions
 
-**Actions** 是具有 `type` 字段的纯 JavaScript 对象。如前所述，**你可以将 actions 视为描述应用程序中所发生的事情**。
+**Actions** 是具有 `type` 字段的普通 JavaScript 对象。如前所述，**你可以将 actions 视为描述应用程序中所发生的事情**。
 
 就像我们根据应用程序的需求设计 state 结构一样，我们也应该能够列出一些描述正在发生的事情的 actions 列表：
 
@@ -196,7 +196,7 @@ const todoAppState = {
 - 删除待办事项
 - 将所有待办事项标记为已完成
 - 清除所有已完成的待办事项
-- 选择不同的 “ 已完成 ” 过滤器值
+- 选择不同的 “已完成” 过滤器值
 - 添加新的滤色器
 - 移除滤色器
 
@@ -204,7 +204,7 @@ const todoAppState = {
 
 Redux 存储并不关心该 `action.type` 字段的实际文本是什么。但是，你的代码将查看 `action.type` 以判断是否需要更新。此外，你会在调试时经常查看 Redux DevTools 拓展中的 actions 类型字符串，以了解你的应用程序中发生了什么。因此，请选择能够清楚地描述正在发生事情的 actions 类型 - 当你稍后查看它们时会更容易理解它们！
 
-基于可能发生的事情列表，我们可以创建我们的应用程序将使用的 actions 列表：
+基于可能发生的事情列表，可以创建应用程序将使用的 actions 列表：
 
 - `{type: 'todos/todoAdded', payload: todoText}`
 - `{type: 'todos/todoToggled', payload: todoId}`
@@ -215,23 +215,23 @@ Redux 存储并不关心该 `action.type` 字段的实际文本是什么。但�
 - `{type: 'filters/statusFilterChanged', payload: filterValue}`
 - `{type: 'filters/colorFilterChanged', payload: {color, changeType}}`
 
-在这种情况下，actions 主要有一个额外的数据，所以我们可以直接把它放在 `action.payload` 字段中。我们可以将滤色器 action 拆分为两个 actions ，一个用于 “ 添加 ”，一个用于 “ 移除 ”，但在这种情况下，我们将作为一个 action 执行，其中包含一个额外的字段，可以将对象作为一个 action payload 用于区分。
+actions 主要有一个额外的数据，所以可以直接把它放在 `action.payload` 字段中。我们可以将滤色器 action 拆分为两个 actions ，一个用于 “ 添加 ”，一个用于 “ 移除 ”；也可以作为一个 action 执行，其中包含一个额外的字段，可以将对象作为一个 action payload 用于区分。
 
 像 state 数据一样，**actions 应该包含描述所发生情况所需的最少信息**.
 
 ## 编写 Reducers
 
-现在明白了 state 结构和 action 是什么样的，是时候编写第一个 reducer。
+现在明白了 state 结构和 action 是什么样的，开始编写第一个 reducer。
 
 **Reducers** 是接收当前的 `state` 和 `action` 作为参数并返回新的 `state` 结果的函数。也就是， **`(state, action) => newState`**.
 
 ### 创建根 Reducer
 
-**Redux 应用程序实际上只有一个 reducer 函数：** 稍后你将传递给的 “ root reducer ” 函数 `createStore`。那个根 reducer 函数负责处理所有被调度的 actions，并计算每次的整个新 state 结果应该是什么。
+**Redux 应用程序实际上只有一个 reducer 函数：** 将“ root reducer ”传递给 `createStore` 函数。那个根 reducer 函数负责处理所有被调度的 actions，并计算每次所有的新 state 结果。
 
-让我们首先在 `src` 文件夹中创建一个 `reducer.js` 文件， 旁边是 `index.js` 和 `App.js`.
+让我们首先在 `src` 文件夹中创建一个 `reducer.js` 文件， 同级是 `index.js` 和 `App.js`.
 
-每个 reducer 都需要一些初始状态，所以我们将添加一些虚假的 todo 条目来帮助我们开始。然后，我们可以为 reducer 函数内部的逻辑写一个大纲：
+每个 reducer 都需要一些初始状态，所以将添加一些模拟的 todo 条目来帮助我们开始。然后，可以为 reducer 函数内部的逻辑写一个大纲：
 
 ```js title="src/reducer.js"
 const initialState = {
@@ -246,24 +246,23 @@ const initialState = {
   }
 }
 
-// 使用初始化状态值作为默认值
+// 使用 initialState 作为默认值
 export default function appReducer(state = initialState, action) {
   // reducer 通常会查看 action type 字段来决定发生什么
   switch (action.type) {
     // 根据不同 type 的 action 在这里做一些事情
     default:
-      // 如果这个 reducer 不能识别 action type ，或者没有
-      // 关心这个具体 action，原样返回现有 state
+      // 如果这个 reducer 不关心这个 action type，会返回原本的state
       return state
   }
 }
 ```
 
-初始化应用程序时，可以设置 `undefined` 作为初始状态值。如果发生这种情况，我们需要提供一个初始状态值，以便其余的 reducer 代码可以使用。**Reducers 通常使用 ES6 默认参数语法来提供初始状态：`(state = initialState, action)`**。
+Reducers 在初始化时如果未传值其值为 `undefined`，可以提供一个默认参数，以便后续代码可以使用。**Reducers 通常使用 ES6 默认参数语法来提供初始状态：`(state = initialState, action)`**。
 
-接下来，让我们添加处理 `'todos/todoAdded'` action 的逻辑。
+接下来，添加处理 `'todos/todoAdded'` action 的逻辑。
 
-我们首先需要检查当前 action 的类型是否与该特定字符串匹配。然后，我们需要返回一个包含所有状态的新对象，即使是那些没有改变的字段。
+首先需要根据当前 action 的类型是否与该特定字符串匹配。然后，需要返回一个包含所有状态的新对象，即使是那些没有改变的字段。
 
 ```js title="src/reducer.js"
 function nextTodoId(todos) {
@@ -275,8 +274,7 @@ function nextTodoId(todos) {
 export default function appReducer(state = initialState, action) {
   // reducer 通常会查看 action type 字段来决定发生什么
   switch (action.type) {
-    // Do something here based on the different types of actions
-    // 根据不同 type 的 action ，在这做一些事
+    // 根据不同 type 的 action ，进入不同的操作
     // highlight-start
     case 'todos/todoAdded': {
       // 需要返回一个新的 state 对象
@@ -299,8 +297,7 @@ export default function appReducer(state = initialState, action) {
     }
     // highlight-end
     default:
-      // 如果这个 reducer 不能识别 action type ，或者没有
-      // 关心这个具体 action，原样返回现有 state
+      // 如果这个 reducer 不关心这个 action type，会返回原本的state
       return state
   }
 }
@@ -313,8 +310,8 @@ export default function appReducer(state = initialState, action) {
 我们之前说过 **reducer 必须始终遵循一些特殊规则**：
 
 - 应该只根据 `state` 和 `action` 参数计算新的状态值
-- 不允许修改现有的 `state`。 相反，必须通过复制现有值并对复制的值进行更改来进行不可变更新。
-- 不能做任何异步逻辑或其他 " 副作用 "
+- 不允许修改现有的 `state`。相反，必须通过复制现有值并对复制的值进行更改来进行 immutable updates 。
+- 不能做任何异步逻辑或其他 "副作用"
 
 :::tip
 
@@ -329,7 +326,7 @@ export default function appReducer(state = initialState, action) {
 
 :::
 
-任何遵循这些规则的函数也被称为 **" 纯 " 函数**。
+任何遵循这些规则的函数也被称为 **" 纯 " 函数**（普通函数）。
 
 但为什么这些规则很重要？有几个不同的原因：
 
@@ -357,17 +354,17 @@ state.value = 123
 
 在 Redux 中不能改变状态有几个原因：
 
-- 会导致错误，例如 UI 无法正确更新以显示最新值
+- 会导致错误，例如 UI 无法正确更新显示最新值
 - 这使得更难理解为什么以及如何更新状态
 - 使编写测试变得更加困难
 - 破坏了正确使用“时间旅行调试”的能力
 - 违背了 Redux 的预期精神和使用模式
 
-那么如果我们不能改变原始 state ，我们如何返回一个更新的 state 呢？
+那么如果不能改变原始 state ，那么如何返回一个更新的 state 呢？
 
 :::tip
 
-**Reducers 只能 _复制_ 原始值，然后他们可以改变这些副本。**
+**Reducers 只能 _复制_ 原始值，可以改变这些副本。**
 
 ```js
 // ✅ 做了复制，所以是安全的
@@ -379,11 +376,11 @@ return {
 
 :::
 
-我们可以[手动编写不可变更新](./part-2-concepts-data-flow.md#immutability)，通过使用 JavaScript 的数组/对象扩展运算符和其他返回原始值副本的函数。
+我们可以[手动编写 immutable updates](./part-2-concepts-data-flow.md#immutability)，通过使用 JavaScript 的数组/对象扩展运算符和其他返回原始值副本的函数。
 
 当数据嵌套时，这变得更加困难。**Immutable Updates 的一个关键规则是，你必须复制需要更新的每一层嵌套**。
 
-但是，如果你认为 “ 以这种方式手动编写不可变更新看起来很难记住和正确执行 ” ......啊对对对！:)
+但是，如果你认为 “ 以这种方式手动编写 immutable updates 看起来很难记住和正确执行 ” ......啊对对对！:)
 
 手工编写不可变的更新逻辑很困难，并且**在 reducer 中意外改变状态是 Redux 用户最常犯的一个错误**。
 
@@ -394,7 +391,7 @@ return {
 
 ### 处理附加 Actions
 
-考虑到这一点，让我们为更多案例添加 reducer 逻辑。首先，根据 ID 切换待办事项的 “ 已完成 ” 字段:
+考虑到这一点，给更多案例添加 reducer 逻辑。首先，根据 ID 切换待办事项的 “ 已完成 ” 字段:
 
 ```js title="src/reducer.js"
 export default function appReducer(state = initialState, action) {
@@ -494,21 +491,21 @@ export default function appReducer(state = initialState, action) {
 }
 ```
 
-我们只处理了 3 个动作，但这已经有点长了。如果我们尝试处理这个 reducer 函数中的每一个 action，那么将很难阅读所有内容。
+只处理了 3 个动作，但已经有点长了。如果尝试处理这个 reducer 函数中的每一个 action，那么将很难阅读所有内容。
 
 这就是为什么 **reducer 通常被拆分为多个较小的 reducer 函数**的原因 - 以便更容易理解和维护 reducer 逻辑。
 
 ## 拆分 Reducers
 
-作为其中的一部分，**Redux reducer 通常根据更新的 Redux 状态部分进行拆分**。 我们的 todo 应用状态当前有两个顶级部分：`state.todos` 和 `state.filters`。因此，我们可以将大的根 reducer 函数拆分为两个较小的 reducer - `todosReducer` 和 `filtersReducer`。
+作为其中的一部分，**Redux reducer 通常根据更新的 Redux 状态部分进行拆分**。我们的 todo 应用状态当前有两个顶级部分：`state.todos` 和 `state.filters`。因此，可以将大的根 reducer 函数拆分为两个较小的 reducer - `todosReducer` 和 `filtersReducer`。
 
 那么，这些拆分的 reducer 函数应该放在哪里呢？
 
-**我们建议根据 " features "** - （与应用程序的特定概念或区域相关的代码）来组织你的 Redux 应用程序文件夹和文件。**特定功能的 Redux 代码通常编写为单个文件，称为 “ slice ” 文件**，其中包含所有 reducer 逻辑和所有与应用程序状态部分相关的操作代码。
+**建议根据 " features "** - （与应用程序的特定概念或区域相关的代码）来组织 Redux 应用程序文件夹和文件。**特定功能的 Redux 代码通常编写为单个文件，称为 “ slice ” 文件**，其中包含所有 reducer 逻辑和所有与应用程序状态部分相关的操作代码。
 
-因此，**Redux 应用程序状态的特定部分的 redux 称为 “ slice reducer ”**。通常，一些 actions 对象将与特定的 slice reducer 密切相关，因此 action type 字符串应该以该功能的名称（像 `'todos'`）开头，并描述发生的事件 (像 `'todoAdded'`)， 连接在一起成为一个字符串 (`'todos/todoAdded'`).
+因此，**Redux 应用程序状态的特定部分的 redux 称为 “ slice reducer ”**。通常，一些 actions 对象将与特定的 slice reducer 密切相关，因此 action type 字符串应该以该功能的名称（像 `'todos'`）开头，并描述发生的事件 (像 `'todoAdded'`)， 连接在一起成为一个字符串 (`'todos/todoAdded'`)。
 
-在我们的项目中，创建一个新 `features` 文件夹，然后在里面创建一个 `todos` 文件夹。创建一个名为 `todosSlice.js` 的新文件，然后将与 todo 相关的初始状态剪切并粘贴到该文件中：
+在项目中，创建一个新 `features` 文件夹，然后在里面创建一个 `todos` 文件夹。创建一个名为 `todosSlice.js` 的新文件，然后将与 todo 相关的初始状态复制粘贴到该文件中：
 
 ```js title="src/features/todos/todosSlice.js"
 const initialState = [
@@ -530,11 +527,11 @@ export default function todosReducer(state = initialState, action) {
 }
 ```
 
-现在我们可以复制更新 todos 的逻辑。但是，这里有一个重要的区别。**这个文件只需要更新 todos 相关的状态——它不再嵌套了！** 这是我们拆分 redux 的另一个原因。由于 todos 状态本身就是一个数组，因此我们不必在此处复制外部根状态对象。这使得这个 reducer 更容易阅读。
+复制更新 todos 的逻辑。但是，这里有一个重要的区别。**这个文件只需要更新 todos 相关的状态——不再嵌套了！** 这是我们拆分 redux 的另一个原因。由于 todos 状态本身就是一个数组，因此不必在此处复制外部根 state 对象。这让 reducer 更容易阅读。
 
 这称为 **reducer composition**，它是构建 Redux 应用程序的基本模式。
 
-这是我们处理完这些操作后更新后的 reducer 的样子：
+这是处理完这些操作后更新的 reducer：
 
 ```js title="src/features/todos/todosSlice.js"
 export default function todosReducer(state = initialState, action) {
@@ -597,13 +594,13 @@ export default function filtersReducer(state = initialState, action) {
 }
 ```
 
-我们仍然必须复制包含过滤器状态的对象，但由于嵌套较少，因此更容易阅读正在发生的事情。
+依旧需要复制包含过滤器状态的对象，但由于嵌套较少，因此更容易阅读正在发生的事情。
 
 :::info
 
-为了使这个页面更短，我们将跳过展示如何为其他操作编写 reducer 更新逻辑。
+为了使这个页面更短，将跳过展示其他 reducer 更新逻辑的操作。
 
-根据 [上述要求](#defining-requirements)，**尝试自己编写更新**。
+根据[上述要求](#defining-requirements)，**尝试自己编写**。
 
 如果遇到困难，请参阅[本页末尾的 CodeSandbox](#what-youve-learned)， 了解这些 reducer 的完整实现。
 
@@ -611,7 +608,7 @@ export default function filtersReducer(state = initialState, action) {
 
 ## 组合 Reducers
 
-我们现在有两个独立的 slice 文件，每个文件都有自己的 slice reducer 函数。但是，Redux 存储在创建时需要 _一个_ 根 reducer 函数。那么，我们如何才能在不将所有代码放在一个大函数中的情况下重新使用根 redux 呢？
+现在有两个独立的 slice 文件，每个文件都有自己的 slice reducer 函数。但是，Redux 存储在创建时需要 _一个_ 根 reducer 函数。那么，如何才能在不将所有代码放在一个大函数中的情况下重新使用根 redux 呢？
 
 由于 reducers 是一个普通的 JS 函数，我们可以将 slice reducer 重新导入 `reducer.js`，并编写一个新的根 reducer，它唯一的工作就是调用其他两个函数。
 
@@ -636,9 +633,9 @@ export default function rootReducer(state = {}, action) {
 
 ### `combineReducers`（组合 Reducers ）
 
-我们可以看到新的根 reducer 对每个 slice 都做同样的事情：调用 slice reducer，传入该 reducer 拥有 state 的 slice，并将结果分配回根 state 对象。如果我们要添加更多 slice ，则该模式将重复。
+新的根 reducer 对每个 slice 都做同样的事情：调用 slice reducer，传入该 reducer 拥有 state 的 slice，并将结果分配回根 state 对象。如果要添加更多 slice ，则该模式将重复。
 
-Redux 核心库包含一个名为 [`combineReducers`](../../api/combineReducers.md) 的实用程序，它为我们执行相同的样板步骤。我们可以用 `combineReducers` 生成的较短的 `rootReducer` 替换我们手写的 `rootReducer`。
+Redux 核心库包含一个名为 [`combineReducers`](../../api/combineReducers.md) 的实用程序，它为我们执行相同的样板步骤。我们可以用 `combineReducers` 生成的较短的 `rootReducer` 替换手写的 `rootReducer`。
 
 **现在我们需要 `combineReducers`， 是时候实际安装 Redux 核心库了**：
 
@@ -646,7 +643,7 @@ Redux 核心库包含一个名为 [`combineReducers`](../../api/combineReducers.
 npm install redux
 ```
 
-完成后，我们可以导入 `combineReducers` 并使用它：
+完成后，可以导入并使用 `combineReducers` ：
 
 ```js title="src/reducer.js"
 // highlight-next-line
@@ -664,7 +661,7 @@ const rootReducer = combineReducers({
 export default rootReducer
 ```
 
-`combineReducers` 接受一个对象，其中键名将成为根 state 对象中的键，值是 slice reducer 函数，知道如何更新 Redux 状态的这些 slices。
+`combineReducers` 接受一个对象，其中键名将成为根 state 对象中的键，值是描述如何更新 Redux 状态的 slice reducer 函数。
 
 **记住，你给 `combineReducers` 的键名决定了你的状态对象的键名是什么！**
 
@@ -698,7 +695,7 @@ export default rootReducer
   - Reducers 必须始终遵循特殊规则：
     - 仅根据 `state` 和 `action` 参数计算新状态
     - 永远不要改变现有的 `state` - 总是返回一个副本
-    - 有像 AJAX 调用或异步逻辑这样的 “ 副作用 ”
+    - 不要有像 AJAX 调用或异步逻辑这样的 “ 副作用 ”
 - **Reducers 应该被拆分以使它们更易于阅读**
   - Reducer 通常根据顶级状态键或状态 “ slices ” 进行拆分
   - Reducers 通常写在 “ slice ” 文件中，组织成 “ feature ” 文件夹
@@ -709,6 +706,6 @@ export default rootReducer
 
 ## 下一步
 
-我们现在有一些 reducer 逻辑可以更新我们的状态，但是这些 reducer 不会自己做任何事情。它们需要放在 Redux 存储中，当发生某些事情时，可以通过操作调用 reducer 代码。
+现在有一些 reducer 逻辑可以更新状态，但是这些 reducer 不会自己做任何事情。它们需要放在 Redux 存储中，当发生某些事情时，可以通过操作调用 reducer 代码。
 
-在 [第 4 部分：存储](./part-4-store.md)中, 我们将看到如何创建 Redux 存储并运行我们的 reducer 逻辑。
+在[第 4 部分：存储](./part-4-store.md)中, 我们将看到如何创建 Redux 存储并运行 reducer 逻辑。
