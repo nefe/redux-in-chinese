@@ -1,27 +1,29 @@
 ---
 id: writing-tests
-title: Writing Tests
-description: 'Usage > Writing Tests: recommended practices and setup for testing Redux apps'
+# title: Writing Tests
+title: 编写测试
+# description: 'Usage > Writing Tests: recommended practices and setup for testing Redux apps'
+description: '使用 > 编写测试: 针对 Redux 应用设置测试环境和编写测试的推荐实践'
 ---
 
-# Writing Tests
+# 编写测试
 
-:::tip What You'll Learn
+:::tip 你将学到什么？
 
-- Recommended practices for testing apps using Redux
-- Examples of test configuration and setup
+- 针对使用 Redux 的应用推荐的测试实践
+- 配置测试和测试环境搭建的一些示例
 
 :::
 
-## Guiding Principles
+## 指导原则
 
-The guiding principles for testing Redux logic closely follow that of React Testing Library:
+针对 Redux 逻辑编写测试用例严格遵循 React Testing Libraray 的指导原则:
 
-> [The more your tests resemble the way your software is used, the more confidence they can give you.](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
+> [你的测试越接近的去模拟软件的使用方式，这些测试越能给你信心](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking. However, you should consider whether each piece of your Redux code needs its own dedicated tests. **In the majority of scenarios, the end-user does not know, and does not care whether Redux is used within the application at all**. As such, the Redux code can be treated as an implementation detail of the app, without requiring explicit tests for the Redux code in many circumstances.
+因为你编写的多数 Redux 代码都是函数，并且多数又都是纯函数，所以它们很容易在没有 mocking 的情况下进行测试的。然而，你需要考虑的是是否你的每一部分 Redux 代码都需要它专有的测试。 **在大多数场景下，终端用户并不知道也一点都不在乎应用中是否使用了Redux**。因此，可以将 Redux 代码视为应用实现细节的一部分，多数情况下不并需要对 Redux 代码进行显式测试。
 
-Our general advice for testing an app using Redux is:
+通常我们针对使用 Redux 的应用编写测试的建议是:
 
 - **Prefer writing integration tests with everything working together**. For a React app using Redux, render a `<Provider>` with a real store instance wrapping the components being tested. Interactions with the page being tested should use real Redux logic, with API calls mocked out so app code doesn't have to change, and assert that the UI is updated appropriately.
 - _If_ needed, use basic unit tests for pure functions such as particularly complex reducers or selectors. However, in many cases, these are just implementation details that are covered by integration tests instead.
