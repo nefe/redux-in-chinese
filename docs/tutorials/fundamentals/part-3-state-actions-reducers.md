@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info 预置知识
 
-- 熟悉 Redux 的关键术语和概念，如 actions、reducers、 store 和 dispatching 。（有关这些术语的解释，请参阅 **[第 2 部分：Redux 概念和数据流。](./part-2-concepts-data-flow.md)** )
+- 熟悉 Redux 的核心术语和概念，如 actions、reducers、 store 和 dispatching 。（有关这些术语的解释，请参阅 **[第 2 部分：Redux 概念和数据流。](./part-2-concepts-data-flow.md)** )
 
 :::
 
