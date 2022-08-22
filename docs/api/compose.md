@@ -2,14 +2,17 @@
 id: compose
 title: compose
 hide_title: true
+description: 'API > compose: composing multiple functions together'
 ---
-# compose
+
+&nbsp;
+
 # `compose(...functions)`
 
 从右到左来组合多个函数。
 
 这是函数式编程中的方法，为了方便，被放到了 Redux 里。  
-当需要把多个 [store 增强器](../understanding/thinking-in-redux/Glossary.md#store-enhancer) 依次执行的时候，需要用到它。
+当需要把多个 [store enhancers](../understanding/thinking-in-redux/Glossary.md#store-enhancer) 依次执行的时候，需要用到它。
 
 #### 参数
 
@@ -40,4 +43,4 @@ const store = createStore(
 
 #### 小贴士
 
-- `compose` 做的只是让你在写深度嵌套的函数时，避免了代码的向右偏移（译者注：可以参考[上述的译者注](#参数)）。不要觉得它很复杂。
+- 所有的 `compose` 做的只是让你在写深度嵌套的函数时，避免了代码的向右偏移（译者注：可以参考[上述的译者注](#参数)）。不要觉得它很复杂。
