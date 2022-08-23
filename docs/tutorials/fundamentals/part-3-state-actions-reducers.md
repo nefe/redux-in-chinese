@@ -26,7 +26,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## 简介
 
-在[第 2 部分：Redux 概念和数据流](./part-2-concepts-data-flow.md)中，研究了 Redux 如何通过提供单一中心位置存放全局应用程序状态，来帮助我们构建可维护的应用程序。还讨论了 Redux 的核心概念，例如 dispatching action 对象和使用返回新状态值的 reducer 函数。
+在[第 2 部分：Redux 概念和数据流](./part-2-concepts-data-flow.md)中，看看 Redux 是如何将全局 app state 收归一处集中管理，从而构建可维护应用的。还讨论了 Redux 的核心概念，例如 dispatching action 对象和使用返回新状态值的 reducer 函数。
 
 现在你已经对这部分有所了解，是时候将这些知识付诸实践了。我们将构建一个小型示例应用，来了解这些模块是如何协同工作。
 
