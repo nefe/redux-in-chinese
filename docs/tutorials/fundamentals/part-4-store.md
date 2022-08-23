@@ -96,7 +96,7 @@ console.log('Initial state: ', store.getState())
 // {todos: [....], filters: {status, colors}}
 
 // 每次状态变化时，记录一下
-// 请注意，subscribe() 返回一个用于取消注册侦听器的函数
+// 请注意，subscribe() 返回一个用于解绑侦听器的函数
 // highlight-start
 const unsubscribe = store.subscribe(() =>
   console.log('State after dispatch: ', store.getState())
@@ -124,7 +124,7 @@ store.dispatch({
 // highlight-next-line
 unsubscribe()
 
-// 在 dispatch 一个 action，看看发生了什么
+// 再 dispatch 一个 action，看看发生了什么
 
 store.dispatch({ type: 'todos/todoAdded', payload: 'Try creating a store' })
 
