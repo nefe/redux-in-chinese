@@ -28,7 +28,7 @@ sidebar_label: TypeScript 快速开始
 
 Redux Toolkit 已经用 TypeScript 编写，所以它的 TS 类型定义是内置的。
 
-[React Redux](https://react-redux.js.org) 在 NPM 上有一个单独的 [`@types/react-redux` 类型定义包](https://npm.im/@types/react-redux)有它的类型定义。除了引入类型库函数之外，这些类型还导出了一些帮助器，以便更轻松地在 Redux 存储 store 和 React 组件之间编写类型安全的接口。
+[React Redux](https://react-redux.js.org) 在 NPM 上有一个单独的 [`@types/react-redux` 类型定义包](https://npm.im/@types/react-redux)有它的类型定义。除了引入类型库函数之外，这些类型还导出了一些帮助器，以便更轻松地在 Redux 存储 store 和 React 组件之间编写安全的类型接口。
 
 从 React Redux v7.2.3, `react-redux` 包依赖于`@types/react-redux`, 因此类型定义将与库一起自动安装。 除非，你需要自己手动安装它们（通常是 `npm install @types/react-redux` ）。
 
@@ -38,7 +38,7 @@ Redux Toolkit 已经用 TypeScript 编写，所以它的 TS 类型定义是内�
 
 ### 定义根 State 和 Dispatch 类型
 
-[Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) 不需要任何额外的类型。 但是，你需要提取 `RootState` 类型和 `Dispatch` 类型。以便可以根据需要引用它们。从 store 本身推断这些类型，意味着它们会随着你添加更多状态切片或修改中间件设置而正确更新。
+[Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) 不需要任何额外的类型。 但是，你需要提取 `RootState` 类型和 `Dispatch` 类型。以便可以根据需要引用它们。从 store 本身推断这些类型，意味着它们会随着你添加更多 state slices 或修改 middleware 设置而正确更新。
 
 因为有了这些是类型定义，可以安全地直接从你的 store 设置文件（例如 `app/store.ts`）导出它们，然后将它们直接导入其他文件。
 
@@ -64,10 +64,10 @@ export type AppDispatch = typeof store.dispatch
 
 ### 定义 Hooks 类型
 
-虽然可以将 `RootState` 和 `AppDispatch` 类型导入每个组件, **最好创建类型版本的 `useDispatch` 和 `useSelector` 钩子以便在你的应用程序中使用** 有几个重要的原因：
+尽管你可以将 `RootState` 和 `AppDispatch` 类型导入每个组件, **更好的方式是创建 `useDispatch` 和 `useSelector` 钩子的类型定义，以便在你的应用程序中使用** 有几个重要的原因：
 
-- 对于`useSelector`，它节省了你每次输入`(state: RootState)`的需要
-- 对于 useDispatch，默认的 Dispatch 类型不知道 thunk。为了正确调度 thunk，你需要使用 store 中包含 thunk 中间件类型的特定自定义 `AppDispatch` 类型，并将其与 `useDispatch` 一起使用。添加一个预先输入的 `useDispatch` 钩子可以防止你忘记在需要的地方导入 `AppDispatch`。
+- 对于 `useSelector` ，它不需要你每次输入`(state: RootState)`
+- 对于 `useDispatch` ，默认的 Dispatch 类型不知道 thunk 。为了正确调度 thunk ，你需要使用 store 中包含 thunk 中间件类型的特定自定义 `AppDispatch` 类型，并将其与 `useDispatch` 一起使用。添加一个预先输入的 `useDispatch` 钩子可以防止你忘记在需要的地方导入 `AppDispatch`。
 
 由于这些是实际变量，而不是类型，因此将它们定义在单独的文件中很重要，例如 `app/hooks.ts`，而不是 store 设置文件。这允许你将它们导入到需要使用挂钩的任何组件文件中，并避免潜在的循环导入依赖问题。
 
@@ -76,7 +76,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from './store'
 
 // highlight-start
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
+// 在整个应用程序中使用，而不是简单的 `useDispatch` 和 `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 // highlight-end
