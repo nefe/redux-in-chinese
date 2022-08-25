@@ -84,9 +84,9 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 ## 应用程序中使用
 
-### 定义切片状态和动作类型
+### 定义 slice state 和 action 类型
 
-每个切片文件都应该为其初始状态值定义一个类型，以便`createSlice` 可以在每种情况下正确推断`state` 的类型 reducer。
+每个 slice 文件都应该为其初始 state 定义一个类型，以便`createSlice` 可以在每种情况下正确推断`state` 的类型 reducer。
 
 所有生成的动作都应该使用 Redux Toolkit 中的 `PayloadAction<T>` 类型定义，该类型将 `action.payload` 字段的类型作为其通用参数。
 
@@ -97,12 +97,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
 // highlight-start
-// 为切片状态定义一个类型
+// 为 slice state 定义一个类型
 interface CounterState {
   value: number
 }
 
-// 使用该类型定义初始状态
+// 使用该类型定义初始 state
 const initialState: CounterState = {
   value: 0
 }
@@ -110,7 +110,7 @@ const initialState: CounterState = {
 
 export const counterSlice = createSlice({
   name: 'counter',
-  // `createSlice` 将从 `initialState` 参数推断状态类型
+  // `createSlice` 将从 `initialState` 参数推断 state 类型
   initialState,
   reducers: {
     increment: state => {
@@ -135,12 +135,12 @@ export const selectCount = (state: RootState) => state.counter.value
 export default counterSlice.reducer
 ```
 
-生成的 action creator 将根据你为 reducer 提供的 `PayloadAction<T>` 类型来校验接受 `payload` 参数类型的正确性。例如，`incrementByAmount` 需要一个“数字”作为其参数。
+生成的 action creator 将根据你为 reducer 提供的 `PayloadAction<T>` 类型来校验 `payload` 参数类型的正确性。例如，`incrementByAmount` 需要一个“数字”作为其参数。
 
-在某些情况下，[TypeScript 可能会不必要地收紧初始状态的类型](https://github.com/reduxjs/redux-toolkit/pull/827). 如果发生这种情况，你可以通过使用 `as` 转换初始状态来解决它，而不是声明变量的类型：
+在某些情况下，[TypeScript 可能会对初始 state 进行不必要的类型收束](https://github.com/reduxjs/redux-toolkit/pull/827). 如果发生这种情况，你可以通过使用 `as` 转换初始 state 来解决它，而不是声明变量的类型：
 
 ```ts
-// 解决方法：强制转换状态而不是声明变量类型
+// 解决方法：强制转换 state 而不是声明变量类型
 const initialState = {
   value: 0
 } as CounterState
@@ -160,7 +160,7 @@ import { decrement, increment } from './counterSlice'
 
 export function Counter() {
   // highlight-start
-  // `state` arg 已正确推断为 `RootState` 类型
+  // `state` 参数已正确推断为 `RootState` 类型
   const count = useAppSelector(state => state.counter.value)
   const dispatch = useAppDispatch()
   // highlight-end
