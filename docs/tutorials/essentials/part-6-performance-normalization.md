@@ -368,7 +368,7 @@ export default notificationsSlice.reducer
 在展示 `<NotificationsList>` 组件时，我们希望将这些通知标记为已读，因为我们点击 tab 查看了这些通知，或者因为我们已经打开它并收到了一些其它的通知。我们可以通过在该组件重新渲染的时候调用 `allNotificationsRead` 来实现这将通知数据标记为已读。为了避免在更新时刷新旧数据，我们将在 `useLayoutEffect` 钩子中执行该操作。我们还想为页面中的所有通知列表条目添加一个额外的类名，用来突出显示它们：
 
 ```js title="features/notifications/NotificationsList.js"
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 // highlight-next-line
 import { useSelector, useDispatch } from 'react-redux'
 import { formatDistanceToNow, parseISO } from 'date-fns'
@@ -432,7 +432,7 @@ export const NotificationsList = () => {
 
 这是可行的，但实际上有一些令人惊讶的行为。每当有新的通知（因为我们切换到这个 tab，或者通过 API 获取一些新的通知），实际上，你会看到发起了两次 `"notifications/allNotificationsRead"`。 这是为什么呢？
 
-假设我们在查看 `<PostsList>` 时获取了一些通知，然后单击“通知” tab 。 `<NotificationsList>` 组件将被挂载，`useEffect` 回调将在第一次渲染和发起`allNotificationsRead` 之后运行。 我们的 `notificationsSlice` 将通过更新 store 中的通知条目来响应这一过程。 这会创建一个新的 `state.notifications` 数组，其中包含不可变更新的条目，因为组件观察到从 `useSelector` 返回了新的数组，这会导致组件再次渲染，从而再次触发 `useEffect` 钩子并再次发起`allNotificationsRead`。reducer 也将再次运行，但这次并没有数据更新，因此组件不会重新渲染。
+假设我们在查看 `<PostsList>` 时获取了一些通知，然后单击“通知” tab 。 `<NotificationsList>` 组件将被挂载，`useLayoutEffect` 回调将在第一次渲染和发起`allNotificationsRead` 之后运行。 我们的 `notificationsSlice` 将通过更新 store 中的通知条目来响应这一过程。 这会创建一个新的 `state.notifications` 数组，其中包含不可变更新的条目，因为组件观察到从 `useSelector` 返回了新的数组，这会导致组件再次渲染，从而再次触发 `useLayoutEffect` 钩子并再次发起`allNotificationsRead`。reducer 也将再次运行，但这次并没有数据更新，因此组件不会重新渲染。
 
 有几种方法可以避免二次发起，例如通过拆分组件挂载时的逻辑确保只发起一次，并且仅在通知数组的大小发生变化时才再次发起。这并没有破坏其它任何东西，所以我们可以不管它。
 
