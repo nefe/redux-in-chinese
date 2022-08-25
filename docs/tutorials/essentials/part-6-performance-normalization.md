@@ -152,7 +152,7 @@ export const fetchNotifications = createAsyncThunk(
     const response = await client.get(
       `/fakeApi/notifications?since=${latestTimestamp}`
     )
-    return response.notifications
+    return response.data
   }
 )
 
@@ -391,7 +391,7 @@ export const NotificationsList = () => {
   const users = useSelector(selectAllUsers)
 
   // highlight-start
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(allNotificationsRead())
   })
   // highlight-end
