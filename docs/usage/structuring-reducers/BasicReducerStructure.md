@@ -75,15 +75,15 @@ Redux state 中顶层的 state 树通常是一个普通的 JavaScript 对象（�
 }
 ```
 
-在这个例子中，`todos` 和 `visibilityFilter` 都是 state 的顶层 Key，他们分别代表着一个某个特定概念的 "slice"。
+在这个例子中，`todos` 和 `visibilityFilter` 都是 state 的顶层 Key，他们分别代表着某个特定概念的 "slice"。
 
 大多数应用会处理多种数据类型，通常可以分为以下三类：
 
-- 域数据（_Domain data_）: 应用需要展示、使用或者修改的数据（比如 "从服务器检索到的所有 todos ")
-- 应用状态（_App state_）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行一个获取 Todos 的请求”）
-- UI 状态（_UI state_）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
+- _域数据_（_Domain data_）: 应用需要展示、使用或者修改的数据（比如 "从服务器检索到的所有 todos ")
+- _应用状态_（_App state_）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行获取 Todos 的请求”）
+- _UI 状态_（_UI state_）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
 
-Store 代表着应用核心，你应该**用域数据（Domain data）和应用状态数据（App state）定义 State，而不是用 UI 组件树（UI state）**。举个例子，`state.leftPane.todoList.todos` 这样的结构就是一个坏主意，因为整个应用的核心是 “todos” 而不仅仅是 UI 的一个模块。 `todos` 这个 slice 才应该是 state 树的顶层。
+Store 代表着应用核心，你应该**用域数据（Domain data）和应用状态数据（App state）定义 State，而不是用 UI 组件树（UI state）**。举个例子，`state.leftPane.todoList.todos` 这样的结构并不太好，因为整个应用的核心是 “todos” 而不仅仅是 UI 的一个模块。 `todos` 这个 slice 才应该是 state 树的顶层。
 
 UI 树和状态树之间很少有 1 对 1 的关系。除非你想明确的跟踪你的 Redux Store 中存储的 UI 数据的各个方面，但即使是这样，UI 数据的结构和域数据的结构也是不一样的。
 
