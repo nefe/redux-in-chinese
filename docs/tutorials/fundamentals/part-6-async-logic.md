@@ -1,11 +1,11 @@
 ---
 id: part-6-async-logic
-title: 'Redux 深入浅出，第六节：异步逻辑和数据获取'
+title: 'Redux 深入浅出，第 6 节：异步逻辑和数据获取'
 sidebar_label: '异步逻辑和数据获取'
 description: '官方 Redux 基础教程：学习如何在 Redux 中使用异步逻辑'
 ---
 
-# Redux 深入浅出，第六节：异步逻辑和数据获取
+# Redux 深入浅出，第 6 节：异步逻辑和数据获取
 
 :::tip 你将学到
 
@@ -24,7 +24,7 @@ description: '官方 Redux 基础教程：学习如何在 Redux 中使用异步�
 
 ## 简介
 
-[第五节：视图和 React](./part-5-ui-and-react.md)，展示了如何使用 React-Redux 库使得 React 组件与 Redux store 能够交互，包括调用 `useSelector` 来读取 Redux state，调用 `useDispatch` 来访问 `dispatch` 函数，以及使用 `<Provider>` 组件包裹应用程序来让这些钩子函数可以访问 store。
+[第 5 节：视图和 React](./part-5-ui-and-react.md)，展示了如何使用 React-Redux 库使得 React 组件与 Redux store 能够交互，包括调用 `useSelector` 来读取 Redux state，调用 `useDispatch` 来访问 `dispatch` 函数，以及使用 `<Provider>` 组件包裹应用程序来让这些 hook 函数可以访问 store。
 
 到目前为止，我们所使用的数据都直接来自 React+Redux 客户端应用程序。但是，大多数实际应用程序需要通过调用 HTTP API 来获取并保存来自服务器的数据。
 
@@ -32,9 +32,9 @@ description: '官方 Redux 基础教程：学习如何在 Redux 中使用异步�
 
 ### REST API 和客户端示例
 
-为了保持示例项目独立但具真实性，初始项目已经预置了一个虚拟的内存 REST API（使用 [Mirage.js 模拟 API 工具](https://miragejs.com/) 进行配置）。它使用 `/fakeApi` 作为基本 URL，并支持 `/fakeApi/todos` 常用的 HTTP 方法如： `GET/POST/PUT/DELETE`，它们定义在 `src/api/server.js`。
+为了保持示例项目独立但具真实性，初始项目已经预置了一个虚拟的内存 REST API（使用 [Mirage.js 模拟 API 工具](https://miragejs.com/) 进行配置）。它使用 `/fakeApi` 作为基本 URL，并支持 `/fakeApi/todos` 常用的 HTTP 方法如：`GET/POST/PUT/DELETE`，它们定义在 `src/api/server.js`。
 
-该项目还包括一个小型 HTTP API 客户端对象，它公开了 client.get() 和 client.post() 方法，类似于流行的 HTTP 库，如 axios。 它定义在 `src/api/client.js`。
+该项目还包括一个小型 HTTP API 客户端对象，它公开了 client.get() 和 client.post() 方法，类似于流行的 HTTP 库，如 axios。它定义在 `src/api/client.js`。
 
 在本节中，我们将使用 `client` 对象对虚拟 REST API 进行 HTTP 调用。
 
@@ -42,7 +42,7 @@ description: '官方 Redux 基础教程：学习如何在 Redux 中使用异步�
 
 Redux store 本身无法处理异步逻辑。它只会同步地 dispatch action，并通过调用根 reducer 函数来更新 state，然后通知视图更新。任何异步都必须在 store 之外发生。
 
-之前提过 Redux reducer 绝对不能包含“副作用”。 **“副作用”是指除函数返回值之外的任何变更，包括 state 的更改或者其他行为**。一些常见的副作用是：
+之前提过 Redux reducer 绝对不能包含“副作用”。**“副作用”是指除函数返回值之外的任何变更，包括 state 的更改或者其他行为**。一些常见的副作用是：
 
 - 在控制台打印日志
 - 保存文件
@@ -55,7 +55,7 @@ Redux store 本身无法处理异步逻辑。它只会同步地 dispatch action�
 
 **Redux middleware 就是用来放这些副作用逻辑代码的地方**。
 
-正如[第四节](./part-4-store.md#middleware-use-cases)介绍的，当 Redux middleware 执行 dispatch action 时，它可以做 _任何事情_：记录某些内容、修改 action、延迟 action，进行异步调用等。此外，由于 middleware 围绕真正的 `store.dispatch` 函数形成了一个管道，这也意味着我们实际上可以将一些 _不是_ 普通 action 对象的东西传递给 `dispatch`，只要 middleware 截获该值并且不让它到达 reducer。
+正如[第 4 节](./part-4-store.md#middleware-use-cases)介绍的，当 Redux middleware 执行 dispatch action 时，它可以做 _任何事情_：记录某些内容、修改 action、延迟 action，进行异步调用等。此外，由于 middleware 围绕真正的 `store.dispatch` 函数形成了一个管道，这也意味着我们实际上可以将一些 _不是_ 普通 action 对象的东西传递给 `dispatch`，只要 middleware 截获该值并且不让它到达 reducer。
 
 Middleware 也可以访问 `dispatch` 和 `getState`。这意味着你可以在 middleware 中编写一些异步逻辑，并且仍然能够通过 dispatch action 与 Redux store 进行交互。
 
@@ -146,7 +146,7 @@ store.dispatch(fetchSomeData)
 // 打印日志：'加载完成后 todos 的数量：###'
 ```
 
-再次注意，**这个异步函数 middleware 使得我们可以给 `dispatch` 传入 _函数_ ！** 在该函数中，可以编写一些异步逻辑（比如 HTTP 请求），然后在请求完成后 dispatch 一个普通的 action。
+再次注意，**这个异步函数 middleware 使得我们可以给 `dispatch` 传入 _函数_ ！**在该函数中，可以编写一些异步逻辑（比如 HTTP 请求），然后在请求完成后 dispatch 一个普通的 action。
 
 ## Redux 异步数据流
 
@@ -162,7 +162,7 @@ store.dispatch(fetchSomeData)
 
 ## 使用 Redux Thunk Middleware
 
-实际上，Redux 已经有了异步函数 middleware 的正式版本，称为 [**Redux “Thunk” middleware**](https://github.com/reduxjs/redux-thunk)。 thunk middleware 允许我们编写以 `dispatch` 和 `getState` 作为参数的函数。 thunk 函数可以包含我们想要的任何异步逻辑，并且该逻辑可以根据需要 dispatch action 以及读取 store state。
+实际上，Redux 已经有了异步函数 middleware 的正式版本，称为 [**Redux “Thunk” middleware**](https://github.com/reduxjs/redux-thunk)。thunk middleware 允许我们编写以 `dispatch` 和 `getState` 作为参数的函数。thunk 函数可以包含我们想要的任何异步逻辑，并且该逻辑可以根据需要 dispatch action 以及读取 store state。
 
 **将异步逻辑写成 thunk 函数允许我们在不知道使用的 Redux store 的情况下能够重用该逻辑。**
 
@@ -230,8 +230,8 @@ export async function fetchTodos(dispatch, getState) {
 
 我们只需要在应用程序第一次加载时调用这个 API。以下是 _可以_ 放这个 thunk 函数的地方：
 
-- 在`<App>` 组件的 `useEffect` 钩子函数中
-- 在 `<TodoList>` 组件的 `useEffect` 钩子函数中
+- 在`<App>` 组件的 `useEffect` hook 函数中
+- 在 `<TodoList>` 组件的 `useEffect` hook 函数中
 - 直接放在 `index.js` 导入 store 之后的地方
 
 现在，尝试将其直接放在 `index.js` 中：
@@ -266,7 +266,7 @@ ReactDOM.render(
 
 ![Devtools - todosLoaded action contents](/img/tutorials/fundamentals/devtools-todosLoaded-action.png)
 
-请注意，即使我们已经 dispatch 了一个 action，state 仍没有任何改变。 **我们需要在 todos reducer 中处理这个 action 来更新 state。**
+请注意，即使我们已经 dispatch 了一个 action，state 仍没有任何改变。**我们需要在 todos reducer 中处理这个 action 来更新 state。**
 
 让我们在 reducer 中添加一个 case，来将这些数据载入 store。因为我们需要从服务器获取数据，并完全替换现有的 todos，所以可以返回 `action.payload` 数组，使其成为新的 todos `state` 值：
 
@@ -393,7 +393,7 @@ const handleKeyDown = e => {
 }
 ```
 
-现在组件实际上并不知道它甚至在 dispatch 一个 thunk 函数 - `saveNewTodo` 函数正在封装实际发生的事情。 `<Header>` 组件只知道它需要在用户按下回车键时 dispatch _一些值_。
+现在组件实际上并不知道它甚至在 dispatch 一个 thunk 函数 - `saveNewTodo` 函数正在封装实际发生的事情。`<Header>` 组件只知道它需要在用户按下回车键时 dispatch _一些值_。
 
 编写预备传递给`dispatch`内容的函数，这一模式称为**action creator 模式**，我们将在[下一节](./part-7-standard-patterns.md)详细讨论。
 
@@ -427,7 +427,7 @@ export default function todosReducer(state = initialState, action) {
 
 :::tip 提示
 
-Thunk 函数可用于处理异步 _和_ 同步逻辑。 Thunks 提供了一种方法来编写任何需要访问 `dispatch` 和 `getState` 的可重用逻辑。
+Thunk 函数可用于处理异步 _和_ 同步逻辑。Thunks 提供了一种方法来编写任何需要访问 `dispatch` 和 `getState` 的可重用逻辑。
 
 :::
 
@@ -468,4 +468,4 @@ Thunk 函数可用于处理异步 _和_ 同步逻辑。 Thunks 提供了一种�
 - 使用 reducer、enhancer 和 middleware 创建及配置 Redux store
 - 使用 middleware 编写 dispatch action 的异步逻辑
 
-在[第 7 部分：标准 Redux 模式](./part-7-standard-patterns.md)中，我们将了解现实中 Redux 应用程序常用的几种代码模式，以使代码随着应用程序的扩张能够更加一致并更具扩展性。
+在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中，我们将了解现实中 Redux 应用程序常用的几种代码模式，以使代码随着应用程序的扩张能够更加一致并更具扩展性。
