@@ -5,27 +5,30 @@ description: '简介 > 入门: 从这里开始学习和使用 Redux'
 hide_title: false
 ---
 
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+
 # 入门 Redux
 
 Redux 是 JavaScript 应用的状态容器，提供可预测的状态管理。
 
-可以让你开发出行为稳定可预测的应用，运行于不同的环境（客户端、服务器、原生应用），并且易于测试。不仅于此，它还提供超爽的开发体验，比如有一个[时间旅行调试器可以编辑后实时预览](https://github.com/reduxjs/redux-devtools)。
+可以帮助你开发出行为稳定可预测的、运行于不同的环境（客户端、服务器、原生应用）、易于测试的应用程序。不仅于此，它还提供超爽的开发体验，比如有一个[与时间旅行调试器相结合的实时代码编辑](https://github.com/reduxjs/redux-devtools)。
 
-Redux 除了和 React 一起用外，还支持其它界面库。它体小精悍（只有2kB，包括依赖），却有很强大的插件扩展生态。
+可以将Redux 与 [React](https://reactjs.org) 或其他视图库一起使用。它体小精悍（只有2kB，包括依赖），却有很强大的插件扩展生态。
 
 ## 安装
 
 ### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们官方推荐的编写 Redux 逻辑的方法。它包含了 Redux 核心，并包含我们认为对于构建 Redux 应用必不可少的软件包和功能。Redux Toolkit 建立在我们建议的最佳实践中，简化了大多数 Redux 任务，防止了常见错误，并使编写 Redux 应用程序更加容易。
+[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们官方推荐的编写 Redux 逻辑的方法。它围绕 Redux 核心，并包含我们认为对于构建 Redux 应用必不可少的软件包和功能。Redux Toolkit 建立在我们建议的最佳实践中，简化了大多数 Redux 任务，防止了常见错误，并使编写 Redux 应用程序更加容易。
 
 RTK 包含了有助于简化许多常见场景的工具，包括 [配置 Store](https://redux-toolkit.js.org/api/configureStore)，
 [创建 reducer 并编写 immutable 更新逻辑](https://redux-toolkit.js.org/api/createreducer)，
-甚至还包含 [一次性创建整个 State 的 “切面”](https://redux-toolkit.js.org/api/createslice)。
+甚至还包含 [一次性创建整个 State 的 “Slice”](https://redux-toolkit.js.org/api/createslice)。
 
-无论你是一个完全的新手想要开发第一个 Redux 应用，还是经验老到的老手想要简化已有应用，**[Redux Toolkit](https://redux-toolkit.js.org/)** 都能帮你写出更好的 Redux 代码.
+无论你是一个想要开发第一个 Redux 应用的新手，还是想要简化已有应用经验老到的老手，**[Redux Toolkit](https://redux-toolkit.js.org/)** 都能帮你写出更好的 Redux 代码.
 
-Redux Toolkit 提供 NPM 软件包，安装方式如下：
+Redux Toolkit 提供 NPM 软件包，可与模块捆绑器或 Node 应用程序一起使用，安装方式如下：
 
 ```bash
 # NPM
@@ -37,15 +40,19 @@ yarn add @reduxjs/toolkit
 
 ### 创建一个 React Redux 应用
 
-官方推荐的创建 React Redux 新应用的方式是使用 [官方 Redux+JS 模版](https://github.com/reduxjs/cra-template-redux)，它基于 [Create React App](https://github.com/facebook/create-react-app)，它利用了 **[Redux Toolkit](https://redux-toolkit.js.org/)** 和 Redux 与 React 组件的集成.
+官方推荐的使用 React 和 Redux 创建新应用的方式是使用 [官方 Redux+JS 模版](https://github.com/reduxjs/cra-template-redux)或 [Redux+TS 模板](https://github.com/reduxjs/cra-template-redux-typescript)，它基于 [Create React App](https://github.com/facebook/create-react-app)，利用了 **[Redux Toolkit](https://redux-toolkit.js.org/)** 和 Redux 与 React 组件的集成.
 
-```sh
+```bash
+# Redux + Plain JS template
 npx create-react-app my-app --template redux
+
+# Redux + TypeScript template
+npx create-react-app my-app --template redux-typescript
 ```
 
 ### Redux 核心库
 
-Redux 核心库同样有 NPM 软件包，安装方式如下：
+Redux 核心库同样有 NPM 软件包，可与模块捆绑器或 Node 应用程序一起使用，安装方式如下：
 
 ```bash
 # NPM
@@ -69,16 +76,14 @@ yarn add redux
 import { createStore } from 'redux'
 
 /**
- * This is a reducer - a function that takes a current state value and an
- * action object describing "what happened", and returns a new state value.
- * A reducer's function signature is: (state, action) => newState
+ * 这是一个 reducer 函数：接受当前 state 值和描述“发生了什么”的 action 对象，它返回一个新的 state 值。
+ * reducer 函数签名是 : (state, action) => newState
  *
- * The Redux state should contain only plain JS objects, arrays, and primitives.
- * The root state value is usually an object.  It's important that you should
- * not mutate the state object, but return a new object if the state changes.
+ * Redux state 应该只包含普通的 JS 对象、数组和原语。
+ * 根状态值通常是一个对象。 重要的是，不应该改变 state 对象，而是在 state 发生变化时返回一个新对象。
  *
- * You can use any conditional logic you want in a reducer. In this example,
- * we use a switch statement, but it's not required.
+ * 你可以在 reducer 中使用任何条件逻辑。 在这个例子中，我们使用了 switch 语句，但这不是必需的。
+ * 
  */
 function counterReducer(state = { value: 0 }, action) {
   switch (action.type) {
@@ -91,18 +96,18 @@ function counterReducer(state = { value: 0 }, action) {
   }
 }
 
-// Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
+// 创建一个包含应用程序 state 的 Redux store。
+// 它的 API 有 { subscribe, dispatch, getState }.
 let store = createStore(counterReducer)
 
-// You can use subscribe() to update the UI in response to state changes.
-// Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
-// There may be additional use cases where it's helpful to subscribe as well.
+// 你可以使用 subscribe() 来更新 UI 以响应 state 的更改。
+// 通常你会使用视图绑定库（例如 React Redux）而不是直接使用 subscribe()。
+// 可能还有其他用例对 subscribe 也有帮助。
 
 store.subscribe(() => console.log(store.getState()))
 
-// The only way to mutate the internal state is to dispatch an action.
-// The actions can be serialized, logged or stored and later replayed.
+// 改变内部状态的唯一方法是 dispatch 一个 action。
+// 这些 action 可以被序列化、记录或存储，然后再重放。
 store.dispatch({ type: 'counter/incremented' })
 // {value: 1}
 store.dispatch({ type: 'counter/incremented' })
@@ -113,7 +118,7 @@ store.dispatch({ type: 'counter/decremented' })
 
 你需要使用 _action_ 这个普通对象来描述发生了什么，而不是直接改变 state。然后，编写一个名为 _reducer_ 的特殊函数，来决定如何基于 action 来更新整个应用的状态树。
 
-在典型的Redux应用程序中，只有一个 store 以及一个根 reducer 函数。随着应用程序的增长，您可以将根 reducer 拆分为较小的 reducer，分别在状态树的不同部分上进行操作。这就像在 React 应用程序中只有一个根组件一样，但是它是由许多小组件组成的。
+在典型的Redux应用程序中，只有一个 store 以及一个根 reducer 函数。随着应用程序的增长，您可以将根 reducer 拆分为较小的 reducer，分别在状态树的不同部分上进行运行。这就像在 React 应用程序中只有一个根组件一样，但是它是由许多小组件组成的。
 
 对于简单的计数器应用来说，这种架构看起来过度设计，但是这种模式的优点在于它可以很好地扩展到大型和复杂的应用程序。还可以基于此设计出功能非常强大的开发者工具，因为可以跟踪每个 action 以及状态变更。你可以记录用户会话并仅通过重播每个 action 来重现它们。
 
@@ -131,10 +136,9 @@ const counterSlice = createSlice({
   },
   reducers: {
     incremented: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+      // Redux Toolkit 允许在 reducers 中编写 "mutating" 逻辑。
+      // 它实际上并没有改变 state，因为使用的是 Immer 库，检测到“草稿 state”的变化并产生一个全新的
+      // 基于这些更改的不可变的 state。
       state.value += 1
     },
     decremented: state => {
@@ -149,10 +153,10 @@ const store = configureStore({
   reducer: counterSlice.reducer
 })
 
-// Can still subscribe to the store
+// 可以订阅 store
 store.subscribe(() => console.log(store.getState()))
 
-// Still pass action objects to `dispatch`, but they're created for us
+// 将我们所创建的 action 对象传递给 `dispatch`
 store.dispatch(incremented())
 // {value: 1}
 store.dispatch(incremented())
@@ -161,7 +165,7 @@ store.dispatch(decremented())
 // {value: 1}
 ```
 
-Redux Toolkit 使我们可以编写更精短的代码，更易于阅读，同时仍然遵循同样的 Redux 规范和数据流。
+Redux Toolkit 使我们可以编写更精短且更易于阅读的代码，同时仍然遵循同样的 Redux 规范和数据流。
 
 ## 学习 Redux
 
@@ -169,15 +173,26 @@ Redux Toolkit 使我们可以编写更精短的代码，更易于阅读，同时
 
 ### Redux 基础教程
 
-[**Redux 基础教程**](../tutorials/essentials/part-1-overview-concepts.md) 是一个“自上而下”的教程，使用推荐的最新 API 和最佳实践来教“如何以正确的方式使用 Redux”。建议从那里开始。
+[**Redux 基础教程**](../tutorials/essentials/part-1-overview-concepts.md) 是一个“自上而下”的教程，使用推荐的最新 API 和最佳实践来教“如何以正确的方式使用 Redux”。建议从这个教程开始。
 
-### Redux 进阶教程
+### Redux 基础教程
 
-[**Redux 进阶教程**](../tutorials/fundamentals/part-1-overview.md) 是一个“自下而上”的教程，该教程从最初的原理开始，没有任何抽象地讲授“Redux 工作原理”，以及 Redux 标准规范存在背后的原因。
+[**Redux 基础教程**](../tutorials/fundamentals/part-1-overview.md) 是一个“自下而上”的教程，该教程从最初的原理开始，没有任何抽象地讲授“Redux 工作原理”，以及 Redux 标准规范存在背后的原因。
+
+### 学习流行的 Redux 流
+
+Redux 维护者 Mark Erikson 在“与 Jason 一起学习”节目中，解释了我们今天如何推荐使用 Redux。该节目用一个实时编码的示例应用程序，展示了如何用 Typescript 编写 Redux Toolkit 和 React-Redux hooks，以及新的 RTK Query 数据获取 API。
+
+请参阅 [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/let-s-learn-modern-redux) 以获取脚本和示例应用程序源的链接。
+
+<LiteYouTubeEmbed
+    id="9zySeP5vH9c"
+    title="Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query"
+/>
 
 ### 附加教程
 
-- Redux 仓库包含几个示例项目，展示了如何使用 Redux 的各个方面。几乎所有示例都具有对应的 CodeSandbox 案例。这是你可以在线使用的交互式代码平台。请参阅 **[案例页面](./Examples.md)**
+- Redux 仓库包含几个示例项目，展示了如何使用 Redux 的各个方面。几乎所有示例都具有对应的 CodeSandbox 案例，CodeSandbox是可以在线使用的交互式代码平台。请参阅 **[示例页面](./Examples.md)**
 - Redux 作者 Dan Abramov 的 **免费 ["Redux 入门" 视频系列](https://app.egghead.io/courses/getting-started-with-redux)** 和 **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** Egghead.io 上的视频教程
 - Redux 维护者 Mark Erikson 的 **["Redux Fundamentals" 大会演讲](https://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" 工作坊 PPT**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
 - Dave Ceddia 的文章 [**面向初学者的完整 React Redux 教程**](https://daveceddia.com/redux-tutorial/)
@@ -191,11 +206,11 @@ Redux Toolkit 使我们可以编写更精短的代码，更易于阅读，同时
 
 ## 帮助和讨论
 
-The **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** of the **[Reactiflux Discord community](https://www.reactiflux.com)** is our official resource for all questions related to learning and using Redux. Reactiflux is a great place to hang out, ask questions, and learn - come join us!
+**[Reactiflux Discord 社区](https://www.reactiflux.com)** 的 **[#redux channel](https://discord.gg/0ZcbPKXt5bZ6au5t)** 是有关学习和使用 Redux 所有问题的官方资源。Reactiflux 浏览、提问和学习的好地方 - 快来加入我们吧!
 
-You can also ask questions on [Stack Overflow](https://stackoverflow.com) using the **[#redux tag](https://stackoverflow.com/questions/tagged/redux)**.
+你也可以用在 **[#redux 标签](https://stackoverflow.com/questions/tagged/redux)** 在[Stack Overflow](https://stackoverflow.com) 上提问。
 
-If you have a bug report or need to leave other feedback, [please file an issue on the Github repo](https://github.com/reduxjs/redux)
+如果你有 bug report 或者需要留下其他反馈， [请在 Github repo 上提出问题](https://github.com/reduxjs/redux)
 
 ## 你需要使用 Redux 吗？
 
