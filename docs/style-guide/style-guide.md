@@ -14,126 +14,128 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 ## 引言
 
-这篇文章为你编写 Redux 代码提供官方的风格指导。 **It lists our recommended patterns, best practices, and suggested approaches for writing Redux applications.**
+这篇文章为你编写 Redux 代码提供官方的风格指导。**列出我们推荐的模式, 最佳实践, 以及编写 Redux 应用的推荐方法。**
 
-Both the Redux core library and most of the Redux documentation are unopinionated. There are many ways to use Redux, and much of the time there is no single "right" way to do things.
+Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated）。使用 Redux 有很多种方法，而且很多时候根本就没有唯一“正确”的方法。
 
-However, time and experience have shown that for some topics, certain approaches work better than others. In addition, many developers have asked us to provide official guidance to reduce decision fatigue.
+然而，经过时间和实践的证明，一些方法就是比其他的方法更优越。此外，很多开发者也要求我们提供官方引导，从而减少决策的疲劳。
 
-With that in mind, **we've put together this list of recommendations to help you avoid errors, bikeshedding, and anti-patterns**. We also understand that team preferences vary and different projects have different requirements, so no style guide will fit all sizes. **You are encouraged to follow these recommendations, but take the time to evaluate your own situation and decide if they fit your needs**.
+基于以上背景, **我们将这些推荐写法都列出来，让你避免出现错误、将精力放在非业务代码身上，以及避免不满足规范的代码**。我们也知道团队的编码偏好是多种多样的，且不同的项目有不同的需求，根本就没有一种风格指导能满足所有情况。**我们推荐你遵循这些推荐，但你也需要评估这些场景是否适用于你的需求**。
 
-Finally, we'd like to thank the Vue documentation authors for writing the [Vue Style Guide page](https://vuejs.org/v2/style-guide/), which was the inspiration for this page.
+最后，我们感谢 Vue 文档的作者，因为受到[Vue Style Guide page](https://vuejs.org/v2/style-guide/)的启发，才有了我们这篇文章。
 
-## Rule Categories
+## 规则分类
 
-We've divided these rules into three categories:
+我们将规则分为以下三类：
 
-### Priority A: Essential
+### 优先级 A：必要
 
-**These rules help prevent errors, so learn and abide by them at all costs**. Exceptions may exist, but should be very rare and only be made by those with expert knowledge of both JavaScript and Redux.
+**这一级别的规则可以防止错误，所以要不计成本地遵守**。例外情况可能存在，但应该非常罕见，并且只能由具备 JavaScript 和 Redux 专业知识的开发者产生。
 
-### Priority B: Strongly Recommended
+### 优先级 B：强烈推荐
 
-These rules have been found to improve readability and/or developer experience in most projects. Your code will still run if you violate them, but violations should be rare and well-justified. **Follow these rules whenever it is reasonably possible**.
+这些规则在绝大多数的项目中都提高了代码可读性和开发体验。即使违反这些规则，代码仍然能运行，但仅能在极少数情况，有很正当理由的时候再去违反这些规则。**只要合理，请尽可能遵守这些规则**。
 
-### Priority C: Recommended
+### 优先级 C：推荐
 
-Where multiple, equally good options exist, an arbitrary choice can be made to ensure consistency. In these rules, **we describe each acceptable option and suggest a default choice**. That means you can feel free to make a different choice in your own codebase, as long as you're consistent and have a good reason. Please do have a good reason though!
+你可以选择这些同样优秀选择中的任意一种来保证一致性。在这些规则中，**我们介绍了每个每种规则并推荐了一个默认选项**。这意味着你可以在代码库中自由地做出不同的选择，只要保持一致性并有充分的理由。但是，请慎重！
 
 <div class="priority-rules priority-essential">
 
-## Priority A Rules: Essential
+## A 级优先规则: 必要
 
-### Do Not Mutate State
+### 不要修改 State
 
-Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
+修改 state 是 Redux 应用 bug 的最常见的诱因，包括组件没有正确再渲染，且阻止了 Redux DevTools 的时间穿梭调试。无论是 reducers 中还是任意其他应用代码中，**都要始终避免 state 的真实变换**。
 
-Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/) to avoid accidental mutations in state updates.
+请使用类似于[`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获，并使用[Immer](https://immerjs.github.io/immer/)库来避免偶然的 state 更新.
 
-> **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
+> **注意**：修改已有值的 _副本_ 是没问题的——这是一种朴素的 immutable 更新方式。 同样的， 如果我们使用了 Immer 库做 immutable 更新， 编写 "mutating" 逻辑也是允许的，因为真实的数据没有被修改—— Immer 在内部进行了安全的变化追踪并且生成了新的 immutably 值。
 
-### Reducers Must Not Have Side Effects
+### Reducers 不能产生副作用
 
-Reducer functions should _only_ depend on their `state` and `action` arguments, and should only calculate and return a new state value based on those arguments. **They must not execute any kind of asynchronous logic (AJAX calls, timeouts, promises), generate random values (`Date.now()`, `Math.random()`), modify variables outside the reducer, or run other code that affects things outside the scope of the reducer function**.
+Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重新计算并返回一个新的 state。**其中禁止执行任何异步代码（AJAX 调用, timeouts, promises），生成随机值 （`Date.now()`, `Math.random()`，在 reducer 外面修改变量，或者执行一些修改 reducer 函数作用于之外变量的代码**。
 
-> **Note**: It is acceptable to have a reducer call other functions that are defined outside of itself, such as imports from libraries or utility functions, as long as they follow the same rules.
+> **注意**：只要符合同样的规则，在 reducer 中调用外部定义的一些方法，比如从库或工具类中 import 的函数等，也是可以的。
 
-<DetailedExplanation>
+<DetailedExplanation title="详细说明">
 
-The purpose of this rule is to guarantee that reducers will behave predictably when called. For example, if you are doing time-travel debugging, reducer functions may be called many times with earlier actions to produce the "current" state value. If a reducer has side effects, this would cause those effects to be executed during the debugging process, and result in the application behaving in unexpected ways.
+此规则的目的是确保在调用时 reducers 的行为可预测。例如，如果你正在进行时间旅行调试，则可能会多次调用 reducer 函数，并根据之前的 actions 生成“当前”状态值。如果 reducer 有副作用，这将导致在调试过程中产生了这些副作用，并导致应用程序以意料之外的方式运行。
 
-There are some gray areas to this rule. Strictly speaking, code such as `console.log(state)` is a side effect, but in practice has no effect on how the application behaves.
+这条规则也有一些灰色地带。严格来说，有一些代码也是副作用，比如 `console.log(state)`，但是实际上它对应用程序没有实质行的行为。
 
 </DetailedExplanation>
 
-### Do Not Put Non-Serializable Values in State or Actions
+### 不要把不可序列化的值放进 State 或 Action
 
-**Avoid putting non-serializable values such as Promises, Symbols, Maps/Sets, functions, or class instances into the Redux store state or dispatched actions**. This ensures that capabilities such as debugging via the Redux DevTools will work as expected. It also ensures that the UI will update as expected.
+**不要把不可序列化的值放进 Redux store 或者 dispatch 的 actions，比如 Promises、Symbols、Maps/Sets、functions、或类的实例**。这一点保证 Redux DevTools 按照预期方式工作。也保证 UI 按照预期方式更新。
 
-> **Exception**: you may put non-serializable values in actions _if_ the action will be intercepted and stopped by a middleware before it reaches the reducers. Middleware such as `redux-thunk` and `redux-promise` are examples of this.
+> **例外**：有时你也可以将非可序列化数据放进 action _当且仅当_ 该 action 在传递到 reducer 之前会被 Middleware 拦截住并不继续向下传递。`redux-thunk` 和 `redux-promise` 就是个例子。
 
-### Only One Redux Store Per App
+### 一个应用只有一个 Redux Store
 
-**A standard Redux application should only have a single Redux store instance, which will be used by the whole application**. It should typically be defined in a separate file such as `store.js`.
+**一个标准的 Redux 应用应有且仅有一个 Store 实例（单例），供整个应用使用**。它应该用一个单独的文件比如`store.js`定义出来。
 
-Ideally, no app logic will import the store directly. It should be passed to a React component tree via `<Provider>`, or referenced indirectly via middleware such as thunks. In rare cases, you may need to import it into other logic files, but this should be a last resort.
+理想情况下，不应该有任意一个应用逻辑将其直接引入。他应该使用通过`<Provider>` 传递给 React 组件树，或通过 thunks 这样的 middlewares 间接引用。在极少数的用例中，你可能需要将其导入其他逻辑文件，但这应该是没有办法的办法。
 
 </div>
 
 <div class="priority-rules priority-stronglyrecommended">
 
-## Priority B Rules: Strongly Recommended
+## A 级优先规则: 强烈推荐
 
-### Use Redux Toolkit for Writing Redux Logic
+### 在写 Redux 逻辑时使用 Redux Toolkit
 
-**[Redux Toolkit](../redux-toolkit/overview.md) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
+**[Redux Toolkit](../redux-toolkit/overview.md) 是我们推荐的 Redux 工具集**。它囊括了一些封装可我们最佳实践的方法，包括设置 store 使其能捕获 mutations 并激活 Redux DevTools 拓展，使用 Immer 简化 immutable 更新等等。
 
-You are not required to use RTK with Redux, and you are free to use other approaches if desired, but **using RTK will simplify your logic and ensure that your application is set up with good defaults**.
+写 Redux 的时候也不是必须要使用 RTK，如果愿意的话你也可以用一些其他的方法，但是**使用 RTK 会简化代码逻辑，并确保应用程序遵循好的 Redux 默认行为**。
 
-### Use Immer for Writing Immutable Updates
+### 使用 Immer 做 Immutable 更新
 
-Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
+手写 immutable 更新逻辑通常比较复杂，却容易出错。[Immer](https://immerjs.github.io/immer/)库可以让你写“可变”更新逻辑来简化 immutable 更新，即便在应用开发的其他任意地方为了捕捉 mutation 而 freeze 了 state。
+
+**我们建议使用 Immer 编写 immutable 更新逻辑，这一点已经作为了 [Redux Toolkit](../redux-toolkit/overview.md) 偏好的一部分**。
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 
-### Structure Files as Feature Folders with Single-File Logic
+### 将文件结构构造为具有单文件逻辑的功能性文件夹
 
-Redux itself does not care about how your application's folders and files are structured. However, co-locating logic for a given feature in one place typically makes it easier to maintain that code.
+Redux 本身并不关心应用的目录结构怎么组织。但是，按照一定规则将 Redux 逻辑收归到一处使得代码更可维护。
 
-Because of this, **we recommend that most applications should structure files using a "feature folder" approach** (all files for a feature in the same folder). Within a given feature folder, **the Redux logic for that feature should be written as a single "slice" file**, preferably using the Redux Toolkit `createSlice` API. (This is also known as the ["ducks" pattern](https://github.com/erikras/ducks-modular-redux)). While older Redux codebases often used a "folder-by-type" approach with separate folders for "actions" and "reducers", keeping related logic together makes it easier to find and update that code.
+正因如此，**我们建议大多数的应用程序因该按照“功能性文件夹”的方法来组织目录结构**（即具有统一功能的文件都在一个文件夹里）。给定一个特定文件夹，**有相对应功能的 Redux 逻辑 都应该被写进单独的一个 "slice" 文件**，推荐使用 Redux Toolkit 的 `createSlice` API。（这也是俗称的 ["ducks" 模式](https://github.com/erikras/ducks-modular-redux)）。虽然一些老的 Redux 代码库经常使用一种 "folder-by-type" 方式，将“actions”和“reducers”分别写到不同的文件夹中，但是将相关逻辑都归到一起使得定位代码和修改代码变得更容易。
 
-<DetailedExplanation title="Detailed Explanation: Example Folder Structure">
-An example folder structure might look something like:
+<DetailedExplanation title="详细说明：目录结构的示例">
+一个目录结构的示例，大概长这样：
 
 - `/src`
-  - `index.tsx`: Entry point file that renders the React component tree
+  - `index.tsx`: React 组件树渲染的入口文件
   - `/app`
-    - `store.ts`: store setup
-    - `rootReducer.ts`: root reducer (optional)
-    - `App.tsx`: root React component
-  - `/common`: hooks, generic components, utils, etc
-  - `/features`: contains all "feature folders"
-    - `/todos`: a single feature folder
-      - `todosSlice.ts`: Redux reducer logic and associated actions
-      - `Todos.tsx`: a React component
+    - `store.ts`: store 配置
+    - `rootReducer.ts`: 根 reducer (可选)
+    - `App.tsx`: React 根组件
+  - `/common`: hooks、通用组件、工具方法等
+  - `/features`: 包含所有的“功能性文件夹”
+    - `/todos`: 但个功能的文件夹
+      - `todosSlice.ts`: Redux reducer 逻辑和相关的 action
+      - `Todos.tsx`: 一个 React 组件
 
-`/app` contains app-wide setup and layout that depends on all the other folders.
+`/app` 包含应用级别的一些配置和布局等，这些配置和布局取决于项目中的其他文件夹
 
-`/common` contains truly generic and reusable utilities and components.
+`/common` 包含真正通用和可重用的工具方法和组件
 
-`/features` has folders that contain all functionality related to a specific feature. In this example, `todosSlice.ts` is a "duck"-style file that contains a call to RTK's `createSlice()` function, and exports the slice reducer and action creators.
+`/features` 是一个存放包含一个特定功能所有的相关方法的文件夹。在本例中，`todosSlice.ts` 就是一个"duck" 风格的文件，其中包含了 RTK 的 `createSlice()` 函数的调用，并导出了 slice reducer 和 action creators。
 
 </DetailedExplanation>
 
-### Put as Much Logic as Possible in Reducers
+### 尽可能的把逻辑放进 Reducers
 
-Wherever possible, **try to put as much of the logic for calculating a new state into the appropriate reducer, rather than in the code that prepares and dispatches the action** (like a click handler). This helps ensure that more of the actual app logic is easily testable, enables more effective use of time-travel debugging, and helps avoid common mistakes that can lead to mutations and bugs.
+尽可能**试着将计算新的 state 的逻辑代码写进合适的 reducer，而不是准备数据并 dispatch action 的那段代码中**（比如 click handler）。这一点有助于确保更多实际应用程序逻辑易于测试，使得时间旅行调试更高效，更帮助避免导致 mutation 和 bug 的一般性错误。
 
-There are valid cases where some or all of the new state should be calculated first (such as generating a unique ID), but that should be kept to a minimum.
+存在一些合理的用例，新的 state 中的某些或全部数据需要被首先计算（例如生成唯一的 ID），但是这种情况应该维持在一个最低的限度。
 
-<DetailedExplanation>
+<DetailedExplanation title="详细说明">
 
-The Redux core does not actually care whether a new state value is calculated in the reducer or in the action creation logic. For example, for a todo app, the logic for a "toggle todo" action requires immutably updating an array of todos. It is legal to have the action contain just the todo ID and calculate the new array in the reducer:
+Redux 核心实际上并不关心新的 state 是在 reducer 中计算的还是在 action 创建逻辑中计算的。例如，对于 todo 应用程序，“切换 todo 状态”操作的逻辑要求 immutable 更新 todo 数组。让 action 只携带 todo ID 并在 reducer 中计算新数组是是合法的：
 
 ```js
 // Click handler:
@@ -151,7 +153,7 @@ case "todos/toggleTodo": {
 }
 ```
 
-And also to calculate the new array first and put the entire new array in the action:
+并且，首先计算出一个新的数组，并将整个数组放进 action 中也是可以的：
 
 ```js
 // Click handler:
@@ -170,21 +172,21 @@ case "todos/toggleTodo":
     return action.payload.todos;
 ```
 
-However, doing the logic in the reducer is preferable for several reasons:
+但是，我们推荐在 reducer 中完成这些逻辑，有以下几点原因：
 
-- Reducers are always easy to test, because they are pure functions - you just call `const result = reducer(testState, action)`, and assert that the result is what you expected. So, the more logic you can put in a reducer, the more logic you have that is easily testable.
-- Redux state updates must always follow [the rules of immutable updates](../usage/structuring-reducers/ImmutableUpdatePatterns.md). Most Redux users realize they have to follow the rules inside a reducer, but it's not obvious that you _also_ have to do this if the new state is calculated _outside_ the reducer. This can easily lead to mistakes like accidental mutations, or even reading a value from the Redux store and passing it right back inside an action. Doing all of the state calculations in a reducer avoids those mistakes.
-- If you are using Redux Toolkit or Immer, it is much easier to write immutable update logic in reducers, and Immer will freeze the state and catch accidental mutations.
-- Time-travel debugging works by letting you "undo" a dispatched action, then either do something different or "redo" the action. In addition, hot-reloading of reducers normally involves re-running the new reducer with the existing actions. If you have a correct action but a buggy reducer, you can edit the reducer to fix the bug, hot-reload it, and you should get the correct state right away. If the action itself was wrong, you'd have to re-run the steps that led to that action being dispatched. So, it's easier to debug if more logic is in the reducer.
-- Finally, putting logic in reducers means you know where to look for the update logic, instead of having it scattered in random other parts of the application code.
+- 由于 reducer 都是纯函数，所以他们更容易测试 —— 你只需要调用 `const result = reducer(testState, action)`，并且断言你期望的结果。所以，在 reducer 中执行的逻辑越多，可测试的逻辑就越多。
+- Redux state 的更新必须始终遵守[immutable 更新的原则](../usage/structuring-reducers/ImmutableUpdatePatterns.md)。大多数的 Redux 使用者都明白在 reducer 中遵循这些规则，但也可能不知道如果要在 reducer 的 _外部_ 计算出一个新的 state _也_ 必须这么干。这样很容易产生错误，比如意外的 mutation 或者甚至从 Redux store 中读取一个值并将其直接回传到 action 中。在 reducer 中执行所有的 state 计算 能避免造成这些错误。
+- 如果你正在使用 Redux Toolkit 或 Immer 库，那么在 reducers 编写 immutable 更新逻辑 是相当简单的，并且 Immer 会 freeze 掉 state 从而捕获意外的 mutations 错误。
+- 时间旅行调试让你可以 "撤销" 已经被 dispatch 的 action，且可以 "重做" dispatch action。此外，reducers 的热重载通常涉及到使用新的 reducer 来执行现有的 action。 如果你的 action 没问题但是 reducer 是有 bug 的，你可以修改 recuder 修复 bug，并热重载这个 reducer，你就能获得一个正确的新 state。如果 action 本身出现错误，你只需要重新执行产生错误的那一步的 action。所以，将更多的逻辑放进 reducer 后，调试也变方便了。
+- 最后，把更新数据的逻辑放进 reducers 而不是让它们随机散落在应用代码的其他地方意味着你更方便找到这些逻辑了。
 
 </DetailedExplanation>
 
-### Reducers Should Own the State Shape
+### Reducers 应该拥有 State Shape
 
-The Redux root state is owned and calculated by the single root reducer function. For maintainability, that reducer is intended to be split up by key/value "slices", with **each "slice reducer" being responsible for providing an initial value and calculating the updates to that slice of the state**.
+Redux 根 state 是被单一的根 reducer 函数持有和计算的。从可维护性的角度，reducer 会被按照键/值对的形式划分为一个个 "slice"，**每个 "slice reducer" 都负责初始化值且计算和更新 slice state 值**。
 
-In addition, slice reducers should exercise control over what other values are returned as part of the calculated state. **Minimize the use of "blind spreads/returns"** like `return action.payload` or `return {...state, ...action.payload}`, because those rely on the code that dispatched the action to correctly format the contents, and the reducer effectively gives up its ownership of what that state looks like. That can lead to bugs if the action contents are not correct.
+此外，slice reducers should exercise control over what other values are returned as part of the calculated state. **Minimize the use of "blind spreads/returns"** like `return action.payload` or `return {...state, ...action.payload}`, because those rely on the code that dispatched the action to correctly format the contents, and the reducer effectively gives up its ownership of what that state looks like. That can lead to bugs if the action contents are not correct.
 
 > **Note**: A "spread return" reducer may be a reasonable choice for scenarios like editing data in a form, where writing a separate action type for each individual field would be time-consuming and of little benefit.
 

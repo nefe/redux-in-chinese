@@ -1,7 +1,7 @@
 ---
 id: store
 title: Store
-hide_title: false
+description: 'API > Store: the core Redux store methods'
 ---
 
 # Store
@@ -27,7 +27,7 @@ Store 不是类。它只是有几个方法的对象。
 
 ### getState()
 
-返回应用当前的 state 树。  
+返回应用当前的 state 树。
 它与 store 的最后一个 reducer 返回值相同。
 
 #### 返回值
@@ -36,11 +36,14 @@ _(any)_: 应用当前的 state 树。
 
 ---
 
+&nbsp;
+
 ### dispatch(action)
 
-分发 action。这是触发 state 变化的惟一途径。
+dispatch action。这是触发 state 变化的惟一途径。
 
-将使用当前 [`getState()`](#getstate) 的结果和传入的 `action` 以同步方式的调用 store 的 reduce 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getstate) 的返回值，同时变化监听器(change listener)会被触发。
+****
+将使用当前 [`getState()`](#getstate) 的结果和传入的 `action` 以同步方式的调用 store 的 reducer 函数。它的返回值会被作为下一个 state。从现在开始，这就成为了 [`getState()`](#getstate) 的返回值，同时变化监听器(change listener)会被触发。
 
 > ##### Flux 用户使用注意
 >
