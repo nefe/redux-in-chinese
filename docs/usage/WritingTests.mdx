@@ -1,8 +1,6 @@
 ---
 id: writing-tests
-# title: Writing Tests
 title: 编写测试
-# description: 'Usage > Writing Tests: recommended practices and setup for testing Redux apps'
 description: '使用 > 编写测试: 针对 Redux 应用设置测试环境和编写测试的推荐实践'
 ---
 
@@ -19,15 +17,15 @@ description: '使用 > 编写测试: 针对 Redux 应用设置测试环境和编
 
 针对 Redux 逻辑编写测试用例严格遵循 React Testing Libraray 的指导原则:
 
-> [你的测试越接近的去模拟软件的使用方式，这些测试越能给你信心](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
+> [你的测试越接近软件的使用方式，这些测试越能给你信心](https://twitter.com/kentcdodds/status/977018512689455106) - Kent C. Dodds
 
 因为你编写的多数 Redux 代码都是函数，并且多数又都是纯函数，所以它们很容易在没有 mock 的情况下进行测试的。然而，你需要考虑的是是否你的每一部分 Redux 代码都需要它专有的测试。 **在大多数场景下，终端用户并不知道也一点都不在乎应用中是否使用了 Redux**。因此，可以将 Redux 代码视为应用实现细节的一部分，多数情况下不并需要对 Redux 代码进行显式测试。
 
 通常我们针对使用 Redux 的应用编写测试的建议是:
 
-- **倾向于编写整体性的集成测试**。对于使用 Redux 的 React 应用，使用一个真实的 store 实例包裹被测试的组件来渲染一个 `<Provider>`。与被测试页面的交互应该使用真实的 Redux 逻辑，把 API 调用 mock 掉，这样应用代码就不需要改变，就可以断言 UI 是否被正确更新。
+- **倾向于编写整体性的集成测试**。对于使用 Redux 的 React 应用，使用一个真实的 store 实例包裹被测试的组件来渲染一个 `<Provider>`。与被测试页面的交互应该使用真实的 Redux 逻辑，把 API 调用 mock 掉，这样应用代码就不需要改变，只需要断言 UI 是否被正确更新。
 - _如果_ 需要，可以对纯函数（例如复杂的 reducer 或 selector）进行基本的单元测试。然而，在很多情况下，这些只是被集成测试覆盖的实现细节。
-- **不要尝试 mock selector 函数或 React-Redux 的钩子函数！** mock 库的导入是脆弱的，并且不会给你信心你的实际应用代码是可用的。
+- **不要尝试 mock selector 函数或 React-Redux 的钩子函数！** 对库的 imports 进行 mock 是脆弱的，并且也让你对自己代码的可用性没有信心。
 
 :::info
 针对我们推荐的集成测试风格的测试背景，请参考：
@@ -41,7 +39,7 @@ description: '使用 > 编写测试: 针对 Redux 应用设置测试环境和编
 
 ### 测试运行器
 
-**Redux 可以使用任何测试运行器进行测试**，因为它只是纯粹的 JavaScript。一个常见的选择是 [Jest](https://jestjs.io/)，一个广泛使用的测试运行器，它附带了 Create-React-App，并且被 Redux 库仓库使用。如果你正在使用 [Vite](https://vitejs.dev/) 来构建你的项目，你可能正在使用 [Vitest](https://vitest.dev/) 作为你的测试运行器。
+**Redux 可以使用任何测试运行器进行测试**，因为它就是纯的 JavaScript。一个常见的选择是 [Jest](https://jestjs.io/)，一个广泛使用的测试运行器，它附带了 Create-React-App，并且被 Redux 库仓库使用。如果你正在使用 [Vite](https://vitejs.dev/) 来构建你的项目，你可能正在使用 [Vitest](https://vitest.dev/) 作为你的测试运行器。
 
 通常，你的测试运行器需要被配置为编译 JavaScript/TypeScript 语法。如果你要测试 UI 组件，你可能需要配置测试运行器使用 [JSDOM](https://github.com/jsdom/jsdom) 提供一个 mock DOM 环境。
 
@@ -202,7 +200,7 @@ export type AppDispatch = AppStore['dispatch']
 // file: app/hooks.ts
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from './store'
-// 在整个应用程序中使用，而不是纯粹的 `useDispatch` 和 `useSelector`
+// 在整个应用程序中使用，而不是 `useDispatch` 和 `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 ```
@@ -302,7 +300,7 @@ export default function UserDisplay() {
 
 ### 设置可重用的测试渲染函数
 
-React Testing Library 的 `render` 函数接受一棵 React 元素树并渲染这些组件。就像在真实的应用程序中一样，任何 Redux 连接的组件都需要 [一个 React-Redux `<Provider>` 组件包裹在它们周围](https://react-redux.js.org/tutorials/quick-start#provide-the-redux-store-to-react)，并设置和提供一个真实的 Redux store。
+React Testing Library 的 `render` 函数接受 React 元素树并渲染这些组件。就像在真实的应用程序中一样，任何 Redux 连接的组件都需要 [一个 React-Redux `<Provider>` 组件包裹在它们周围](https://react-redux.js.org/tutorials/quick-start#provide-the-redux-store-to-react)，并设置和提供一个真实的 Redux store。
 
 此外，**测试代码应为每个测试创建一个单独的 Redux store 实例，而不是重用相同的 store 实例并重置其状态**。这确保了测试之间不会意外地泄漏值。
 
