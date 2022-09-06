@@ -182,16 +182,16 @@ case "todos/toggleTodo":
 
 </DetailedExplanation>
 
-### Reducers 应该拥有 State Shape
+### Reducers 应该持有 State Shape
 
-Redux 根 state 是被单一的根 reducer 函数持有和计算的。从可维护性的角度，reducer 会被按照键/值对的形式划分为一个个 "slice"，**每个 "slice reducer" 都负责初始化值且计算和更新 slice state 值**。
+Redux 根 state 是被唯一的一个的根 reducer 函数持有和计算的。从可维护性的角度，reducer 会被按照键/值对的形式划分为一个个 "slice"，**每个 "slice reducer" 都负责初始化值且计算和更新 slice state 值**。
 
-此外，slice reducers should exercise control over what other values are returned as part of the calculated state. **Minimize the use of "blind spreads/returns"** like `return action.payload` or `return {...state, ...action.payload}`, because those rely on the code that dispatched the action to correctly format the contents, and the reducer effectively gives up its ownership of what that state looks like. That can lead to bugs if the action contents are not correct.
+此外，slice reducers 要实际控制其他作为被计算出的 state 的一部分而返回的值。 **尽可能减少“盲目的 spreads/returns 表达式” 的使用**，比如 `return action.payload` 或 `return {...state, ...action.payload}`，因为这些表达式依赖于 dispatch action 那段代码才能正确地格式化内容，且 reducer 放弃了 state 数据结构的掌控权。如果 action 的内容不正确，极容易导致 bug。
 
-> **Note**: A "spread return" reducer may be a reasonable choice for scenarios like editing data in a form, where writing a separate action type for each individual field would be time-consuming and of little benefit.
+> **注意**: 一个有着 spread 返回的 reducer 在很多场景下是合理的选择，比如在表单中编辑数据，如果为每个表单项分别写 action type，那将是事倍功半的。
 
-<DetailedExplanation>
-Picture a "current user" reducer that looks like:
+<DetailedExplanation title="详细说明">
+假设一个控制“当前登陆用户”的 reducer 是这样的：
 
 ```js
 const initialState = {
@@ -210,9 +210,9 @@ export default usersReducer = (state = initialState, action) {
 }
 ```
 
-In this example, the reducer completely assumes that `action.payload` is going to be a correctly formatted object.
+在本例中，reducer 完全假定 `action.payload` 将会是正确的数据结构传上来。
 
-However, imagine if some part of the code were to dispatch a "todo" object inside the action, instead of a "user" object:
+但是，假设如果一些其他代码，用 action 传上来了一个“todo”对象，而不是“user”对象：
 
 ```js
 dispatch({
@@ -224,32 +224,32 @@ dispatch({
 })
 ```
 
-The reducer would blindly return the todo, and now the rest of the app would likely break when it tries to read the user from the store.
+reducer 将会盲目地返回这个 todo 对象，并且 app 中尝试从 store 中获取 user 的其他部分可能会崩掉。
 
-This could be at least partly fixed if the reducer has some validation checks to ensure that `action.payload` actually has the right fields, or tries to read the right fields out by name. That does add more code, though, so it's a question of trading off more code for safety.
+如果在 reducer 中检查一下`action.payload`是否具有正确的字段，或者根据正确字段的名字尝试去获取一下，至少可以避免一部分以上错误。虽然可能会增加一些代码，所以如何权衡代码量和可靠性是一个问题。
 
-Use of static typing does make this kind of code safer and somewhat more acceptable. If the reducer knows that `action` is a `PayloadAction<User>`, then it _should_ be safe to do `return action.payload`.
+使用静态数据检查就可以提高代码安全性，在一定程度上可以接受。如果 reducer 知道 `action` 是 `PayloadAction<User>`，那么`return action.payload`就*应该*安全。
 
 </DetailedExplanation>
 
-### Name State Slices Based On the Stored Data
+### 根据存储的数据来命名 State Silce
 
-As mentioned in [Reducers Should Own the State Shape ](#reducers-should-own-the-state-shape), the standard approach for splitting reducer logic is based on "slices" of state. Correspondingly, `combineReducers` is the standard function for joining those slice reducers into a larger reducer function.
+正如在[Reducer 应该持有数据形状](#reducers-should-own-the-state-shape)提到的那样，基于 state 的“slice”来划分 reducer 逻辑是标准的方法。对应的，`combineReducers`是一个将 slice reducer 合并成一个较大 reducer 的标准函数。
 
-The key names in the object passed to `combineReducers` will define the names of the keys in the resulting state object. Be sure to name these keys after the data that is kept inside, and avoid use of the word "reducer" in the key names. Your object should look like `{users: {}, posts: {}}`, rather than `{usersReducer: {}, postsReducer: {}}`.
+传递给 `combineReducers` 的对象中的键名将定义最终 state 对象中的键名。确保以内部保存的数据后命名这些键，并避免在键名中使用“reducer”这个单词。你的对象应该像这样`{users: {}, posts: {}}`，而不是`{usersReducer: {}, postsReducer: {}}`。
 
-<DetailedExplanation>
-ES6 object literal shorthand makes it easy to define a key name and a value in an object at the same time:
+<DetailedExplanation title="详细说明">
+ES6 对象字面量简写使得在对象中同时定义键名和值很简单：
 
 ```js
 const data = 42
 const obj = { data }
-// same as: {data: data}
+// 和 {data: data} 相同
 ```
 
-`combineReducers` accepts an object full of reducer functions, and uses that to generate state objects that have the same key names. This means that the key names in the functions object define the key names in the state object.
+`combineReducers` 接受一个全是 reducer 函数的对象，并用它来生成与其键名称相同的 state 对象。就是说那个全是函数的对象的键名充当了 state 对象的键名。
 
-This results in a common mistake, where a reducer is imported using "reducer" in the variable name, and then passed to `combineReducers` using the object literal shorthand:
+这导致了一个很常见的错误，倒入了一个变量名中含有“reducer”的 reducer，然后将这个 reducer 用字面量的简写传给了`combineReducers`：
 
 ```js
 import usersReducer from 'features/users/usersSlice'
@@ -259,9 +259,9 @@ const rootReducer = combineReducers({
 })
 ```
 
-In this case, use of the object literal shorthand created an object like `{usersReducer: usersReducer}`. So, "reducer" is now in the state key name. This is redundant and useless.
+这个例子使用了字面量简写创建了对象比如`{usersReducer: usersReducer}`。所以，“reducer”现在出现在了 state 对象的键名中。多余且无用。
 
-Instead, define key names that only relate to the data inside. We suggest using explicit `key: value` syntax for clarity:
+相反，定义键名仅仅只和对象内部相关。我们建议直接使用明确的`key: value`语法：
 
 ```js
 import usersReducer from 'features/users/usersSlice'
@@ -273,30 +273,34 @@ const rootReducer = combineReducers({
 })
 ```
 
-It's a bit more typing, but it results in the most understandable code and state definition.
+这可能就是多打了一些代码，但是其带来的是更优的可读性和清晰的 state 定义。
 
 </DetailedExplanation>
 
-### Organize State Structure Based on Data Types, Not Components
+### 根据数据的类型而不是组件来组织 state 结构
 
-Root state slices should be defined and named based on the major data types or areas of functionality in your application, not based on which specific components you have in your UI. This is because there is not a strict 1:1 correlation between data in the Redux store and components in the UI, and many components may need to access the same data. Think of the state tree as a sort of global database that any part of the app can access to read just the pieces of state needed in that component.
+在应用程序中，根 state silce 应该基于主要数据的类型或者功能领域来定义和命名，而不该基于 UI 中特定的组件。这是因为 Redux store 中的数据和 UI 中的组件并不是一一对应的，且很多组件可能要访问同一份数据。可以把 state 树想象成为一系列的全局数据库，app 的任意部分都可以访问，读取组件中需要的那一些数据。
 
-For example, a blogging app might need to track who is logged in, information on authors and posts, and perhaps some info on what screen is active. A good state structure might look like `{auth, posts, users, ui}`. A bad structure would be something like `{loginScreen, usersList, postsList}`.
+例如，一个博客 app，想要追踪到登录用户是谁，作者和帖子的信息，抑或是页面激活状态等一些信息。那么一个好的 state 结构也许是这样`{auth, posts, users, ui}`。一个不好的 state 结构可能长这样：`{loginScreen, usersList, postsList}`。
 
-### Treat Reducers as State Machines
+### 把 Reducer 看作是 State 机器
 
-Many Redux reducers are written "unconditionally". They only look at the dispatched action and calculate a new state value, without basing any of the logic on what the current state might be. This can cause bugs, as some actions may not be "valid" conceptually at certain times depending on the rest of the app logic. For example, a "request succeeded" action should only have a new value calculated if the state says that it's already "loading", or an "update this item" action should only be dispatched if there is an item marked as "being edited".
+有很多“无条件的” Redux reducer。他们只观察 dispatch 的 action 并计算一个新的状态值，而不关心当前状态的逻辑。这可能产生 bug，因为根据 app 逻辑的其他位置，某些 action 在某些时候可能在概念上“无效”。例如，一个“request 成功”的 action 当且仅当 state 已经被“加载了”，或者一个“更新这个项”的 action 在某些项目被标记为“被编辑”状态时被 dispatch 了才会有新的值被计算。
 
 To fix this, **treat reducers as "state machines", where the combination of both the current state _and_ the dispatched action determines whether a new state value is actually calculated**, not just the action itself unconditionally.
 
+为了解决这个问题，**把 reducer 当作是“state 机器”，将现有 state _和_ dispatch 的 action 绑定到一起，决定如何计算出一个新的 state**，而不是仅让 action 没有状态。
+
 <DetailedExplanation>
 
-A [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) is a useful way of modeling something that should only be in one of a finite number of "finite states" at any time. For example, if you have a `fetchUserReducer`, the finite states can be:
+[有限状态机](https://en.wikipedia.org/wiki/Finite-state_machine) is a useful way of modeling something that should only be in one of a finite number of "finite states" at any time. For example, if you have a `fetchUserReducer`, the finite states can be:
 
-- `"idle"` (fetching not started yet)
-- `"loading"` (currently fetching the user)
-- `"success"` (user fetched successfully)
-- `"failure"` (user failed to fetch)
+[有限状态机](https://en.wikipedia.org/wiki/Finite-state_machine)是个很有效的建模方法，它在任何时候都应该只处于有限数量的“有限状态”之一。 例如有一个 `fetchUserReducer`，则其有限状态可以是：
+
+- `"idle"` （数据请求没有开始）
+- `"loading"` （正在请求 User 数据）
+- `"success"` （User 数据请求成功）
+- `"failure"` （User 数据请求失败）
 
 To make these finite states clear and [make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible), you can specify a property that holds this finite state:
 
