@@ -21,7 +21,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## 简介
 
-在[第三节: State，Actions 和 Reducers](./part-3-state-actions-reducers.md)中, 开始编写 todo 示例程序。我们列出了业务需求，定义了让应用正常运行所需的 **state** 结构，创建了一系列描述匹配用户交互时“发生了什么”的 action type。还编写了 **reducer** 函数来更新 `state.todos` 和 `state.filters`，并了解了如何使用 React `combineReducers` 函数来为每个功能创建一个基于 "slice reducers" 的“根 reducer”。
+在[第 3 节: State，Actions 和 Reducers](./part-3-state-actions-reducers.md)中, 开始编写 todo 示例程序。我们列出了业务需求，定义了让应用运行所需的 **state** 结构，创建了一系列描述匹配用户交互时“发生了什么”的 action type。还编写了 **reducer** 函数来更新 `state.todos` 和 `state.filters`，并了解了如何使用 Redux `combineReducers` 函数来为每个功能创建一个基于 "slice reducers" 的“根 reducer”。
 
 是时候将这些部分整合在一起了，其中包含 Redux 应用程序的核心部分：**store**
 
@@ -41,7 +41,7 @@ Redux **store** 汇集了构成应用程序的 state、actions 和 reducers。st
 
 **每个 Redux store 都有一个根 reducer 函数**. 在上一节中，我们 [使用 `combineReducers` 创建了一个根 reducer 函数](./part-3-state-actions-reducers.md#combinereducers)。在我们的示例应用程序中，该根 reducer 当前在 `src/reducer.js` 中定义。让我们导入根 reducer 并创建第一个 store。
 
-Redux 核心库有一个[** `createStore` **](../../api/createStore.md)的 API 将创建 store。新建一个名为 `store.js` 的文件，并导入 `createStore` 和根 reducer。然后，调用 `createStore` 并传入根 reducer ：
+Redux 核心库有一个[** `createStore` **](../../api/createStore.md) API 可以创建 store。新建一个名为 `store.js` 的文件，并导入 `createStore` 和根 reducer。然后，调用 `createStore` 并传入根 reducer ：
 
 ```js title="src/store.js"
 import { createStore } from 'redux'
@@ -167,7 +167,7 @@ test('Toggles a todo based on id', () => {
 
 ## Redux Store 内部
 
-查看 Redux Store 内部实现对于学习 store 有所帮助。这是一个关于 Redux Store 实现的小型示例，大约 25 行代码：
+查看 Redux Store 内部实现对于学习 store 有所帮助。这是一个关于 Redux Store 实现的简化示例，大约 25 行代码：
 
 ```js title="miniReduxStoreExample.js"
 function createStore(reducer, preloadedState) {
@@ -218,13 +218,13 @@ state.filters.status = 'Active'
 
 换句话说：
 
-- 当你调用 `getState()` 时，Redux store 不会制作 `state` 值的额外副本。它与根 reducer 函数返回的引用完全相同。
+- 当你调用 `getState()` 时，Redux store 不会产生 `state` 值的额外副本。它与根 reducer 函数返回的引用完全相同。
 - Redux store 对于意外更改没有做任何防护，我们可以在 reducer 内部或者 store 外部改变状态，所以必须小心避免意外更改。
 
 无意中发生变动的一个常见原因是对数组进行排序。[**调用 `array.sort()` 实际上会改变现有数组**](https://doesitmutate.xyz/sort/)。如果我们调用 `const sortedTodos = state.todos.sort()`，我们最终会无意中改变真实的 store 状态。
 :::tip
 
-在[第八节: Modern Redux](./part-8-modern-redux.md), 我们将看到 Redux Toolkit 如何避免 reducer 中的变动，以及检测并警告 reducer 之外无意中发生的变动。
+在[第 8 节: Modern Redux](./part-8-modern-redux.md), 我们将看到 Redux Toolkit 如何避免 reducer 中的变动，以及检测并警告 reducer 之外无意中发生的变动。
 :::
 
 ## 配置 Store
@@ -235,12 +235,12 @@ Redux store 是使用一种叫做 **store enhancer** 的东西来定制的。sto
 
 在本教程中，不会详细介绍“ store enhancers ”的实际工作原理——我们将重点介绍如何使用它们。
 
-### 使用 Enhancers 创建一个 Store
+### 使用 Enhancers 创建 Store
 
 我们的项目在 `src/exampleAddons/enhancers.js` 文件中有两个小示例 `store enhancers` 可用：
 
-- `sayHiOnDispatch`: 一个 enhancer，每次 dispatched 一个 action 时总是将`'Hi'！`记录到控制台
-- `includeMeaningOfLife`: 一个 enhancer 总是将字段 `meaningOfLife: 42` 添加到 `getState()` 返回值中
+- `sayHiOnDispatch`: enhancer，每次 dispatched 一个 action 时总是将`'Hi'！`记录到控制台
+- `includeMeaningOfLife`: enhancer 总是将字段 `meaningOfLife: 42` 添加到 `getState()` 返回值中
 
 让我们从使用 `sayHiOnDispatch` 开始。 首先，我们将其导入，并将其传递给`createStore`：
 
@@ -328,7 +328,7 @@ const store = createStore(rootReducer, storeEnhancer)
 
 :::
 
-## Middleware（中间件）
+## Middleware
 
 Enhancers 非常强大，因为其可以覆盖或替换 store 的任何方法：`dispatch`、`getState` 和 `subscribe`。
 
