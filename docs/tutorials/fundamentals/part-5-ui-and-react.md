@@ -1,17 +1,17 @@
 ---
 id: part-5-ui-react
-title: 'Redux 深入浅出，第 5 节：视图和 React'
-sidebar_label: '视图和 React'
+title: 'Redux 深入浅出，第 5 节：UI 和 React'
+sidebar_label: 'UI 和 React'
 description: '官方 Redux 基础教程：学习如何将 Redux 与 React 一起使用'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux 深入浅出，第 5 节：视图和 React
+# Redux 深入浅出，第 5 节：UI 和 React
 
 :::tip 你将学到
 
-- Redux store 如何与视图一起工作
+- Redux store 如何与 UI 一起工作
 - 如何在 React 中使用 Redux
 
 :::
@@ -20,30 +20,30 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 [第 4 节：Store](./part-4-store.md) 介绍了如何创建 Redux store、dispatch action 以及读取当前 state。还研究了 store 内部工作机制，enhancers 和 middleware 是如何使我们能够自定义 store，以及如何添加 Redux DevTools 让我们在 dispatch action 时可以查看应用程序内部的变化。
 
-在本节中，我们将为 todo 应用程序添加用户界面。除了介绍 Redux 如何与视图层一起工作外，还会专门介绍 Redux 如何与 React 一起工作。
+在本节中，我们将为 todo 应用程序添加用户界面。除了介绍 Redux 如何与 UI 层一起工作外，还会专门介绍 Redux 如何与 React 一起工作。
 
-## 集成 Redux 和视图
+## 集成 Redux 和 UI
 
 Redux 是一个独立的 JS 库。正如前文所述，即使没有设置用户界面，也可以创建和使用 Redux store。这也意味着 **Redux 可以和任何 UI 框架一起使用**（甚至不使用 _任何_ UI 框架），并且同时支持在客户端和服务器上使用。你可以使用 React、Vue、Angular、Ember、jQuery 或 vanilla JavaScript 编写 Redux 应用程序。
 
-**Redux 是专门为 [React](https://reactjs.org)** 设计的。React 允许你将视图描述为 state 函数，然后 Redux 控制并更新 state 以响应 action。
+**Redux 是专门为 [React](https://reactjs.org)** 设计的。React 允许你将 UI 描述为 state 函数，然后 Redux 控制并更新 state 以响应 action。
 
 我们将在本教程中使用 React 来构建 todo 应用程序，并介绍如何将 React 与 Redux 一起使用的基础知识。
 
-我们先来快速地看一下 Redux 是如何与视图层交互的。
+我们先来快速地看一下 Redux 是如何与 UI 层交互的。
 
-### Redux 和视图的基本集成
+### Redux 和 UI 的基本集成
 
-将 Redux 与任何视图层一起使用都需要这几个步骤：
+将 Redux 与任何 UI 层一起使用都需要这几个步骤：
 
 1. 创建 Redux store
-2. 订阅更新
+2. 订阅（subscribe）更新
 3. 在订阅回调内部：
    1. 获取当前 store 的 state
-   2. 提取当前视图需要的数据
-   3. 使用这些数据更新视图
-4. 如有必要，使用初始状态渲染视图
-5. 通过 dispatch action 来响应视图的输入操作
+   2. 提取当前 UI 需要的数据
+   3. 使用这些数据更新 UI
+4. 如有必要，使用初始 state 渲染 UI
+5. 通过 dispatch action 来响应 UI 的输入操作
 
 先来回顾[在第 1 节中看到的计数器应用程序示例](./part-1-overview.md)，看看它是如何遵循这些步骤的：
 
@@ -64,22 +64,22 @@ function render() {
   // 3.2) 提取你想要的数据
   const newValue = state.value.toString()
 
-  // 3.3) 使用新值更新视图
+  // 3.3) 使用新值更新 UI
   valueEl.innerHTML = newValue
 }
 
-// 4) 使用初始状态渲染视图
+// 4) 使用初始 state 渲染 UI
 render()
 
-// 5) 基于视图输入 dispatch action
+// 5) 基于 UI 输入 dispatch action
 document.getElementById('increment').addEventListener('click', function () {
   store.dispatch({ type: 'counter/incremented' })
 })
 ```
 
-无论使用什么视图层，**Redux 都以相同的方式与每个视图层一起工作**。出于性能的考虑，实际实现通常会更复杂，但都遵循相同的步骤。
+无论使用什么 UI 层，**Redux 都以相同的方式与每个 UI 一起工作**。出于性能的考虑，实际实现通常会更复杂，但都遵循相同的步骤。
 
-由于 Redux 是一个单独的库，因此有不同的绑定库可以帮助你将 Redux 与给定的 UI 框架一起使用。这些 UI 绑定库会处理订阅 store 的详细信息，并在状态更改时有效地更新视图，因此你不必自己编写这部分代码。
+由于 Redux 是一个单独的库，因此有不同的绑定库可以帮助你将 Redux 与给定的 UI 框架一起使用。这些 UI 绑定库会处理订阅 store 的详细信息，并在 state 更改时有效地更新 UI，因此你不必自己编写这部分代码。
 
 ## Redux 结合 React 使用
 
@@ -89,7 +89,7 @@ document.getElementById('increment').addEventListener('click', function () {
 npm install react-redux
 ```
 
-（如果不使用 npm，可以从 unpkg 获取最新的 UMD 构建（无论是[开发](https://unpkg.com/react-redux@latest/dist/react-redux.js)还是[ 生产](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果是通过 `<script>` 标签引入的，UMD 构建会导出一个名为 `window.ReactRedux` 的全局变量。）
+（如果不使用 npm，可以从 unpkg 获取最新的 UMD 构建（无论是[开发](https://unpkg.com/react-redux@latest/dist/react-redux.js)还是[生产](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)）。如果是通过 `<script>` 标签引入的，UMD 构建会导出一个名为 `window.ReactRedux` 的全局变量。）
 
 本教程将会介绍 Redux 结合 React 使用所需的最重要的模式和示例，以及它们在 todo 应用程序中是如何工作的。
 
@@ -101,21 +101,21 @@ npm install react-redux
 
 ### 设计组件树
 
-类似根据需求[设计状态结构](./part-3-state-actions-reducers.md#designing-the-state-structure)，我们可以设计整个 UI 组件集以及它们在应用程序中的相互关系。
+类似根据需求[设计 state 结构](./part-3-state-actions-reducers.md#designing-the-state-structure)，我们可以设计整个 UI 组件集以及它们在应用程序中的相互关系。
 
 根据[应用程序的业务需求列表](./part-3-state-actions-reducers.md#defining-requirements)，我们至少需要这些组件：
 
 - **`<App>`**：渲染所有内容的根组件
-  - **`<Header>`**：包含“新 todo”的文本输入框和“完成所有 todo”的复选框
+  - **`<Header>`**：包含 new todo 的文本输入框和 complete all todos 的复选框
   - **`<TodoList>`**：基于过滤结果的所有当前可见 todo 列表
-    - **`<TodoListItem>`**：单个 todo 列表项，包含可单击切换完成状态的复选框，以及颜色过滤器
+    - **`<TodoListItem>`**：单个 todo 列表项，包含可单击切换完成状态的复选框，以及颜色类别 selector
   - **`<Footer>`**：显示未完成状态的数量，以及可以根据已完成状态和颜色类别过滤列表的控件
 
  除了这个基本的组件结构之外，也可以通过多种不同方式来划分组件。例如，`<Footer>` 组件 _可以_ 是一个较大的组件，也可以内部包含多个小组件，比如 `<CompletedTodos>`、`<StatusFilter>` 和 `<ColorFilters>`。并没有唯一正确的方法来划分，你会发现根据实际情况来选择编写较大组件还是拆分成多个小组件可能会更好。
 
 我们先从简单的小组件列表开始。我们假设[你已经熟悉 React](https://reactjs.org)，**所以会跳过编写布局代码的细节，并专注于如何在 React 组件中使用 React-Redux 库**。
 
-在开始添加任何的 Redux 相关逻辑之前，这个应用程序的初始视图如下所示：
+在开始添加任何的 Redux 相关逻辑之前，这个应用程序的初始 UI 如下所示：
 
 <iframe
   class="codesandbox"
@@ -135,15 +135,15 @@ npm install react-redux
 
 我们将看到的第一个 React-Redux hook 是 [**`useSelector`**](https://react-redux.js.org/api/hooks#useselector)，它**使得 React 组件可以从 Redux store 中读取数据**。
 
-`useSelector` 接收一个**选择器**函数。**选择器函数接收 Redux store 的 state 作为其参数，然后从 state 中取值并返回**。
+`useSelector` 接收一个 **selector** 函数。**selector 函数接收 Redux store 的 state 作为其参数，然后从 state 中取值并返回**。
 
-例如，在 todo 应用程序中，Redux state 将 todos 数组保存为 `state.todos`。我们可以编写一个选择器函数来返回它：
+例如，在 todo 应用程序中，Redux state 将 todos 数组保存为 `state.todos`。我们可以编写一个 selector 函数来返回它：
 
 ```js
 const selectTodos = state => state.todos
 ```
 
-也可以获取到当前被标记为“已完成”的 todo 列表：
+也可以获取到当前被标记为 completed 的 todo 列表：
 
 ```js
 const selectTotalCompletedTodos = state => {
@@ -152,9 +152,9 @@ const selectTotalCompletedTodos = state => {
 }
 ```
 
-因此，**选择器函数可以直接返回 Redux state，也可以基于该 state 返回 _派生_ 值**。
+因此，**selector 函数可以直接返回 Redux state，也可以基于该 state 返回 _派生_ 值**。
 
-为了在 `<TodoList>` 组件中读取 todos 数组，首先需要从 `react-redux` 库中引入 `useSelector` hook，然后使用选择器函数作为参数调用它：
+为了在 `<TodoList>` 组件中读取 todos 数组，首先需要从 `react-redux` 库中引入 `useSelector` hook，然后使用 selector 函数作为参数调用它：
 
 ```jsx title="src/features/todos/TodoList.js"
 import React from 'react'
@@ -186,17 +186,17 @@ export default TodoList
 
 虽然 _可以_ 调用 `store.subscribe()` 来监听每个组件中 store 的变化，但是这样会变得重复且难以控制。
 
-幸运的是，**`useSelector` 会自动订阅 Redux store！**这样，任何时候 dispatch action，它都会立即再次调用对应的选择器函数。**如果选择器返回的值与上次运行时相比发生了变化，`useSelector` 将强制组件使用新值重新渲染**。我们仅需要在组件中调用一次 `useSelector()` 即可。
+幸运的是，**`useSelector` 会自动订阅 Redux store！**这样，任何时候 dispatch action，它都会立即再次调用对应的 selector 函数。**如果 selector 返回的值与上次运行时相比发生了变化，`useSelector` 将强制组件使用新值重新渲染**。我们仅需要在组件中调用一次 `useSelector()` 即可。
 
 但是，要谨记下面这个要点：
 
 :::caution 警告
 
-**`useSelector` 使用严格的 `===` 来比较结果，因此只要选择器函数返回的结果是新地址引用，组件就会重新渲染！**这意味着如果在选择器中创建并返回新地址引用，那么每次 dispatch action 后组件都会被重新渲染，即使数据值确实没有改变。
+**`useSelector` 使用严格的 `===` 来比较结果，因此只要 selector 函数返回的结果是新地址引用，组件就会重新渲染！**这意味着如果在 selector 中创建并返回新地址引用，那么每次 dispatch action 后组件都会被重新渲染，即使数据值确实没有改变。
 
 :::
 
-例如，将此选择器传递给 `useSelector` 会导致组件 _总是_ 被重新渲染，因为 `array.map()` 永远返回一个新的数组引用：
+例如，将此 selector 传递给 `useSelector` 会导致组件 _总是_ 被重新渲染，因为 `array.map()` 永远返回一个新的数组引用：
 
 ```js
 // 不好的示例：总是返回一个新的引用
@@ -208,11 +208,11 @@ const selectTodoDescriptions = state => {
 
 :::tip 提示
 
-我们会在本节后面部分介绍解决此问题的一种方法。还会在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中讨论如何使用“记忆”选择器函数来提高性能并避免不必要的重新渲染。
+我们会在本节后面部分介绍解决此问题的一种方法。还会在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中讨论如何使用“记忆（memoized）”selector 函数来提高性能并避免不必要的重新渲染。
 
 :::
 
-还值得注意的是，我们可以像下面这样直接在 `useSelector` 里写选择器函数，而不必把它写成单独的变量：
+还值得注意的是，我们可以像下面这样直接在 `useSelector` 里写 selector 函数，而不必把它写成单独的变量：
 
 ```js
 const todos = useSelector(state => state.todos)
@@ -228,7 +228,7 @@ React-Redux 的 [**`useDispatch` hook 函数**](https://react-redux.js.org/api/h
 
 我们先在 `<Header>` 组件中试一下。首先需要让用户输入一些文本作为新的 todo 项，然后 dispatch 一个包含该文本的 `{type: 'todos/todoAdded'}` action。
 
-我们将编写一个典型的 React 表单组件，它使用["受控组件"](https://reactjs.org/docs/forms.html#controlled-components)来让用户输入文本。然后，当用户按下 Enter 键时，就 dispatch action。
+我们将编写一个典型的 React 表单组件，它使用[“受控组件（controlled inputs）”](https://reactjs.org/docs/forms.html#controlled-components)来让用户输入文本。然后，当用户按下 Enter 键时，就 dispatch action。
 
 ```jsx title="src/features/header/Header.js"
 import React, { useState } from 'react'
@@ -307,7 +307,7 @@ ReactDOM.render(
 - 使用 `useDispatch` hook 函数在组件中 dispatch action
 - 使用 `<Provider store={store}>` 组件包裹 `<App>` 组件，这样其他组件都能够和 store 进行交互
 
-我们现在能够与应用程序进行实际交互了！这是到目前为止的视图：
+我们现在能够与应用程序进行实际交互了！这是到目前为止的 UI：
 
 <iframe
   class="codesandbox"
@@ -350,21 +350,21 @@ ReactDOM.render(
 
 这也是一个如何在 Redux 中设计表单 state 很好的例子。**大多数表单 state 可能不应该保存在 Redux 中。** 而是应该在编辑表单时将数据保存在表单组件里，然后在用户完成时 dispatch action 以更新 store。
 
-### 在组件中使用多个选择器
+### 在组件中使用多个 Selectors
 
 目前只有 `<TodoList>` 组件从 store 中读取数据。如果 `<Footer>` 组件也从 store 中获取数据会是什么样。
 
 `<Footer>` 组件需要获取如下三个信息：
 
 - 有多少已完成的 todo
-- 当前“状态”过滤器的值
-- 当前选定的“颜色”类别过滤器列表
+- 当前 “status” 的 filter 值
+- 当前选定的 “color” 类别 filters 列表
 
 组件中如何读取这些值？
 
 **我们可以在一个组件中多次使用 `useSelector`**。**并且每次调用 `useSelector` 都应该总是返回尽可能少的 state**。——事实上，这样做是明智的。
 
-前面我们已经看到了如何编写一个选择器来获取已完成的 todo。由于这个组件需要用到的状态过滤器值和颜色过滤器值都存放在 `state.filters` slice 中，我们可以读取整个 `state.filters` 对象。
+前面我们已经看到了如何编写一个 selector 来获取已完成的 todo。由于这个组件需要用到的 status filter 值和 color filters 值都存放在 `state.filters` slice 中，我们可以读取整个 `state.filters` 对象。
 
 正如前文所述，我们可以将所有输入处理直接放入 `<Footer>`，或者将其拆分成多个独立组件，比如 `<StatusFilter>`。为了解释起来更简洁，我们将跳过编写输入处理的具体细节，并假设已经包含多个独立的小组件，这些组件通过 prop 已传入一些给定数据和 change 事件处理器回调函数。
 
@@ -496,7 +496,7 @@ const TodoListItem = ({ id }) => {
 export default TodoListItem
 ```
 
- 不过，这有一个问题。之前说过**在选择器中返回新的数组引用会导致组件每次都重新渲染**，现在我们尝试在 `<TodoList>` 中返回一个新的 IDs 数组。那么，即使我们切换 todo，IDs 数组的 _内容_ 应该是相同的，因为我们没有添加或删除任何内容。但是，由于包含这些 ID 的数组是一个新的引用，所以 `<TodoList>` 也会重新渲染即使它确实没有必要。
+ 不过，这有一个问题。之前说过**在 selector 中返回新的数组引用会导致组件每次都重新渲染**，现在我们尝试在 `<TodoList>` 中返回一个新的 IDs 数组。那么，即使我们切换 todo，IDs 数组的 _内容_ 应该是相同的，因为我们没有添加或删除任何内容。但是，由于包含这些 ID 的数组是一个新的引用，所以 `<TodoList>` 也会重新渲染即使它确实没有必要。
 
 一种解决方案是更改 `useSelector` 判断值是否变更的方式。`useSelector` 可以将比较函数作为它的第二个参数。比较函数接收旧值和新值作为参数，内部会判断两个值是否相同，相同则返回 “true”，那么组件也就不会被重新渲染。
 
@@ -525,7 +525,7 @@ const TodoList = () => {
 
 现在，如果我们切换 todo，ID 列表将被视为没有变化，`<TodoList>` 也不会被重新渲染。一个 `<TodoListItem>` 组件将获得一个更新的 todo 对象并重新渲染，但其余的组件因为 todo 没有变化所以不会被重新渲染。
 
-如前所述，还可以使用一种称为["记忆选择器"](part-7-standard-patterns.md)的特殊选择器函数来改进组件渲染，我们会在另一章节介绍。
+如前所述，还可以使用一种称为["记忆（memoized）selector"](part-7-standard-patterns.md) 的特殊 selector 函数来改进组件渲染，我们会在另一章节介绍。
 
 ## 你的所学
 
@@ -536,9 +536,9 @@ const TodoList = () => {
 你可以尝试自己实现其余缺少的 UI 功能！这是需要添加的内容列表：
 
 - 在 `<TodoListItem>` 组件中，使用 `useDispatch` hook 来 dispatch 用于更改颜色类别和删除 todo 的 action
-- 在 `<Footer>` 中，使用 `useDispatch` hook 来 dispatch 用于标记 todos 为已完成、清除已完成的状态以及更改过滤器值的 action
+- 在 `<Footer>` 中，使用 `useDispatch` hook 来 dispatch 用于标记 todos 为已完成、清除已完成的状态以及更改 filter 值的 action
 
-我们会在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中实现过滤器。
+我们会在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中实现 filters。
 
 :::
 
@@ -555,14 +555,14 @@ const TodoList = () => {
 :::tip 总结
 
 - **Redux  stores 可以和任何 UI 层一起使用**
-  - UI 代码始终订阅 store 以获取最新状态，并自行重绘
+  - UI 代码始终订阅 store 以获取最新的 state，并自行重绘
 - **React-Redux 是 React 的官方 Redux UI 绑定库**
   - React-Redux 作为单独的 `react-redux` 包安装
 - **`useSelector` hook 使得 React 组件能够从 store 中读取数据**
-  - 选择器函数将整个 store `state` 作为参数，并根据该状态返回一个值
-  - `useSelector` 调用它的选择器函数并返回选择器返回的结果
-  - `useSelector` 订阅 store，并在每次 dispatch action 时重新运行选择器
-  - 每当选择器结果发生变化时，`useSelector` 将强制组件使用新数据重新渲染
+  - selector 函数将整个 store `state` 作为参数，并根据该 state 返回一个值
+  - `useSelector` 调用它的 selector 函数并返回 selector 返回的结果
+  - `useSelector` 订阅 store，并在每次 dispatch action 时重新运行 selector
+  - 每当 selector 结果发生变化时，`useSelector` 将强制组件使用新数据重新渲染
 - **`useDispatch` hook 使得 React 组件能够向 store dispatch action**
   - `useDispatch` 返回实际的 `store.dispatch` 函数
   - 你可以根据需要在组件内部调用 `dispatch(action)`
@@ -573,4 +573,4 @@ const TodoList = () => {
 
 ## 下一步
 
-目前视图已正常运作，接下来要让 Redux 应用程序与服务器通信。在[第 6 节：异步逻辑](./part-6-async-logic.md)中，我们将讨论超时、AJAX 调用等异步逻辑如何适应 Redux 数据流。
+目前 UI 已正常运作，接下来要让 Redux 应用程序能够与服务器通信。在[第 6 节：异步逻辑](./part-6-async-logic.md)中，我们将讨论超时、AJAX 调用等异步逻辑如何适应 Redux 数据流。
