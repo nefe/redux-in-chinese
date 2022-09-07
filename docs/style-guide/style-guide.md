@@ -287,13 +287,9 @@ const rootReducer = combineReducers({
 
 有很多“无条件的” Redux reducer。他们只观察 dispatch 的 action 并计算一个新的状态值，而不关心当前状态的逻辑。这可能产生 bug，因为根据 app 逻辑的其他位置，某些 action 在某些时候可能在概念上“无效”。例如，一个“request 成功”的 action 当且仅当 state 已经被“加载了”，或者一个“更新这个项”的 action 在某些项目被标记为“被编辑”状态时被 dispatch 了才会有新的值被计算。
 
-To fix this, **treat reducers as "state machines", where the combination of both the current state _and_ the dispatched action determines whether a new state value is actually calculated**, not just the action itself unconditionally.
-
 为了解决这个问题，**把 reducer 当作是“state 机器”，将现有 state _和_ dispatch 的 action 绑定到一起，决定如何计算出一个新的 state**，而不是仅让 action 没有状态。
 
 <DetailedExplanation>
-
-[有限状态机](https://en.wikipedia.org/wiki/Finite-state_machine) is a useful way of modeling something that should only be in one of a finite number of "finite states" at any time. For example, if you have a `fetchUserReducer`, the finite states can be:
 
 [有限状态机](https://en.wikipedia.org/wiki/Finite-state_machine)是个很有效的建模方法，它在任何时候都应该只处于有限数量的“有限状态”之一。 例如有一个 `fetchUserReducer`，则其有限状态可以是：
 
@@ -302,19 +298,19 @@ To fix this, **treat reducers as "state machines", where the combination of both
 - `"success"` （User 数据请求成功）
 - `"failure"` （User 数据请求失败）
 
-To make these finite states clear and [make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible), you can specify a property that holds this finite state:
+为了更清晰地看这些状态机的状态且[make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible)，你可以指定一个保存这些状态的属性：
 
 ```js
 const initialUserState = {
-  status: 'idle', // explicit finite state
+  status: 'idle', // 表示状态
   user: null,
   error: null
 }
 ```
 
-With TypeScript, this also makes it easy to use [discriminated unions](https://basarat.gitbook.io/typescript/type-system/discriminated-unions) to represent each finite state. For instance, if `state.status === 'success'`, then you would expect `state.user` to be defined and wouldn't expect `state.error` to be truthy. You can enforce this with types.
+如果用 Typescript，使用[discriminated unions](https://basarat.gitbook.io/typescript/type-system/discriminated-unions)来表示每个有限的状态也很简单。举个例子，如果`state.status === 'success'`，那么`state.user`就被认为是有定义的并且`state.error`为 false。你可以使用类型来约束。
 
-Typically, reducer logic is written by taking the action into account first. When modeling logic with state machines, it's important to take the state into account first. Creating "finite state reducers" for each state helps encapsulate behavior per state:
+典型的，在写 reducer 逻辑的时候应该首先讲 action 考虑进去。当使用状态机建模程序逻辑的时候，首先考虑 state 是很重要的。为每个状态创建“有限状态 reducer”有助于封装每个状态的行为：
 
 ```js
 import {
@@ -328,7 +324,7 @@ const SUCCESS_STATUS = 'success';
 const FAILURE_STATUS = 'failure';
 
 const fetchIdleUserReducer = (state, action) => {
-  // state.status is "idle"
+  // state.status 是 “idle” 状态
   switch (action.type) {
     case FETCH_USER:
       return {
@@ -341,7 +337,7 @@ const fetchIdleUserReducer = (state, action) => {
   }
 }
 
-// ... other reducers
+// ... 其他的 reducer
 
 const fetchUserReducer = (state, action) => {
   switch (state.status) {
@@ -354,48 +350,48 @@ const fetchUserReducer = (state, action) => {
     case FAILURE_STATUS:
       return fetchFailureUserReducer(state, action);
     default:
-      // this should never be reached
+      // 这里不会被访问
       return state;
   }
 }
 ```
 
-Now, since you're defining behavior per state instead of per action, you also prevent impossible transitions. For instance, a `FETCH_USER` action should have no effect when `status === LOADING_STATUS`, and you can enforce that, instead of accidentally introducing edge-cases.
+现在，由于你是在定义每个 state 的行为，而不是每个 action，所以也可以阻止一些不可能的变化。举个例子，一个`FETCH_USER` action 在`status === LOADING_STATUS`的时候不应该产生任何副作用，你可以强制要求，而不会意外地产生一些边界 case。
 
 </DetailedExplanation>
 
-### Normalize Complex Nested/Relational State
+### 将复杂的嵌套/关联式 State 规范化
 
-Many applications need to cache complex data in the store. That data is often received in a nested form from an API, or has relations between different entities in the data (such as a blog that contains Users, Posts, and Comments).
+很多应用需要在 store 需要缓存复杂数据。数据经常是通过 API 获取的嵌套的表单结构，或者数据之间包含着相关联的实体（比如一条博客数据包含用户数据、帖子数据以及评论数据）。
 
-**Prefer storing that data in [a "normalized" form](../usage/structuring-reducers/NormalizingStateShape.md) in the store**. This makes it easier to look up items based on their ID and update a single item in the store, and ultimately leads to better performance patterns.
+**在 store 中使用[“规范化的”格式](../usage/structuring-reducers/NormalizingStateShape.md)**来存储以上数据是更优的。这使得基于项目 ID 查找项目和更新 store 中的单个项目变得更容易，并最终更好的性能模式。
 
-### Keep State Minimal and Derive Additional Values
+### 保持 state 的最小化并派生出其他的值
 
-Whenever possible, **keep the actual data in the Redux store as minimal as possible, and _derive_ additional values from that state as needed**. This includes things like calculating filtered lists or summing up values. As an example, a todo app would keep an original list of todo objects in state, but derive a filtered list of todos outside the state whenever the state is updated. Similarly, a check for whether all todos have been completed, or number of todos remaining, can be calculated outside the store as well.
+无论是否可行，**请尽可能地保证 store 中实际使用的 data 对象最小化，并且按需从那个 state *派生*额外值**。这包括计算过滤列表或求和值。例如，todo 应用程序将保留状态中的 todo 对象的原始列表，但在状态更新时，会导出状态外的 todo 过滤列表。类似地，也可以在 store 外计算是否已完成所有 todo 或剩余 todo 的数量。
 
-This has several benefits:
+有以下几点好处：
 
-- The actual state is easier to read
-- Less logic is needed to calculate those additional values and keep them in sync with the rest of the data
-- The original state is still there as a reference and isn't being replaced
+- 真实的 state 可读性更高
+- 计算出派生值并使其与其余数据保持同步所需的逻辑更少
+- 原始状态仍然作为引用，不会被替换
 
-Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using libraries like `reselect` and `proxy-memoize`.
+派生数据这件事通常使用“selector”函数，该函数可以封装进行派生数据计算的逻辑。为了提高性能，使用`reselect`和`proxy-memoize`这些库可以使 selector 能被*缓存*，从而缓存前一次的结果。
 
-### Model Actions as Events, Not Setters
+### 将 action 建模为事件而不是 setter
 
-Redux does not care what the contents of the `action.type` field are - it just has to be defined. It is legal to write action types in present tense (`"users/update"`), past tense (`"users/updated"`), described as an event (`"upload/progress"`), or treated as a "setter" (`"users/setUserName"`). It is up to you to determine what a given action means in your application, and how you model those actions.
+Redux 从不关心`action.type`的字段内容是什么——它只需要被定义。写现在时态的（`"users/update"`）、过去时态的（`"users/updated"`），描述成一个事件（`"upload/progress"`）或者看作是“setter”（`"users/setUserName"`）的 action type 都是合法的。程序中的 action type 是什么含义以及怎么建模这些 action 完全取决于你。
 
-However, **we recommend trying to treat actions more as "describing events that occurred", rather than "setters"**. Treating actions as "events" generally leads to more meaningful action names, fewer total actions being dispatched, and a more meaningful action log history. Writing "setters" often results in too many individual action types, too many dispatches, and an action log that is less meaningful.
+但是，**我们建议你将 action 更多地视作 “描述发生的事件”，而不是“setter”**。将其视为“事件”总体而言使得 action 名称更有意义，更少的 action 被 dispatch，以及更有意义的 action 日志历史记录。编写“setter”通常导致有很多特别的 action type，更多的 dispatch，且 action 日志会没有意义。
 
-<DetailedExplanation>
-Imagine you've got a restaurant app, and someone orders a pizza and a bottle of Coke.  You could dispatch an action like:
+<DetailedExplanation title="详细说明">
+想象你有一个餐厅 app，有个人点了一个披萨，一瓶可乐。那么你可以 dispatch 一个 action：
 
 ```js
 { type: "food/orderAdded",  payload: {pizza: 1, coke: 1} }
 ```
 
-Or you could dispatch:
+或者这样 dispatch:
 
 ```js
 {
