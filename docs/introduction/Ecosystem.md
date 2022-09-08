@@ -7,9 +7,9 @@ hide_title: false
 
 # 生态
 
-Redux 是一个小型库，但是它的设计和 API 都是经过精心选择的，以至于衍生出工具和扩展的生态系统，并且社区中存在各种各样有用的插件、库和工具。虽然你无需使用任何这些插件就可以使用Redux，但它们可以帮助你更轻松地实现功能并解决应用程序中的问题。
+Redux 是一个小型库，但是它的设计和 API 都是经过精心选择的，以至于衍生出工具和扩展的生态系统，并且社区中存在各种各样有用的插件、库和工具。虽然你无需使用这些插件就可以使用 Redux，但它们可以帮助你更轻松地实现功能并解决应用程序中的问题。
 
-与Redux相关的库，插件和工具的广泛目录
+与 Redux 相关的库，插件和工具的广泛目录
 请访问 [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) 了解更全面的 Redux 库、插件、和工具的目录。此外，[React/Redux Links](https://github.com/markerikson/react-redux-links) 包含了学习 React 或 Redux 的教程和其他有用资料。
 
 此页面列出了一些 Redux 维护人员亲自审核的或在社区中被广泛使用的 Redux 相关插件。不要让这阻止你尝试其他方法！生态系统增长太快，我们时间有限，无法洞察一切。考虑这些是“内部人员挑选”，如果您使用 Redux 构建了一些很棒的东西，请毫不犹豫地提交 PR。
@@ -127,7 +127,7 @@ const myCounter = counter({
 #### 高阶 Reducers
 
 **[omnidan/redux-undo](https://github.com/omnidan/redux-undo)** <br />
-为reducers提供敏捷的撤销/重做和操作历史记录的功能
+为 reducers 提供敏捷的撤销/重做和操作历史记录的功能
 
 **[omnidan/redux-ignore](https://github.com/omnidan/redux-ignore)** <br />
 通过数组或过滤函数忽略 redux actions

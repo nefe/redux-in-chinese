@@ -26,7 +26,7 @@ RTK 包含了有助于简化许多常见场景的工具，包括 [配置 Store](
 [创建 reducer 并编写 immutable 更新逻辑](https://redux-toolkit.js.org/api/createreducer)，
 甚至还包含 [一次性创建整个 State 的 “Slice”](https://redux-toolkit.js.org/api/createslice)。
 
-无论你是一个想要开发第一个 Redux 应用的新手，还是想要简化已有应用经验老到的老手，**[Redux Toolkit](https://redux-toolkit.js.org/)** 都能帮你写出更好的 Redux 代码.
+无论你是一个想要开发第一个 Redux 应用的新手，还是想要简化已有应用经验老道的老手，**[Redux Toolkit](https://redux-toolkit.js.org/)** 都能帮你写出更好的 Redux 代码.
 
 Redux Toolkit 提供 NPM 软件包，可与模块捆绑器或 Node 应用程序一起使用，安装方式如下：
 
@@ -118,7 +118,7 @@ store.dispatch({ type: 'counter/decremented' })
 
 你需要使用 _action_ 这个普通对象来描述发生了什么，而不是直接改变 state。然后，编写一个名为 _reducer_ 的特殊函数，来决定如何基于 action 来更新整个应用的状态树。
 
-在典型的Redux应用程序中，只有一个 store 以及一个根 reducer 函数。随着应用程序的增长，您可以将根 reducer 拆分为较小的 reducer，分别在状态树的不同部分上进行运行。这就像在 React 应用程序中只有一个根组件一样，但是它是由许多小组件组成的。
+在典型的 Redux 应用程序中，只有一个 store 以及一个根 reducer 函数。随着应用程序的增长，您可以将根 reducer 拆分为较小的 reducer，分别在状态树的不同部分上进行运行。这就像在 React 应用程序中只有一个根组件一样，但是它是由许多小组件组成的。
 
 对于简单的计数器应用来说，这种架构看起来过度设计，但是这种模式的优点在于它可以很好地扩展到大型和复杂的应用程序。还可以基于此设计出功能非常强大的开发者工具，因为可以跟踪每个 action 以及状态变更。你可以记录用户会话并仅通过重播每个 action 来重现它们。
 
