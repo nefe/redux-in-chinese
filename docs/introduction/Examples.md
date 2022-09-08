@@ -82,25 +82,7 @@ npm start
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-with-undo/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-此示例是前一个示例的变体。它与上一个示例基本相同但额外展示了如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 打包 reducer，仅增加几行代码实现撤销/重做功能。
-
-## Flow 版本的 Todos
-
-Run the [Todos w/ Flow](https://github.com/reduxjs/redux/tree/master/examples/todos-flow) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/todos-flow
-npm install
-npm start
-```
-
-或者可以浏览在线 [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-flow):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-flow/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-和上一个示例类似，区别是使用了 Redux 与 [Flow](https://flow.org/).
+此示例是前一个示例的变体。它与上一个示例基本相同但额外展示了如何使用 [Redux Undo](https://github.com/omnidan/redux-undo) 打包 reducer，仅增加几行代码实现应用程序的撤销/重做功能。
 
 ## TodoMVC
 
@@ -118,7 +100,7 @@ npm start
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todomvc/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-经典的 [TodoMVC](http://todomvc.com/) 示例。与 Todos 示例的目的相同，可以通过这个示例比较和其他框架的异同。
+经典的 [TodoMVC](http://todomvc.com/) 示例。涵盖了与 Todos 示例相同的要点，可以通过这个示例比较和其他框架的异同。
 
 示例中包含了测试代码。
 
@@ -138,7 +120,7 @@ npm start
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/shopping-cart/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-该示例展示了随着应用升级变得愈发重要的常用的 Redux 模式。尤其展示了，如何使用 ID 来标准化存储数据实体，如何在不同层级将多个 reducer 组合使用，如何利用 reducer 定义选择器以封装 state 的相关内容。该示例也展示了使用 [Redux Logger](https://github.com/fcomb/redux-logger) 生成日志，以及使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件进行 action 的条件性分发。
+该示例展示了随着应用升级变得愈发重要的常用的 Redux 模式。尤其展示了，如何使用 ID 来标准化存储数据实体，如何在不同层级组合使用多个 reducer，如何利用 reducer 定义选择器以封装 state 的相关内容。该示例也展示了使用 [Redux Logger](https://github.com/fcomb/redux-logger) 生成日志，以及使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件进行 action 的条件性分发。
 
 ## 树状视图
 
@@ -176,7 +158,7 @@ npm start
 
 <iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/async/?runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存过期失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步带来的附带作用。
+该示例包含了：从异步 API 的读取操作、基于用户的输入来获取数据、显示正在加载的提示、缓存响应、以及使缓存失效。使用 [Redux Thunk](https://github.com/gaearon/redux-thunk) 中间件来封装异步副作用。
 
 ## 同构
 
@@ -208,7 +190,7 @@ npm start
 
 <iframe class="codesandbox" src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/real-world/?runonclick=1" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-最为复杂的示例。浓缩化的设计，包含了持续性地从标准化缓存中批量获取数据实例，针对 API 调用的自定义中间件的实现，逐步渲染已加载的数据、分页器、缓存响应，展示错误信息，以及路由。同时，包含了调试工具 Redux DevTools 。
+这是一个复杂程度很高的示例，比较难懂，包含了将获取的实例保存在标准化存储中，为 API 调用实现自定义中间件、渲染已加载的数据、分页、缓存响应、显示错误消息和路由。同时，还包含了调试工具 Redux DevTools 。
 
 ## 更多示例
 
