@@ -39,48 +39,6 @@ _介绍 Redux 基本概念以及如何使用它的教程_
   https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
   一个制作精良的幻灯片，直观地介绍了 Redux 的核心概念、React 的使用、项目组织以及 thunk 和 sagas 的副作用。 有一些很棒的动画图展示了数据如何通过 React+Redux 架构流动。
 
-<!-- - **Redux 入门 —— 系列视频** <br/>
-  https://app.egghead.io/courses/getting-started-with-redux <br/>
-  https://github.com/tayiorbeii/egghead.io_redux_course_notes <br/>
-  Redux 的创建者 Dan Abramov 在 30 个短片（2-5 分钟）中展示了各种概念。链接的 Github 仓库包含视频的笔记和转录。
-
-- **使用 Redux 的常用方式构建 React 应用程序 —— 系列视频** <br/>
-  https://app.egghead.io/courses/building-react-applications-with-idiomatic-redux <br/>
-  https://github.com/tayiorbeii/egghead.io_idiomatic_redux_course_notes <br/>
-  Dan Abramov 的第二个视频教程系列，第一个系列的续集。包括在 store 中初始化 state、如何和 React Router 一起使用、使用 “selector” function、状态规范化、使用 Redux 中间件、异步 action creator 等课程。链接的 Github 仓库包含视频的笔记和转录。
-
-- **Live React: 热重载 and Time Travel** <br/>
-  https://youtube.com/watch?v=xsSnOQynTHs <br/>
-  Dan Abramov 在最初介绍了 Redux 的会议上的演讲。了解 Redux 如何通过强制执行的约束实现 Time Travel 和热重载。
-
-- **Redux Crash Course With React** <br/>
-  https://www.youtube.com/watch?v=93p3LxR9xfM <br/>
-  Traversy Media explains the daunting Redux in such a beautiful way here. All the jargon words such as reducers, state, actions are very well defined by him. Redux may be seem difficult at the start but Traversy paves out a perfect route for beginners.
-
-- **Redux 卡通指南** <br/>
-  https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6 <br/>
-  一个 Redux 的高级描述，使用友好的漫画来阐述 Redux 的理念。
-
-- **Leveling Up with React: Redux** <br/>
-  https://css-tricks.com/learning-react-redux/ <br/>
-  一个非常精心编写的 Redux 及其相关概念的介绍，包含一些漂亮的卡通图表。
-
-- **An Introduction to Redux** <br/>
-  https://www.smashingmagazine.com/2016/06/an-introduction-to-redux/ <br/>
-  概述和介绍 Redux 的基本概念。 使用 Redux 的好处，它与 MVC 或 Flux 的区别，以及它与函数式编程的关系。
-
-- **Redux Tutorial** <br/>
-  https://github.com/pshrmn/notes/blob/master/redux/redux.md <br/>
-  一个简短明了的教程，介绍了基本的 Redux 术语，展示了如何拆分 reducer 函数，并描述了 Redux store API。
-
-- **Redux: From Twitter Hype to Production** <br/>
-  https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
-  这是一个制作精良的幻灯片，直观地介绍了 Redux 核心概念、与 React 的联动、项目组织以及带有 thunk 和 sagas 的副作用（side effect）。 用一些绝对 **极出色** 的动画图表演示了数据如何流经 React + Redux 架构。
-
-- **DevGuides: Introduction to Redux** <br/>
-  http://devguides.io/redux/ <br/>
-  一个涵盖 Redux 多方面的教程，包括 actions、reducers、与 React 的联动和中间件。 -->
-
 ## 在 React 中使用 Redux
 
 _一些有关 React-Redux 绑定的解释_
@@ -92,18 +50,6 @@ _一些有关 React-Redux 绑定的解释_
 - **为什么 Redux 在 React 应用程序中很有用** <br/>
   https://www.fullstackreact.com/articles/redux-with-mark-erikson/ <br/>
   解释使用 Redux 和 React 的一些好处，比如在组件和热加载 (Hot Module Reloading) 之间共享数据。
-
-<!-- * **Redux 可以做什么？（什么时候应该使用它？）** <br/>
-  https://daveceddia.com/what-does-redux-do/ <br/>
-  关于 Redux 如何解决 React 应用程序中的数据流问题的总结。
-
-* **Redux 如何工作：一个计数器的例子** <br/>
-  https://daveceddia.com/how-does-redux-work/ <br/>
-  对前一篇文章的一个很好的后续。 它解释了如何使用 Redux 和 React-Redux，首先显示一个 React 组件，该组件在其内部状态中存储一个值，然后重构它以使用 Redux。在此过程中，本文解释了重要的 Redux 术语和概念，以及它们如何组合在一起以使 Redux 数据流正常工作。
-
-* **Redux React 简介** <br/>
-  https://jakesidsmith.com/blog/post/2017-11-18-redux-and-react-an-introduction/ <br/>
-  介绍 Redux 的核心概念，解释如何使用 React-Redux 包将 Redux 与 React 一起使用。 -->
 
 ## 基于项目的教程
 
