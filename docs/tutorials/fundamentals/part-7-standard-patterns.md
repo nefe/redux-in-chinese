@@ -14,7 +14,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 - 实际应用中 Redux 的标准使用模式，以及这些模式存在的原因：
   - 使用 Action creators 封装 action 对象
-  - 使用缓存（memoized）selectors 以提高性能
+  - 使用记忆化（memoized）selectors 以提高性能
   - 通过加载枚举值跟踪请求状态
   - 规范化 state 以管理项目集合
   - 与 promises、thunks 一起工作
@@ -241,7 +241,7 @@ export const todoAdded = todo => ({ type: 'todos/todoAdded', payload: todo })
 
 :::
 
-## 缓存（Memoized） Selectors
+## 记忆化（Memoized）Selectors
 
 我们已经可以编写 selector 函数了，它接受 Redux `state` 对象作为参数，并返回一个值：
 
@@ -260,13 +260,13 @@ const selectTodoIds = state => state.todos.map(todo => todo.id)
 在这个例子中，**在 _每个_ action 后调用 `useSelector(selectTodoIds)` 将 _总是_ 造成重渲染，因为返回的是一个新数组引用！**
 
 
-在第 5 节，我们看到[可以将 `shallowEqual` 作为参数传递给 `useSelector`](./part-5-ui-and-react.md#selecting-data-in-list-items-by-id)。现在还有另一选择：我们可以使用“缓存（memoized）” selectors。
+在第 5 节，我们看到[可以将 `shallowEqual` 作为参数传递给 `useSelector`](./part-5-ui-and-react.md#selecting-data-in-list-items-by-id)。现在还有另一选择：我们可以使用“记忆化”（memoized）selectors。
 
 **Memoization** 是一种缓存——具体来说，就是保存那些非常耗时的计算结果，然后再次遇到同样的计算任务时，直接重用这些结果。
 
 **Memoized selector 函数**是保存最新结果值的 selector，如果使用相同的输入多次调用它们，将得到相同的结果值。如果使用与上次 _不同的_ 输入调用它们，它们将重新计算新的结果值，将其缓存并返回新值。
 
-### 使用 `createSelector` 来缓存（Memoize） Selectors
+### 使用 `createSelector` 来记忆（Memoize） Selectors
 
 **[Reselect 库](https://github.com/reduxjs/reselect) 提供了一个 `createSelector` API，它将生成 memoized selector 函数**。`createSelector` 接收一个或多个 input selector 函数作为参数，外加一个 output selector，并返回新的 selector 函数。每次调用 selector 时：
 
@@ -275,7 +275,7 @@ const selectTodoIds = state => state.todos.map(todo => todo.id)
 - 所有 input selector 的结果都将成为 output selector 的参数
 - output selector 的最终结果将被缓存以供下次使用
 
-让我们来创建一个缓存版的 `selectTodoIds`，并且在 `<TodoList>` 中使用。
+让我们来创建一个记忆化版的 `selectTodoIds`，并且在 `<TodoList>` 中使用。
 
 首先我们需要安装 Reselect：
 
@@ -978,9 +978,9 @@ export default Header
 
 - **Action creators 函数可以封装关于 action 对象和 thunks 的逻辑**
   - Action creators 可以接受参数并包含设置逻辑，并返回最终的 action 对象或 thunk 函数
-- **缓存（memoized）selectors 有助于提高 Redux 应用性能**
-  - Reselect 有一个 `createSelector` API 可以生成缓存（memoized）selectors
-  - 如果给缓存（memoized）selectors 传入相同的参数，将返回相同的结果（引用）
+- **记忆化（memoized）selectors 有助于提高 Redux 应用性能**
+  - Reselect 有一个 `createSelector` API 可以生成记忆化（memoized）selectors
+  - 如果给记忆化（memoized）selectors 传入相同的参数，将返回相同的结果（引用）
 - **请求状态应存储为枚举值，而不是布尔值**
   - 使用 `idle` 和 `loading` 等枚举有助于一致地跟踪状态
 - **Flux Standard Actions 是管理 action 对象公认的约定**
