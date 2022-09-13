@@ -409,86 +409,89 @@ Redux 从不关心`action.type`的字段内容是什么——它只需要被定�
 }
 ```
 
-The first example would be an "event". "Hey, someone ordered a pizza and a pop, deal with it somehow".
+第一个例子像是个“事件”。“喂，有人点了披萨和汽水，想办法处理一下”。
 
-The second example is a "setter". "I _know_ there are fields for 'pizzas ordered' and 'pops ordered', and I am commanding you to set their current values to these numbers".
+第二个例子就像是个“setter”。“我*知道*有点披萨和汽水的字段，并且命令你讲现在的数量加一”。
 
-The "event" approach only really needed a single action to be dispatched, and it's more flexible. It doesn't matter how many pizzas were already ordered. Maybe there's no cooks available, so the order gets ignored.
+“事件”方法只需要 dispatch 一个 action，且更加灵活。根本不关心之前点了几个披萨。也许厨师根本忙不过来，订单会被忽略。
 
-With the "setter" approach, the client code needed to know more about what the actual structure of the state is, what the "right" values should be, and ended up actually having to dispatch multiple actions to finish the "transaction".
-
-</DetailedExplanation>
-
-### Write Meaningful Action Names
-
-The `action.type` field serves two main purposes:
-
-- Reducer logic checks the action type to see if this action should be handled to calculate a new state
-- Action types are shown in the Redux DevTools history log for you to read
-
-Per [Model Actions as "Events"](#model-actions-as-events-not-setters), the actual contents of the `type` field do not matter to Redux itself. However, the `type` value _does_ matter to you, the developer. **Actions should be written with meaningful, informative, descriptive type fields**. Ideally, you should be able to read through a list of dispatched action types, and have a good understanding of what happened in the application without even looking at the contents of each action. Avoid using very generic action names like `"SET_DATA"` or `"UPDATE_STORE"`, as they don't provide meaningful information on what happened.
-
-### Allow Many Reducers to Respond to the Same Action
-
-Redux reducer logic is intended to be split into many smaller reducers, each independently updating their own portion of the state tree, and all composed back together to form the root reducer function. When a given action is dispatched, it might be handled by all, some, or none of the reducers.
-
-As part of this, you are encouraged to **have many reducer functions all handle the same action separately** if possible. In practice, experience has shown that most actions are typically only handled by a single reducer function, which is fine. But, modeling actions as "events" and allowing many reducers to respond to those actions will typically allow your application's codebase to scale better, and minimize the number of times you need to dispatch multiple actions to accomplish one meaningful update.
-
-### Avoid Dispatching Many Actions Sequentially
-
-**Avoid dispatching many actions in a row to accomplish a larger conceptual "transaction"**. This is legal, but will usually result in multiple relatively expensive UI updates, and some of the intermediate states could be potentially invalid by other parts of the application logic. Prefer dispatching a single "event"-type action that results in all of the appropriate state updates at once, or consider use of action batching addons to dispatch multiple actions with only a single UI update at the end.
-
-<DetailedExplanation>
-There is no limit on how many actions you can dispatch in a row.  However, each dispatched action does result in execution of all store subscription callbacks (typically one or more per Redux-connected UI component), and will usually result in UI updates.
-
-While UI updates queued from React event handlers will usually be batched into a single React render pass, updates queued _outside_ of those event handlers are not. This includes dispatches from most `async` functions, timeout callbacks, and non-React code. In those situations, each dispatch will result in a complete synchronous React render pass before the dispatch is done, which will decrease performance.
-
-In addition, multiple dispatches that are conceptually part of a larger "transaction"-style update sequence will result in intermediate states that might not be considered valid. For example, if actions `"UPDATE_A"`, `"UPDATE_B"`, and `"UPDATE_C"` are dispatched in a row, and some code is expecting all three of `a`, `b`, and `c` to be updated together, the state after the first two dispatches will effectively be incomplete because only one or two of them has been updated.
-
-If multiple dispatches are truly necessary, consider batching the updates in some way. Depending on your use case, this may just be batching React's own renders (possibly using [`batch()` from React-Redux](https://react-redux.js.org/api/batch)), debouncing the store notification callbacks, or grouping many actions into a larger single dispatch that only results in one subscriber notification. See [the FAQ entry on "reducing store update events"](../faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events) for additional examples and links to related addons.
+通过“setter”方法，客户需要知道 state 的真实数据结构，要知道“正确”的值是怎么样的，并且最终为了完成“事务”还要 dispatch 很多 action。
 
 </DetailedExplanation>
 
-### Evaluate Where Each Piece of State Should Live
+### action 的命名要有语义
 
-The ["Three Principles of Redux"](../understanding/thinking-in-redux/ThreePrinciples.md) says that "the state of your whole application is stored in a single tree". This phrasing has been over-interpreted. It does not mean that literally _every_ value in the entire app _must_ be kept in the Redux store. Instead, **there should be a single place to find all values that _you_ consider to be global and app-wide**. Values that are "local" should generally be kept in the nearest UI component instead.
+`action.type`字段有两个主要的作用：
 
-Because of this, it is up to you as a developer to decide what state should actually live in the Redux store, and what should stay in component state. **[Use these rules of thumb to help evaluate each piece of state and decide where it should live](../faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)**.
+- reducer 逻辑通过 action type 来判断如何计算新的 state
+- action type 在 redux dev tool 中作为历史日志的显示名称
 
-### Use the React-Redux Hooks API
+每次[将 action 建模为“事件”](#model-actions-as-events-not-setters)，`type` 字段的实际内容对于 redux 本身来说并不关心。然而，`type` 的值对于你——一个开发者来说*非常*重要。**action 应该编写语义化，包含关键信息，有描述性的 type 字段**。理想情况下，在看 action type 列表的时候就应该知道这段代码在程序中是干什么的，甚至不用进去看代码本身。避免使用过于通用的命名比如 `"SET_DATA"` 、`"UPDATE_STORE"`，因为这种命名无法表述代码具体在做什么。
 
-**Prefer using [the React-Redux hooks API (`useSelector` and `useDispatch`)](https://react-redux.js.org/api/hooks) as the default way to interact with a Redux store from your React components**. While the classic `connect` API still works fine and will continue to be supported, the hooks API is generally easier to use in several ways. The hooks have less indirection, less code to write, and are simpler to use with TypeScript than `connect` is.
+### 允许多个 Reducer 响应相同的操作
 
-The hooks API does introduce some different tradeoffs than `connect` does in terms of performance and data flow, but we now recommend them as the default.
+redux reducer 逻辑能够被分割到很多小的 reducer 当中去，分别独立维护自已的那部分状态树，所有的小 reducer 组合起来构成应用的根 reducer 函数。当一个 action 被 dispatch 了，他可能会被所有的 reducer 执行、也可能是其中一些，也有可能都不执行。
 
-<DetailedExplanation>
+作为一部分，入股可以，建议你**弄不同的 reducer 函数来分别处理同一个 action**。经验表明，大多数动作通常只由单个 reducer 来处理，这很好。但是，将操作建模为“事件”并允许许多 reducer 响应这些操作通常可以让您的应用程序的代码库更好地扩展，并最大限度地减少需要调度多个操作以完成一次有意义的更新的次数。
 
-The [classic `connect` API](https://react-redux.js.org/api/connect) is a [Higher Order Component](https://reactjs.org/docs/higher-order-components.html). It generates a new wrapper component that subscribes to the store, renders your own component, and passes down data from the store and action creators as props.
+### 避免依次 dispatch 多个 action
 
-This is a deliberate level of indirection, and allows you to write "presentational"-style components that receive all their values as props, without being specifically dependent on Redux.
+**避免连续 dispatch 多个 action 来完成一个概念上很大的“事务”**。这虽然合法，但是通常会导致多次的 UI 更新，成本较大，且有些中间状态可能会被程序中的其他逻辑置为无效。推荐 dispatch 单个“事件式”的 action，一次性更新所有状态，或者考虑使用 action 的批处理插件来 dispatch 多个 action，从而保持一次 UI 更新。
 
-The introduction of hooks has changed how most React developers write their components. While the "container/presentational" concept is still valid, hooks push you to write components that are responsible for requesting their own data internally by calling an appropriate hook. This leads to different approaches in how we write and test components and logic.
+<DetailedExplanation title="详细说明">
 
-The indirection of `connect` has always made it a bit difficult for some users to follow the data flow. In addition, `connect`'s complexity has made it very difficult to type correctly with TypeScript, due to the multiple overloads, optional parameters, merging of props from `mapState` / `mapDispatch` / parent component, and binding of action creators and thunks.
+你可以连续调度多少个 action，没有限制。但是，每个 dispatch 的 action 都会导致执行所有 store 订阅回调（通常每个 Redux 关联的 UI 组件一个或多个），并且通常会导致 UI 更新。
 
-`useSelector` and `useDispatch` eliminate the indirection, so it's much more clear how your own component is interacting with Redux. Since `useSelector` just accepts a single selector, it's much easier to define with TypeScript, and the same goes for `useDispatch`.
+虽然 UI 是根据 react 事件处理队列来完成 UI 更新的，且通常多个更新会被打包到一次 react 渲染通道中，对于*外部的*事件处理程序的队列就不是这样。这些多数来自 `async` 方法、延时回调，以及非 react 代码中的 dispatch。在这些场景中，每个 dispatch 在完成之前都会产生一个完整的异步 react 渲染通道，影响了性能。
+
+此外，在概念上属于较大的“事务”式更新序列的多个 dispatch 将产生可能被认为无效的中间状态。例如，如果 action `"UPDATE_A"`，`"UPDATE_B"`，和 `"UPDATE_C"` 一起被 dispatch，且一些代码期望变量 `a`，`b`和`c` 被同时更新，前两个 dispatch 后的状态是不完整的，因为只有其中的两个变量被更新。
+
+如果确实需要多次 dispatch，请考虑以某种方式对更新进行批处理。鉴于你的用例，可能只是批处理 React 自己的渲染（可能使用[React-Redux 的`batch()`方法](https://react-redux.js.org/api/batch)），对 store 通知的回调进行防抖，或者把很多 action 收归到一个仅通知一次订阅更新的 dispatch 中。查看[FAQ “减少 store 更新事件”](../faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events)获取更多示例和相关插件的链接。
+
+</DetailedExplanation>
+
+### 评估以下每个 state 应该存在哪里
+
+[“Redux 三原则”](../understanding/thinking-in-redux/ThreePrinciples.md)中说明了“整个应用的 state 都存储在一个单一的 state 树中”。这句话被过度解读了。这并不意味着在字面上，整个应用都将*每个*数据值都*必须*存储在 Redux store 中。相反的，***你*能想到的全局的和 app 级的数据值都应该放到单一的一个位置**。“局部”的数据通常只应该保存到最近的 UI 组件中。
+
+正因如此，作为开发者应该自主决定什么数据应该放到 store 中，什么数据应该放到组件状态中。**[使用这些经验规则来评估每个 state 并确定应该放在哪里](../faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)**。
+
+### API 使用 React-Redux Hooks API
+
+**推荐使用[React-Redux hooks API （`useSelector` 和 `useDispatch`）](https://react-redux.js.org/api/hooks)作为默认方法来使 React 组件和 Redux store 之间交互**。虽然传统的 `connect` API 仍然可用且未来也将继续支持，但是 hooks API 总体来说使用起来比较简单。这些 hooks 的间接性更少，编写的代码更少，并且与 TypeScript 一起使用比 `connect` 更简单。
+
+hooks API 在性能和数据流方面确实引入了一些与 `connect` 不同的权衡，但我们现在推荐它们作为默认。
+
+<DetailedExplanation title="详细说明">
+
+[传统 `connect` API](https://react-redux.js.org/api/connect)是一个[高阶组件](https://reactjs.org/docs/higher-order-components.html)。它生成了一个封装过的订阅了 store 的组件，并可以渲染你自己的组件，并且通过 props 传递了 store 数据和 action creator。
+
+这是一个特意设计的间接使用，让你编写“纯展示”风格的组件，将 store 中的数据或方法作为 props 接收，而无需特别依赖 Redux。
+
+hooks 的引入改变了大多数 React 开发人员编写组件编写风格。虽然“容器/展示”概念仍然有效，但 hooks 会促使你编写通过调用适当的 hooks 在内部请求自己的数据的组卷。这导致了我们编写和测试组件和逻辑的不同方法。
+
+`connect` 的间接性使一些用户跟踪数据流变得有点困难。此外，`connect` 的复杂度使在用 Typescript 的时候类型定义非常困难，这是因为存在多重 overload，optional 参数，合并从父组件来的`mapState` / `mapDispatch`方法，以及整合 action creator 和 thunk 这些操作。
+
+`useSelector` 和 `useDispatch` 消除了这种间接性，所以组件如何与 redux 交互是非常清晰的。因为 `useSelector`仅仅接受一个 selector，所以使用 Typescript 定义类型很容易，`useDispatch` 也是一样的道理。
 
 For more details, see Redux maintainer Mark Erikson's post and conference talk on the tradeoffs between hooks and HOCs:
+
+获取更多细节，请查看 Redux 维护者 Mark Erikson 的帖子以及在在会议中关于如何权衡 hooks 和 HOC 的讲话：
 
 - [Thoughts on React Hooks, Redux, and Separation of Concerns](https://blog.isquaredsoftware.com/2019/07/blogged-answers-thoughts-on-hooks/)
 - [ReactBoston 2019: Hooks, HOCs, and Tradeoffs](https://blog.isquaredsoftware.com/2019/09/presentation-hooks-hocs-tradeoffs/)
 
-Also see the [React-Redux hooks API docs](https://react-redux.js.org/api/hooks) for info on how to correctly optimize components and handle rare edge cases.
+也可以看 [React-Redux hooks API 文档](https://react-redux.js.org/api/hooks)查看如何正确优化组件，并处理一些边界 case。
 
 </DetailedExplanation>
 
-### Connect More Components to Read Data from the Store
+### 关联更多组件以从存储中读取数据
 
-Prefer having more UI components subscribed to the Redux store and reading data at a more granular level. This typically leads to better UI performance, as fewer components will need to render when a given piece of state changes.
+推荐以一种更细的粒度，在 UI 组件中从 Redux store 中多次订阅不同的数据。这通常会保持一个更好的 UI 性能，因为给出的这些 state 变化后造成的需要更新的组件更少。
 
-For example, rather than just connecting a `<UserList>` component and reading the entire array of users, have `<UserList>` retrieve a list of all user IDs, render list items as `<UserListItem userId={userId}>`, and have `<UserListItem>` be connected and extract its own user entry from the store.
+举个例子，应该使 `<UserList>` 检索出一个具有所有用户的 ID 的列表并通过 `<UserListItem userId={userId}>` 来渲染列表项，并使 `<UserListItem>` 关联到它自己关心的那个用户数据。而应该直接关联 `<UserList>` 并读取整个的用户数组。
 
-This applies for both the React-Redux `connect()` API and the `useSelector()` hook.
+以上对于 React-Redux `connect()` API 和 `useSelector()` hook 都适用。
 
 ### Use the Object Shorthand Form of `mapDispatch` with `connect`
 
