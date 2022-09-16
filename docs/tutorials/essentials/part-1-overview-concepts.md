@@ -8,9 +8,9 @@ description: 'The official Essentials tutorial for Redux: learn how to use Redux
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# 第一节：Redux 概述和概念
+# 第 1 节：Redux 概述和概念
 
-:::tip 你将会学到
+:::tip 你将学到什么
 
 - Redux 是什么，为什么需要使用它
 - Redux 的关键术语和概念
@@ -18,32 +18,32 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## 介绍
+## 简介
 
-欢迎来到 Redux 循序渐进教程! **本教程将向您介绍 Redux 并教您如何使用我们最新推荐的工具和最佳实践以正确的方式使用它**. 当您完成时，您应该能够使用您在此处学到的工具和模式开始构建您自己的 Redux 应用程序。
+欢迎来到 Redux 循序渐进教程! **本教程将向你介绍 Redux 并教你如何正确得使用我们最新推荐的工具和最佳实践**。当你完成时，你应该能够通过已学到的工具和模式开始构建你自己的 Redux 应用程序。
 
-在教程的第一节，会包含使用 Redux 需要了解的关键术语和概念，然后在[第二节: Redux 应用骨架](./part-2-app-structure.md) 我们将尝试一个基本的 React + Redux 应用程序，以了解各个部分如何组合在一起。
+在教程的第 1 节，会包含使用 Redux 需要了解的关键术语和概念，然后在[第 2 节: Redux 应用骨架](./part-2-app-structure.md) 我们将尝试一个基本的 React + Redux 应用程序，以了解各个部分如何组合在一起。
 
-从 [第三节：Redux 数据流基础](./part-3-data-flow.md) 开始，我们将使用这些知识来构建一个具有一些实际功能的小型社交媒体供稿应用程序，了解这些内容在实践中的实际工作方式，并讨论使用Redux的一些重要模式和指南。
+从[第 3 节：Redux 数据流基础](./part-3-data-flow.md) 开始，我们将使用这些知识来构建一个具有一些实际功能的小型社交媒体供稿应用程序，了解这些内容在实践中的实际工作方式，并讨论使用 Redux 的一些重要模式和指南。
 
 ### 如何阅读本教程
 
-本节将重点向您展示**如何**以正确的方式使用 Redux，并介绍恰到好处的概念，以便您了解如何正确构建 Redux 应用程序。
+本节将重点向你展示**如何**以正确的方式使用 Redux，并介绍恰到好处的概念，以便你了解如何正确构建 Redux 应用程序。
 
 我们试图让这些解释对初学者友好，但你还是需要：
 
-:::important 必备能力
+:::important 前置知识
 
 - 熟悉 [HTML & CSS](https://internetingishard.com/).
 - 熟悉 [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - 了解 React 术语: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- 了解 [JavaScript Promise 异步处理](https://javascript.info/promise-basics) and [发送 AJAX 请求](https://javascript.info/fetch)
+- 了解 [JavaScript Promise 异步处理](https://javascript.info/promise-basics) 和 [发送 AJAX 请求](https://javascript.info/fetch)
 
 :::
 
-**如果您对这些主题还不熟悉，我们鼓励您先花一些时间熟悉它们，然后再回来学习 Redux**。当您准备好时，我们会在这里！
+**如果你对这些主题还不熟悉，我们鼓励你先花一些时间熟悉它们，然后再回来学习 Redux**。当你准备好时，我们会在这里等你！
 
-您应该确保在浏览器中安装了 React 和 Redux DevTools 扩展：
+你应该确保在浏览器中安装了 React 和 Redux DevTools 扩展：
 
 - React DevTools 扩展：
   - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
@@ -54,32 +54,32 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Redux 是什么？
 
-它有助于首先理解这个“Redux”的东西是什么。它有什么作用？它帮助我解决什么问题？我为什么要使用它？
+首先理解 “Redux” 是什么。它有什么作用？它帮助我解决什么问题？我为什么要使用它？
 
-**Redux 是一个使用叫做“action”的事件来管理和更新应用状态的模式和工具库** 它以集中式Store（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
+**Redux 是一个使用叫做 “action” 的事件来管理和更新应用状态的模式和工具库** 它以集中式 Store（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
 
 ### 为什么要使用 Redux？
 
-Redux 帮你管理“全局”状态 - 哪些应用程序的许多部分都需要的状态。
+Redux 帮你管理“全局”状态 - 应用程序中的很多组件都需要的状态。
 
-**Redux 提供的模式和工具使您更容易理解应用程序中的状态何时、何地、为什么以及如何更新，以及当这些更改发生时您的应用程序逻辑将如何表现**. Redux 指导您编写可预测和可测试的代码，这有助于让您确信您的应用程序将按预期工作。
+**Redux 提供的模式和工具使你更容易理解应用程序中的状态何时、何地、为什么、state 如何被更新，以及当这些更改发生时你的应用程序逻辑将如何表现**. Redux 指导你编写可预测和可测试的代码，这有助于你确信你的应用程序将按预期工作。
 
 ### 我什么时候应该使用 Redux？
 
-Redux 可帮助您处理共享状态的管理，但与任何工具一样，它也有权衡。有更多的概念需要学习，还有更多的代码需要编写。它还为您的代码添加了一些额外代码，并要求您遵循某些限制。这是短期和长期生产力之间的权衡。
+Redux 可帮助你处理共享状态的管理，但与任何工具一样，它也需要权衡利弊。使用 Redux 有更多的概念需要学习，还有更多的代码需要编写，需要添加了一些额外代码，并要求你遵循某些限制。这是短期和长期生产力之间的权衡。
 
-Redux 在以下情况下更有用：
+在以下情况下使用 Redux：
 
-- 在应用的大量地方，都存在大量的状态
-- 应用状态会随着时间的推移而频繁更新
-- 更新该状态的逻辑可能很复杂
+- 应用中有很多 state 在多个组件中需要使用
+- 应用 state 会随着时间的推移而频繁更新
+- 更新 state 的逻辑很复杂
 - 中型和大型代码量的应用，很多人协同开发
 
-**并非所有应用程序都需要 Redux。 花一些时间思考您正在构建的应用程序类型，并决定哪些工具最能帮助解决您正在处理的问题。**
+**并非所有应用程序都需要 Redux。 花一些时间思考你正在构建的应用程序类型，并决定哪些工具最能帮助解决你正在处理的问题。**
 
 :::info 想了解更多？
 
-如果您不确定 Redux 是否适合您的应用程序，这些资源提供了更多指导：
+如果你不确定 Redux 是否适合你的应用程序，这些资源提供了更多指导：
 
 - **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
 - **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
@@ -94,15 +94,15 @@ Redux 是一个小型的独立 JS 库。 但是，它通常与其他几个包一
 
 #### React-Redux
 
-Redux 可以集成到任何的 UI 框架中，其中最常见的是 React 。[**React-Redux**](https://react-redux.js.org/) 是我们的官方包，它可以让 React 组件访问 state 和下发 action 更新 store，从而同 Redux 集成起来。 
+Redux 可以集成到任何的 UI 框架中，其中最常见的是 React 。[**React-Redux**](https://react-redux.js.org/) 是我们的官方包，它可以让 React 组件访问 state 片段和 dispatch actions 更新 store，从而同 Redux 集成起来。
 
 #### Redux Toolkit
 
-[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们推荐的编写 Redux 逻辑的方法。 它包含我们认为对于构建 Redux 应用程序必不可少的包和函数。 Redux Toolkit 构建在我们建议的最佳实践中，简化了大多数 Redux 任务，防止了常见错误，并使编写 Redux 应用程序变得更加容易。
+[**Redux Toolkit**](https://redux-toolkit.js.org) 是我们推荐的编写 Redux 逻辑的方法。 它包含我们认为对于构建 Redux 应用程序必不可少的包和函数。 Redux Toolkit 构建是我们建议的最佳实践中，简化了大多数 Redux 任务，预防了常见错误，并使编写 Redux 应用程序变得更加容易。
 
 #### Redux DevTools 扩展
 
-[**Redux DevTools 扩展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许您有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
+[**Redux DevTools 扩展**](https://github.com/zalmoxisus/redux-devtools-extension) 可以显示 Redux 存储中状态随时间变化的历史记录。这允许你有效地调试应用程序，包括使用强大的技术，如“时间旅行调试”。
 
 ## Redux 术语和概念
 
@@ -114,7 +114,7 @@ Redux 可以集成到任何的 UI 框架中，其中最常见的是 React 。[**
 
 ```jsx
 function Counter() {
-  // State: a counter value
+  // State: counter 值
   const [counter, setCounter] = useState(0)
 
   // Action: 当事件发生后，触发状态更新的代码
@@ -122,7 +122,7 @@ function Counter() {
     setCounter(prevCounter => prevCounter + 1)
   }
 
-  // View: UI 定义
+  // View: 视图定义
   return (
     <div>
       Value: {counter} <button onClick={increment}>Increment</button>
@@ -134,7 +134,7 @@ function Counter() {
 这是一个包含以下部分的自包含应用程序：
 
 - **state**：驱动应用的真实数据源头
-- **view**：基于当前状态的 UI 声明性描述
+- **view**：基于当前状态的视图声明性描述
 - **actions**：根据用户输入在应用程序中发生的事件，并触发状态更新
 
 接下来简要介绍 **"单向数据流（one-way data flow）"**:
@@ -146,7 +146,7 @@ function Counter() {
 
 ![单向数据流](/img/tutorials/essentials/one-way-data-flow.png)
 
-然而，当我们有**多个组件需要共享和使用相同state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
+然而，当我们有**多个组件需要共享和使用相同 state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
 
 解决这个问题的一种方法是从组件中提取共享 state，并将其放入组件树之外的一个集中位置。这样，我们的组件树就变成了一个大“view”，任何组件都可以访问 state 或触发 action，无论它们在树中的哪个位置！
 
@@ -173,7 +173,7 @@ arr[1] = 'd'
 
 这就是 _改变_ 对象或数组的例子。内存中还是原来对象或数组的引用，但里面的内容变化了。
 
-**如果想要不可变的方式来更新，代码必需先_复制_原来的 object/array，然后更新它的复制体**。
+**如果想要不可变的方式来更新，代码必需先*复制*原来的 object/array，然后更新它的复制体**。
 
 JavaScript array/object 的展开运算符（spread operator）可以实现这个目的：
 
@@ -221,7 +221,7 @@ arr3.push('c')
 
 ### 术语
 
-在我们继续之前，您需要熟悉一些重要的 Redux 术语：
+在我们继续之前，你需要熟悉一些重要的 Redux 术语：
 
 #### Action
 
@@ -299,10 +299,9 @@ function counterReducer(state = initialState, action) {
 
 Reducer 可以在内部使用任何类型的逻辑来决定新状态应该是什么，如 `if/else`、`switch`、循环等等。
 
-
 <DetailedExplanation title="细节说明：Reducer 名字的来历" >
 
-[`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 方法处理数组的方式是，一次处理数组中的每一项，并返回一个最终结果。您可以将其视为“将数组减少到一个值”。
+[`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 方法处理数组的方式是，一次处理数组中的每一项，并返回一个最终结果。你可以将其视为“将数组减少到一个值”。
 
 `Array.reduce()` 将回调函数作为参数，该函数将为数组中的每一项调用一次。它需要两个参数：
 
@@ -352,12 +351,12 @@ console.log(finalResult)
 // {value: 3}
 ```
 
-我们可以说 **Redux reducer 将一组操作（随着时间的推移）减少到单个状态**。不同之处在于，使用 `Array.reduce()` 时它会一次性发生，而使用 Redux 时，它会在您正在运行的应用程序的整个生命周期内发生。
+我们可以说 **Redux reducer 将一组 actions（随着时间的推移）转化为单个 state**。不同之处在于，使用 `Array.reduce()` 时它会一次性发生，而使用 Redux 时，它会在你正在运行的应用程序的整个生命周期内发生。
 </DetailedExplanation>
 
 #### Store
 
-当前 Redux 应用的状态存在于一个名为 **store** 的对象中。
+当前 Redux 应用的 state 存在于一个名为 **store** 的对象中。
 
 store 是通过传入一个 reducer 来创建的，并且有一个名为 `getState` 的方法，它返回当前状态值：
 
@@ -415,22 +414,22 @@ console.log(currentValue)
 早些时候，我们谈到了“单向数据流”，它描述了更新应用程序的以下步骤序列：
 
 - State 描述了应用程序在特定时间点的状况
-- 基于 state 来渲染 UI
+- 基于 state 来渲染视图
 - 当发生某些事情时（例如用户单击按钮），state 会根据发生的事情进行更新
-- 基于新的 state 重新渲染 UI
+- 基于新的 state 重新渲染视图
 
 具体来说，对于 Redux，我们可以将这些步骤分解为更详细的内容：
 
 - 初始启动：
   - 使用最顶层的 root reducer 函数创建 Redux store
   - store 调用一次 root reducer，并将返回值保存为它的初始 `state`
-  - 当 UI 首次渲染时，UI 组件访问 Redux store 的当前 state，并使用该数据来决定要呈现的内容。同时监听 store 的更新，以便他们可以知道 state 是否已更改。
+  - 当视图 首次渲染时，视图组件访问 Redux store 的当前 state，并使用该数据来决定要呈现的内容。同时监听 store 的更新，以便他们可以知道 state 是否已更改。
 - 更新环节：
   - 应用程序中发生了某些事情，例如用户单击按钮
   - dispatch 一个 action 到 Redux store，例如 `dispatch({type: 'counter/increment'})`
   - store 用之前的 `state` 和当前的 `action` 再次运行 reducer 函数，并将返回值保存为新的 `state`
-  - store 通知所有订阅过的 UI，通知它们 store 发生更新
-  - 每个订阅过 store 数据的 UI 组件都会检查它们需要的 state 部分是否被更新。
+  - store 通知所有订阅过的视图，通知它们 store 发生更新
+  - 每个订阅过 store 数据的视图 组件都会检查它们需要的 state 部分是否被更新。
   - 发现数据被更新的每个组件都强制使用新数据重新渲染，紧接着更新网页
 
 动画的方式来表达数据流更新：
@@ -447,12 +446,12 @@ Redux 确实有许多新的术语和概念需要记住。提醒一下，这是�
   - Redux 通常与 React-Redux 库一起使用，把 Redux 和 React 集成在一起
   - Redux Toolkit 是编写 Redux 逻辑的推荐方式
 - **Redux 使用 "单向数据流"**
-  - State 描述了应用程序在某个时间点的状态，UI 基于该状态渲染
+  - State 描述了应用程序在某个时间点的状态，视图基于该 state 渲染
   - 当应用程序中发生某些事情时：
-    - UI dispatch 一个 action
+    - 视图 dispatch 一个 action
     - store 调用 reducer，随后根据发生的事情来更新 state
-    - store 通知 UI state 发生了变化
-  - UI 基于新 state 重新渲染
+    - store 将 state 发生了变化的情况通知 UI
+  - 视图基于新 state 重新渲染
 - **Redux 有这几种类型的代码**
   - _Action_ 是有 `type` 字段的纯对象，描述发生了什么
   - _Reducer_ 是纯函数，基于先前的 state 和 action 来计算新的 state
