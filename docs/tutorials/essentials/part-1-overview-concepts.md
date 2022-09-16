@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## 简介
 
-欢迎来到 Redux 循序渐进教程! **本教程将向你介绍 Redux 并教你正如何正确得使用我们最新推荐的工具和最佳实践**。 当你完成时，你应该能够通过已学到的工具和模式开始构建你自己的 Redux 应用程序。
+欢迎来到 Redux 循序渐进教程! **本教程将向你介绍 Redux 并教你如何正确得使用我们最新推荐的工具和最佳实践**。当你完成时，你应该能够通过已学到的工具和模式开始构建你自己的 Redux 应用程序。
 
 在教程的第 1 节，会包含使用 Redux 需要了解的关键术语和概念，然后在[第 2 节: Redux 应用骨架](./part-2-app-structure.md) 我们将尝试一个基本的 React + Redux 应用程序，以了解各个部分如何组合在一起。
 
@@ -54,7 +54,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Redux 是什么？
 
-首先理解 “Redux” 的东西是什么。它有什么作用？它帮助我解决什么问题？我为什么要使用它？
+首先理解 “Redux” 是什么。它有什么作用？它帮助我解决什么问题？我为什么要使用它？
 
 **Redux 是一个使用叫做 “action” 的事件来管理和更新应用状态的模式和工具库** 它以集中式 Store（centralized store）的方式对整个应用中使用的状态进行集中管理，其规则确保状态只能以可预测的方式更新。
 
