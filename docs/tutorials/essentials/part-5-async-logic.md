@@ -12,7 +12,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::tip 你将学到
 
-- 如何使用 Redux “thunk” 中间件处理异步逻辑
+- 如何使用 Redux “thunk” middleware 处理异步逻辑
 - 处理异步请求状态的开发模式
 - 如何使用 Redux Toolkit `createAsyncThunk` API 来简化异步调用
 
@@ -40,7 +40,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 在本节中，我们将使用 `client` 对象对我们的内存中假 REST API 进行 HTTP 调用。
 
-此外，模拟服务器已设置为在每次加载页面时重复使用相同的随机种子，以便生成相同的假用户和假帖子列表。如果您想重置它，请删除浏览器 Local Storage 中的 `randomTimestampSeed` 值并重新加载页面，或者您可以通过编辑 `src/api/server.js` 并将 `useSeededRNG` 设置为 `false` 来关闭它.
+此外，模拟服务器已设置为在每次加载页面时重复使用相同的随机种子，以便生成相同的假用户和假帖子列表。如果你想重置它，请删除浏览器 Local Storage 中的 `randomTimestampSeed` 值并重新加载页面，或者你可以通过编辑 `src/api/server.js` 并将 `useSeededRNG` 设置为 `false` 来关闭它.
 
 :::info 说明
 
@@ -49,28 +49,28 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Thunks 与异步逻辑
 
-### 使用 Middleware 中间件处理异步逻辑
+### 使用 Middleware 处理异步逻辑
 
 就其本身而言，Redux store 对异步逻辑一无所知。它只知道如何同步 dispatch action，通过调用 root reducer 函数更新状态，并通知 UI 某些事情发生了变化。任何异步都必须发生在 store 之外。
 
-但是，如果您希望通过调度或检查当前 store 状态来使异步逻辑与 store 交互，该怎么办？ 这就是 [Redux 中间件](../fundamentals/part-4-store.md#middleware) 的用武之地。它们扩展了 store，并允许您：
+但是，如果你希望通过调度或检查当前 store 状态来使异步逻辑与 store 交互，该怎么办？ 这就是 [Redux middleware](../fundamentals/part-4-store.md#middleware) 的用武之地。它们扩展了 store，并允许你：
 
 - dispatch action 时执行额外的逻辑（例如打印 action 的日志和状态）
 - 暂停、修改、延迟、替换或停止 dispatch 的 action
 - 编写可以访问 `dispatch` 和 `getState` 的额外代码
 - 教 `dispatch` 如何接受除普通 action 对象之外的其他值，例如函数和 promise，通过拦截它们并 dispatch 实际 action 对象来代替
 
-[使用中间件的最常见原因是允许不同类型的异步逻辑与 store 交互](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)。这允许您编写可以 dispatch action 和检查 store 状态的代码，同时使该逻辑与您的 UI 分开。
+[使用 middleware 的最常见原因是允许不同类型的异步逻辑与 store 交互](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)。这允许你编写可以 dispatch action 和检查 store 状态的代码，同时使该逻辑与你的 UI 分开。
 
-Redux 有多种异步中间件，每一种都允许您使用不同的语法编写逻辑。最常见的异步中间件是 [`redux-thunk`](https://github.com/reduxjs/redux-thunk)，它可以让你编写可能直接包含异步逻辑的普通函数。Redux Toolkit 的 `configureStore` 功能[默认自动设置 thunk 中间件](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware)，[我们推荐使用 thunk 作为 Redux 开发异步逻辑的标准方式](../../style-guide/style-guide.md#use-thunks-for-async-logic)。
+Redux 有多种异步 middleware，每一种都允许你使用不同的语法编写逻辑。最常见的异步 middleware 是 [`redux-thunk`](https://github.com/reduxjs/redux-thunk)，它可以让你编写可能直接包含异步逻辑的普通函数。Redux Toolkit 的 `configureStore` 功能[默认自动设置 thunk middleware](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware)，[我们推荐使用 thunk 作为 Redux 开发异步逻辑的标准方式](../../style-guide/style-guide.md#use-thunks-for-async-logic)。
 
-早些时候，我们看到了[Redux 的同步数据流是什么样子](part-1-overview-concepts.md#redux-application-data-flow)。当我们引入异步逻辑时，我们添加了一个额外的步骤，中间件可以运行像 AJAX 请求这样的逻辑，然后 dispatch action。这使得异步数据流看起来像这样：
+早些时候，我们看到了[Redux 的同步数据流是什么样子](part-1-overview-concepts.md#redux-application-data-flow)。当引入异步逻辑时，我们添加了一个额外的步骤，middleware 可以运行像 AJAX 请求这样的逻辑，然后 dispatch action。这使得异步数据流看起来像这样：
 
 ![Redux 异步数据流](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
 ### Thunk 函数
 
-将 thunk 中间件添加到 Redux store 后，它允许您将 _thunk 函数_ 直接传递给 `store.dispatch`。调用 thunk 函数时总是将 `(dispatch, getState)` 作为它的参数，你可以根据需要在 thunk 中使用它们。
+将 thunk middleware 添加到 Redux store 后，它允许你将 _thunk 函数_ 直接传递给 `store.dispatch`。调用 thunk 函数时总是将 `(dispatch, getState)` 作为它的参数，你可以根据需要在 thunk 中使用它们。
 
 Thunks 通常还可以使用 action creator 再次 dispatch 普通的 action，比如 `dispatch(increment())`：
 
@@ -104,11 +104,11 @@ const logAndAdd = amount => {
 store.dispatch(logAndAdd(5))
 ```
 
-Thunk 通常写在“切片”文件中。`createSlice` 本身对定义 thunk 没有任何特殊支持，因此您应该将它们作为单独的函数编写在同一个切片文件中。这样，他们就可以访问该切片的普通 action creator，并且很容易找到 thunk 的位置。
+Thunk 通常写在 “slice” 文件中。`createSlice` 本身对定义 thunk 没有任何特殊支持，因此你应该将它们作为单独的函数编写在同一个 slice 文件中。这样，他们就可以访问该 slice 的普通 action creator，并且很容易找到 thunk 的位置。
 
 :::info
 
-“thunk”这个词是一个编程术语，意思是 ["一段做延迟工作的代码"](https://en.wikipedia.org/wiki/Thunk). 如何使用 thunk 的详细信息，请参阅 thunk 使用指南页面:
+“thunk” 这个词是一个编程术语，意思是 ["一段做延迟工作的代码"](https://en.wikipedia.org/wiki/Thunk). 如何使用 thunk 的详细信息，请参阅 thunk 使用指南页面:
 
 - [Using Redux: Writing Logic with Thunks](../../usage/writing-logic-thunks)
 
@@ -121,15 +121,15 @@ Thunk 通常写在“切片”文件中。`createSlice` 本身对定义 thunk �
 
 ### 编写异步 Thunks
 
-Thunk 内部可能有异步逻辑，例如 `setTimeout`、`Promise` 和 `async/await`。这使它们成为将 AJAX 发起 API 请求的好地方。
+Thunk 内部可能有异步逻辑，例如 `setTimeout`、`Promise` 和 `async/await`。这使它们成为使用 AJAX 发起 API 请求的好地方。
 
 Redux 的数据请求逻辑通常遵循以下可预测的模式：
 
-- 在请求之前 dispatch 请求“开始” 的 action，以指示请求正在进行中。这可用于跟踪加载状态以允许跳过重复请求或在 UI 中显示加载指示器。
+- 在请求之前 dispatch 请求“开始”的 action，以指示请求正在进行中。这可用于跟踪加载状态以允许跳过重复请求或在 UI 中显示加载中提示。
 - 发出异步请求
-- 根据请求结果，异步逻辑 dispatch 包含结果数据的 “成功” action 或包含错误详细信息的 “失败” action。在这两种情况下，reducer 逻辑都会清除加载状态，并且要么展示成功案例的结果数据，要么保存错误值并在需要的地方展示。
+- 根据请求结果，异步逻辑 dispatch 包含结果数据的“成功” action 或包含错误详细信息的 “失败” action。在这两种情况下，reducer 逻辑都会清除加载状态，并且要么展示成功案例的结果数据，要么保存错误值并在需要的地方展示。
 
-这些步骤不是 _必需的_，而是常用的。（如果你只关心一个成功的结果，你可以在请求完成时发送一个 “成功” action ，并跳过“开始”和“失败” action 。）
+这些步骤不是 _必需的_，而是常用的。（如果你只关心一个成功的结果，你可以在请求完成时发送一个“成功” action ，并跳过“开始”和“失败” action 。）
 
 Redux Toolkit 提供了一个 `createAsyncThunk` API 来实现这些 action 的创建和 dispatch，我们很快就会看看如何使用它。
 
@@ -166,7 +166,7 @@ const fetchIssuesCount = (org, repo) => async dispatch => {
 - 每种 action 类型通常都有相应的 action creator 功能
 - 必须编写一个 thunk 以正确的顺序发送正确的 action
 
-`createAsyncThunk` 实现了这套模式：通过生成 action type 和 action creator 并生成一个自动 dispatch 这些 action 的 thunk。您提供一个回调函数来进行异步调用，并把结果数据返回成 Promise。
+`createAsyncThunk` 实现了这套模式：通过生成 action type 和 action creator 并生成一个自动 dispatch 这些 action 的 thunk。你提供一个回调函数来进行异步调用，并把结果数据返回成 Promise。
 
 </DetailedExplanation>
 
@@ -174,7 +174,7 @@ const fetchIssuesCount = (org, repo) => async dispatch => {
 
 :::tip
 
-Redux Toolkit 有一个新的 [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview)。 RTK Query 是专门为 Redux 应用程序构建的数据获取和缓存解决方案，**可以不用编写任何 thunk 或 reducer 来处理数据获取**。 我们鼓励您尝试一下，看看它是否有助于简化您自己的应用程序中的数据获取逻辑！
+Redux Toolkit 有一个新的 [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview)。 RTK Query 是专门为 Redux 应用程序构建的数据获取和缓存解决方案，**可以不用编写任何 thunk 或 reducer 来处理数据获取**。 我们鼓励你尝试一下，看看它是否有助于简化你自己的应用程序中的数据获取逻辑！
 
 我们将从 [第 7 部分：RTK query 基础](./part-7-rtk-query-basics.md) 开始介绍如何使用 RTK Query。:::
 
@@ -182,7 +182,7 @@ Redux Toolkit 有一个新的 [**RTK Query data fetching API**](https://redux-to
 
 到目前为止，我们的 `postsSlice` 已经使用了一些硬编码的样本数据作为其初始状态。我们将把它改为从一个空的帖子数组开始，然后从服务器获取一个帖子列表。
 
-为了做到这一点，我们将不得不更改 `postsSlice` 中的状态结构，以便我们可以跟踪 API 请求的当前状态。
+为了做到这一点，我们将不得不更改 `postsSlice` 中的状态结构，以便可以跟踪 API 请求的当前状态。
 
 ### 提取帖子 selectors
 
@@ -190,7 +190,7 @@ Redux Toolkit 有一个新的 [**RTK Query data fetching API**](https://redux-to
 
 同时，像 `<PostsList>` 这样的 UI 组件正在尝试从 `useSelector` 钩子中的 `state.posts` 中读取帖子，假设该字段是一个数组。我们还需要更改这些位置以匹配新数据。
 
-如果我们不必在每次对 reducer 中的数据格式进行更改时都继续重写我们的组件，那就太好了。避免这种情况的一种方法是在切片文件中定义可重用的 selector 函数，并让组件使用这些 selector 来提取它们需要的数据，而不是在每个组件中重复 selector 逻辑。这样，如果我们再次更改状态结构，我们只需要更新切片文件中的代码。
+如果我们不必在每次对 reducer 中的数据格式进行更改时都继续重写我们的组件，那就太好了。避免这种情况的一种方法是在 slice 文件中定义可重用的 selector 函数，并让组件使用这些 selector 来提取它们需要的数据，而不是在每个组件中重复 selector 逻辑。这样，如果我们再次更改状态结构，我们只需要更新 slice 文件中的代码。
 
 `<PostsList>` 组件需要读取所有帖子的列表，而 `<SinglePostPage>` 和 `<EditPostForm>` 组件需要通过其 ID 查找单个帖子。让我们从 `postsSlice.js` 中导出两个小的 selector 函数来涵盖这些情况：
 
@@ -253,9 +253,9 @@ export const EditPostForm = ({ match }) => {
 }
 ```
 
-通过编写可重用的选择器来封装数据查找通常是一个好主意。您还可以创建有助于提高性能的“记忆化 memoized” 选择器，我们将在本教程的后面部分进行介绍。
+通过编写可重用的选择器来封装数据查找通常是一个好主意。你还可以创建有助于提高性能的“记忆化 memoized” 选择器，我们将在本教程的后面部分进行介绍。
 
-但是，就像任何抽象一样，这不是你 _所有_ 时间、任何地方都应该做的事情。编写选择器意味着需要理解和维护更多的代码。**不要觉得您需要为状态的每个字段都编写选择器**。建议开始时不使用任何选择器，稍后当您发现自己在应用程序代码的许多部分中查找相同值时添加一些选择器。
+但是，就像任何抽象一样，这不是你 _所有_ 时间、任何地方都应该做的事情。编写选择器意味着需要理解和维护更多的代码。**不要觉得你需要为状态的每个字段都编写选择器**。建议开始时不使用任何选择器，稍后当你发现自己在应用程序代码的许多部分中查找相同值时添加一些选择器。
 
 ### 请求过程中的加载状态
 
@@ -276,7 +276,7 @@ export const EditPostForm = ({ match }) => {
 }
 ```
 
-这些字段将与 store 的任何实际数据一起存在。这些特定的字符串状态名称不是必需的 - 如果您愿意，可以随意使用其他名称，例如`“pending”` 代替 `“loading”`，或 `“complete”` 代替 `“succeeded”`。
+这些字段将与 store 的任何实际数据一起存在。这些特定的字符串状态名称不是必需的 - 如果你愿意，可以随意使用其他名称，例如`“pending”` 代替 `“loading”`，或 `“complete”` 代替 `“succeeded”`。
 
 我们可以使用这些信息来决定在请求进行时在 UI 中显示什么，并在我们的 reducer 中添加逻辑以防止诸如两次加载数据之类的情况。
 
@@ -338,11 +338,11 @@ export const selectPostById = (state, postId) =>
 // highlight-end
 ```
 
-是的，这 _确实_ 意味着我们现在有一个看起来像 `state.posts.posts` 的嵌套对象路径，这有点重复和愚蠢:) 我们 _可以_ 将嵌套数组名称更改为 `items` 或 `data` 或其他东西 如果我们想避免这种情况，但我们暂时保持原样。
+是的，这 _确实_ 意味着我们现在有一个看起来像 `state.posts.posts` 的嵌套对象路径，这有点重复和愚蠢:) , 如果我们想避免这种情况, _可以_ 将嵌套数组名称更改为 `items` 或 `data` 或其他东西，但我们暂时保持原样。
 
 ### 使用 `createAsyncThunk` 请求数据
 
-Redux Toolkit 的 `createAsyncThunk` API 生成 thunk，为您自动 dispatch 那些 "start/success/failure" action。
+Redux Toolkit 的 `createAsyncThunk` API 生成 thunk，为你自动 dispatch 那些 "start/success/failure" action。
 
 让我们从添加一个 thunk 开始，该 thunk 将进行 AJAX 调用以检索帖子列表。我们将从 `src/api` 文件夹中引入 `client` 工具库，并使用它向 `'/fakeApi/posts'` 发出请求。
 
@@ -369,7 +369,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 `createAsyncThunk` 接收 2 个参数:
 
 - 将用作生成的 action 类型的前缀的字符串
-- 一个“payload creator”回调函数，它应该返回一个包含一些数据的 `Promise`，或者一个被拒绝的带有错误的 `Promise`
+- 一个 “payload creator” 回调函数，它应该返回一个包含一些数据的 `Promise`，或者一个被拒绝的带有错误的 `Promise`
 
 Payload creator 通常会进行某种 AJAX 调用，并且可以直接从 AJAX 调用返回 `Promise`，或者从 API 响应中提取一些数据并返回。我们通常使用 JS `async/await` 语法来编写它，这让我们可以编写使用 `Promise` 的函数，同时使用标准的 `try/catch` 逻辑而不是 `somePromise.then()` 链式调用。
 
@@ -387,9 +387,9 @@ Payload creator 通常会进行某种 AJAX 调用，并且可以直接从 AJAX �
 
 #### 在组件中 dispatch thunk
 
-现在，让我们更新我们的 `<PostsList>` 组件，来为我们自动请求这些数据。
+现在，更新我们的 `<PostsList>` 组件，来自动请求这些数据。
 
-我们将把 `fetchPosts` thunk 引入到组件中。像我们所有的其他 action creator 一样，我们必须 dispatch 它，所以我们还需要添加 `useDispatch` 钩子。由于我们想在 `<PostsList>` 挂载时获取这些数据，我们需要引入 React `useEffect` 钩子：
+我们将把 `fetchPosts` thunk 引入到组件中。像所有的其他 action creator 一样，我们必须 dispatch 它，所以还需要添加 `useDispatch` 钩子。由于我们想在 `<PostsList>` 挂载时获取这些数据，我们需要引入 React `useEffect` 钩子：
 
 ```js title="features/posts/PostsList.js"
 // highlight-start
@@ -419,7 +419,7 @@ export const PostsList = () => {
 }
 ```
 
-重要的是，我们只尝试获取一次帖子列表。如果我们每次在 `<PostsList>` 组件渲染时都这样做，或者因为我们在视图之间切换而重新创建，我们最终可能会多次获取帖子。我们可以使用 `posts.status` 枚举来帮助决定我们是否需要真正开始获取，方法是将它注入到组件中，并且只有在状态为“idle 空闲”时才开始获取。
+重要的是，我们只尝试获取一次帖子列表。如果我们每次在 `<PostsList>` 组件渲染时都这样做，或者因为视图之间切换而重新创建，我们最终可能会多次获取帖子。我们可以使用 `posts.status` 枚举来帮助决定是否需要真正开始获取，方法是将它注入到组件中，并且只有在状态为 “idle 空闲” 时才开始获取。
 
 ### Reducer 与 Loading Action
 
@@ -443,9 +443,9 @@ console.log(
 */
 ```
 
-但是，有时切片的 reducer 需要响应 _没有_ 定义到该切片的 `reducers` 字段中的 action。这个时候就需要使用 slice 中的 `extraReducers` 字段。
+但是，有时 slice 的 reducer 需要响应 _没有_ 定义到该 slice 的 `reducers` 字段中的 action。这个时候就需要使用 slice 中的 `extraReducers` 字段。
 
-`extraReducers` 选项是一个接收名为 `builder` 的参数的函数。 `builder` 对象提供了一些方法，让我们可以定义额外的 case reducer，这些 reducer 将响应在 slice 之外定义的 action。 我们将使用 `builder.addCase(actionCreator, reducer)` 来处理我们异步 thunk dispatch 的每个 action。
+`extraReducers` 选项是一个接收名为 `builder` 的参数的函数。`builder` 对象提供了一些方法，让我们可以定义额外的 case reducer，这些 reducer 将响应在 slice 之外定义的 action。我们将使用 `builder.addCase(actionCreator, reducer)` 来处理异步 thunk dispatch 的每个 action。
 
 <DetailedExplanation title="细节说明：Adding Extra Reducers to Slices">
 
@@ -455,7 +455,7 @@ console.log(
 - `builder.addMatcher(matcher, reducer)`：定义一个 case reducer，它可以响应任何 `matcher` 函数返回 `true` 的 action.
 - `builder.addDefaultCase(reducer)`：定义一个 case reducer，如果没有其他 case reducer 被执行，这个 action 就会运行。
 
-您可以将这些链接在一起，例如`builder.addCase().addCase().addMatcher().addDefaultCase()`。 如果多个匹配器匹配操作，它们将按照定义的顺序运行。
+你可以将这些链接在一起，例如`builder.addCase().addCase().addMatcher().addDefaultCase()`。 如果多个匹配器匹配操作，它们将按照定义的顺序运行。
 
 ```js
 import { increment } from '../features/counter/counterSlice'
@@ -475,61 +475,6 @@ const postsSlice = createSlice({
   // highlight-end
 })
 ```
-
-如果您使用的是 TypeScript，则应该使用 `extraReducers` 的构建器回调（builder callback）形式。
-
-或者，`extraReducers` 也可以是一个对象。 **这是一种遗留语法 - 它仍然受支持，但我们建议使用“ 构建器回调（builder callback）”语法，因为它与 TypeScript 一起使用效果更好。**
-
-`extraReducers` 对象中的键应该是 Redux action 类型字符串，例如 `'counter/increment'`，手动输入即可。如果类型名称包含 `/` 这样的字符串，也必须写出来。
-
-```js
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState,
-  reducers: {
-    // slice-specific reducers here
-  },
-  extraReducers: {
-    'counter/increment': (state, action) => {
-      // 更新帖子内容 slice 的 reducer 逻辑
-    }
-  }
-})
-```
-
-更好的方法是，调用 `actionCreator.toString()`，它会返回 Redux Toolkit 生成的 action 类型的字符串。这样就可以把它作为 ES6 对象字面量来传递，action 类型字符串作为对象的键：
-
-```js
-import { increment } from '../features/counter/counterSlice'
-const object = {
-  [increment]: () => {}
-}
-console.log(object)
-// { "counter/increment": Function}
-```
-
-把它应用到 `extraReducers` 中就是：
-
-```js
-import { increment } from '../features/counter/counterSlice'
-
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState,
-  reducers: {
-    // slice-specific reducers here
-  },
-  extraReducers: {
-    // highlight-next-line
-    [increment]: (state, action) => {
-      // 更新帖子内容 slice 的 reducer 逻辑
-    }
-  }
-})
-```
-
-不幸的是，TypeScript 无法进行类型推断，因此您必须在此处使用 `increment.type` 来传递类型字符串。 它也不会正确推断 reducer 内的 `action` 类型。
-
 </DetailedExplanation>
 
 在这个例子中，我们需要监听我们 `fetchPosts` thunk dispatch 的 "pending" 和 "fulfilled" action 类型。这些 action creator 附加到我们实际的 `fetchPost` 函数中，我们可以将它们传递给 `extraReducers` 来监听这些 action：
@@ -574,11 +519,11 @@ const postsSlice = createSlice({
 
 ### 显示加载状态
 
-我们的 `<PostsList>` 组件已经在检查存储在 Redux 中的帖子的任何更新，并在列表更改时重新渲染。 因此，如果我们刷新页面，我们应该会在屏幕上看到一组来自假 API 的随机帖子：
+我们的 `<PostsList>` 组件已经在检查存储在 Redux 中的帖子的任何更新，并在列表更改时重新渲染。因此，如果我们刷新页面，应该会在屏幕上看到一组来自假 API 的随机帖子：
 
-我们使用的假 API 会立即返回数据。 但是，真正的 API 调用可能需要一些时间才能返回响应。 在 UI 中显示某种“正在加载...”指示器通常是个好主意，这样用户就知道我们正在等待数据。
+我们使用的假 API 会立即返回数据。但是，真正的 API 调用可能需要一些时间才能返回响应。在 UI 中显示某种 “正在加载...” 指示器通常是个好主意，这样用户就知道正在等待数据。
 
-我们可以更新我们的 `<PostsList>` ，根据 `state.posts.status` 的值显示不同的 UI：加载中显示加载动画（spinner）, 失败显示错误消息，请求成功显示正常的帖子列表。 现在是将列表中的一项封装成 `<PostExcerpt>` 组件的好时机。
+我们可以更新我们的 `<PostsList>` ，根据 `state.posts.status` 的值显示不同的 UI：加载中显示加载动画（spinner）, 失败显示错误消息，请求成功显示正常的帖子列表。现在是将列表中的一项封装成 `<PostExcerpt>` 组件的好时机。
 
 结果可能如下所示：
 
@@ -652,14 +597,14 @@ export const PostsList = () => {
 }
 ```
 
-您可能会注意到 API 调用需要一段时间才能完成，并且加载动画（spinner）在屏幕上停留了几秒钟。 我们的模拟 API 服务器配置为向所有响应添加 2 秒延迟，专门用于帮助可视化记载动画（spinner）可见的时间。 如果你想改变这个行为，你可以打开`api/server.js`，并修改这一行：
+你可能会注意到 API 调用需要一段时间才能完成，并且加载动画（spinner）在屏幕上停留了几秒钟。我们的模拟 API 服务器配置为向所有响应添加 2 秒延迟，专门用于帮助可视化记载动画（spinner）可见的时间。如果你想改变这个行为，你可以打开`api/server.js`，并修改这一行：
 
 ```js title="api/server.js"
-// Add an extra delay to all endpoints, so loading spinners show up.
+// 为所有端点添加额外的延迟，以便显示加载微调器。
 const ARTIFICIAL_DELAY_MS = 2000
 ```
 
-如果您希望 API 调用更快完成，请随时打开和关闭它。
+如果你希望 API 调用更快完成，请随时打开和关闭它。
 
 ## 加载用户数据
 
@@ -667,9 +612,9 @@ const ARTIFICIAL_DELAY_MS = 2000
 
 ![未知帖子作者](/img/tutorials/essentials/posts-unknownAuthor.png)
 
-这是因为帖子条目是由假 API 服务器随机生成的，每次我们重新加载页面时，它也会随机生成一组假用户。我们需要更新用户切片的代码，以在应用程序启动时获取用户数据。
+这是因为帖子条目是由假 API 服务器随机生成的，每次我们重新加载页面时，它也会随机生成一组假用户。我们需要更新用户 slice 的代码，以在应用程序启动时获取用户数据。
 
-和上次一样，我们将创建另一个异步 thunk 来从 API 获取用户数据，然后在 `extraReducers` 切片字段中处理 `fulfilled` action。暂时先不考虑加载状态：
+和上次一样，创建另一个异步 thunk 来从 API 获取用户数据，然后在 `extraReducers` 切片字段中处理 `fulfilled` action。暂时先不考虑加载状态：
 
 ```js title="features/users/usersSlice.js"
 // highlight-start
@@ -701,34 +646,46 @@ const usersSlice = createSlice({
 
 export default usersSlice.reducer
 ```
+你可能已经注意到，这一次 case reducer 根本没有使用 `state` 变量。相反，我们直接返回 `action.payload`。Immer 让我们以两种方式更新状态：要么 _mutating_ 现有状态值，要么 _returning_ 一个新结果。如果我们返回一个新值，它将用我们返回的任何内容完全替换现有状态。（请注意，如果你想手动返回一个新值，则由你编写任何可能需要的不可变更新逻辑。）
+
+在这种情况下，初始状态是一个空数组，我们可能可以使用 state.push(...action.payload) 来改变它。但是，在例子中，我们真的想用服务器返回的任何内容替换用户列表，这样可以避免意外复制状态中的用户列表。
+
+:::info
+
+要了解有关使用 Immer 进行状态更新如何工作的更多信息，请参阅 [RTK 文档中的 “使用 Immer 编写 Reducers” 指南](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns ）。
+
+:::
 
 我们只需要获取一次用户列表，我们希望在应用程序启动时就完成。我们可以在我们的 `index.js` 文件中做到这一点，并直接 dispatch `fetchUsers` thunk，因为我们在那里有 `store`：
 
 ```js title="index.js"
-// omit imports
+// omit other imports
 
 // highlight-next-line
 import { fetchUsers } from './features/users/usersSlice'
 
 import { worker } from './api/server'
 
-// Start our mock API server
-worker.start({ onUnhandledRequest: 'bypass' })
+async function main() {
+  // Start our mock API server
 
-// highlight-next-line
-store.dispatch(fetchUsers())
+  await worker.start({ onUnhandledRequest: 'bypass' })
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+  // highlight-next-line
+  store.dispatch(fetchUsers())
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+}
 ```
 
-现在，每个帖子都应该再次显示用户名，并且我们还应该在 `<AddPostForm>` 的“作者”下拉列表中显示相同的用户列表。
+现在，每个帖子都应该再次显示用户名，并且我们还应该在 `<AddPostForm>` 的 “作者” 下拉列表中显示相同的用户列表。
 
 ## 添加新帖子
 
@@ -744,11 +701,11 @@ ReactDOM.render(
 // highlight-start
 export const addNewPost = createAsyncThunk(
   'posts/addNewPost',
-  // The payload creator receives the partial `{title, content, user}` object
+  // payload 创建者接收部分“{title, content, user}”对象
   async initialPost => {
-    // We send the initial data to the fake API server
+    // 我们发送初始数据到 API server
     const response = await client.post('/fakeApi/posts', initialPost)
-    // The response includes the complete post object, including unique ID
+    // 响应包括完整的帖子对象，包括唯一 ID
     return response.data
   }
 )
@@ -758,7 +715,7 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    // The existing `postAdded` reducer and prepare callback were deleted
+    // 删除了现有的 `postAdded` 减速器和准备回调
     reactionAdded(state, action) {}, // omit logic
     postUpdated(state, action) {} // omit logic
   },
@@ -766,7 +723,7 @@ const postsSlice = createSlice({
     // omit posts loading reducers
     // highlight-start
     builder.addCase(addNewPost.fulfilled, (state, action) => {
-      // We can directly add the new post object to our posts array
+      // 我们可以直接将新的帖子对象添加到我们的帖子数组中
       state.posts.push(action.payload)
     })
     // highlight-end
@@ -778,7 +735,7 @@ const postsSlice = createSlice({
 
 最后，我们将更新 `<AddPostForm>` 以 dispatch `addNewPost` thunk 而不是旧的 `postAdded` action。由于这是对服务器的另一个 API 调用，因此需要一些时间并且 _可能_ 失败。`addNewPost()` thunk 会自动将它的 `pending/fulfilled/rejected` action dispatch 到 store 中。如果我们愿意，我们可以使用第二个加载枚举来跟踪 `postsSlice` 中的请求状态，但是对于这个例子，让我们将加载状态跟踪限制在组件上。
 
-在等待请求时可以禁用“保存帖子”按钮，那么用户就不会意外地尝试保存帖子两次，这样交互会更友好。如果请求失败，我们可能还想在表单中显示错误消息，或者只是将其记录到控制台。
+在等待请求时可以禁用 “保存帖子” 按钮，那么用户就不会意外地尝试保存帖子两次，这样交互会更友好。如果请求失败，我们可能还想在表单中显示错误消息，或者只是将其记录到控制台。
 
 可以让我们的组件逻辑等待异步 thunk 完成，并在完成后检查结果：
 
@@ -831,11 +788,11 @@ export const AddPostForm = () => {
 
 但是，想要编写查看实际请求成功或失败的逻辑是很常见的。 Redux Toolkit 向返回的 `Promise` 添加了一个 `.unwrap()` 函数，它将返回一个新的 `Promise`，这个 `Promise` 在 `fulfilled` 状态时返回实际的 `action.payload` 值，或者在 “rejected” 状态下抛出错误。这让我们可以使用正常的“try/catch”逻辑处理组件中的成功和失败。 因此，如果帖子创建成功，我们将清除输入字段以重置表单，如果失败，则将错误记录到控制台。
 
-如果您想查看 `addNewPost` API 调用失败时如何处理，请尝试创建一个新帖子，其中“内容”字段只有“error”一词（不含引号）。服务器将看到并发送回失败的响应，这样你应该会看到控制台记录一条日志。
+如果你想查看 `addNewPost` API 调用失败时如何处理，请尝试创建一个新帖子，其中“内容”字段只有“error”一词（不含引号）。服务器将看到并发送回失败的响应，这样你应该会看到控制台记录一条日志。
 
 ## 你学到了
 
-异步逻辑和数据获取始终是一个复杂的话题。如您所见，Redux Toolkit 包含一些工具来自动化典型的 Redux 数据获取模式。
+异步逻辑和数据获取始终是一个复杂的话题。如你所见，Redux Toolkit 包含一些工具来自动化典型的 Redux 数据获取模式。
 
 这是我们的应用程序现在从那个假 API 获取数据的样子：
 
@@ -853,10 +810,10 @@ export const AddPostForm = () => {
 
 - **可以编写可复用的“selector 选择器”函数来封装从 Redux 状态中读取数据的逻辑**
   - 选择器是一种函数，它接收 Redux `state` 作为参数，并返回一些数据
-- **Redux 使用叫做“中间件”这样的插件模式来开发异步逻辑**
-  - 官方的处理异步中间件叫 `redux-thunk`，包含在 Redux Toolkit 中
+- **Redux 使用叫做“ middleware ”这样的插件模式来开发异步逻辑**
+  - 官方的处理异步 middleware 叫 `redux-thunk`，包含在 Redux Toolkit 中
   - Thunk 函数接收 `dispatch` 和`getState` 作为参数，并且可以在异步逻辑中使用它们
-- **您可以 dispatch 其他 action 来帮助跟踪 API 调用的加载状态**
+- **你可以 dispatch 其他 action 来帮助跟踪 API 调用的加载状态**
   - 典型的模式是在调用之前 dispatch 一个 "pending" 的 action，然后是包含数据的 “sucdess” 或包含错误的 “failure” action
   - 加载状态通常应该使用枚举类型，如 `'idle' | 'loading' | 'succeeded' | 'failed'`
 - **Redux Toolkit 有一个 `createAsyncThunk` API 可以为你 dispatch 这些 action **
