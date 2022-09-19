@@ -1,8 +1,7 @@
 ---
 id: structuring-reducers
 title: 组织 Reducer
-description: '组织 Reducer'
-hide_title: false
+description: '组织 Reducer > 简介：概述和内容'
 ---
 
 # 组织 Reducer
