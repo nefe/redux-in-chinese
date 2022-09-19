@@ -1,8 +1,8 @@
 ---
 id: updating-normalized-data
-title: 管理范式化数据
-description: 'Structuring Reducers > 管理范式化数据: Patterns for updating normalized data'
-hide_title: false
+title: 更新范式化数据
+sidebar_label: 更新范式化数据
+description: 'Structuring Reducers > 更新范式化数据: 更新范式化数据的模式'
 ---
 
 # 管理范式化数据
