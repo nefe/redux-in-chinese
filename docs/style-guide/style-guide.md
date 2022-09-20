@@ -493,62 +493,62 @@ For more details, see Redux maintainer Mark Erikson's post and conference talk o
 
 以上对于 React-Redux `connect()` API 和 `useSelector()` hook 都适用。
 
-### Use the Object Shorthand Form of `mapDispatch` with `connect`
+### 将 `mapDispatch` 的对象简写（shorthand）形式和 `connect` 一起使用
 
-The `mapDispatch` argument to `connect` can be defined as either a function that receives `dispatch` as an argument, or an object containing action creators. **We recommend always using [the "object shorthand" form of `mapDispatch`](https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**, as it simplifies the code considerably. There is almost never a real need to write `mapDispatch` as a function.
+`connect` 的 `mapDispatch` 参数可以定义为接收 `dispatch` 参数的函数，也可以定义为包含 action creator 的对象。**我们建议总是使用 [`mapDispatch` 的“对象简写”格式 ](https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**，因为这样极大地简化了代码。几乎不需要将 `mapDispatch` 写为函数。
 
-### Call `useSelector` Multiple Times in Function Components
+### 在函数组件中多次调用 `useSelector`
 
-**When retrieving data using the `useSelector` hook, prefer calling `useSelector` many times and retrieving smaller amounts of data, instead of having a single larger `useSelector` call that returns multiple results in an object**. Unlike `mapState`, `useSelector` is not required to return an object, and having selectors read smaller values means it is less likely that a given state change will cause this component to render.
+**当使用 `useSelector` hook 检索数据时，尽可能多次调用 `useSelector` 并使得检索到最小数据量，而不是通过一次 `useSelector` 调用直接获取一个大的对象**。不像 `mapState`，`useSelector` 并不需要返回一个对象，也不需要使 selector 读取更小的值，这意味着给定的状态更改不太可能导致该组件渲染。
 
-However, try to find an appropriate balance of granularity. If a single component does need all fields in a slice of the state , just write one `useSelector` that returns that whole slice instead of separate selectors for each individual field.
+尽管如此，也要试着找到一个合适数据粒度作为平衡点。如果单个组件确实需要 state slice 中的所有字段，只需编写一个“useSelector”，它将返回整个片段，而不是为每个单独的字段编写单独的 selector。
 
-### Use Static Typing
+### 使用静态类型
 
-**Use a static type system like TypeScript or Flow rather than plain JavaScript**. The type systems will catch many common mistakes, improve the documentation of your code, and ultimately lead to better long-term maintainability. While Redux and React-Redux were originally designed with plain JS in mind, both work well with TS and Flow. Redux Toolkit is specifically written in TS and is designed to provide good type safety with a minimal amount of additional type declarations.
+**使用静态类型语言系统，如 TypeScript 或 Flow，而不是纯 JavaScript**。类型系统能提前发现许多常见错误，改进代码的规范性，并最终获得更好的长期可维护性。虽然 Redux 和 React-Redux 最初设计时考虑的是简单的 JS，但两者都能很好地与 TS 和 Flow 配合使用。Redux Toolkit 是用 TS 专门编写的，旨在通过最少的附加类型声明提供良好的类型安全性。
 
-### Use the Redux DevTools Extension for Debugging
+### 使用 Redux DevTools 浏览器拓展进行 debug
 
-**Configure your Redux store to enable [debugging with the Redux DevTools Extension](https://github.com/reduxjs/redux-devtools/tree/main/extension)**. It allows you to view:
+**配置 Redux store 使其支持 [Redux DevTools 拓展来调试](https://github.com/reduxjs/redux-devtools/tree/main/extension)**。它能让你查看：
 
-- The history log of dispatched actions
-- The contents of each action
-- The final state after an action was dispatched
-- The diff in the state after an action
-- The [function stack trace showing the code where the action was actually dispatched](https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/Features/Trace.md)
+- action dispatch 的历史记录
+- 每个 action 的内容
+- 在一个 action 被 dispatch 后的结果
+- action 执行前后 state 的差别
+- [action 被 disptch 处的函数调用栈追踪，显示对应代码](https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/Features/Trace.md)
 
-In addition, the DevTools allows you to do "time-travel debugging", stepping back and forth in the action history to see the entire app state and UI at different points in time.
+此外，DevTools 支持“时间旅行调试”，在动作历史记录中来回切换，以查看不同时间点的整个应用程序状态和 UI。
 
-**Redux was specifically designed to enable this kind of debugging, and the DevTools are one of the most powerful reasons to use Redux**.
+**Redux 特地设计成支持这种 debug，且 DevTools 成为了为什么使用 Redux 的最强有力的理由之一**。
 
-### Use Plain JavaScript Objects for State
+### state 使用普通 javascript 对象
 
-Prefer using plain JavaScript objects and arrays for your state tree, rather than specialized libraries like Immutable.js. While there are some potential benefits to using Immutable.js, most of the commonly stated goals such as easy reference comparisons are a property of immutable updates in general, and do not require a specific library. This also keeps bundle sizes smaller and reduces complexity from data type conversions.
+推荐使用普通 js 对象和数组来表示 state 树结构，额不是特殊的库，比如 Immutable.js。即使使用 Immutable.js 有一些潜在的好处，大多数常见的 state 操作目标（如简单引用比较）通常是不可变更新的属性，那样就不需要特定的库了。这样还可以使 bundle 包更小，并降低数据类型转换的复杂性。
 
-As mentioned above, we specifically recommend using Immer if you want to simplify immutable update logic, specifically as part of Redux Toolkit.
+如上所述，如果您想简化不可变的更新逻辑，特别是作为 Redux Toolkit 的一部分，特别推荐使用 Immer。
 
-<DetailedExplanation>
-Immutable.js has been semi-frequently used in Redux apps since the beginning.  There are several common reasons stated for using Immutable.js:
+<DetailedExplanation title="详细说明">
+Immutable.js 在一开始的 Redux 应用中就被频繁使用了。使用 Immutable.js 还有以下几点理由：
 
-- Performance improvements from cheap reference comparisons
-- Performance improvements from making updates thanks to specialized data structures
-- Prevention of accidental mutations
-- Easier nested updates via APIs like `setIn()`
+- 轻量的引用对比带来的性能提高
+- 由于采用了专门的数据结构进行更新而提高了性能
+- 阻止了意外的 mutation
+- 通过类似于 `setIn()` 的 API 使得嵌套更新更容易
 
-There are some valid aspects to those reasons, but in practice, the benefits aren't as good as stated, and there's multiple negatives to using it:
+这些原因有一些有效的部分，但在实践中，好处并不像所说的那么好，使用它有一些负面影响：
 
-- Cheap reference comparisons are a property of any immutable updates, not just Immutable.js
-- Accidental mutations can be prevented via other mechanisms, such as using Immer (which eliminates accident-prone manual copying logic, and deep-freezes state in development by default) or `redux-immutable-state-invariant` (which checks state for mutations)
-- Immer allows simpler update logic overall, eliminating the need for `setIn()`
-- Immutable.js has a very large bundle size
-- The API is fairly complex
-- The API "infects" your application's code. All logic must know whether it's dealing with plain JS objects or Immutable objects
-- Converting from Immutable objects to plain JS objects is relatively expensive, and always produces completely new deep object references
-- Lack of ongoing maintenance to the library
+- 简单引用对比是任何不可变更新的属性，而不仅仅是 immutable.js
+- 偶然的 mutation 可以通过其他机制来预防，例如使用 Immer（它消除了容易发生错误的手动复制逻辑，默认情况下在开发中深度冻结 state）或 `redux-immutable-state-invariant`（它检查状态是否有突变）
+- 总体来说 Immer 简化了更新逻辑，消除使用 `setIn()` 的需求
+- Immutable.js 包体积较大
+- API 有点复杂
+- API “影响了” 程序代码。所有的逻辑都必须要知道是在修改普通 js 对象还是 Immutable 对象
+- 从 Immutable 对象转换为普通 JS 对象的成本相对较高，并且总是会产生全新的深层对象引用
+- 库缺乏持续维护
 
-The strongest remaining reason to use Immutable.js is fast updates of _very_ large objects (tens of thousands of keys). Most applications won't deal with objects that large.
+使用 Immutable 的最强劲的理由。js 是对各种*超大型*对象（成千上万个键）的快速更新。大多数应用程序不会处理那么大的对象。
 
-Overall, Immutable.js adds too much overhead for too little practical benefit. Immer is a much better option.
+总的来说，Immutable.js 增加了太多的开销，但实际好处太少。Immer 是一个更好的选择。
 
 </DetailedExplanation>
 
@@ -556,37 +556,37 @@ Overall, Immutable.js adds too much overhead for too little practical benefit. I
 
 <div class="priority-rules priority-recommended">
 
-## Priority C Rules: Recommended
+## C 级优先规则: 推荐
 
-### Write Action Types as `domain/eventName`
+### 把 action type 写成 `domain/eventName` 的形式
 
-The original Redux docs and examples generally used a "SCREAMING_SNAKE_CASE" convention for defining action types, such as `"ADD_TODO"` and `"INCREMENT"`. This matches typical conventions in most programming languages for declaring constant values. The downside is that the uppercase strings can be hard to read.
+原始的 Redux 文档和例子总体上使用 “SCREAMING_SNAKE_CASE” 的风格来定义 action type，比如 `“ADD_TODO”` 以及 `“INCREMENT”`。这与大多数编程语言中声明常量值的典型约定相匹配。缺点是大写字符串可读性差。
 
-Other communities have adopted other conventions, usually with some indication of the "feature" or "domain" the action is related to, and the specific action type. The NgRx community typically uses a pattern like `"[Domain] Action Type"`, such as `"[Login Page] Login"`. Other patterns like `"domain:action"` have been used as well.
+其他社区也采用了一些公约，通常会对行动所涉及的“特征”或“域”以及具体行动类型进行一些说明，并规定 action type。典型的，NgRx 社区使用一种 `“[Domain] Action Type”` 模式，比如 `“[Login Page] Login”`。其他的一些模式比如 `“domain:action”` 也被广泛使用。
 
-Redux Toolkit's `createSlice` function currently generates action types that look like `"domain/action"`, such as `"todos/addTodo"`. Going forward, **we suggest using the `"domain/action"` convention for readability**.
+Redux Toolkit's `createSlice` 函数现在生成的 action type 是类似于这样`“domain/action”`，比如 `“todos/addTodo”`。**从可读性角度出发我们建议使用 `“domain/action”` 形式**。
 
-### Write Actions Using the Flux Standard Action Convention
+### 使用 Flux Standard Action Convention 写 action
 
-The original "Flux Architecture" documentation only specified that action objects should have a `type` field, and did not give any further guidance on what kinds of fields or naming conventions should be used for fields in actions. To provide consistency, Andrew Clark created a convention called ["Flux Standard Actions"](https://github.com/redux-utilities/flux-standard-action) early in Redux's development. Summarized, the FSA convention says that actions:
+最初的“Flux Architecture”文档只规定 action 对象应该有一个 “type” 字段，没有对 action 中的字段应该使用什么类型的字段或命名约定给出任何进一步的指导。为了一致性，Andrew Clark 在 Redux 开发早期创建了一种名为 [“Flux Standard Actions”](https://github.com/redux-utilities/flux-standard-action)规范。总的来说，FSA 这样定义 action：
 
-- Should always put their data into a `payload` field
-- May have a `meta` field for additional info
-- May have an `error` field to indicate the action represents a failure of some kind
+- 永远把数据存进 `payload` 字段
+- 可能会有 `meta` 字段来存放一些额外的数据
+- 可能会有 `error` 字段来表示 action 失败的一些错误
 
-Many libraries in the Redux ecosystem have adopted the FSA convention, and Redux Toolkit generates action creators that match the FSA format.
+很多 Redux 生态中的库采用了 FSA 规范，且 Redux Toolkit 生成的 action creator 也是符合的。
 
-**Prefer using FSA-formatted actions for consistency**.
+**从一致性角度出发推荐使用 FSA 格式的 action**。
 
-> **Note**: The FSA spec says that "error" actions should set `error: true`, and use the same action type as the "valid" form of the action. In practice, most developers write separate action types for the "success" and "error" cases. Either is acceptable.
+> **注意**：FSA 规范规定，“error”动作应设置为“error:true”，并使用与动作的“valid”形式相同的动作类型。实际上，大多数开发人员为“成功”和“错误”情况编写单独的操作类型。两者都可以接受。
 
-### Use Action Creators
+### 使用 action creator
 
-"Action creator" functions started with the original "Flux Architecture" approach. With Redux, action creators are not strictly required. Components and other logic can always call `dispatch({type: "some/action"})` with the action object written inline.
+”Action creator“ 函数起源于 “Flux 架构“ 方法。结合 Redux，action creator 不是必须的。组件和其他逻辑也能调用 `dispatch({type: "some/action"})` 来使用 action。
 
-However, using action creators provides consistency, especially in cases where some kind of preparation or additional logic is needed to fill in the contents of the action (such as generating a unique ID).
+然而，使用 action creator 保持了一致性，尤其是在需要某种准备或附加逻辑来填充 action 内容的情况下（例如生成唯一 ID）。
 
-**Prefer using action creators for dispatching any actions**. However, rather than writing action creators by hand, **we recommend using the `createSlice` function from Redux Toolkit, which will generate action creators and action types automatically**.
+**推荐在 dispatch 任意 action 的时候都使用 action creators**。但是，与手写 action creator 不同，**我们建议使用来自 Redux Toolkit 的 `createSlice` 函数，可以自动生成 action creator 和 action types**。
 
 ### Use Thunks for Async Logic
 
