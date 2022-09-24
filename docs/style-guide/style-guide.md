@@ -588,43 +588,43 @@ Redux Toolkit's `createSlice` 函数现在生成的 action type 是类似于这�
 
 **推荐在 dispatch 任意 action 的时候都使用 action creators**。但是，与手写 action creator 不同，**我们建议使用来自 Redux Toolkit 的 `createSlice` 函数，可以自动生成 action creator 和 action types**。
 
-### Use Thunks for Async Logic
+### 使用 Thunk 处理异步逻辑
 
-Redux was designed to be extensible, and the middleware API was specifically created to allow different forms of async logic to be plugged into the Redux store. That way, users wouldn't be forced to learn a specific library like RxJS if it wasn't appropriate for their needs.
+Redux 从设计上就是可拓展的，且特地设计了一些允许各种形式的异步逻辑植入的 middleware API。那样的话，如果不满足需求，使用者就不需要特地去学习像 RxJS 这样的库。
 
-This led to a wide variety of Redux async middleware addons being created, and that in turn has caused confusion and questions over which async middleware should be used.
+这导致创建了各种各样的 Redux 异步 middleware 插件，然后反过来引起混乱，也会存在关于应该使用哪种异步 middleware 的问题。
 
-**We recommend [using the Redux Thunk middleware by default](https://github.com/reduxjs/redux-thunk)**, as it is sufficient for most typical use cases (such as basic AJAX data fetching). In addition, use of the `async/await` syntax in thunks makes them easier to read.
+**我们建议[使用 Redux Thunk middleware 的默认配置](https://github.com/reduxjs/redux-thunk)**，因为对于大多数的典型用例这些都是够用的（例如基本的 AJAX 数据请求）。此外，在 thunk 函数中使用 `async/await` 语法也使其可读性更高。
 
-If you have truly complex async workflows that involve things like cancellation, debouncing, running logic after a given action was dispatched, or "background-thread"-type behavior, then consider adding more powerful async middleware like Redux-Saga or Redux-Observable.
+如果你有特别复杂的异步工作流包括撤销、防抖、在某个 action 被 dispatch 之后运行一些逻辑，或者“后台线程”行为，那么可以考虑增加一些功能更强大的异步 middleware 比如 Redux-Saga 或者 Redux-Observable。
 
-### Move Complex Logic Outside Components
+### 把复杂的逻辑从组件中移出去
 
-We have traditionally suggested keeping as much logic as possible outside components. That was partly due to encouraging the "container/presentational" pattern, where many components simply accept data as props and display UI accordingly, but also because dealing with async logic in class component lifecycle methods can become difficult to maintain.
+我们一直都建议尽可能将逻辑抽离到组件的外面。有一部分是因为要鼓励“容器/表示”的模式，在这种模式下，许多组件只接受数据作为 props 并相应地显示 UI，但也因为在类组件生命周期方法中处理异步逻辑可能变得难以维护。
 
-**We still encourage moving complex synchronous or async logic outside components, usually into thunks**. This is especially true if the logic needs to read from the store state.
+**我们依然鼓励奖复杂的异步逻辑挪到组件外面，通常是放到 thunk 函数里**。如果这部分逻辑要从 store state 中读取的话，这一点尤其正确。
 
-However, **the use of React hooks does make it somewhat easier to manage logic like data fetching directly inside a component**, and this may replace the need for thunks in some cases.
+但是，**React hook 在组件中直接使用，在一定程度上简化了像数据请求这样的逻辑的管理**，并且在一些用例中直接替代了 thunk 的作用。
 
-### Use Selector Functions to Read from Store State
+### 使用 selector 函数从 store state 中读取数据
 
-"Selector functions" are a powerful tool for encapsulating reading values from the Redux store state and deriving further data from those values. In addition, libraries like Reselect enable creating memoized selector functions that only recalculate results when the inputs have changed, which is an important aspect of optimizing performance.
+”selector 函数“是一个用来包装从 Redux store 状态树读取的值并从这些值派生出其他的值的强有力的工具。此外，像 Reselect 这样的库可以创建可缓存的 selector 函数，仅在输入值发生变化时才重新计算结果，这是性能优化的一个重要方面。
 
-**We strongly recommend using memoized selector functions for reading store state whenever possible**, and recommend creating those selectors with Reselect.
+**我们强烈建议，从 store state 取数的时候无论是否可能都使用缓存的 selector 函数**，并且推荐使用 Reselect。
 
-However, don't feel that you _must_ write selector functions for every field in your state. Find a reasonable balance for granularity, based on how often fields are accessed and updated, and how much actual benefit the selectors are providing in your application.
+然而，也不是所有 state 中的字段都*必须*写 selector 函数。基于哪些属性要经常被访问或更新，以及它能在你的程序中能真正带来多少收益，要找到一个合适的粒度平衡。
 
-### Name Selector Functions as `selectThing`
+### 将 selector 函数命名成这样：`selectThing`
 
-**We recommend prefixing selector function names with the word `select`**, combined with a description of the value being selected. Examples of this would be `selectTodos`, `selectVisibleTodos`, and `selectTodoById`.
+**我们推荐将 selector 函数的命名前缀为单词 `select`**，结合要选择的值的描述。例如 `selectTodos`，`selectVisibleTodos`，和 `selectTodoById`。
 
-### Avoid Putting Form State In Redux
+### 避免在 Redux 中放表单数据
 
-**Most form state shouldn't go in Redux**. In most use cases, the data is not truly global, is not being cached, and is not being used by multiple components at once. In addition, connecting forms to Redux often involves dispatching actions on every single change event, which causes performance overhead and provides no real benefit. (You probably don't need to time-travel backwards one character from `name: "Mark"` to `name: "Mar"`.)
+**大多数的表单格式不应该出现在 Redux 中**。在大多数的使用案例中，数据并不是全局的，不被缓存的，且同时不会被多组件使用。此外，将表单数据链接到 Redux 通常在每个更改事件使都涉及 dispatch action，造成了性能开销，却没有实际收益。（可能你并不需要进行仅改回一个字母的时间旅行调试比如从 `name: "Mark"` 改到 `name: "Mar"`。）
 
-Even if the data ultimately ends up in Redux, prefer keeping the form edits themselves in local component state, and only dispatching an action to update the Redux store once the user has completed the form.
+即使数据最终非要保存到 Redux，也尽可能将表单数据本身保持在本地组件状态中来进行更新，并且只在用户完成表单后 dispatch 一个 action 来更新 Redux store。
 
-There are use cases when keeping form state in Redux does actually make sense, such as WYSIWYG live previews of edited item attributes. But, in most cases, this isn't necessary.
+一些案例中在 Redux 中维护表单状态确实有意义，例如实时编辑预览（WYSIWYG）。但在大多数情况下是不必要的。
 
 </div>
 
