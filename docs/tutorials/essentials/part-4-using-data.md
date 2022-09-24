@@ -643,7 +643,7 @@ export const TimeAgo = ({ timestamp }) => {
 由于 `array.sort()` 改变了现有数组，我们需要制作 `state.posts` 的副本并对该副本进行排序。我们知道我们的 `post.date` 字段被保存为日期时间戳字符串，我们可以直接比较它们以按正确的顺序对文章进行排序：
 
 ```jsx title="features/posts/PostsList.js"
-// 根据日期时间字符串，对文章安装时间倒序进行排序
+// 根据日期时间对文章进行倒序排序
 //highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
