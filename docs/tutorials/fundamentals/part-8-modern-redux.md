@@ -51,13 +51,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
   - Action creators 封装了 action 对象和 thunk
   - 记忆化 selectors 用于优化转换数据的计算
   - 应该通过 loading state 枚举值来跟踪请求状态
-  - 规范化 state 使通过 ID 查找 items 更容易
+  - 归一化 state 使通过 ID 查找 items 更容易
 
 </DetailedExplanation>
 
 :::
 
-如你所见，Redux 涉及编写一些冗长的代码，例如不可变更新、action types 和 action creators，以及规范化 state。虽然这些模式有充分的存在理由，但是“手动”编写这些代码可能是比较困难的。此外，设置 Redux store 的过程需要几个步骤，我们必须提出自己的逻辑来处理诸如在 thunk 中 dispatch “loading” action 或处理规范化数据等事情。最后，很多时候用户不确定编写 Redux 逻辑的“正确方法”是什么。
+如你所见，Redux 涉及编写一些冗长的代码，例如不可变更新、action types 和 action creators，以及归一化 state。虽然这些模式有充分的存在理由，但是“手动”编写这些代码可能是比较困难的。此外，设置 Redux store 的过程需要几个步骤，我们必须提出自己的逻辑来处理诸如在 thunk 中 dispatch “loading” action 或处理归一化数据等事情。最后，很多时候用户不确定编写 Redux 逻辑的“正确方法”是什么。
 
 这就是为什么 Redux 团队创建了 [**Redux Toolkit**：官方的、预设最佳实践的、功能齐备的工具集，用于高效的 Redux 开发](https://redux-toolkit.js.org)。
 
@@ -386,7 +386,7 @@ export default todosSlice.reducer
 // highlight-end
 ```
 
-示例应用程序中的 todos reducer 仍然使用嵌套在父对象中的规范化 state，因此这里的代码与我们刚刚看到的 `createSlice` 示例有点不同。还记得我们之前是如何不得不[编写大量嵌套扩展运算符来切换 todo 的吗？](./part-7-standard-patterns.md#normalized-state)现在，代码变得更短且更易于阅读。
+示例应用程序中的 todos reducer 仍然使用嵌套在父对象中的归一化 state，因此这里的代码与我们刚刚看到的 `createSlice` 示例有点不同。还记得我们之前是如何不得不[编写大量嵌套扩展运算符来切换 todo 的吗？](./part-7-standard-patterns.md#normalized-state)现在，代码变得更短且更易于阅读。
 
 让我们在这个 reducer 中再添加几个 case。
 
@@ -435,7 +435,7 @@ export default todosSlice.reducer
 
 在这里，我们使用了一个“准备回调”来让 `todoColorSelected` action creator 接收 `todoId` 和 `color` 参数，并将它们作为一个对象放在 `action.payload` 中。
 
-同时，在 `todoDeleted` reducer 中，我们可以使用 JS 的 `delete` 操作符从规范化 state 中删除某项。
+同时，在 `todoDeleted` reducer 中，我们可以使用 JS 的 `delete` 操作符从归一化 state 中删除某项。
 
 我们可以使用相同的模式去重写 `todosSlice.js` 和 `filtersSlice.js` 中其余的 reducer。
 
@@ -581,15 +581,15 @@ const todosSlice = createSlice({
 - payload creator 将接收一个对象作为其第二个参数，其中包含 `{getState，dispatch}` 和一些其他有用值
 - thunk 在运行 payload creator 之前会 dispatch `pending` action，然后根据返回的 `Promise` 是成功还是失败来 dispatch `fulfilled` 或 `rejected`
 
-## 规范化 State
+## 归一化 State
 
-我们之前看到了如何通过将 items 保存在由它的 ID 作为键的对象中来“规范化” state。这使我们能够通过 ID 查找任何的 items，而无需遍历整个数组。但是，手动编写更新规范化 state 的逻辑是冗长而乏味的。使用 Immer 编写“突变”（mutate）更新代码会更简单，但仍然可能存在很多重复的工作——我们可能会在应用程序中加载许多不同类型的 items，并且每次都必须重复相同的 reducer 逻辑。
+我们之前看到了如何通过将 items 保存在由它的 ID 作为键的对象中来“归一化” state。这使我们能够通过 ID 查找任何的 items，而无需遍历整个数组。但是，手动编写更新归一化 state 的逻辑是冗长而乏味的。使用 Immer 编写“突变”（mutate）更新代码会更简单，但仍然可能存在很多重复的工作——我们可能会在应用程序中加载许多不同类型的 items，并且每次都必须重复相同的 reducer 逻辑。
 
-**Redux Toolkit 包含 `createEntityAdapter` API，该 API 为具有规范化 state 的典型数据更新操作预先构建了 reducer**。包括从 slice 中添加、更新和删除 items。**`createEntityAdapter` 还会生成一些用于从 store 中读取值的记忆化 selectors**。
+**Redux Toolkit 包含 `createEntityAdapter` API，该 API 为具有归一化 state 的典型数据更新操作预先构建了 reducer**。包括从 slice 中添加、更新和删除 items。**`createEntityAdapter` 还会生成一些用于从 store 中读取值的记忆化 selectors**。
 
 ### 使用 `createEntityAdapter`
 
-让我们用 `createEntityAdapter` 替换我们规范化的实体 reducer 逻辑。
+让我们用 `createEntityAdapter` 替换我们归一化的实体 reducer 逻辑。
 
 调用 `createEntityAdapter` 会为我们返回一个“适配器”对象，其中包含几个预置的 reducer 函数，包括：
 
@@ -803,7 +803,7 @@ export const selectFilteredTodoIds = createSelector(
 
 我们调用 `todosAdapter.getSelectors`，并传入内容为 `state => state.todos` 的 selector 来返回这个 slice state。适配器生成一个 `selectAll` selector，它像往常一样取到 _全部的_ Redux state 树，并循环遍历 `state.todos.entities` 和 `state.todos.ids` 以提供完整的 todo 对象数组。由于 `selectAll` 没有告诉我们选择的 _内容_，我们可以使用 ES6 解构语法将函数重命名为 `selectTodos`。同样，我们可以将 `selectById` 重命名为 `selectTodoById`。
 
-请注意，其他 selectors 仍然使用 `selectTodos` 作为输入。这是因为它始终返回一个 todo 对象数组，无论我们是将数组保存为整个 `state.todos`，将其保存为嵌套数组，还是将其存储为规范化对象并转换为数组。尽管存储数据的方式已经做了以上更改，由于 selectors 的使用，我们不需要改动其他代码了，并且记忆化 selectors 通过避免不必要的重渲染也提升了 UI 性能。
+请注意，其他 selectors 仍然使用 `selectTodos` 作为输入。这是因为它始终返回一个 todo 对象数组，无论我们是将数组保存为整个 `state.todos`，将其保存为嵌套数组，还是将其存储为归一化对象并转换为数组。尽管存储数据的方式已经做了以上更改，由于 selectors 的使用，我们不需要改动其他代码了，并且记忆化 selectors 通过避免不必要的重渲染也提升了 UI 性能。
 
 ## 你的所学
 
@@ -865,7 +865,7 @@ export const selectFilteredTodoIds = createSelector(
 
 既然你已经完成了本教程，我们还有一些建议可帮助你了解有关 Redux 的更多信息。
 
-这个“基础”教程专注于 Redux 的低级层面：手动编写 action types 和不可变更新，Redux store 和 middleware 如何工作，以及为什么我们使用 action creators 和规范化 state 等模式。此外，todo 示例应用程序相当小，并不意味着是构建完整应用程序的现实例子。
+这个“基础”教程专注于 Redux 的低级层面：手动编写 action types 和不可变更新，Redux store 和 middleware 如何工作，以及为什么我们使用 action creators 和归一化 state 等模式。此外，todo 示例应用程序相当小，并不意味着是构建完整应用程序的现实例子。
 
 而 [**Redux 循序渐进教程**](../essentials/part-1-overview-concepts.md) 是专门教你**如何构建“真实世界”类型的应用程序**。它通过 Redux Toolkit 来聚焦于如何以正确的方式使用 Redux，并讨论你将在大型应用程序中看到的更现实的模式。它涵盖了许多与本“基础”教程相同的主题，例如为什么 reducer 需要使用不可变更新，但重点是构建一个真实工作中的应用程序。**我们强烈建议你在下一步阅读 Redux 循序渐进教程。**
 
