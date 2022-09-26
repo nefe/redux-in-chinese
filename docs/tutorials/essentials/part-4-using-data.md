@@ -18,7 +18,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-:::info 必备能力
+:::info 预置知识
 
 - 理解 [Redux 循序渐进，第三节：数据流基础](./part-3-data-flow.md)
 - 熟悉 [使用 React Router 中 `<Link>` 与 `<Route>` 组件来做页面路由](https://reacttraining.com/react-router/web/api)
@@ -27,10 +27,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## 简介
 
-在 [第三节：基本数据流](./part-3-data-flow.md) 中，我们看到了如何从一个空的 Redux+React 项目设置开始，添加一个新的状态切片，并创建 React 组件 可以从 Redux store 中读取数据并 dispatch action 来更新该数据。我们还研究了数据如何在应用程序中流动，组件 dispatch action，reducer 处理动作并返回新状态，以及组件读取新状态并重新渲染 UI。
+在 [第三节：基本数据流](./part-3-data-flow.md) 中，我们看到了如何从一个空的 Redux+React 项目设置开始，添加一个新的状态 slice ，并创建 React 组件 可以从 Redux store 中读取数据并 dispatch action 来更新该数据。我们还研究了数据如何在应用程序中流动，组件 dispatch action，reducer 处理 action 并返回新状态，以及组件读取新状态并重新渲染 UI。
 
-现在您已经了解了编写 Redux 逻辑的核心步骤，我们将使用这些相同的步骤向我们的社交媒体提要添加一些很实用的新功能：查看单个帖子、编辑现有帖子、详细信息显示帖子作者、发布时间戳和反应按钮。
-
+现在您已经了解了编写 Redux 逻辑的核心步骤，我们将使用这些相同的步骤向我们的社交媒体提要添加一些很实用的新功能：查看单个文章、编辑现有文章、详细信息显示文章作者、发布时间戳和交互按钮。
 
 :::info 说明
 
@@ -38,15 +37,15 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::
 
-## 显示单个帖子
+## 显示单个文章
 
-由于我们能够向 Redux store 添加新帖子，因此我们可以添加更多以不同方式使用帖子数据的功能。
+由于我们能够向 Redux store 添加新文章，因此我们可以添加更多以不同方式使用文章数据的功能。
 
-目前，我们的帖子列表正在首页中显示，但如果文本太长，我们只会显示内容的摘录。能够在其自己的页面上查看单个帖子条目会很有帮助。
+目前，我们的文章列表正在首页中显示，但如果文本太长，我们只会显示内容的摘录。能够在其自己的页面上查看单个文章条目会很有帮助。
 
-### 创建单个帖子的页面
+### 创建单个文章的页面
 
-首先，我们需要在我们的 `posts` 功能文件夹中添加一个新的 `SinglePostPage` 组件。当页面 URL 是 `/posts/123` 这样的格式时，我们将使用 React Router 来显示这个组件，其中 `123` 部分应该是我们想要显示的帖子的 ID。
+首先，我们需要在我们的 `posts` 功能文件夹中添加一个新的 `SinglePostPage` 组件。当页面 URL 是 `/posts/123` 这样的格式时，我们将使用 React Router 来显示这个组件，其中 `123` 部分应该是我们想要显示的文章的 ID。
 
 ```jsx title="features/posts/SinglePostPage.js"
 import React from 'react'
@@ -84,15 +83,15 @@ React Router 将传入一个 `match` 对象作为包含我们正在寻找的 URL
 
 重要的是要注意**每当 `useSelector` 返回的值为新引用时，组件就会重新渲染**。所以组件应始终尝试从 store 中选择它们需要的**尽可能少**的数据，这将有助于确保它仅在实际需要时才渲染。
 
-可能我们在 store 中没有匹配的帖子条目 - 也许用户试图直接输入 URL，或者我们没有加载正确的数据。如果发生这种情况，`find()` 函数将返回 `undefined` 而不是实际的 post 对象。我们的组件需要检查并通过显示“找不到帖子！”来处理它。
+可能我们在 store 中没有匹配的文章条目 - 也许用户试图直接输入 URL，或者我们没有加载正确的数据。如果发生这种情况，`find()` 函数将返回 `undefined` 而不是实际的 post 对象。我们的组件需要检查并通过显示“找不到文章！”来处理它。
 
-假设我们在 store 中有正确的 post 对象，`useSelector` 将返回它，我们可以使用它来渲染页面中帖子的标题和内容。
+假设我们在 store 中有正确的 post 对象，`useSelector` 将返回它，我们可以使用它来渲染页面中文章的标题和内容。
 
-您可能会注意到，这看起来与我们在 `<PostsList>` 组件主体中的逻辑非常相似，其中我们遍历整个 `posts` 数组以显示主要提要的帖子摘录。我们_可以尝试_提取一个可以在两个地方使用的“帖子”组件，但是我们在显示帖子摘录和整个帖子方面已经存在一些差异。即使有一些重复，通常最好还是分开写一段时间，然后我们可以稍后决定不同的代码部分是否足够相似，以至于我们可以真正提取出可重用的组件。
+您可能会注意到，这看起来与我们在 `<PostsList>` 组件主体中的逻辑非常相似，其中我们遍历整个 `posts` 数组以显示主要提要的文章摘录。我们*可以尝试*提取一个可以在两个地方使用的“文章”组件，但是我们在显示文章摘录和整个文章方面已经存在一些差异。即使有一些重复，通常最好还是暂时分开写，然后我们可以稍后决定不同的代码部分是否足够相似，我们可以真正提取出可重用的组件。
 
-### 添加单个帖子的路由
+### 添加单个文章的路由
 
-现在我们有一个 `<Single Post Page>` 组件，我们可以定义一个路由来显示它，并在首页提要中添加每个帖子的链接。
+现在我们有一个 `<Single Post Page>` 组件，我们可以定义一个路由来显示它，并在首页提要中添加每个文章的链接。
 
 我们将在`App.js`中导入`Single Post Page`，并添加路由：
 
@@ -128,7 +127,7 @@ function App() {
 }
 ```
 
-然后，在 `<PostsList>` 中，我们将更新列表渲染逻辑以包含一个路由到该特定帖子的 `<Link>`：
+然后，在 `<PostsList>` 中，我们将更新列表渲染逻辑以包含一个路由到该特定文章的 `<Link>`：
 
 ```jsx title="features/posts/PostsList.js"
 import React from 'react'
@@ -160,7 +159,7 @@ export const PostsList = () => {
 }
 ```
 
-由于我们现在可以点击进入不同的页面，因此在 `<Navbar>` 组件中提供一个返回主帖子页面的链接也会很有帮助：
+由于我们现在可以点击进入不同的页面，因此在 `<Navbar>` 组件中提供一个返回主文章页面的链接也会很有帮助：
 
 ```jsx title="app/Navbar.js"
 import React from 'react'
@@ -177,7 +176,7 @@ export const Navbar = () => {
         <div className="navContent">
           // highlight-start
           <div className="navLinks">
-            <Link to="/">帖子列表</Link>
+            <Link to="/">文章列表</Link>
           </div>
           // highlight-end
         </div>
@@ -187,21 +186,21 @@ export const Navbar = () => {
 }
 ```
 
-## 编辑帖子
+## 编辑文章
 
-作为用户，写完一篇文章，保存它，然后意识到你在某个地方犯了错误，这真的很烦人。 在我们创建帖子后能够编辑它会很有用。
+作为用户，写完一篇文章，保存它，然后意识到你在某个地方犯了错误，这真的很烦人。 在我们创建文章后能够编辑它会很有用。
 
-让我们添加一个新的 `<EditPostForm>` 组件，该组件能够获取现有帖子 ID，从 store 读取该帖子，让用户编辑标题和帖子内容，然后保存更改以更新 store 中的帖子。
+让我们添加一个新的 `<EditPostForm>` 组件，该组件能够获取现有文章 ID，从 store 读取该文章，让用户编辑标题和文章内容，然后保存更改以更新 store 中的文章。
 
-### 更新帖子条目
+### 更新文章条目
 
-首先，我们需要更新我们的 `postsSlice` 以创建一个新的 reducer 函数和一个动作，以便 store 知道如何更新帖子数据。
+首先，我们需要更新我们的 `postsSlice` 以创建一个新的 reducer 函数和一个 action ，以便 store 知道如何更新文章数据。
 
 在 `createSlice()` 函数中，我们应该在 `reducers` 对象中添加一个新函数。请记住，reducer 的名称应该很好地描述了正在发生的事情，因为无论何时调度此 action，我们都会看到 reducer 名称显示为 Redux DevTools 中的 action type 字符串的一部分。我们的第一个 reducer 被称为 `postAdded`，这个就命名为 `postUpdated`。
 
 为了更新 post 对象，我们需要知道：
 
-- 正在更新的帖子的ID，以便我们可以在状态中找到正确的帖子对象
+- 正在更新的文章的 ID，以便我们可以在状态中找到正确的文章对象
 - 用户输入的新“标题”和“内容”字段
 
 Redux action 对象需要有一个 `type` 字段，它通常是一个描述性字符串，也可能包含其他字段，其中包含有关发生的事情的更多信息。按照惯例，我们通常将附加信息放在名为 `action.payload` 的字段中，但由我们来决定 `payload` 字段包含的内容 - 它可以是字符串、数字、对象、数组或别的东西。在这种情况下，由于我们需要三个信息，让我们计划让 `payload` 字段成为其中包含三个字段的对象。这意味着 action 对象将类似于 `{type: 'posts/postUpdated', payload: {id, title, content}}`。
@@ -210,7 +209,7 @@ Redux action 对象需要有一个 `type` 字段，它通常是一个描述性�
 
 我们还知道，reducer 负责确定在调度 action 时实际应该如何更新状态。鉴于此，我们应该让 reducer 根据 ID 找到正确的 post 对象，并专门更新该 post 中的 `title` 和 `content` 字段。
 
-最后，我们需要导出 `createSlice` 为我们生成的 action creator 函数，以便用户保存帖子时 UI 可以 dispatch 新的 `postUpdated` action。
+最后，我们需要导出 `createSlice` 为我们生成的 action creator 函数，以便用户保存文章时 UI 可以 dispatch 新的 `postUpdated` action。
 
 考虑到所有这些要求，修改后的 `postsSlice` 代码如下：
 
@@ -241,9 +240,9 @@ export const { postAdded, postUpdated } = postsSlice.actions
 export default postsSlice.reducer
 ```
 
-### 编辑帖子表单
+### 编辑文章表单
 
-我们新的 `<EditPostForm>` 组件看起来类似于 `<AddPostForm>`，但逻辑需要有点不同。我们需要从 store 中检索正确的 `post` 对象，然后使用它来初始化组件中的状态字段，以便用户可以进行更改。用户完成后，我们会将更改的标题和内容值保存回 store。 我们还将使用 React Router 的历史 API 切换到单个帖子页面并显示该帖子。
+我们新的 `<EditPostForm>` 组件看起来类似于 `<AddPostForm>`，但逻辑需要有点不同。我们需要从 store 中检索正确的 `post` 对象，然后使用它来初始化组件中的状态字段，以便用户可以进行更改。用户完成后，我们会将更改的标题和内容值保存回 store。 我们还将使用 React Router 的历史 API 切换到单个文章页面并显示该文章。
 
 ```jsx title="features/posts/EditPostForm.js"
 import React, { useState } from 'react'
@@ -277,9 +276,9 @@ export const EditPostForm = ({ match }) => {
 
   return (
     <section>
-      <h2>编辑帖子</h2>
+      <h2>编辑文章</h2>
       <form>
-        <label htmlFor="postTitle">帖子标题：</label>
+        <label htmlFor="postTitle">文章标题：</label>
         <input
           type="text"
           id="postTitle"
@@ -297,7 +296,7 @@ export const EditPostForm = ({ match }) => {
         />
       </form>
       <button type="button" onClick={onSavePostClicked}>
-        保存帖子
+        保存文章
       </button>
     </section>
   )
@@ -324,9 +323,9 @@ export const SinglePostPage = ({ match }) => {
 
 ### 准备 Action Payloads
 
-我们刚刚看到 `createSlice` 中的 action creator 通常期望一个参数，它变成了 `action.payload`。这简化了最常见的使用模式，但有时我们需要做更多的工作来准备 action 对象的内容。 在我们的 `postAdded` 操作的情况下，我们需要为新帖子生成一个唯一的 ID，我们还需要确保有效负载是一个看起来像 `{id, title, content}` 的对象。
+我们刚刚看到 `createSlice` 中的 action creator 通常期望一个参数，它变成了 `action.payload`。这简化了最常见的使用模式，但有时我们需要做更多的工作来准备 action 对象的内容。 在我们的 `postAdded` 操作的情况下，我们需要为新文章生成一个唯一的 ID，我们还需要确保有效 payload 是一个看起来像 `{id, title, content}` 的对象。
 
-现在，我们正在 React 组件中生成 ID 并创建有效负载对象，并将有效负载对象传递给 `postAdded`。 但是，如果我们需要从不同的组件 dispatch 相同的 action，或者准备负载的逻辑很复杂怎么办？ 每次我们想要 dispatch action 时，我们都必须复制该逻辑，并且我们强制组件确切地知道此 action 的有效负载应该是什么样子。
+现在，我们正在 React 组件中生成 ID 并创建有效 payload 对象，并将有效 payload 对象传递给 `postAdded`。 但是，如果我们需要从不同的组件 dispatch 相同的 action，或者准备 payload 的逻辑很复杂怎么办？ 每次我们想要 dispatch action 时，我们都必须复制该逻辑，并且我们强制组件确切地知道此 action 的有效 payload 应该是什么样子。
 
 :::caution 注意
 
@@ -349,7 +348,7 @@ function postAdded(title, content) {
 
 但是，Redux Toolkit 的 `createSlice` 正在为我们生成这些 action creator。这使得代码更短，因为我们不必自己编写它们，但我们仍然需要一种方法来自定义 `action.payload` 的内容。
 
-幸运的是，`createSlice` 允许我们在编写 reducer 时定义一个 `prepare` 函数。  `prepare` 函数可以接受多个参数，生成诸如唯一 ID 之类的随机值，并运行需要的任何其他同步逻辑来决定哪些值进入 action 对象。然后它应该返回一个包含 `payload` 字段的对象。（返回对象还可能包含一个 `meta` 字段，可用于向 action 添加额外的描述性值，以及一个 `error` 字段，该字段应该是一个布尔值，指示此 action 是否表示某种错误。）
+幸运的是，`createSlice` 允许我们在编写 reducer 时定义一个 `prepare` 函数。 `prepare` 函数可以接受多个参数，生成诸如唯一 ID 之类的随机值，并运行需要的任何其他同步逻辑来决定哪些值进入 action 对象。然后它应该返回一个包含 `payload` 字段的对象。（返回对象还可能包含一个 `meta` 字段，可用于向 action 添加额外的描述性值，以及一个 `error` 字段，该字段应该是一个布尔值，指示此 action 是否表示某种错误。）
 
 在 `createSlice` 的 `reducers` 字段内，我们可以将其中一个字段定义为一个类似于 `{reducer, prepare}` 的对象：
 
@@ -392,15 +391,15 @@ const onSavePostClicked = () => {
 }
 ```
 
-## 用户与帖子
+## 用户与文章
 
-到目前为止，我们只有一个状态切片。 逻辑在 `postsSlice.js` 中定义，数据存储在 `state.posts` 中，我们所有的组件都与 posts 功能相关。真实的应用程序可能会有许多不同的状态切片，以及用于 Redux 逻辑和 React 组件的几个不同的“功能文件夹”。
+到目前为止，我们只有一个状态 slice 。 逻辑在 `postsSlice.js` 中定义，数据存储在 `state.posts` 中，我们所有的组件都与 posts 功能相关。真实的应用程序可能会有许多不同的状态 slice ，以及用于 Redux 逻辑和 React 组件的几个不同的“功能文件夹”。
 
 如果没有任何其他人参与，您就无法做出社交媒体。让我们添加在我们的应用程序中跟踪用户列表的功能，并更新与发布相关的功能。
 
-### 添加用户切片
+### 添加用户 slice
 
-由于“用户”的概念不同于“帖子”的概念，我们希望将用户的代码和数据与帖子的代码和数据分开。我们将添加一个新的 `features/users` 文件夹，并在其中放置一个 `usersSlice` 文件。 与帖子切片一样，现在我们将添加一些初始条目，以便我们可以使用数据。
+由于“用户”的概念不同于“文章”的概念，我们希望将用户的代码和数据与文章的代码和数据分开。我们将添加一个新的 `features/users` 文件夹，并在其中放置一个 `usersSlice` 文件。 与文章 slice 一样，现在我们将添加一些初始条目，以便我们可以使用数据。
 
 ```js title="features/users/usersSlice.js"
 import { createSlice } from '@reduxjs/toolkit'
@@ -440,13 +439,13 @@ export default configureStore({
 })
 ```
 
-### 为帖子添加作者
+### 为文章添加作者
 
-我们应用中的每篇文章都是由我们的一个用户撰写的，每次我们添加新文章时，我们都应该跟踪哪个用户写了该文章。 在一个真正的应用程序中，我们会有某种 `state.currentUser` 字段来跟踪当前登录的用户，并在他们添加帖子时使用该信息。
+我们应用中的每篇文章都是由我们的一个用户撰写的，每次我们添加新文章时，我们都应该跟踪哪个用户写了该文章。 在一个真正的应用程序中，我们会有某种 `state.currentUser` 字段来跟踪当前登录的用户，并在他们添加文章时使用该信息。
 
-为了让这个例子更简单，我们将更新我们的 `<AddPostForm>` 组件，以便我们可以从下拉列表中选择一个用户，我们将把该用户的 ID 作为帖子的一部分。一旦我们的帖子对象中有一个用户 ID，我们就可以使用它来查找用户名并在 UI 中的每个单独帖子中显示它。
+为了让这个例子更简单，我们将更新我们的 `<AddPostForm>` 组件，以便我们可以从下拉列表中选择一个用户，我们将把该用户的 ID 作为文章的一部分。一旦我们的文章对象中有一个用户 ID，我们就可以使用它来查找用户名并在 UI 中的每个单独文章中显示它。
 
-首先，我们需要更新我们的 `postAdded` action creator 以接受用户 ID 作为参数，并将其包含在 action 中。（我们还将更新 `initialState` 中的现有帖子条目，使其具有包含示例用户 ID 之一的 `post.user` 字段。）
+首先，我们需要更新我们的 `postAdded` action creator 以接受用户 ID 作为参数，并将其包含在 action 中。（我们还将更新 `initialState` 中的现有文章条目，使其具有包含示例用户 ID 之一的 `post.user` 字段。）
 
 ```js title="features/posts/postsSlice.js"
 const postsSlice = createSlice({
@@ -475,7 +474,7 @@ const postsSlice = createSlice({
 })
 ```
 
-现在，在我们的 `<AddPostForm>` 中，我们可以使用 `useSelector` 从 store 中读取用户列表，并将它们显示为下拉列表。然后我们将获取所选用户的 ID 并将其传递给 `postAdded` 这个 action creator。 在此过程中，我们可以在表单中添加一些验证逻辑，以便用户只能在标题和内容合规时才能单击“保存帖子”按钮：
+现在，在我们的 `<AddPostForm>` 中，我们可以使用 `useSelector` 从 store 中读取用户列表，并将它们显示为下拉列表。然后我们将获取所选用户的 ID 并将其传递给 `postAdded` 这个 action creator。 在此过程中，我们可以在表单中添加一些验证逻辑，以便用户只能在标题和内容合规时才能单击“保存文章”按钮：
 
 ```jsx title="features/posts/AddPostForm.js"
 import React, { useState } from 'react'
@@ -556,7 +555,7 @@ export const AddPostForm = () => {
 }
 ```
 
-现在，我们需要一种方法来在我们的帖子列表项和 `<SinglePostPage>` 中显示帖子作者的姓名。由于我们想要在多个地方显示相同类型的信息，我们可以创建一个 PostAuthor 组件，它将用户 ID 作为 prop，查找正确的用户对象，并格式化用户名：
+现在，我们需要一种方法来在我们的文章列表项和 `<SinglePostPage>` 中显示文章作者的姓名。由于我们想要在多个地方显示相同类型的信息，我们可以创建一个 PostAuthor 组件，它将用户 ID 作为 prop，查找正确的用户对象，并格式化用户名：
 
 ```jsx title="features/posts/PostAuthor.js"
 import React from 'react'
@@ -573,15 +572,15 @@ export const PostAuthor = ({ userId }) => {
 
 请注意，我们在每个组件中都遵循相同的模式。任何需要从 Redux store 读取数据的组件都可以使用 `useSelector` 钩子，并提取它需要的特定数据片段。此外，许多组件可以同时访问 Redux store 中的相同数据。
 
-我们现在可以将 `PostAuthor` 组件导入到 `PostsList.js` 和 `SinglePostPage.js` 中，并将其渲染为 `<PostAuthor userId={post.user} />`，并且每次我们添加一个帖子条目时，所选用户的姓名应显示在帖子内。
+我们现在可以将 `PostAuthor` 组件导入到 `PostsList.js` 和 `SinglePostPage.js` 中，并将其渲染为 `<PostAuthor userId={post.user} />`，并且每次我们添加一个文章条目时，所选用户的姓名应显示在文章内。
 
-## 更多帖子功能
+## 更多文章功能
 
-此时，我们可以创建和编辑帖子。让我们添加一些额外的逻辑，使我们的帖子提要更有用。
+此时，我们可以创建和编辑文章。让我们添加一些额外的逻辑，使我们的文章提要更有用。
 
-### 存储帖子的日期
+### 存储文章的日期
 
-社交媒体提要通常按帖子创建时间排序，并向我们显示帖子创建时间作为相对描述，例如“5 小时前”。为此，我们需要开始跟踪帖子条目的“日期”字段。
+社交媒体提要通常按文章创建时间排序，并向我们显示文章创建时间作为相对描述，例如“5 小时前”。为此，我们需要开始跟踪文章条目的“日期”字段。
 
 与 `post.user` 字段一样，我们将更新我们的 `postAdded` prepare 回调，以确保在 dispatch action 时始终包含 `post.date`。然而，它不是将被传入的另一个参数。我们希望始终使用 dispatch action 时的时间戳，因此我们将让 prepare 回调自己处理它。
 
@@ -613,7 +612,7 @@ export const PostAuthor = ({ userId }) => {
     },
 ```
 
-与帖子作者一样，我们需要在 `<PostsList>` 和 `<SinglePostPage>` 组件中显示相对时间戳描述。我们将添加一个 `<TimeAgo>` 组件来处理格式化时间戳字符串作为相对描述。像 `date-fns` 这样的库有一些有用的工具函数来解析和格式化日期，可以在这里使用：
+与文章作者一样，我们需要在 `<PostsList>` 和 `<SinglePostPage>` 组件中显示相对时间戳描述。我们将添加一个 `<TimeAgo>` 组件来处理格式化时间戳字符串作为相对描述。像 `date-fns` 这样的库有一些有用的工具函数来解析和格式化日期，可以在这里使用：
 
 ```jsx title="features/posts/TimeAgo.js"
 import React from 'react'
@@ -635,16 +634,16 @@ export const TimeAgo = ({ timestamp }) => {
 }
 ```
 
-### 为帖子列表排序
+### 为文章列表排序
 
-我们的 `<PostsList>` 当前以帖子在 Redux store 中保存的相同顺序显示所有帖子。我们的示例首先包含最旧的帖子，每当我们添加新帖子时，它都会添加到帖子数组的末尾。这意味着最新的帖子总是在页面底部。
+我们的 `<PostsList>` 当前以文章在 Redux store 中保存的相同顺序显示所有文章。我们的示例首先包含最旧的文章，每当我们添加新文章时，它都会添加到文章数组的末尾。这意味着最新的文章总是在页面底部。
 
-通常，社交媒体提要首先显示最新帖子，然后向下滚动以查看旧帖子。即使数据在 store 中是旧的在前，仍然可以在 `<PostsList>` 组件中重新排序数据，以便最新的帖子在最前面。理论上，由于我们知道 `state.posts` 数组已经排序，我们_可以_只反转列表。但是，为了确定起见，最好还是自己进行排序。
+通常，社交媒体提要首先显示最新文章，然后向下滚动以查看旧文章。即使数据在 store 中是旧的在前，仍然可以在 `<PostsList>` 组件中重新排序数据，以便最新的文章在最前面。理论上，由于我们知道 `state.posts` 数组已经排序，我们*可以*只反转列表。但是，为了确定起见，最好还是自己进行排序。
 
-由于 `array.sort()` 改变了现有数组，我们需要制作 `state.posts` 的副本并对该副本进行排序。我们知道我们的 `post.date` 字段被保存为日期时间戳字符串，我们可以直接比较它们以按正确的顺序对帖子进行排序：
+由于 `array.sort()` 改变了现有数组，我们需要制作 `state.posts` 的副本并对该副本进行排序。我们知道我们的 `post.date` 字段被保存为日期时间戳字符串，我们可以直接比较它们以按正确的顺序对文章进行排序：
 
 ```jsx title="features/posts/PostsList.js"
-// 根据日期时间字符串，对帖子安装时间倒序进行排序
+// 根据日期时间对文章进行倒序排序
 //highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
@@ -689,13 +688,13 @@ const initialState = [
 ]
 ```
 
-### 为帖子添加反应表情
+### 文章交互按钮
 
-现在添加一个新功能，我们的帖子有点无聊。我们需要让他们更令人兴奋，还有什么比让我们的朋友在我们的帖子中添加反应表情更好的方法呢？
+现在添加一个新功能，我们的文章有点无聊。我们需要让他们更令人兴奋，还有什么比让我们的朋友在我们的文章中添加表情交互按钮是更好的方法呢？
 
-我们将在 `<PostsList>` 和 `<SinglePostPage>` 的每个帖子底部添加一行表情符号反应按钮。每次用户单击一个反应按钮时，我们都需要更新 Redux store 中该帖子的匹配计数器字段。由于反应计数器数据位于 Redux store 中，因此在应用程序的不同部分之间切换应该在使用该数据的任何组件中始终显示相同的值。
+我们将在 `<PostsList>` 和 `<SinglePostPage>` 的每个文章底部添加一行表情符号交互按钮。每次用户单击一个交互按钮时，我们都需要更新 Redux store 中该文章的匹配计数器字段。由于交互计数器数据位于 Redux store 中，因此在应用程序的不同部分之间切换应该在使用该数据的任何组件中始终显示相同的值。
 
-与帖子作者和时间戳一样，我们希望在显示帖子的任何地方使用它，因此我们将创建一个以 `post` 作为 props 的 `<ReactionButtons>` 组件。我们将首先显示里面的按钮，以及每个按钮的当前反应计数：
+与文章作者和时间戳一样，我们希望在显示文章的任何地方使用它，因此我们将创建一个以 `post` 作为 props 的 `<ReactionButtons>` 组件。我们将首先显示里面的按钮，以及每个按钮的当前交互计数：
 
 ```jsx title="features/posts/ReactionButtons.js"
 import React from 'react'
@@ -721,11 +720,11 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-我们的数据中还没有 `post.reactions` 字段，因此我们需要更新 `initialState` 帖子对象和我们的 `postAdded` prepare 回调函数以确保每个帖子都包含该数据，例如 `反应：{thumbsUp：0，hooray：0}`。
+我们的数据中还没有 `post.reactions` 字段，因此我们需要更新 `initialState` 文章对象和我们的 `postAdded` prepare 回调函数以确保每个文章都包含该数据，例如 `交互：{thumbsUp：0，hooray：0}`。
 
-现在，我们可以定义一个新的 reducer，当用户单击反应按钮时，它将处理更新帖子的反应计数。
+现在，我们可以定义一个新的 reducer，当用户单击交互按钮时，它将处理更新文章的交互计数。
 
-与编辑帖子一样，我们需要知道帖子的 ID，以及用户点击了哪个反应按钮。我们将让我们的 `action.payload` 成为一个看起来像 `{id, react}` 的对象。 然后，reducer 可以找到正确的 post 对象，并更新正确的反应字段。
+与编辑文章一样，我们需要知道文章的 ID，以及用户点击了哪个交互按钮。我们将让我们的 `action.payload` 成为一个看起来像 `{id, react}` 的对象。 然后，reducer 可以找到正确的 post 对象，并更新正确的交互字段。
 
 ```js
 const postsSlice = createSlice({
@@ -749,9 +748,9 @@ const postsSlice = createSlice({
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 ```
 
-正如我们已经看到的，`createSlice` 可以让我们在 reducer 中编写“mutable/变异”的逻辑。如果我们不使用 `createSlice` 和 Immer 库，`existingPost.reactions[reaction]++`这行代码确实会改变现有的 `post.reactions` 对象，这可能会导致我们应用程序中其他地方的错误，因为我们没有遵循 reducer 的规则。但是，由于我们_正在_使用 `createSlice`，我们可以以更简单的方式编写这个更复杂的更新逻辑，并让 Immer 完成将这段代码转换为安全不可变更新的工作。
+正如我们已经看到的，`createSlice` 可以让我们在 reducer 中编写 “mutating” 的逻辑。如果我们不使用 `createSlice` 和 Immer 库，`existingPost.reactions[reaction]++`这行代码确实会改变现有的 `post.reactions` 对象，这可能会导致我们应用程序中其他地方的错误，因为我们没有遵循 reducer 的规则。但是，由于我们*正在*使用 `createSlice`，我们可以以更简单的方式编写这个更复杂的更新逻辑，并让 Immer 完成将这段代码转换为安全不可变更新的工作。
 
-请注意，**action 对象只包含描述发生的事情所需的最少信息**。我们知道我们需要更新哪个帖子，以及点击了哪个反应名称。我们_可以_计算新的反应计数器值并将其放入 action 中，但**保持动作对象尽可能小总是更好，并在 reducer 中进行状态更新计算**。这也意味着 **reducer 中可以包含计算新状态所需的尽可能多的逻辑**。
+请注意，**action 对象只包含描述发生的事情所需的最少信息**。我们知道我们需要更新哪个文章，以及点击了哪个交互名称。我们*可以*计算新的交互计数器值并将其放入 action 中，但**保持 action 对象尽可能小总是更好，并在 reducer 中进行状态更新计算**。这也意味着 **reducer 中可以包含计算新状态所需的尽可能多的逻辑**。
 
 :::info 说明
 
@@ -802,7 +801,7 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-现在，每次我们点击一个反应按钮时，计数器都会增加。如果我们浏览应用程序的不同部分，我们应该在每次查看此帖子时看到正确的计数器值，即使我们单击 `<PostsList>` 中的反应按钮，然后单独查看该帖子 `<SinglePostPage>`。
+现在，每次我们点击一个交互按钮时，计数器都会增加。如果我们浏览应用程序的不同部分，我们应该在每次查看此文章时看到正确的计数器值，即使我们单击 `<PostsList>` 中的交互按钮，然后单独查看该文章 `<SinglePostPage>`。
 
 ## 你学到了
 
