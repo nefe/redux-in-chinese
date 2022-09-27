@@ -1,90 +1,89 @@
 ---
 id: part-8-modern-redux
-title: 'Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit'
-sidebar_label: 'Modern Redux with Redux Toolkit'
-hide_title: false
-description: 'The official Fundamentals tutorial for Redux: learn the modern way to write Redux logic'
+title: 'Redux 深入浅出，第 8 节：使用 Redux Toolkit 的现代 Redux'
+sidebar_label: '使用 Redux Toolkit 的现代 Redux'
+description: 'Redux 官方基础教程：学习编写 Redux 逻辑的现代方法'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit
+# Redux 深入浅出，第 8 节：使用 Redux Toolkit 的现代 Redux
 
 :::tip 你将学到
 
-- How to simplify your Redux logic using Redux Toolkit
-- Next steps for learning and using Redux
+- 如何使用 Redux Toolkit 来简化 Redux 逻辑
+- 学习和使用 Redux 的后续步骤
 
 :::
 
-Congratulations, you've made it to the last section of this tutorial! We've got one more topic to cover before we're done.
+恭喜你进入本教程的最后一部分！在此之前，我们还有一个主题要讨论。
 
-If you'd like a reminder of what we've covered so far, take a look at this summary:
+如果你想回顾截止目前为止所涵盖的内容，请查看以下摘要：
 
-:::info
+:::info 提示
 
-<DetailedExplanation title="Recap: What You've Learned">
+<DetailedExplanation title="回顾：你的所学">
 
-- [Part 1: Overview](./part-1-overview.md):
-  - what Redux is, when/why to use it, and the basic pieces of a Redux app
-- [Part 2: Concepts and Data Flow](./part-2-concepts-data-flow.md):
-  - How Redux uses a "one-way data flow" pattern
-- [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers.md):
-  - Redux state is made of plain JS data
-  - Actions are objects that describe "what happened" events in an app
-  - Reducers take current state and an action, and calculate a new state
-  - Reducers must follow rules like "immutable updates" and "no side effects"
-- [Part 4: Store](./part-4-store.md):
-  - The `createStore` API creates a Redux store with a root reducer function
-  - Stores can be customized using "enhancers" and "middleware"
-  - The Redux DevTools extension lets you see how your state changes over time
-- [Part 5: UI and React](./part-5-ui-and-react.md):
-  - Redux is separate from any UI, but frequently used with React
-  - React-Redux provides APIs to let React components talk to Redux stores
-  - `useSelector` reads values from Redux state and subscribes to updates
-  - `useDispatch` lets components dispatch actions
-  - `<Provider>` wraps your app and lets components access the store
-- [Part 6: Async Logic and Data Fetching](./part-6-async-logic.md):
-  - Redux middleware allow writing logic that has side effects
-  - Middleware add an extra step to the Redux data flow, enabling async logic
-  - Redux "thunk" functions are the standard way to write basic async logic
-- [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md):
-  - Action creators encapsulate preparing action objects and thunks
-  - Memoized selectors optimize calculating transformed data
-  - Request status should be tracked with loading state enum values
-  - Normalized state makes it easier to look up items by IDs
+- [第 1 节：Redux 概览](./part-1-overview.md)：
+  - Redux 是什么，何时/为什么使用它，以及 Redux 应用程序的基本部分
+- [第 2 节：概念与数据流](./part-2-concepts-data-flow.md)：
+  - Redux 如何使用“单向数据流”模式
+- [第 3 节：State，Actions 和 Reducers](./part-3-state-actions-reducers.md)：
+  - Redux state 由普通的 JS 对象组成
+  - Actions 是描述应用程序中“发生了什么”事件的对象
+  - Reducers 根据当前的 state 和 action，计算出一个新的 state
+  - Reducers 必须遵循“不可变更新”和“无副作用”等规则
+- [第 4 节：Store](./part-4-store.md)：
+  - `createStore` API 使用根 reducer 函数创建 Redux store
+  - 可以使用 enhancers 和 middleware 来自定义 store
+  - Redux DevTools 扩展使你可以查看 state 的变化
+- [第 5 节：UI 和 React](./part-5-ui-and-react.md)：
+  - Redux 独立于任何 UI，但经常与 React 一起使用
+  - React-Redux 提供 API 使得 React 组件能够与 Redux store 进行交互
+  - `useSelector` 从 Redux state 中读取值并订阅更新
+  - `useDispatch` 使得组件能够 dispatch actions
+  - 使用 `<Provider>` 包裹应用程序，使得组件能够访问 store
+- [第 6 节：异步逻辑和数据获取](./part-6-async-logic.md)：
+  - Redux middleware 支持编写具有副作用的逻辑
+  - Middleware 向 Redux 数据流添加了一个额外的步骤，以启用异步逻辑
+  - Redux “thunk” 函数是编写基本异步逻辑的标准方式
+- [第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)：
+  - Action creators 封装了 action 对象和 thunk
+  - 记忆化 selectors 用于优化转换数据的计算
+  - 应该通过 loading state 枚举值来跟踪请求状态
+  - 归一化 state 使通过 ID 查找 items 更容易
 
 </DetailedExplanation>
 
 :::
 
-As you've seen, many aspects of Redux involve writing some code that can be verbose, such as immutable updates, action types and action creators, and normalizing state. There's good reasons why these patterns exist, but writing that code "by hand" can be difficult. In addition, the process for setting up a Redux store takes several steps, and we've had to come up with our own logic for things like dispatching "loading" actions in thunks or processing normalized data. Finally, many times users aren't sure what "the right way" is to write Redux logic.
+如你所见，Redux 涉及编写一些冗长的代码，例如不可变更新、action types 和 action creators，以及归一化 state。虽然这些模式有充分的存在理由，但是“手动”编写这些代码可能是比较困难的。此外，设置 Redux store 的过程需要几个步骤，我们必须提出自己的逻辑来处理诸如在 thunk 中 dispatch “loading” action 或处理归一化数据等事情。最后，很多时候用户不确定编写 Redux 逻辑的“正确方法”是什么。
 
-That's why the Redux team created [**Redux Toolkit**: our official, opinionated, "batteries included" toolset for efficient Redux development](https://redux-toolkit.js.org).
+这就是为什么 Redux 团队创建了 [**Redux Toolkit**：官方的、预设最佳实践的、功能齐备的工具集，用于高效的 Redux 开发](https://redux-toolkit.js.org)。
 
-Redux Toolkit contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+Redux Toolkit 包含了对于构建 Redux 应用程序至关重要的包和函数。它构建在我们建议的最佳实践中，简化了大多数 Redux 任务，避免了常见错误，使得编写 Redux 应用程序更容易了。
 
-Because of this, **Redux Toolkit is the standard way to write Redux application logic**. The "hand-written" Redux logic you've written so far in this tutorial is actual working code, but **you shouldn't write Redux logic by hand** - we've covered those approaches in this tutorial so that you understand _how_ Redux works. However, **for real applications, you should use Redux Toolkit to write your Redux logic.**
+因此，**Redux Toolkit 是编写 Redux 应用程序逻辑的标准方式**。到目前为止，虽然你在本教程中“手写”的 Redux 逻辑是实际可行的代码，但是**你不应该手动编写 Redux 逻辑**——我们在本教程中介绍这些方法，是为了帮助你理解 Redux 是 _如何_ 工作的。但是，**对于实际应用程序，你应该使用 Redux Toolkit 来编写 Redux 逻辑。**
 
-When you use Redux Toolkit, all the concepts that we've covered so far (actions, reducers, store setup, action creators, thunks, etc) still exist, but **Redux Toolkit provides easier ways to write that code**.
+当你使用 Redux Toolkit 时，到目前为止介绍的所有概念（actions、reducers、store setup、action creators、thunk 等）仍然存在，但是**Redux Toolkit 提供了更简单的方法来编写代码**。
 
-:::tip
+:::tip 提示
 
-Redux Toolkit _only_ covers the Redux logic - we still use React-Redux to let our React components talk to the Redux store, including `useSelector` and `useDispatch`.
+Redux Toolkit _仅_ 涵盖了 Redux 逻辑——仍然需要使用 React-Redux 使得 React 组件与 Redux store 进行交互，包括 `useSelector` 和 `useDispatch`。
 
 :::
 
-So, let's see how we can use Redux Toolkit to simplify the code we've already written in our example todo application. We'll primarily be rewriting our "slice" files, but we should be able to keep all the UI code the same.
+那么，让我们看看如何通过 Redux Toolkit 来简化 todo 应用程序中已经编写的代码。我们主要将重写 slice 文件，但要保持所有 UI 代码相同。
 
-Before we continue, **add the Redux Toolkit package to your app**:
+在继续前，**先将 Redux Toolkit 包添加到应用程序**：
 
 ```bash
 npm install @reduxjs/toolkit
 ```
 
-## Store Setup
+## 设置 Store
 
-We've gone through a few iterations of setup logic for our Redux store. Currently, it looks like this:
+Redux store 已经经历了几次设置逻辑的迭代。目前，它看起来像这样：
 
 ```js title="src/rootReducer.js"
 import { combineReducers } from 'redux'
@@ -93,7 +92,7 @@ import todosReducer from './features/todos/todosSlice'
 import filtersReducer from './features/filters/filtersSlice'
 
 const rootReducer = combineReducers({
-  // Define a top-level state field named `todos`, handled by `todosReducer`
+  // 定义一个名为 `todos` 的顶级 state 字段，值为 `todosReducer`
   todos: todosReducer,
   filters: filtersReducer
 })
@@ -113,19 +112,19 @@ const store = createStore(rootReducer, composedEnhancer)
 export default store
 ```
 
-Notice that the setup process takes several steps. We have to:
+请注意，设置过程需要几个步骤。我们必须：
 
-- Combine the slice reducers together to form the root reducer
-- Import the root reducer into the store file
-- Import the thunk middleware, `applyMiddleware`, and `composeWithDevTools` APIs
-- Create a store enhancer with the middleware and devtools
-- Create the store with the root reducer
+- 将 slice reducers 组合在一起形成根 reducer
+- 将根 reducer 导入到 store 文件中
+- 导入 thunk middleware、`applyMiddleware` 和 `composeWithDevTools` API
+- 使用 middleware 和 devtools 创建 store enhancer
+- 使用根 reducer 创建 store
 
-It would be nice if we could cut down the number of steps here.
+如果我们可以减少这里的步骤数，那就太好了。
 
-### Using `configureStore`
+### 使用 `configureStore`
 
-**Redux Toolkit has a `configureStore` API that simplifies the store setup process**. `configureStore` wraps around the Redux core `createStore` API, and handles most of the store setup for us automatically. In fact, we can cut it down to effectively one step:
+**Redux Toolkit 的 `configureStore` API，可简化 store 的设置过程**。`configureStore` 包裹了 Redux 核心 `createStore` API，并自动为我们处理大部分 store 设置逻辑。事实上，我们可以有效地将其缩减为一步：
 
 ```js title="src/store.js"
 // highlight-next-line
@@ -137,7 +136,7 @@ import filtersReducer from './features/filters/filtersSlice'
 // highlight-start
 const store = configureStore({
   reducer: {
-    // Define a top-level state field named `todos`, handled by `todosReducer`
+    // 定义一个名为 `todos` 的顶级 state 字段，值为 `todosReducer`
     todos: todosReducer,
     filters: filtersReducer
   }
@@ -147,24 +146,24 @@ const store = configureStore({
 export default store
 ```
 
-That one call to `configureStore` did all the work for us:
+`configureStore` 为我们完成了所有工作：
 
-- It combined `todosReducer` and `filtersReducer` into the root reducer function, which will handle a root state that looks like `{todos, filters}`
-- It created a Redux store using that root reducer
-- It automatically added the `thunk` middleware
-- It automatically added more middleware to check for common mistakes like accidentally mutating the state
-- It automatically set up the Redux DevTools Extension connection
+- 将 `todosReducer` 和 `filtersReducer` 组合到根 reducer 函数中，它将处理看起来像 `{todos, filters}` 的根 state
+- 使用根 reducer 创建了 Redux store
+- 自动添加了 “thunk” middleware
+- 自动添加更多 middleware 来检查常见错误，例如意外改变（mutate）state
+- 自动设置 Redux DevTools 扩展连接
 
-We can confirm this works by opening up our example todo application and using it. All of our existing feature code works fine! Since we're dispatching actions, dispatching thunks, reading state in the UI, and looking at the action history in the DevTools, all those pieces must be working correctly. All we've done is switched out the store setup code.
+我们可以通过打开并使用 todo 应用程序来确认它是否有效。所有的现有功能代码都可以正常工作！Dispatch actions、dispatch thunks、读取 UI 中的 state 以及查看 DevTools 中的 action 历史记录，所有这些部分都必须正常工作。我们所做的只是改写了 store 的设置代码。
 
-Let's see what happens now if we accidentally mutate some of the state. What if we change the "todos loading" reducer so that it directly changes the state field, instead of immutably making a copy?
+来看下如果我们不小心改变了一些 state 会发生什么。比如在 “todos loading” reducer 里直接修改 state 字段，而不是拷贝副本呢？
 
 ```js title="src/features/todos/todosSlice"
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
-    // omit other cases
+    // 省略其他 cases
     case 'todos/todosLoading': {
-      // ❌ WARNING: example only - don't do this in a normal reducer!
+      // ❌ 警告：仅示例 - 不要在普通 reducer 中执行此操作！
       state.status = 'loading'
       return state
     }
@@ -174,59 +173,62 @@ export default function todosReducer(state = initialState, action) {
 }
 ```
 
-Uh-oh. Our whole app just crashed! What happened?
+整个应用程序崩溃了！发生了什么？
 
 ![Immutability check middleware error](/img/tutorials/fundamentals/immutable-error.png)
 
-**This error message is a _good_ thing - we caught a bug in our app!** `configureStore` specifically added an extra middleware that automatically throws an error whenever it sees an accidental mutation of our state (in development mode only). That helps catch mistakes we might make while writing our code.
+**这个报错是件_好事_——我们在应用程序中发现了一个错误！**`configureStore` 特别添加了一个额外的 middleware，当它检测到 state 发生意外突变时会自动抛出错误（仅在开发模式下）。这有助于捕获编码时可能犯的错误。
 
-### Package Cleanup
+### 包清理
 
-Redux Toolkit already includes several of the packages we're using, like `redux`, `redux-thunk`, and `reselect`, and re-exports those APIs. So, we can clean up our project a bit.
+Redux Toolkit 已经包含了我们正在使用的几个包，例如 `redux`、`redux-thunk` 和 `reselect`，并重新导出了这些 API。所以，我们可以稍微清理一下项目。
 
-First, we can switch our `createSelector` import to be from `'@reduxjs/toolkit'` instead of `'reselect'`. Then, we can remove the separate packages we have listed in our `package.json`:
+首先，我们可以将 `createSelector` 导入切换为来自 `'@reduxjs/toolkit'` 而不是 `'reselect'`。然后，我们可以删除在 `package.json` 中列出的单独包：
 
 ```js
 npm uninstall redux redux-thunk reselect
 ```
 
-To be clear, **we're still using these packages and need to have them installed**. However, because Redux Toolkit depends on them, they'll be installed automatically when we install `@reduxjs/toolkit`, so we don't need to have the other packages specifically listed in our `package.json` file.
+需要明确的是，**我们仍在使用这些软件包，并需要安装它们**。但是，由于 Redux Toolkit 依赖于它们，所以它们会在安装 `@reduxjs/toolkit` 时自动被安装，因此我们不需要在 `package.json` 文件中专门列出其他包。
 
-## Writing Slices
+## 编写 Slices
 
-As we've added new features to our app, the slice files have gotten bigger and more complicated. In particular, the `todosReducer` has gotten harder to read because of all the nested object spreads for immutable updates, and we've written multiple action creator functions.
+随着我们不断向应用程序添加新功能，slice 文件变得更大更复杂了。特别是 `todosReducer` 变得更难阅读，因为扩展所有的嵌套对象都是为了不可变更新，而且我们已经编写了多个 action creator 函数。
 
-**Redux Toolkit has a `createSlice` API that will help us simplify our Redux reducer logic and actions**. `createSlice` does several important things for us:
+**Redux Toolkit 的 `createSlice` API，将帮助我们简化 Redux reducer 逻辑和 actions**。`createSlice` 为我们做了几件重要的事情：
 
-- We can write the case reducers as functions inside of an object, instead of having to write a `switch/case` statement
-- The reducers will be able to write shorter immutable update logic
-- All the action creators will be generated automatically based on the reducer functions we've provided
+- 可以将 case reducer 编写为对象内部的函数，而不必编写 `switch/case` 语句
+- reducer 将能够编写更短的不可变更新逻辑
+- 所有 action creators 将根据我们提供的 reducer 函数自动生成
 
-### Using `createSlice`
+### 使用 `createSlice`
 
-`createSlice` takes an object with three main options fields:
+`createSlice` 接收一个包含三个主要选项字段的对象：
 
-- `name`: a string that will be used as the prefix for generated action types
-- `initialState`: the initial state of the reducer
-- `reducers`: an object where the keys are strings, and the values are "case reducer" functions that will handle specific actions
+- `name`：一个字符串，将用作生成的 action types 的前缀
+- `initialState`：reducer 的初始 state
+- `reducers`：一个对象，其中键是字符串，值是处理特定 actions 的 “case reducer” 函数
 
-Let's look at a small standalone example first.
+让我们先看一个独立的小示例。
 
 ```js title="createSlice  example"
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = []
+const initialState = {
+  entities: [],
+  status: null
+}
 
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
     todoAdded(state, action) {
-      // ✅ This "mutating" code is okay inside of createSlice!
-      state.push(action.payload)
+      // ✅ “突变”（mutate）代码在 createSlice 中是可以的！
+      state.entities.push(action.payload)
     },
     todoToggled(state, action) {
-      const todo = state.find(todo => todo.id === action.payload)
+      const todo = state.entities.find(todo => todo.id === action.payload)
       todo.completed = !todo.completed
     },
     todosLoading(state, action) {
@@ -243,52 +245,52 @@ export const { todoAdded, todoToggled, todosLoading } = todosSlice.actions
 export default todosSlice.reducer
 ```
 
-There's several things to see in this example:
+在此示例中可以看到几件事：
 
-- We write case reducer functions inside the `reducers` object, and give them readable names
-- **`createSlice` will automatically generate action creators** that correspond to each case reducer function we provide
-- createSlice automatically returns the existing state in the default case
-- **`createSlice` allows us to safely "mutate" our state!**
-- But, we can also make immutable copies like before if we want to
+- 我们在 `reducers` 对象中编写 case reducer 函数，并赋予它们高可读性的名称
+- **`createSlice` 会自动生成对应于每个 case reducer 函数的 action creators**
+- createSlice 在默认情况下自动返回现有 state
+- **`createSlice` 允许我们安全地“改变”（mutate）state！**
+- 但是，如果愿意，我们也可以像以前一样拷贝不可变副本
 
-The generated action creators will be available as `slice.actions.todoAdded`, and we typically destructure and export those individually like we did with the action creators we wrote earlier. The complete reducer function is available as `slice.reducer`, and we typically `export default slice.reducer`, again the same as before.
+生成的 action creators 将作为 `slice.actions.todoAdded` 提供，我们通常像之前编写的 action creators 一样单独解构和导出它们。完整的 reducer 函数可以作为 `slice.reducer` 使用，和之前一样，我们通常会 `export default slice.reducer`。
 
-So what do these auto-generated action objects look like? Let's try calling one of them and logging the action to see:
+那么这些自动生成的 action 对象是什么样的呢？让我们调用并打印其中一个 action 来看下：
 
 ```js
 console.log(todoToggled(42))
 // {type: 'todos/todoToggled', payload: 42}
 ```
 
-`createSlice` generated the action type string for us, by combining the slice's `name` field with the `todoToggled` name of the reducer function we wrote. By default, the action creator accepts one argument, which it puts into the action object as `action.payload`.
+`createSlice` 通过将 slice 的`name` 字段与 reducer 函数的 `todoToggled` 名称相结合，为我们生成了 action type 字符串。默认情况下，action creator 接收一个参数，并将其作为 “action.payload” 放入 action 对象中。
 
-Inside of the generated reducer function, `createSlice` will check to see if a dispatched action's `action.type` matches one of the names it generated. If so, it will run that case reducer function. This is exactly the same pattern that we wrote ourselves using a `switch/case` statement, but `createSlice` does it for us automatically.
+在生成的 reducer 函数内部，`createSlice` 将检查 dispatch action 的 `action.type` 是否与它生成的名称之一相匹配。如果匹配成功，它将运行那个 case reducer 函数。这和使用 `switch/case` 语句编写的模式完全相同，但 `createSlice` 会自动为我们完成。
 
-It's also worth talking about the "mutation" aspect in more detail.
+更详细地讨论“突变（mutation）”也是有意义的。
 
-### Immutable Updates with Immer
+### 使用 Immer 进行不可变更新
 
-Earlier, we talked about "mutation" (modifying existing object/array values) and "immutability" (treating values as something that cannot be changed).
+早些时候，我们谈到了“突变”（修改现有对象/数组值）和“不可变性”（将值视为无法更改的东西）。
 
-:::warning
+:::warning 警告
 
-In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
+在 Redux 中，**reducer _绝对_ 不允许改变原始/当前 state 值！**
 
 ```js
-// ❌ Illegal - by default, this will mutate the state!
+// ❌ 非法的——默认情况下，这将改变 state！
 state.value = 123
 ```
 
 :::
 
-So if we can't change the originals, how do we return an updated state?
+那么如果我们不能改变原始值，要如何返回一个更新后的 state 呢？
 
-:::tip
+:::tip 提示
 
-**Reducers can only make _copies_ of the original values, and then they can mutate the copies.**
+**reducers 只能复制原始值，然后改变副本。**
 
 ```js
-// This is safe, because we made a copy
+// 安全的，因为复制了副本
 return {
   ...state,
   value: 123
@@ -297,13 +299,13 @@ return {
 
 :::
 
-As you've seen throughout this tutorial, we can write immutable updates by hand by using JavaScript's array / object spread operators and other functions that return copies of the original values. However, writing immutable update logic by hand _is_ hard, and accidentally mutating state in reducers is the single most common mistake Redux users make.
+正如你在本教程中所看到的，我们可以使用 JavaScript 的数组/对象扩展运算符以及其他返回原始值副本的函数，手动编写不可变更新的逻辑。然而，这是困难的，也容易导致在 reducer 中意外地改变（mutate）state，是 Redux 用户最常犯的一个错误。
 
-**That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
+**这就是 Redux Toolkit 的 `createSlice` 函数让你以更简单的方式编写不可变更新的原因！**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
+`createSlice` 在内部使用了一个名为 [Immer](https://immerjs.github.io/immer/) 的库。Immer 使用称为 Proxy 的特殊 JS 工具来包装你提供的数据，并允许你编写代码来“更改”包装后的数据。但是，**Immer 会跟踪所有更改，然后使用更改列表返回一个安全不可变更新的值**，看起来就像手动编写了所有不可变更新逻辑一样。
 
-So, instead of this:
+所以不需要这样编写：
 
 ```js
 function handwrittenReducer(state, action) {
@@ -323,7 +325,7 @@ function handwrittenReducer(state, action) {
 }
 ```
 
-You can write code that looks like this:
+可以这样写：
 
 ```js
 function reducerWithImmer(state, action) {
@@ -331,26 +333,26 @@ function reducerWithImmer(state, action) {
 }
 ```
 
-That's a lot easier to read!
+可读性好太多了！
 
-But, here's something _very_ important to remember:
+但是，谨记以下 _非常_ 重要的内容：
 
-:::warning
+:::warning 警告
 
-**You can _only_ write "mutating" logic in Redux Toolkit's `createSlice` and `createReducer` because they use Immer inside! If you write mutating logic in reducers without Immer, it _will_ mutate the state and cause bugs!**
+**你 _只能_ 在 Redux Toolkit 的 `createSlice` 和 `createReducer` 中编写“突变”（mutation）逻辑，因为它们在内部使用了 Immer！如果你在没有 Immer 的 reducer 中编写“突变”逻辑，它 _将_ 改变（mutate）state 并导致错误！**
 
 :::
 
-Immer still lets us write immutable updates by hand and return the new value ourselves if we want to. You can even mix and match. For example, removing an item from an array is often easier to do with `array.filter()`, so you could call that and then assign the result to `state` to "mutate" it:
+Immer 仍然允许我们手动编写不可变的更新，并在需要时自己返回新值。你甚至可以混搭。例如，使用 `array.filter()` 从数组中删除一项通常会更容易，因此你可以调用并将结果分配给 `state` 来“改变”（mutate）它：
 
 ```js
-// can mix "mutating" and "immutable" code inside of Immer:
+// 可以在 Immer 中混合“突变”和“不可变更新”代码：
 state.todos = state.todos.filter(todo => todo.id !== action.payload)
 ```
 
-### Converting the Todos Reducer
+### 改造 Todos Reducer
 
-Let's start converting our todos slice file to use `createSlice` instead. We'll pick a couple specific cases from our switch statement first to show how the process works.
+让我们使用 `createSlice` 来开始改造 todos slice 文件。首先从 switch 语句中挑选几个特定的 case 来展示这个过程是如何工作的。
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
@@ -384,9 +386,9 @@ export default todosSlice.reducer
 // highlight-end
 ```
 
-The todos reducer in our example app is still using normalized state that is nested in a parent object, so the code here is a bit different than the miniature `createSlice` example we just looked at. Remember how we had to [write a lot of nested spread operators to toggle that todo earlier](./part-7-standard-patterns.md#normalized-state)? Now that same code is a _lot_ shorter and easier to read.
+示例应用程序中的 todos reducer 仍然使用嵌套在父对象中的归一化 state，因此这里的代码与我们刚刚看到的 `createSlice` 示例有点不同。还记得我们之前是如何不得不[编写大量嵌套扩展运算符来切换 todo 的吗？](./part-7-standard-patterns.md#normalized-state)现在，代码变得更短且更易于阅读。
 
-Let's add a couple more cases to this reducer.
+让我们在这个 reducer 中再添加几个 case。
 
 ```js title="src/features/todos/todosSlice.js"
 const todosSlice = createSlice({
@@ -427,17 +429,17 @@ export const { todoAdded, todoToggled, todoColorSelected, todoDeleted } =
 export default todosSlice.reducer
 ```
 
-The action creators for `todoAdded` and `todoToggled` only need to take a single parameter, like an entire todo object or a todo ID. But, what if we need to pass in multiple parameters, or do some of that "preparation" logic we talked about like generating a unique ID?
+`todoAdded` 和 `todoToggled` 的 action creators 只需要接受一个参数，例如整个 todo 对象或 todo ID。但是，如果我们需要传入多个参数，或者处理一些“准备”逻辑，比如生成一个唯一的 ID，该怎么办？
 
-`createSlice` lets us handle those situations by adding a "prepare callback" to the reducer. We can pass an object that has functions named `reducer` and `prepare`. When we call the generated action creator, the `prepare` function will be called with whatever parameters were passed in. It should then create and return an object that has a `payload` field (or, optionally, `meta` and `error` fields), matching the [Flux Standard Action convention](./part-7-standard-patterns.md#flux-standard-actions).
+`createSlice` 允许我们通过向 reducer 添加“准备回调”函数来处理这些情况。我们可以传递一个具有名为 `reducer` 和 `prepare` 这两个函数的对象。当我们调用生成的 action creator 时，“准备回调”函数会使用传入的任何参数被调用。然后它应该创建并返回一个具有 payload 字段（或者，可选的 meta 和 error 字段）的对象，符合 [Flux Standard Action 约定](./part-7-standard-patterns.md#flux-standard-actions)。
 
-Here, we've used a prepare callback to let our `todoColorSelected` action creator accept separate `todoId` and `color` arguments, and put them together as an object in `action.payload`.
+在这里，我们使用了一个“准备回调”来让 `todoColorSelected` action creator 接收 `todoId` 和 `color` 参数，并将它们作为一个对象放在 `action.payload` 中。
 
-Meanwhile, in the `todoDeleted` reducer, we can use the JS `delete` operator to remove items from our normalized state.
+同时，在 `todoDeleted` reducer 中，我们可以使用 JS 的 `delete` 操作符从归一化 state 中删除某项。
 
-We can use these same patterns to go rewrite the rest of our reducers in `todosSlice.js` and `filtersSlice.js`.
+我们可以使用相同的模式去重写 `todosSlice.js` 和 `filtersSlice.js` 中其余的 reducer。
 
-Here's how our code looks with all the slices converted:
+以下是将所有 slices 改写后的样子：
 
 <iframe
   class="codesandbox"
@@ -447,26 +449,34 @@ Here's how our code looks with all the slices converted:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-## Writing Thunks
+## 编写 Thunks
 
-We've seen how we can [write thunks that dispatch "loading", "request succeeded", and "request failed" actions](./part-7-standard-patterns.md#loading-state-enum-values). We had to write action creators, action types, _and_ reducers to handle those cases.
+我们已经了解了如何[编写能够 dispatch “loading”、“request succeeded” 和 “request failed” 这几个 actions 对应的 thunk](./part-7-standard-patterns.md#loading-state-enum-values)。我们必须编写 action creators、action types、_以及_ reducers 来处理这些情况。
 
-Because this pattern is so common, **Redux Toolkit has a `createAsyncThunk` API that will generate these thunks for us**. It also generates the action types and action creators for those different request status actions, and dispatches those actions automatically based on the resulting `Promise`.
+因为这种模式很常见，**Redux Toolkit 提供的 `createAsyncThunk` API 可以为我们生成这些 thunks**。它还为那些不同的请求状态 actions 生成 action types 和 action creators，并根据生成的 `Promise` 自动 dispatch 这些 actions。
 
-### Using `createAsyncThunk`
+:::tip 提示
 
-Let's replace our `fetchTodos` thunk by generating a thunk with `createAsyncThunk`.
+Redux Toolkit 有一个新的 [**RTK Query 数据获取 API**](https://redux-toolkit.js.org/rtk-query/overview)。RTK Query 是专门为 Redux 应用程序构建的数据获取和缓存解决方案，并且**可以去除编写 _任何_ thunk 或 reducer 来管理数据获取的必要**。我们鼓励你尝试一下，看看它是否有助于简化你的应用程序中的数据获取代码！
 
-`createAsyncThunk` accepts two arguments:
+我们将很快更新 Redux 教程，以包含有关使用 RTK Query 的部分。在此之前，请参阅 [Redux Toolkit 文档中的 RTK 查询部分](https://redux-toolkit.js.org/rtk-query/overview)。
 
-- A string that will be used as the prefix for the generated action types
-- A "payload creator" callback function that should return a `Promise`. This is often written using the `async/await` syntax, since `async` functions automatically return a promise.
+:::
+
+### 使用 `createAsyncThunk`
+
+让我们通过使用 `createAsyncThunk` 生成一个 thunk 来替换 `fetchTodos` thunk。
+
+`createAsyncThunk` 接收两个参数：
+
+- 一个字符串，用作生成的 action types 的前缀
+- 一个 payload creator 回调函数，应该返回一个 `Promise`。这通常使用 `async/await` 语法编写，因为 `async` 函数会自动返回一个 Promise。
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// omit imports and state
+// 省略 imports 和 state
 
 // highlight-start
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
@@ -479,7 +489,7 @@ const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    // omit reducer cases
+    // 省略 reducer cases
   },
   extraReducers: builder => {
     builder
@@ -497,25 +507,25 @@ const todosSlice = createSlice({
   }
 })
 
-// omit exports
+// 省略 exports
 ```
 
-We pass `'todos/fetchTodos'` as the string prefix, and a "payload creator" function that calls our API and returns a promise containing the fetched data. Inside, `createAsyncThunk` will generate three action creators and action types, plus a thunk function that automatically dispatches those actions when called. In this case, the action creators and their types are:
+我们传递 `'todos/fetchTodos'` 作为字符串前缀，以及一个调用 API 并返回包含获取数据的 promise 的 payload creator 函数。在内部，`createAsyncThunk` 将生成三个 action creators 和 action types，以及一个在调用时自动 dispatch 这些 actions 的 thunk 函数。在这种情况下，action creators 和它们 types 是：
 
-- `fetchTodos.pending`: `todos/fetchTodos/pending`
-- `fetchTodos.fulfilled`: `todos/fetchTodos/fulfilled`
-- `fetchTodos.rejected`: `todos/fetchTodos/rejected`
+- `fetchTodos.pending`：`todos/fetchTodos/pending`
+- `fetchTodos.fulfilled`：`todos/fetchTodos/fulfilled`
+- `fetchTodos.rejected`：`todos/fetchTodos/rejected`
 
-However, these action creators and types are being defined _outside_ of the `createSlice` call. We can't handle those inside of the `createSlice.reducers` field, because those generate new action types too. We need a way for our `createSlice` call to listen for _other_ action types that were defined elsewhere.
+但是，这些 action creators 和 types 是在 `createSlice` 调用 _之外_ 定义的。我们无法在 `createSlice.reducers` 中处理它们，因为它们也会生成新的 action types。我们需要一种方法来让 `createSlice` 调用，用于监听在别处定义的 _其他_ action types。
 
-**`createSlice` also accepts an `extraReducers` option, where we can have the same slice reducer listen for other action types**. This field should be a callback function with a `builder` parameter, and we can call `builder.addCase(actionCreator, caseReducer)` to listen for other actions.
+**`createSlice` 还接收一个叫 `extraReducers` 的选项，可以让同一个 slice reducer 监听其他 action types**。这个字段应该是一个带有 `builder` 参数的回调函数，我们可以调用 `builder.addCase(actionCreator, caseReducer)` 来监听其他 actions。
 
-So, here we've called `builder.addCase(fetchTodos.pending, caseReducer)`. When that action is dispatched, we'll run the reducer that sets `state.status = 'loading'`, same as it did earlier when we wrote that logic in a switch statement. We can do the same thing for `fetchTodos.fulfilled`, and handle the data we received from the API.
+所以，这里我们调用了 `builder.addCase(fetchTodos.pending, caseReducer)`。当该 action 被 dispatch 时，我们将运行设置 `state.status = 'loading'` 的 reducer，和之前在 switch 语句中编写该逻辑时做的一样。我们可以对 fetchTodos.fulfilled 做同样的事情，并处理我们从 API 接收到的数据。
 
-As one more example, let's convert `saveNewTodo`. This thunk takes the `text` of the new todo object as its parameter, and saves it to the server. How do we handle that?
+再举个例子，让我们来改造 `saveNewTodo`。此 thunk 将新 todo 对象的 text 作为其参数，并将其保存到服务器。该如何处理？
 
 ```js title="src/features/todos/todosSlice.js"
-// omit imports
+// 省略 imports
 
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
   const response = await client.get('/fakeApi/todos')
@@ -534,7 +544,7 @@ const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    // omit case reducers
+    // 省略 case reducers
   },
   extraReducers: builder => {
     builder
@@ -558,45 +568,45 @@ const todosSlice = createSlice({
   }
 })
 
-// omit exports and selectors
+// 省略 exports 和 selectors
 ```
 
-The process for `saveNewTodo` is the same as we saw for `fetchTodos`. We call `createAsyncThunk`, and pass in the action prefix and a payload creator. Inside the payload creator, we make an async API call, and return a result value.
+`saveNewTodo` 的过程和 `fetchTodos` 相同。我们调用 `createAsyncThunk`，并传入 action 前缀和 payload creator。在 payload creator 中，我们进行异步 API 调用，并返回一个结果值。
 
-In this case, when we call `dispatch(saveNewTodo(text))`, the `text` value will be passed in to the payload creator as its first argument.
+在这种情况下，当我们调用 `dispatch(saveNewTodo(text))` 时，`text` 值将作为其第一个参数传递给 payload creator。
 
-While we won't cover `createAsyncThunk` in more detail here, a few other quick notes for reference:
+虽然我们不会在这里更详细地介绍 `createAsyncThunk`，但还是有一些其他的便条供你参考：
 
-- You can only pass one argument to the thunk when you dispatch it. If you need to pass multiple values, pass them in a single object
-- The payload creator will receive an object as its second argument, which contains `{getState, dispatch}`, and some other useful values
-- The thunk dispatches the `pending` action before running your payload creator, then dispatches either `fulfilled` or `rejected` based on whether the `Promise` you return succeeds or fails
+- dispatch 时只能将一个参数传递给 thunk。如果需要传递多个值，请将它们传递到一个对象中
+- payload creator 将接收一个对象作为其第二个参数，其中包含 `{getState，dispatch}` 和一些其他有用值
+- thunk 在运行 payload creator 之前会 dispatch `pending` action，然后根据返回的 `Promise` 是成功还是失败来 dispatch `fulfilled` 或 `rejected`
 
-## Normalizing State
+## 归一化 State
 
-We previously saw how to "normalize" state, by keeping items in an object keyed by item IDs. This gives us the ability to look up any item by its ID without having to loop through an entire array. However, writing the logic to update normalized state by hand was long and tedious. Writing "mutating" update code with Immer makes that simpler, but there's still likely to be a lot of repetition - we might be loading many different types of items in our app, and we'd have to repeat the same reducer logic each time.
+我们之前看到了如何通过将 items 保存在由它的 ID 作为键的对象中来“归一化” state。这使我们能够通过 ID 查找任何的 items，而无需遍历整个数组。但是，手动编写更新归一化 state 的逻辑是冗长而乏味的。使用 Immer 编写“突变”（mutate）更新代码会更简单，但仍然可能存在很多重复的工作——我们可能会在应用程序中加载许多不同类型的 items，并且每次都必须重复相同的 reducer 逻辑。
 
-**Redux Toolkit includes a `createEntityAdapter` API that has prebuilt reducers for typical data update operations with normalized state**. This includes adding, updating, and removing items from a slice. **`createEntityAdapter` also generates some memoized selectors for reading values from the store**.
+**Redux Toolkit 包含 `createEntityAdapter` API，该 API 为具有归一化 state 的典型数据更新操作预先构建了 reducer**。包括从 slice 中添加、更新和删除 items。**`createEntityAdapter` 还会生成一些用于从 store 中读取值的记忆化 selectors**。
 
-### Using `createEntityAdapter`
+### 使用 `createEntityAdapter`
 
-Let's replace our normalized entity reducer logic with `createEntityAdapter`.
+让我们用 `createEntityAdapter` 替换我们归一化的实体 reducer 逻辑。
 
-Calling `createEntityAdapter` gives us an "adapter" object that contains several premade reducer functions, including:
+调用 `createEntityAdapter` 会为我们返回一个“适配器”对象，其中包含几个预置的 reducer 函数，包括：
 
-- `addOne` / `addMany`: add new items to the state
-- `upsertOne` / `upsertMany`: add new items or update existing ones
-- `updateOne` / `updateMany`: update existing items by supplying partial values
-- `removeOne` / `removeMany`: remove items based on IDs
-- `setAll`: replace all existing items
+- `addOne` / `addMany`：向 state 添加新 items
+- `upsertOne` / `upsertMany`：添加新 items 或更新现有 items
+- `updateOne` / `updateMany`：通过提供部分值更新现有 items
+- `removeOne` / `removeMany`：根据 ID 删除 items
+- `setAll`：替换所有现有 items
 
-We can use these functions as case reducers, or as "mutating helpers" inside of `createSlice`.
+我们可以将这些函数用作 case reducers，或用作 `createSlice` 内部的“突变助手”（mutating helpers）。
 
-The adapter also contains:
+该适配器还包含：
 
-- `getInitialState`: returns an object that looks like `{ ids: [], entities: {} }`, for storing a normalized state of items along with an array of all item IDs
-- `getSelectors`: generates a standard set of selector functions
+- `getInitialState`：返回一个类似于 `{ ids: [], entities: {} }` 的对象，用于存储 item 的标准化 state 以及包含所有 item ID 的数组
+- `getSelectors`：生成一组标准的 selector 函数
 
-Let's see how we can use these in our todos slice:
+让我们看看如何在 todos slice 中使用它们：
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-start
@@ -621,9 +631,9 @@ const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    // omit some reducers
+    // 省略一些 reducers
     // highlight-start
-    // Use an adapter reducer function to remove a todo by ID
+    // 使用适配器 reducer 函数按 ID 删除 todo
     todoDeleted: todosAdapter.removeOne,
     // highlight-end
     completedTodosCleared(state, action) {
@@ -631,7 +641,7 @@ const todosSlice = createSlice({
         .filter(todo => todo.completed)
         .map(todo => todo.id)
       // highlight-start
-      // Use an adapter function as a "mutating" update helper
+      // 使用适配器函数作为“突变”更新助手
       todosAdapter.removeMany(state, completedIds)
       // highlight-end
     }
@@ -646,20 +656,20 @@ const todosSlice = createSlice({
         state.status = 'idle'
       })
       // highlight-start
-      // Use another adapter function as a reducer to add a todo
+      // 使用另一个适配器函数作为 reducer 来添加 todo
       .addCase(saveNewTodo.fulfilled, todosAdapter.addOne)
     // highlight-end
   }
 })
 
-// omit selectors
+// 省略 selectors
 ```
 
-The different adapter reducer functions take different values depending on the function, all in `action.payload`. The "add" and "upsert" functions take a single item or an array of items, the "remove" functions take a single ID or array of IDs, and so on.
+不同的适配器 reducer 根据函数采用不同的值，都在 `action.payload` 中。add 和 upsert 函数采用单个 item 或 item 数组，remove 函数采用单个 ID 或 ID 数组，依此类推。
 
-`getInitialState` allows us to pass in additional state fields that will be included. In this case, we've passed in a `status` field, giving us a final todos slice state of `{ids, entities, status}`, much like we had before.
+`getInitialState` 允许我们传入额外的 state 字段。所以我们传入了一个 status 字段，用来提供 `{ids,entities,status}` 最终的 todos slice state，就像我们之前所做的一样。
 
-We can also replace some of our todos selector functions as well. The `getSelectors` adapter function will generate selectors like `selectAll`, which returns an array of all items, and `selectById`, which returns one item. However, since `getSelectors` doesn't know where our data is in the entire Redux state tree, we need to pass in a small selector that returns this slice out of the whole state tree. Let's switch to using these instead. Since this is the last major change to our code, we'll include the whole todos slice file this time to see what the final version of the code looks like using Redux Toolkit:
+同样，我们也可以替换一些 todos selector 函数。`getSelectors` 适配器函数将生成 selector，例如 `selectAll` 会返回一个包含所有 items 的数组，`selectById` 会返回一个 item。但是，由于 `getSelectors` 不知道数据在整个 Redux state 树中的位置，所以我们需要传入一个小的 selector 来将这个 slice 从整个 state 树中返回。让我们来改用这些。由于这将是最后一次重大更改，我们将涵盖整个 todos slice 文件，来看下使用 Redux Toolkit 的代码最终版：
 
 ```js title="src/features/todos/todosSlice.js"
 import {
@@ -677,7 +687,7 @@ const initialState = todosAdapter.getInitialState({
   status: 'idle'
 })
 
-// Thunk functions
+// Thunk 函数
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
   const response = await client.get('/fakeApi/todos')
   return response.todos
@@ -752,19 +762,19 @@ export const { selectAll: selectTodos, selectById: selectTodoById } =
 // highlight-end
 
 export const selectTodoIds = createSelector(
-  // First, pass one or more "input selector" functions:
+  // 首先，传递一个或多个 input selector 函数：
   selectTodos,
-  // Then, an "output selector" that receives all the input results as arguments
-  // and returns a final result value
+  // 然后，一个 output selector 接收所有输入结果作为参数
+  // 并返回最终结果
   todos => todos.map(todo => todo.id)
 )
 
 export const selectFilteredTodos = createSelector(
-  // First input selector: all todos
+  // 第一个 input selector：所有 todos
   selectTodos,
-  // Second input selector: all filter values
+  // 第二个 input selector：所有 filter 值
   state => state.filters,
-  // Output selector: receives both values
+  // Output selector: 接收两个值
   (todos, filters) => {
     const { status, colors } = filters
     const showAllCompletions = status === StatusFilters.All
@@ -773,7 +783,7 @@ export const selectFilteredTodos = createSelector(
     }
 
     const completedStatus = status === StatusFilters.Completed
-    // Return either active or completed todos based on filter
+    // 根据 filter 条件返回未完成或已完成的 todos
     return todos.filter(todo => {
       const statusMatches =
         showAllCompletions || todo.completed === completedStatus
@@ -784,41 +794,41 @@ export const selectFilteredTodos = createSelector(
 )
 
 export const selectFilteredTodoIds = createSelector(
-  // Pass our other memoized selector as an input
+  // 传入记忆化 selector
   selectFilteredTodos,
-  // And derive data in the output selector
+  // 并在 output selector 中导出数据
   filteredTodos => filteredTodos.map(todo => todo.id)
 )
 ```
 
-We call `todosAdapter.getSelectors`, and pass in a `state => state.todos` selector that returns this slice of state. From there, the adapter generates a `selectAll` selector that takes the _entire_ Redux state tree, as usual, and loops over `state.todos.entities` and `state.todos.ids` to give us the complete array of todo objects. Since `selectAll` doesn't tell us _what_ we're selecting, we can use ES6 destructuring syntax to rename the function to `selectTodos`. Similarly, we can rename `selectById` to `selectTodoById`.
+我们调用 `todosAdapter.getSelectors`，并传入内容为 `state => state.todos` 的 selector 来返回这个 slice state。适配器生成一个 `selectAll` selector，它像往常一样取到 _全部的_ Redux state 树，并循环遍历 `state.todos.entities` 和 `state.todos.ids` 以提供完整的 todo 对象数组。由于 `selectAll` 没有告诉我们选择的 _内容_，我们可以使用 ES6 解构语法将函数重命名为 `selectTodos`。同样，我们可以将 `selectById` 重命名为 `selectTodoById`。
 
-Notice that our other selectors still use `selectTodos` as an input. That's because it's still returning an array of todo objects this whole time, no matter whether we were keeping the array as the entire `state.todos`, keeping it as a nested array, or storing it as a normalized object and converting to an array. Even as we've made all these changes to how we stored our data, the use of selectors allowed us to keep the rest of our code the same, and the use of memoized selectors has helped the UI perform better by avoiding unnecessary rerenders.
+请注意，其他 selectors 仍然使用 `selectTodos` 作为输入。这是因为它始终返回一个 todo 对象数组，无论我们是将数组保存为整个 `state.todos`，将其保存为嵌套数组，还是将其存储为归一化对象并转换为数组。尽管存储数据的方式已经做了以上更改，由于 selectors 的使用，我们不需要改动其他代码了，并且记忆化 selectors 通过避免不必要的重渲染也提升了 UI 性能。
 
-## 你学到了
+## 你的所学
 
-**Congratulations! You've completed the "Redux Fundamentals" tutorial!**
+**恭喜你已经完成了 Redux 基础教程！**
 
-You should now have a solid understanding of what Redux is, how it works, and how to use it correctly:
+你现在应该对 Redux 是什么、它是如何工作的以及如何正确使用它有了深入的了解：
 
-- Managing global app state
-- Keeping the state of our app as plain JS data
-- Writing action objects that describe "what happened" in the app
-- Using reducer functions that look at the current state and an action, and create a new state immutably in response
-- Reading the Redux state in our React components with `useSelector`
-- Dispatching actions from React components with `useDispatch`
+- 管理全局应用程序的 state
+- 将应用程序的 state 保存为普通的 JS 数据
+- 在应用程序中编写用于描述“发生了什么”的 action 对象
+- 使用 reducer 函数，它会根据当前 state 和 action，创建并返回一个不可变的新 state
+- 使用 `useSelector` 读取 React 组件中的 Redux state
+- 使用 `useDispatch` 从 React 组件 dispatch actions
 
-In addition, you've seen how **Redux Toolkit simplifies writing Redux logic**, and why **Redux Toolkit is the standard approach for writing real Redux applications**. By seeing how to write Redux code "by hand" first, it should be clear what the Redux Toolkit APIs like `createSlice` are doing for you, so that you don't have to write that code yourself.
+此外，你还了解了 **Redux Toolkit 是如何简化编写 Redux 逻辑的**，以及为什么 **Redux Toolkit 是编写真实 Redux 应用程序的标准方法**。通过如何“手动”编写 Redux 代码，你应该清楚 Redux Toolkit API（比如 `createSlice`）为你做了什么，这样你就不必自己编写该代码了。
 
-:::info
+:::info 提示
 
-For more info on Redux Toolkit, including usage guides and API references, see:
+有关 Redux Toolkit 的更多信息，包括使用指南和 API 参考，请参阅：
 
-- The Redux Toolkit docs at **https://redux-toolkit.js.org**
+- Redux Toolkit 的文档路径在 **https://redux-toolkit.js.org**
 
 :::
 
-Let's take one final look at the completed todo application, including all the code that's been converted to use Redux Toolkit:
+最后来看一下包含了所有改造为使用 Redux Toolkit 代码后的 todo 应用程序：
 
 <iframe
   class="codesandbox"
@@ -828,43 +838,43 @@ Let's take one final look at the completed todo application, including all the c
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-And we'll do a final recap of the key points you learned in this section:
+我们最后再来回顾下本节学到的关键点：
 
 :::tip 总结
 
-- **Redux Toolkit (RTK) is the standard way to write Redux logic**
-  - RTK includes APIs that simplify most Redux code
-  - RTK wraps around the Redux core, and includes other useful packages
-- **`configureStore` sets up a Redux store with good defaults**
-  - Automatically combines slice reducers to create the root reducer
-  - Automatically sets up the Redux DevTools Extension and debugging middleware
-- **`createSlice` simplifies writing Redux actions and reducers**
-  - Automatically generates action creators based on slice/reducer names
-  - Reducers can "mutate" state inside `createSlice` using Immer
-- **`createAsyncThunk` generates thunks for async calls**
-  - Automatically generates a thunk + `pending/fulfilled/rejected` action creators
-  - Dispatching the thunk runs your payload creator and dispatches the actions
-  - Thunk actions can be handled in `createSlice.extraReducers`
-- **`createEntityAdapter` provides reducers + selectors for normalized state**
-  - Includes reducer functions for common tasks like adding/updating/removing items
-  - Generates memoized selectors for `selectAll` and `selectById`
+- **Redux Toolkit (RTK) 是编写 Redux 逻辑的标准方式**
+  - RTK 包含用于简化大多数 Redux 代码的 API
+  - RTK 围绕 Redux 核心，并包含其他有用的包
+- **`configureStore` 用来设置一个具有良好默认值的 Redux store**
+  - 自动组合 slice reducers 来创建根 reducer
+  - 自动设置 Redux DevTools 扩展和调试 middleware
+- **`createSlice` 简化了 Redux actions 和 reducers 的编写**
+  - 根据 slice/reducer 名称自动生成 action creators
+  - Reducers 可以使用 Immer 在 `createSlice` 中“改变”（mutate）state
+- **`createAsyncThunk` 为异步调用生成 thunk **
+  - 自动生成一个 thunk + `pending/fulfilled/rejected` action creators
+  - dispatch thunk 运行 payload creator 并 dispatch actions
+  - 可以在 `createSlice.extraReducers` 中处理 thunk actions
+- **`createEntityAdapter` 为标准化 state 提供了 reducers + selectors**
+  - 包括用于常见任务的 reducer 功能，例如添加/更新/删除 items
+  - 为 `selectAll` 和 `selectById` 生成记忆化 selectors
 
 :::
 
-## Next Steps for Learning and Using Redux
+## 学习和使用 Redux 的后续步骤
 
-Now that you've completed this tutorial, we have several suggestions for what you should try next to learn more about Redux.
+既然你已经完成了本教程，我们还有一些建议可帮助你了解有关 Redux 的更多信息。
 
-This "Fundamentals" tutorial focused on the low-level aspects of Redux: writing action types and immutable updates by hand, how a Redux store and middleware work, and why we use patterns like action creators and normalized state. In addition, our todo example app is fairly small, and not meant as a realistic example of building a full app.
+这个“基础”教程专注于 Redux 的低级层面：手动编写 action types 和不可变更新，Redux store 和 middleware 如何工作，以及为什么我们使用 action creators 和归一化 state 等模式。此外，todo 示例应用程序相当小，并不意味着是构建完整应用程序的现实例子。
 
-However, our [**"Redux Essentials" tutorial**](../essentials/part-1-overview-concepts.md) specifically teaches you **how to build a "real-world" type application**. It focuses on "how to use Redux the right way" using Redux Toolkit, and talks about more realistic patterns that you'll see in larger apps. It covers many of the same topics as this "Fundamentals" tutorial, such as why reducers need to use immutable updates, but with a focus on building a real working application. **We strongly recommend reading through the "Redux Essentials" tutorial as your next step.**
+而 [**Redux 循序渐进教程**](../essentials/part-1-overview-concepts.md) 是专门教你**如何构建“真实世界”类型的应用程序**。它通过 Redux Toolkit 来聚焦于如何以正确的方式使用 Redux，并讨论你将在大型应用程序中看到的更现实的模式。它涵盖了许多与本“基础”教程相同的主题，例如为什么 reducer 需要使用不可变更新，但重点是构建一个真实工作中的应用程序。**我们强烈建议你在下一步阅读 Redux 循序渐进教程。**
 
-At the same time, the concepts we've covered in this tutorial should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
+同时，我们在本教程中介绍的概念应该足以让你开始使用 React 和 Redux 构建自己的应用程序。现在就是你自己来尝试进行项目以巩固这些概念，并了解它们在实践中如何工作的好时机。如果你不确定要构建什么样的项目，请参阅此[应用程序项目创意列表](https://github.com/florinpop17/app-ideas)来获得一些灵感。
 
-The [Recipes](../../recipes/README.md) section has information on a number of important concepts, like [how to structure your reducers](../../recipes/structuring-reducers/StructuringReducers.md), and [**our Style Guide page**](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
+[使用 Redux](../../usage/index.md) 章节包含许多重要概念的信息，例如[如何构建 reducer](../../usage/structuring-reducers/StructuringReducers.md) 和 [**样式指南页面**](../../style-guide/style-guide.md) 包含我们推荐的模式和最佳实践的重要信息。
 
-If you'd like to know more about _why_ Redux exists, what problems it tries to solve, and how it's meant to be used, see Redux maintainer Mark Erikson's posts on [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) and [The Tao of Redux, Part 2: Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/).
+如果你想了解更多关于 Redux 存在的原因、它试图解决的问题以及它的用途，请参阅 Redux 维护者 Mark Erikson 在 [Redux 之道，第 1 节：实施和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)和 [Redux 之道，第 2 节：实践与哲学](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)上的帖子。
 
-If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
+如果你正在寻求有关 Redux 问题的帮助，请加入 [Discord 上 Reactiflux 服务器中的 `#redux` 频道](https://www.reactiflux.com)。
 
-**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**
+**感谢你阅读本教程，我们希望你喜欢使用 Redux 来构建应用程序！**
