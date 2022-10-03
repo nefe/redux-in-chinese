@@ -18,11 +18,11 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated）。使用 Redux 有很多种方法，而且很多时候根本就没有唯一“正确”的方法。
 
-然而，经过时间和实践的证明，一些方法就是比其他的方法更优越。此外，很多开发者也要求我们提供官方引导，从而减少决策的疲劳。
+然而，经过时间和实践的证明，一些方法就是比其他的方法更优越。此外，很多开发者也要求我们提供官方引导，从而减少决策的繁琐。
 
 基于以上背景, **我们将这些推荐写法都列出来，让你避免出现错误、将精力放在非业务代码身上，以及避免不满足规范的代码**。我们也知道团队的编码偏好是多种多样的，且不同的项目有不同的需求，根本就没有一种风格指导能满足所有情况。**我们推荐你遵循这些推荐，但你也需要评估这些场景是否适用于你的需求**。
 
-最后，我们感谢 Vue 文档的作者，因为受到[Vue Style Guide page](https://vuejs.org/v2/style-guide/)的启发，才有了我们这篇文章。
+最后，我们感谢 Vue 文档的作者，因为受到 [Vue Style Guide page](https://vuejs.org/v2/style-guide/) 的启发，才有了我们这篇文章。
 
 ## 规则分类
 
@@ -30,15 +30,15 @@ Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated
 
 ### 优先级 A：必要
 
-**这一级别的规则可以防止错误，所以要不计成本地遵守**。例外情况可能存在，但应该非常罕见，并且只能由具备 JavaScript 和 Redux 专业知识的开发者产生。
+**这一级别的规则可以防止错误，所以要不计成本地遵守**。例外情况可能存在，但应该非常罕见，并且只能在具备 JavaScript 和 Redux 专业知识的开发者那里出现。
 
 ### 优先级 B：强烈推荐
 
-这些规则在绝大多数的项目中都提高了代码可读性和开发体验。即使违反这些规则，代码仍然能运行，但仅能在极少数情况，有很正当理由的时候再去违反这些规则。**只要合理，请尽可能遵守这些规则**。
+这些规则在绝大多数的项目中都提高了代码可读性和开发体验。即使违反这些规则，代码仍然能运行，但仅能在极少数情况，有非常充分理由的时候才能去破坏这些规则。**只要合理，请尽可能遵守这些规则**。
 
 ### 优先级 C：推荐
 
-你可以选择这些同样优秀选择中的任意一种来保证一致性。在这些规则中，**我们介绍了每个每种规则并推荐了一个默认选项**。这意味着你可以在代码库中自由地做出不同的选择，只要保持一致性并有充分的理由。但是，请慎重！
+你可以在一些也很优秀的方案中选择任意一种来保证一致性。在这些规则中，**我们介绍了每个每种规则并推荐了一个默认选项**。这意味着你可以在代码库中自由地做出不同的选择，只要保持一致性并有充分的理由。但是，请慎重！
 
 <div class="priority-rules priority-essential">
 
@@ -46,15 +46,15 @@ Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated
 
 ### 不要修改 State
 
-修改 state 是 Redux 应用 bug 的最常见的诱因，包括组件没有正确再渲染，且阻止了 Redux DevTools 的时间穿梭调试。无论是 reducers 中还是任意其他应用代码中，**都要始终避免 state 的真实变换**。
+修改 state 是 Redux 应用 bug 的最常见的诱因，包括组件没有正确再渲染，且阻碍了 Redux DevTools 的时间旅行调试。无论是 reducer 中还是任意其他应用代码中，**都要始终避免 state 的真实变换**。
 
-请使用类似于[`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获，并使用[Immer](https://immerjs.github.io/immer/)库来避免偶然的 state 更新.
+请使用类似于 [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获，并使用 [Immer](https://immerjs.github.io/immer/) 库来避免偶然的 state 更新.
 
 > **注意**：修改已有值的 _副本_ 是没问题的——这是一种朴素的 immutable 更新方式。 同样的， 如果我们使用了 Immer 库做 immutable 更新， 编写 "mutating" 逻辑也是允许的，因为真实的数据没有被修改—— Immer 在内部进行了安全的变化追踪并且生成了新的 immutably 值。
 
 ### Reducers 不能产生副作用
 
-Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重新计算并返回一个新的 state。**其中禁止执行任何异步代码（AJAX 调用, timeouts, promises），生成随机值 （`Date.now()`, `Math.random()`，在 reducer 外面修改变量，或者执行一些修改 reducer 函数作用于之外变量的代码**。
+Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重新计算并返回一个新的 state。**其中禁止执行任何异步代码（AJAX 调用, timeouts, promises），生成随机值 （`Date.now()`, `Math.random()`，在 reducer 外面修改变量，或者执行一些修改 reducer 函数作用域之外变量的代码**。
 
 > **注意**：只要符合同样的规则，在 reducer 中调用外部定义的一些方法，比如从库或工具类中 import 的函数等，也是可以的。
 
@@ -62,7 +62,7 @@ Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重�
 
 此规则的目的是确保在调用时 reducers 的行为可预测。例如，如果你正在进行时间旅行调试，则可能会多次调用 reducer 函数，并根据之前的 actions 生成“当前”状态值。如果 reducer 有副作用，这将导致在调试过程中产生了这些副作用，并导致应用程序以意料之外的方式运行。
 
-这条规则也有一些灰色地带。严格来说，有一些代码也是副作用，比如 `console.log(state)`，但是实际上它对应用程序没有实质行的行为。
+这条规则也有一些灰色地带。严格来说，有一些代码也是副作用，比如 `console.log(state)`，但它对应用程序没有实质行的行为。
 
 </DetailedExplanation>
 
@@ -82,11 +82,11 @@ Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重�
 
 <div class="priority-rules priority-stronglyrecommended">
 
-## A 级优先规则: 强烈推荐
+## B 级优先规则: 强烈推荐
 
 ### 在写 Redux 逻辑时使用 Redux Toolkit
 
-**[Redux Toolkit](../redux-toolkit/overview.md) 是我们推荐的 Redux 工具集**。它囊括了一些封装可我们最佳实践的方法，包括设置 store 使其能捕获 mutations 并激活 Redux DevTools 拓展，使用 Immer 简化 immutable 更新等等。
+**[Redux Toolkit](../redux-toolkit/overview.md) 是我们推荐的 Redux 工具集**。它囊括了一些封装了我们最佳实践的方法，包括配置 store 使其能捕获 mutations 并激活 Redux DevTools 拓展，使用 Immer 简化 immutable 更新等等。
 
 写 Redux 的时候也不是必须要使用 RTK，如果愿意的话你也可以用一些其他的方法，但是**使用 RTK 会简化代码逻辑，并确保应用程序遵循好的 Redux 默认行为**。
 
@@ -94,7 +94,7 @@ Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重�
 
 手写 immutable 更新逻辑通常比较复杂，却容易出错。[Immer](https://immerjs.github.io/immer/)库可以让你写“可变”更新逻辑来简化 immutable 更新，即便在应用开发的其他任意地方为了捕捉 mutation 而 freeze 了 state。
 
-**我们建议使用 Immer 编写 immutable 更新逻辑，这一点已经作为了 [Redux Toolkit](../redux-toolkit/overview.md) 偏好的一部分**。
+**我们建议使用 Immer 编写 immutable 更新逻辑，这一点已经作为了 [Redux Toolkit](../redux-toolkit/overview.md) 推荐配置的一部分**。
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 
@@ -175,8 +175,8 @@ case "todos/toggleTodo":
 但是，我们推荐在 reducer 中完成这些逻辑，有以下几点原因：
 
 - 由于 reducer 都是纯函数，所以他们更容易测试 —— 你只需要调用 `const result = reducer(testState, action)`，并且断言你期望的结果。所以，在 reducer 中执行的逻辑越多，可测试的逻辑就越多。
-- Redux state 的更新必须始终遵守[immutable 更新的原则](../usage/structuring-reducers/ImmutableUpdatePatterns.md)。大多数的 Redux 使用者都明白在 reducer 中遵循这些规则，但也可能不知道如果要在 reducer 的 _外部_ 计算出一个新的 state _也_ 必须这么干。这样很容易产生错误，比如意外的 mutation 或者甚至从 Redux store 中读取一个值并将其直接回传到 action 中。在 reducer 中执行所有的 state 计算 能避免造成这些错误。
-- 如果你正在使用 Redux Toolkit 或 Immer 库，那么在 reducers 编写 immutable 更新逻辑 是相当简单的，并且 Immer 会 freeze 掉 state 从而捕获意外的 mutations 错误。
+- Redux state 的更新必须始终遵守[immutable 更新的原则](../usage/structuring-reducers/ImmutableUpdatePatterns.md)。大多数的 Redux 使用者都知道在 reducer 中遵循这些规则，但也可能不知道如果要在 reducer 的 _外部_ 计算出一个新的 state _也_ 必须这么干。这样很容易产生错误，比如意外的 mutation 或者甚至从 Redux store 中读取一个值并将其直接回传到 action 中。在 reducer 中执行所有的 state 计算 能避免造成这些错误。
+- 如果你正在使用 Redux Toolkit 或 Immer 库，那么在 reducers 编写 immutable 更新逻辑是相当简单的，并且 Immer 会 freeze 掉 state 从而捕获意外的 mutations 错误。
 - 时间旅行调试让你可以 "撤销" 已经被 dispatch 的 action，且可以 "重做" dispatch action。此外，reducers 的热重载通常涉及到使用新的 reducer 来执行现有的 action。 如果你的 action 没问题但是 reducer 是有 bug 的，你可以修改 recuder 修复 bug，并热重载这个 reducer，你就能获得一个正确的新 state。如果 action 本身出现错误，你只需要重新执行产生错误的那一步的 action。所以，将更多的逻辑放进 reducer 后，调试也变方便了。
 - 最后，把更新数据的逻辑放进 reducers 而不是让它们随机散落在应用代码的其他地方意味着你更方便找到这些逻辑了。
 
@@ -285,11 +285,11 @@ const rootReducer = combineReducers({
 
 ### 把 Reducer 看作是 State 机器
 
-有很多“无条件的” Redux reducer。他们只观察 dispatch 的 action 并计算一个新的状态值，而不关心当前状态的逻辑。这可能产生 bug，因为根据 app 逻辑的其他位置，某些 action 在某些时候可能在概念上“无效”。例如，一个“request 成功”的 action 当且仅当 state 已经被“加载了”，或者一个“更新这个项”的 action 在某些项目被标记为“被编辑”状态时被 dispatch 了才会有新的值被计算。
+有很多“无条件的” Redux reducer。他们只观察 dispatch 的 action 并计算一个新的状态值，而不关心当前状态的逻辑。这可能产生 bug，因为根据 app 其他逻辑，某些 action 在某些时候可能在概念上“无效”。例如，一个“request 成功”的 action 当且仅当 state 已经被“加载了”，或者一个“更新这个项”的 action 在某些项目被标记为“被编辑”状态时被 dispatch 了才会有新的值被计算。
 
 为了解决这个问题，**把 reducer 当作是“state 机器”，将现有 state _和_ dispatch 的 action 绑定到一起，决定如何计算出一个新的 state**，而不是仅让 action 没有状态。
 
-<DetailedExplanation>
+<DetailedExplanation title="详细说明">
 
 [有限状态机](https://en.wikipedia.org/wiki/Finite-state_machine)是个很有效的建模方法，它在任何时候都应该只处于有限数量的“有限状态”之一。 例如有一个 `fetchUserReducer`，则其有限状态可以是：
 
@@ -298,7 +298,7 @@ const rootReducer = combineReducers({
 - `"success"` （User 数据请求成功）
 - `"failure"` （User 数据请求失败）
 
-为了更清晰地看这些状态机的状态且[make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible)，你可以指定一个保存这些状态的属性：
+为了更清晰地看这些状态机的状态且 [make impossible states impossible](https://kentcdodds.com/blog/make-impossible-states-impossible)，你可以指定一个属性来保存这些状态：
 
 ```js
 const initialUserState = {
@@ -308,9 +308,9 @@ const initialUserState = {
 }
 ```
 
-如果用 Typescript，使用[discriminated unions](https://basarat.gitbook.io/typescript/type-system/discriminated-unions)来表示每个有限的状态也很简单。举个例子，如果`state.status === 'success'`，那么`state.user`就被认为是有定义的并且`state.error`为 false。你可以使用类型来约束。
+如果用 Typescript，使用 [discriminated unions](https://basarat.gitbook.io/typescript/type-system/discriminated-unions) 来表示每个有限的状态也很简单。举个例子，如果 `state.status === 'success'`，那么 `state.user` 就被认为是有定义的并且 `state.error` 为 false。你可以使用类型来约束。
 
-典型的，在写 reducer 逻辑的时候应该首先讲 action 考虑进去。当使用状态机建模程序逻辑的时候，首先考虑 state 是很重要的。为每个状态创建“有限状态 reducer”有助于封装每个状态的行为：
+典型的，在写 reducer 逻辑的时候应该首先将 action 考虑进去。当使用状态机建模程序逻辑的时候，首先考虑 state 是很重要的。为每个状态创建“有限状态 reducer”有助于封装每个 state 的行为：
 
 ```js
 import {
@@ -366,9 +366,9 @@ const fetchUserReducer = (state, action) => {
 
 **在 store 中使用[“规范化的”格式](../usage/structuring-reducers/NormalizingStateShape.md)**来存储以上数据是更优的。这使得基于项目 ID 查找项目和更新 store 中的单个项目变得更容易，并最终更好的性能模式。
 
-### 保持 state 的最小化并派生出其他的值
+### 保持 state 的最小化，其他的值派生出来
 
-无论是否可行，**请尽可能地保证 store 中实际使用的 data 对象最小化，并且按需从那个 state *派生*额外值**。这包括计算过滤列表或求和值。例如，todo 应用程序将保留状态中的 todo 对象的原始列表，但在状态更新时，会导出状态外的 todo 过滤列表。类似地，也可以在 store 外计算是否已完成所有 todo 或剩余 todo 的数量。
+无论是否可行，**请尽可能地保证 store 中实际使用的 data 对象最小化，并且按需从那个 state _派生出_ 其他的值**。这包括计算过滤列表或求和值。例如，todo 应用程序将保留状态中的 todo 对象的原始列表，但在状态更新时，会导出状态外的 todo 过滤列表。类似地，也可以在 store 外计算是否已完成所有 todo 或剩余 todo 的数量。
 
 有以下几点好处：
 
@@ -376,11 +376,11 @@ const fetchUserReducer = (state, action) => {
 - 计算出派生值并使其与其余数据保持同步所需的逻辑更少
 - 原始状态仍然作为引用，不会被替换
 
-派生数据这件事通常使用“selector”函数，该函数可以封装进行派生数据计算的逻辑。为了提高性能，使用`reselect`和`proxy-memoize`这些库可以使 selector 能被*缓存*，从而缓存前一次的结果。
+派生数据这件事通常使用“selector”函数，该函数可以封装进行派生数据计算的逻辑。为了提高性能，使用 `reselect` 和 `proxy-memoize` 这些库可以使 selector 能被*缓存*，从而缓存前一次的结果。
 
 ### 将 action 建模为事件而不是 setter
 
-Redux 从不关心`action.type`的字段内容是什么——它只需要被定义。写现在时态的（`"users/update"`）、过去时态的（`"users/updated"`），描述成一个事件（`"upload/progress"`）或者看作是“setter”（`"users/setUserName"`）的 action type 都是合法的。程序中的 action type 是什么含义以及怎么建模这些 action 完全取决于你。
+Redux 从不关心 `action.type` 的字段内容是什么——它只需要被定义。写现在时态的（`"users/update"`）、过去时态的（`"users/updated"`），描述成一个事件（`"upload/progress"`）或者看作是“setter”（`"users/setUserName"`）的 action type 都是合法的。程序中的 action type 是什么含义以及怎么建模这些 action 完全取决于你。
 
 但是，**我们建议你将 action 更多地视作 “描述发生的事件”，而不是“setter”**。将其视为“事件”总体而言使得 action 名称更有意义，更少的 action 被 dispatch，以及更有意义的 action 日志历史记录。编写“setter”通常导致有很多特别的 action type，更多的 dispatch，且 action 日志会没有意义。
 
@@ -411,7 +411,7 @@ Redux 从不关心`action.type`的字段内容是什么——它只需要被定�
 
 第一个例子像是个“事件”。“喂，有人点了披萨和汽水，想办法处理一下”。
 
-第二个例子就像是个“setter”。“我*知道*有点披萨和汽水的字段，并且命令你讲现在的数量加一”。
+第二个例子就像是个“setter”。“我*知道*有点披萨和汽水的字段，并且命令你将现在的数量加一”。
 
 “事件”方法只需要 dispatch 一个 action，且更加灵活。根本不关心之前点了几个披萨。也许厨师根本忙不过来，订单会被忽略。
 
@@ -430,9 +430,9 @@ Redux 从不关心`action.type`的字段内容是什么——它只需要被定�
 
 ### 允许多个 Reducer 响应相同的操作
 
-redux reducer 逻辑能够被分割到很多小的 reducer 当中去，分别独立维护自已的那部分状态树，所有的小 reducer 组合起来构成应用的根 reducer 函数。当一个 action 被 dispatch 了，他可能会被所有的 reducer 执行、也可能是其中一些，也有可能都不执行。
+redux reducer 逻辑能够被分割到很多小的 reducer 当中去，分别独立维护自已的那部分状态树，所有的小 reducer 组合起来构成应用的根 reducer 函数。当一个 action 被 dispatch 了，他可能会被所有的 reducer 执行，也可能是其中一些，也有可能都不执行。
 
-作为一部分，入股可以，建议你**弄不同的 reducer 函数来分别处理同一个 action**。经验表明，大多数动作通常只由单个 reducer 来处理，这很好。但是，将操作建模为“事件”并允许许多 reducer 响应这些操作通常可以让您的应用程序的代码库更好地扩展，并最大限度地减少需要调度多个操作以完成一次有意义的更新的次数。
+作为一部分，如果可以，建议你**弄不同的 reducer 函数来分别处理同一个 action**。经验表明，大多数动作通常只由单个 reducer 来处理，这很好。但是，将操作建模为“事件”并允许许多 reducer 响应这些操作通常可以让您的应用程序的代码库更好地扩展，并最大限度地减少需要调度多个操作以完成一次有意义的更新的次数。
 
 ### 避免依次 dispatch 多个 action
 
@@ -446,19 +446,19 @@ redux reducer 逻辑能够被分割到很多小的 reducer 当中去，分别独
 
 此外，在概念上属于较大的“事务”式更新序列的多个 dispatch 将产生可能被认为无效的中间状态。例如，如果 action `"UPDATE_A"`，`"UPDATE_B"`，和 `"UPDATE_C"` 一起被 dispatch，且一些代码期望变量 `a`，`b`和`c` 被同时更新，前两个 dispatch 后的状态是不完整的，因为只有其中的两个变量被更新。
 
-如果确实需要多次 dispatch，请考虑以某种方式对更新进行批处理。鉴于你的用例，可能只是批处理 React 自己的渲染（可能使用[React-Redux 的`batch()`方法](https://react-redux.js.org/api/batch)），对 store 通知的回调进行防抖，或者把很多 action 收归到一个仅通知一次订阅更新的 dispatch 中。查看[FAQ “减少 store 更新事件”](../faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events)获取更多示例和相关插件的链接。
+如果确实需要多次 dispatch，请考虑以某种方式对更新进行批处理。鉴于你的用例，可能只是批处理 React 自己的渲染（可以使用 [React-Redux 的`batch()`方法](https://react-redux.js.org/api/batch)），对 store 通知的回调进行防抖，或者把很多 action 收归到一个仅通知一次订阅更新的 dispatch 中。查看 [FAQ “减少 store 更新事件”](../faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events)获取更多示例和相关插件的链接。
 
 </DetailedExplanation>
 
 ### 评估以下每个 state 应该存在哪里
 
-[“Redux 三原则”](../understanding/thinking-in-redux/ThreePrinciples.md)中说明了“整个应用的 state 都存储在一个单一的 state 树中”。这句话被过度解读了。这并不意味着在字面上，整个应用都将*每个*数据值都*必须*存储在 Redux store 中。相反的，***你*能想到的全局的和 app 级的数据值都应该放到单一的一个位置**。“局部”的数据通常只应该保存到最近的 UI 组件中。
+[“Redux 三原则”](../understanding/thinking-in-redux/ThreePrinciples.md)中说明了“整个应用的 state 都存储在一个单一的 state 树中”。这句话被过度解读了。这并不意味着在字面上，整个应用都将*每个*数据值都*必须*存储在 Redux store 中。相反的，**你能想到的全局的和 app 级的数据值都应该放到一起**。“局部”的数据通常只应该保存到最近的 UI 组件中。
 
-正因如此，作为开发者应该自主决定什么数据应该放到 store 中，什么数据应该放到组件状态中。**[使用这些经验规则来评估每个 state 并确定应该放在哪里](../faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)**。
+正因如此，作为开发者应该自主决定什么数据应该放到 store 中，什么数据应该放到组件状态中。**[使用这些经验规则来评估每个 state 并确定它们应该放在哪里](../faq/OrganizingState.md#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)**。
 
 ### API 使用 React-Redux Hooks API
 
-**推荐使用[React-Redux hooks API （`useSelector` 和 `useDispatch`）](https://react-redux.js.org/api/hooks)作为默认方法来使 React 组件和 Redux store 之间交互**。虽然传统的 `connect` API 仍然可用且未来也将继续支持，但是 hooks API 总体来说使用起来比较简单。这些 hooks 的间接性更少，编写的代码更少，并且与 TypeScript 一起使用比 `connect` 更简单。
+**推荐使用 [React-Redux hooks API （`useSelector` 和 `useDispatch`）](https://react-redux.js.org/api/hooks)作为默认方法来使 React 组件和 Redux store 之间交互**。虽然传统的 `connect` API 仍然可用且未来也将继续支持，但是 hooks API 总体来说使用起来比较简单。这些 hooks 的间接性更少，编写的代码更少，并且与 TypeScript 一起使用比 `connect` 更简单。
 
 hooks API 在性能和数据流方面确实引入了一些与 `connect` 不同的权衡，但我们现在推荐它们作为默认。
 
@@ -468,13 +468,11 @@ hooks API 在性能和数据流方面确实引入了一些与 `connect` 不同�
 
 这是一个特意设计的间接使用，让你编写“纯展示”风格的组件，将 store 中的数据或方法作为 props 接收，而无需特别依赖 Redux。
 
-hooks 的引入改变了大多数 React 开发人员编写组件编写风格。虽然“容器/展示”概念仍然有效，但 hooks 会促使你编写通过调用适当的 hooks 在内部请求自己的数据的组卷。这导致了我们编写和测试组件和逻辑的不同方法。
+hooks 的引入改变了大多数 React 开发人员编写组件编写风格。虽然“容器/展示”概念仍然有效，但 hooks 会促使你编写通过调用适当的 hooks 在内部请求自己的数据的组件。这导致了我们编写和测试组件和逻辑的方法会不相同。
 
-`connect` 的间接性使一些用户跟踪数据流变得有点困难。此外，`connect` 的复杂度使在用 Typescript 的时候类型定义非常困难，这是因为存在多重 overload，optional 参数，合并从父组件来的`mapState` / `mapDispatch`方法，以及整合 action creator 和 thunk 这些操作。
+`connect` 的间接地使一些用户跟踪数据流变得有点困难。此外，`connect` 的复杂度使在用 Typescript 的时候类型定义非常困难，这是因为存在多重 overload，optional 参数，合并从父组件来的 `mapState` / `mapDispatch` 方法，以及整合 action creator 和 thunk 这些操作。
 
-`useSelector` 和 `useDispatch` 消除了这种间接性，所以组件如何与 redux 交互是非常清晰的。因为 `useSelector`仅仅接受一个 selector，所以使用 Typescript 定义类型很容易，`useDispatch` 也是一样的道理。
-
-For more details, see Redux maintainer Mark Erikson's post and conference talk on the tradeoffs between hooks and HOCs:
+`useSelector` 和 `useDispatch` 消除了这种间接性，所以组件如何与 redux 交互是非常清晰的。因为 `useSelector` 只接受一个 selector，所以使用 Typescript 定义类型很容易，`useDispatch` 也是一样的道理。
 
 获取更多细节，请查看 Redux 维护者 Mark Erikson 的帖子以及在在会议中关于如何权衡 hooks 和 HOC 的讲话：
 
@@ -501,7 +499,7 @@ For more details, see Redux maintainer Mark Erikson's post and conference talk o
 
 **当使用 `useSelector` hook 检索数据时，尽可能多次调用 `useSelector` 并使得检索到最小数据量，而不是通过一次 `useSelector` 调用直接获取一个大的对象**。不像 `mapState`，`useSelector` 并不需要返回一个对象，也不需要使 selector 读取更小的值，这意味着给定的状态更改不太可能导致该组件渲染。
 
-尽管如此，也要试着找到一个合适数据粒度作为平衡点。如果单个组件确实需要 state slice 中的所有字段，只需编写一个“useSelector”，它将返回整个片段，而不是为每个单独的字段编写单独的 selector。
+尽管如此，也要试着找到一个合适数据粒度作为平衡点。如果单个组件确实需要 state slice 中的所有字段，只需编写一个“useSelector”，它将返回整个片段，而不是为每个单独的字段编写一个的 selector。
 
 ### 使用静态类型
 
@@ -523,7 +521,7 @@ For more details, see Redux maintainer Mark Erikson's post and conference talk o
 
 ### state 使用普通 javascript 对象
 
-推荐使用普通 js 对象和数组来表示 state 树结构，额不是特殊的库，比如 Immutable.js。即使使用 Immutable.js 有一些潜在的好处，大多数常见的 state 操作目标（如简单引用比较）通常是不可变更新的属性，那样就不需要特定的库了。这样还可以使 bundle 包更小，并降低数据类型转换的复杂性。
+推荐使用普通 js 对象和数组来表示 state 树结构，而不是一些特殊的库，比如 Immutable.js。即使使用 Immutable.js 有一些潜在的好处，大多数常见的 state 操作目标（如简单引用比较）通常是不可变更新的属性，那样就不需要特定的库了。这样还可以使 bundle 包更小，并降低数据类型转换的复杂性。
 
 如上所述，如果您想简化不可变的更新逻辑，特别是作为 Redux Toolkit 的一部分，特别推荐使用 Immer。
 
@@ -535,9 +533,9 @@ Immutable.js 在一开始的 Redux 应用中就被频繁使用了。使用 Immut
 - 阻止了意外的 mutation
 - 通过类似于 `setIn()` 的 API 使得嵌套更新更容易
 
-这些原因有一些有效的部分，但在实践中，好处并不像所说的那么好，使用它有一些负面影响：
+这些理由有的很有道理，但在实践中，并不像所说的那么好，使用它有一些负面影响：
 
-- 简单引用对比是任何不可变更新的属性，而不仅仅是 immutable.js
+- 简单引用对比是任何不可变更新的特点，而不仅仅是 immutable.js 的特性
 - 偶然的 mutation 可以通过其他机制来预防，例如使用 Immer（它消除了容易发生错误的手动复制逻辑，默认情况下在开发中深度冻结 state）或 `redux-immutable-state-invariant`（它检查状态是否有突变）
 - 总体来说 Immer 简化了更新逻辑，消除使用 `setIn()` 的需求
 - Immutable.js 包体积较大
@@ -546,7 +544,7 @@ Immutable.js 在一开始的 Redux 应用中就被频繁使用了。使用 Immut
 - 从 Immutable 对象转换为普通 JS 对象的成本相对较高，并且总是会产生全新的深层对象引用
 - 库缺乏持续维护
 
-使用 Immutable 的最强劲的理由。js 是对各种*超大型*对象（成千上万个键）的快速更新。大多数应用程序不会处理那么大的对象。
+使用 Immutable 的最强劲的理由就是对各种*超大型*对象（成千上万个键）的快速更新。但大多数应用程序不会处理那么大的对象。
 
 总的来说，Immutable.js 增加了太多的开销，但实际好处太少。Immer 是一个更好的选择。
 
@@ -568,7 +566,7 @@ Redux Toolkit's `createSlice` 函数现在生成的 action type 是类似于这�
 
 ### 使用 Flux Standard Action Convention 写 action
 
-最初的“Flux Architecture”文档只规定 action 对象应该有一个 “type” 字段，没有对 action 中的字段应该使用什么类型的字段或命名约定给出任何进一步的指导。为了一致性，Andrew Clark 在 Redux 开发早期创建了一种名为 [“Flux Standard Actions”](https://github.com/redux-utilities/flux-standard-action)规范。总的来说，FSA 这样定义 action：
+最初的 “Flux Architecture” 文档只规定 action 对象应该有一个 “type” 字段，没有对 action 中的字段应该使用什么类型的字段或命名约定给出任何进一步的指导。为了一致性，Andrew Clark 在 Redux 开发早期创建了一种名为 [“Flux Standard Actions”](https://github.com/redux-utilities/flux-standard-action)规范。总的来说，FSA 这样定义 action：
 
 - 永远把数据存进 `payload` 字段
 - 可能会有 `meta` 字段来存放一些额外的数据
@@ -602,7 +600,7 @@ Redux 从设计上就是可拓展的，且特地设计了一些允许各种形�
 
 我们一直都建议尽可能将逻辑抽离到组件的外面。有一部分是因为要鼓励“容器/表示”的模式，在这种模式下，许多组件只接受数据作为 props 并相应地显示 UI，但也因为在类组件生命周期方法中处理异步逻辑可能变得难以维护。
 
-**我们依然鼓励奖复杂的异步逻辑挪到组件外面，通常是放到 thunk 函数里**。如果这部分逻辑要从 store state 中读取的话，这一点尤其正确。
+**我们依然鼓励将复杂的异步逻辑挪到组件外面，通常是放到 thunk 函数里**。如果这部分逻辑要从 store state 中读取的话，这一点尤其正确。
 
 但是，**React hook 在组件中直接使用，在一定程度上简化了像数据请求这样的逻辑的管理**，并且在一些用例中直接替代了 thunk 的作用。
 
@@ -610,7 +608,7 @@ Redux 从设计上就是可拓展的，且特地设计了一些允许各种形�
 
 ”selector 函数“是一个用来包装从 Redux store 状态树读取的值并从这些值派生出其他的值的强有力的工具。此外，像 Reselect 这样的库可以创建可缓存的 selector 函数，仅在输入值发生变化时才重新计算结果，这是性能优化的一个重要方面。
 
-**我们强烈建议，从 store state 取数的时候无论是否可能都使用缓存的 selector 函数**，并且推荐使用 Reselect。
+**我们强烈建议，如果可能的话从 store state 取数的时候都使用带缓存的 selector 函数**，并且推荐使用 Reselect。
 
 然而，也不是所有 state 中的字段都*必须*写 selector 函数。基于哪些属性要经常被访问或更新，以及它能在你的程序中能真正带来多少收益，要找到一个合适的粒度平衡。
 
