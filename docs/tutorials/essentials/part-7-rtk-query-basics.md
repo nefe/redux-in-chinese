@@ -1,189 +1,188 @@
 ---
 id: part-7-rtk-query-basics
-title: 'Redux Essentials, Part 7: RTK Query Basics'
-sidebar_label: 'RTK Query Basics'
-description: 'The official Redux Essentials tutorial: learn how to use RTK Query for data fetching'
+title: 'Redux 循序渐进, 第七节: RTK Query 基础'
+sidebar_label: 'RTK Query 基础'
+description: 'Redux Essentials 官方教程：学习如何使用 RTK Query 获取数据'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-:::tip What You'll Learn
+:::tip 你将学到
 
-- How RTK Query simplifies data fetching for Redux apps
-- How to set up RTK Query
-- How to use RTK Query for basic data fetching and update requests
+- RTK Query 如何简化 Redux 应用程序的数据获取
+- 如何设置 RTK Query
+- 如何使用 RTK Query 进行基本的数据获取和更新请求
 
 :::
 
 :::info 预置知识
 
-- Completion of the previous sections of this tutorial to understand Redux Toolkit usage patterns
+- 完成本教程前面部分以了解 Redux Toolkit 使用模式
 
 :::
 
 ## Introduction
 
-in [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md) and [Part 6: Performance and Normalization](./part-6-performance-normalization.md), we saw the standard patterns used for data fetching and caching with Redux. Those patterns include using async thunks to fetch data, dispatching actions with the results, managing request loading state in the store, and normalizing the cached data to enable easier lookups and updates of individual items by ID.
+在 [第 5 部分：异步逻辑和数据获取](./part-5-async-logic.md) 和 [第 6 部分：性能和规范化](./part-6-performance-normalization.md)，我们看到了 用于使用 Redux 获取和缓存数据的标准模式。这些模式包括使用异步 thunk 来获取数据、使用结果 dispatch 操作、管理存储中的请求加载状态以及规范化缓存数据以更轻松地通过 ID 查找和更新单个项目。
 
-In this section, we'll look at how to use RTK Query, a data fetching and caching solution designed for Redux applications, and see how it simplifies the process of fetching data and using it in our components.
+在本节中，我们将了解如何使用 RTK Query，这是一种专为 Redux 应用程序设计的数据获取和缓存解决方案，并了解它如何简化获取数据并在我们的组件中使用它的过程。
 
-## RTK Query Overview
+## RTK Query 概述
 
-**RTK Query** is a powerful data fetching and caching tool. It is designed to simplify common cases for loading data in a web application, **eliminating the need to hand-write data fetching & caching logic yourself**.
+**RTK Query** 是一个强大的数据获取和缓存工具。它旨在简化在 Web 应用程序中加载数据的常见情况，**无需自己手动编写数据获取和缓存逻辑**。
 
-RTK Query is **an optional addon included in the Redux Toolkit package**, and its functionality is built on top of the other APIs in Redux Toolkit.
+RTK Query 是**一个包含在 Redux Toolkit 包中的可选插件**，其功能构建在 Redux Toolkit 中的其他 API 之上。
 
-### Motivation
+### 动机
 
-Web applications normally need to fetch data from a server in order to display it. They also usually need to make updates to that data, send those updates to the server, and keep the cached data on the client in sync with the data on the server. This is made more complicated by the need to implement other behaviors used in today's applications:
+Web 应用程序通常需要从服务器获取数据才能显示它。他们通常还需要对该数据进行更新，将这些更新发送到服务器，并使客户端上的缓存数据与服务器上的数据保持同步。由于需要实现当今应用程序中使用的其他行为，这变得更加复杂：
 
-- Tracking loading state in order to show UI spinners
-- Avoiding duplicate requests for the same data
+- 跟踪加载状态以显示 UI 微调器
+- 避免对相同数据的重复请求
 - Optimistic updates to make the UI feel faster
-- Managing cache lifetimes as the user interacts with the UI
+- 在用户与 UI 交互时管理缓存生命周期
 
-We've already seen how we can implement these behaviors using Redux Toolkit.
+我们已经看到了如何使用 Redux Toolkit 实现这些行为。
 
-However, historically Redux has never included anything built in to help _completely_ solve these use cases. Even when we use `createAsyncThunk` together with `createSlice`, there's still a fair amount of manual work involved in making requests and managing loading state. We have to create the async thunk, make the actual request, pull relevant fields out of the response, add loading state fields, add handlers in `extraReducers` to handle the `pending/fulfilled/rejected` cases, and actually write the proper state updates.
+然而，从历史上看，Redux 从来没有内置任何东西来帮助 _完全_ 解决这些用例。即使我们将 `createAsyncThunk` 与 `createSlice` 一起使用，在发出请求和管理加载状态方面仍然需要进行大量手动工作。我们必须创建异步 thunk，发出实际请求，从响应中提取相关字段，添加加载状态字段，在 `extraReducers` 中添加处理程序以处理 `pending/fulfilled/rejected` 情况，并实际编写正确的状态更新。
 
-Over the last couple years, the React community has come to realize that **"data fetching and caching" is really a different set of concerns than "state management"**. While you can use a state management library like Redux to cache data, the use cases are different enough that it's worth using tools that are purpose-built for the data fetching use case.
+在过去的几年里，React 社区已经意识到 **“数据获取和缓存” 实际上是一组不同于 “状态管理” 的关注点**。虽然你可以使用 Redux 之类的状态管理库来缓存数据，但用例差异较大，因此值得使用专门为数据获取用例构建的工具。
 
-RTK Query takes inspiration from other tools that have pioneered solutions for data fetching, like Apollo Client, React Query, Urql, and SWR, but adds a unique approach to its API design:
+RTK Query 从其他开创数据获取解决方案的工具中汲取灵感，例如 Apollo Client、React Query、Urql 和 SWR，但在其 API 设计中添加了独特的方法：
 
-- The data fetching and caching logic is built on top of Redux Toolkit's `createSlice` and `createAsyncThunk` APIs
-- Because Redux Toolkit is UI-agnostic, RTK Query's functionality can be used with any UI layer
-- API endpoints are defined ahead of time, including how to generate query parameters from arguments and transform responses for caching
-- RTK Query can also generate React hooks that encapsulate the entire data fetching process, provide `data` and `isFetching` fields to components, and manage the lifetime of cached data as components mount and unmount
-- RTK Query provides "cache entry lifecycle" options that enable use cases like streaming cache updates via websocket messages after fetching the initial data
-- We have early working examples of code generation of API slices from OpenAPI and GraphQL schemas
-- Finally, RTK Query is completely written in TypeScript, and is designed to provide an excellent TS usage experience
+- 数据获取和缓存逻辑构建在 Redux Toolkit 的 `createSlice` 和 `createAsyncThunk` API 之上
+- 由于 Redux Toolkit 与 UI 无关，因此 RTK Query 的功能可以与任何 UI 层一起使用
+- API 端点是提前定义的，包括如何从参数生成查询参数和转换响应以进行缓存
+- RTK Query 还可以生成封装整个数据获取过程的 React  hooks ，为组件提供 `data` 和 `isFetching` 字段，并在组件挂载和卸载时管理缓存数据的生命周期
+- RTK Query 提供“缓存条目生命周期”选项，支持在获取初始数据后通过 websocket 消息流式传输缓存更新等用例
+- 我们有从 OpenAPI 和 GraphQL 模式生成 API slice 代码的早期工作示例
+- 最后，RTK Query 完全用 TypeScript 编写，旨在提供出色的 TS 使用体验
 
-### What's included
+### 包含
 
 #### APIs
 
-RTK Query is included within the installation of the core Redux Toolkit package. It is available via either of the two entry points below:
+RTK Query 包含在核心 Redux Toolkit 包的安装中。它可以通过以下两个入口点之一获得：
 
 ```ts no-transpile
 import { createApi } from '@reduxjs/toolkit/query'
 
-/* React-specific entry point that automatically generates
-   hooks corresponding to the defined endpoints */
+/* 自动生成的特定于 React 的入口点
+    对应于定义端点的 hooks  */
 import { createApi } from '@reduxjs/toolkit/query/react'
 ```
 
-RTK Query primarily consists of two APIs:
+RTK Query 主要由两个 API 组成：
 
-- [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi): The core of RTK Query's functionality. It allows you to define a set of endpoints describe how to retrieve data from a series of endpoints, including configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
-- [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): A small wrapper around [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify requests. Intended as the recommended `baseQuery` to be used in `createApi` for the majority of users.
+- [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi)：RTK Query 功能的核心。它允许你定义一组端点来描述如何从一系列端点检索数据，包括如何获取和转换该数据的配置。在大多数情况下，你应该在每个应用程序中使用一次，根据经验，“每个基本 URL 一个 API slice”。
+- [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): [`fetch`](https://developer.mozilla.org/en) 的一个小包装 -US/docs/Web/API/Fetch_API），旨在简化请求。旨在为大多数用户在 `createApi` 中使用推荐的 `baseQuery`。
 
-#### Bundle Size
+#### Bundle 大小
 
-RTK Query adds a fixed one-time amount to your app's bundle size. Since RTK Query builds on top of Redux Toolkit and React-Redux, the added size varies depending on whether you are already using those in your app. The estimated min+gzip bundle sizes are:
+RTK Query 将固定的一次性数量添加到应用程序的捆绑包大小。由于 RTK Query 构建在 Redux Toolkit 和 React-Redux 之上，因此增加的大小取决于你是否已经在应用程序中使用它们。估计的 min+gzip 包大小为：
 
-- If you are using RTK already: ~9kb for RTK Query and ~2kb for the hooks.
-- If you are not using RTK already:
-  - Without React: 17 kB for RTK+dependencies+RTK Query
-  - With React: 19kB + React-Redux, which is a peer dependency
+- 如果你已经在使用 RTK：~9kb 用于 RTK Query，~2kb 用于挂钩。
+- 如果你尚未使用 RTK：
+  - 没有 React：17 kB 用于 RTK+依赖项+RTK Query
+  - 使用 React：19kB + React-Redux，这是一个对等依赖项
 
-Adding additional endpoint definitions should only increase size based on the actual code inside the `endpoints` definitions, which will typically be just a few bytes.
+添加额外的端点定义应该只根据 “端点” 定义中的实际代码增加大小，通常只有几个字节。
 
-The functionality included in RTK Query quickly pays for the added bundle size, and the elimination of hand-written data fetching logic should be a net improvement in size for most meaningful applications.
+RTK Query 中包含的功能可以快速支付增加的包大小，对于大多数有意义的应用程序来说，消除手写数据获取逻辑应该是大小的净改进。
 
-### Thinking in RTK Query Caching
+### 对于 RTK Query 缓存的思考
 
-Redux has always had an emphasis on predictability and explicit behavior. There's no "magic" involved in Redux - you should be able to understand what's happening in the application because **all Redux logic follows the same basic patterns of dispatching actions and updating state via reducers**. This does mean that sometimes you have to write more code to make things happen, but the tradeoff is that should be very clear what the data flow and behavior is.
+Redux 一直强调可预测性和显式行为。Redux 没有“魔法”——你应该能够理解应用程序中发生了什么，因为**所有 Redux 逻辑都遵循相同的基本模式，即通过 reducers 调度操作和更新状态**。这确实意味着有时你必须编写更多代码才能使事情发生，但权衡是应该非常清楚数据流和行为是什么。
 
-**The Redux Toolkit core APIs do not change any of the basic data flow in a Redux app** You're still dispatching actions and writing reducers, just with less code than writing all of that logic by hand. **RTK Query is the same way**. It's an additional level of abstraction, but **internally it's still doing the exact same steps we've already seen for managing async requests and their results**.
+**Redux Toolkit 核心 API 不会更改 Redux 应用程序中的任何基本数据流** 你仍在调度操作和编写 reducer，只是代码比手动编写所有逻辑要少。 **RTK Query 同理**。这是一个额外的抽象级别，但**在内部，它仍在执行我们已经看到的用于管理异步请求及其响应的完全相同的步骤**。
 
-However, when you use RTK Query, there _is_ a mindset shift that happens. We're no longer thinking about "managing state" per se. Instead, **we now think about "managing _cached data_"**. Rather than trying to write reducers ourselves, we're now going to focus on defining **"where is this data coming from?", "how should this update be sent?", "when should this cached data be re-fetched?", and "how should the cached data be updated?"**. How that data gets fetched, stored, and retrieved becomes implementation details we no longer have to worry about.
+但是，当你使用 RTK Query 时，会发生思维转变。我们不再考虑“管理状态”本身。相反，**我们现在考虑“管理_缓存数据_”**。与其尝试自己编写 reducer，我们现在将专注于定义 **“这些数据来自哪里？”、“这个更新应该如何发送？”、“这个缓存的数据应该什么时候重新获取？”，以及“缓存的数据应该如何更新？”**。如何获取、存储和检索这些数据成为我们不再需要担心的实现细节。
 
-We'll see how this mindset shift applies as we continue.
+随着我们的继续，将看到这种思维方式的转变如何应用。
 
-## Setting Up RTK Query
+## 设置 RTK Query
 
-Our example application already works, but now it's time to migrate all of the async logic over to use RTK Query. As we go through, we'll see how to use all the major features of RTK Query, as well as how to migrate existing uses of `createAsyncThunk` and `createSlice` over to use the RTK Query APIs.
+我们的示例应用程序已经可以运行，但现在是时候迁移所有异步逻辑以使用 RTK Query 了。随着我们的学习，我们将看到如何使用 RTK Query 的所有主要功能，以及如何迁移现有的 `createAsyncThunk` 和 `createSlice` 使用以使用 RTK Query API。
 
-### Defining an API Slice
+### 定义 API Slice
 
-Previously, we've defined separate "slices" for each of our different data types like Posts, Users, and Notifications. Each slice had its own reducer, defined its own actions and thunks, and cached the entries for that data type separately.
+以前，我们为每个不同的数据类型（如帖子、用户和通知）定义了单独的 “Slice”。每个 Slice 都有自己的 reducer，定义自己的操作和 thunk，并分别缓存该数据类型的条目。
 
-With RTK Query, **the logic for managing cached data is centralized into a single "API slice" per application**. In much the same way that you have a single Redux store per app, we now have a single slice for _all_ our cached data.
+使用 RTK Query，**管理缓存数据的逻辑被集中到每个应用程序的单个“API Slice”中**。就像每个应用程序只有一个 Redux 存储一样，我们现在有一个Slice 用于 _所有_ 我们的缓存数据。
 
-We'll start by defining a new `apiSlice.js` file. Since this isn't specific to any of the other "features" we've already written, we'll add a new `features/api/` folder and put `apiSlice.js` in there. Let's fill out the API slice file, and then break down the code inside to see what it's doing:
+我们将从定义一个新的 `apiSlice.js` 文件开始。由于这不是特定于我们已经编写的任何其他“功能”，我们将添加一个新的 `features/api/` 文件夹并将 `apiSlice.js` 放在那里。让我们填写 API Slice 文件，然后分解里面的代码，看看它在做什么：
 
 ```js title="features/api/apiSlice.js"
-// Import the RTK Query methods from the React-specific entry point
+// 从特定于 React 的入口点导入 RTK Query 方法
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-// Define our single API slice object
+// 定义我们的单个 API Slice 对象
 export const apiSlice = createApi({
-  // The cache reducer expects to be added at `state.api` (already default - this is optional)
+  // 缓存减速器预计将添加到 `state.api` （已经默认 - 这是可选的）
   reducerPath: 'api',
-  // All of our requests will have URLs starting with '/fakeApi'
+  // 我们所有的请求都有以 “/fakeApi” 开头的 URL
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
-  // The "endpoints" represent operations and requests for this server
+  // “endpoints” 代表对该服务器的操作和请求
   endpoints: builder => ({
-    // The `getPosts` endpoint is a "query" operation that returns data
+    // `getPosts` endpoint 是一个返回数据的 “Query” 操作
     getPosts: builder.query({
-      // The URL for the request is '/fakeApi/posts'
+      // 请求的 URL 是“/fakeApi/posts”
       query: () => '/posts'
     })
   })
 })
 
-// Export the auto-generated hook for the `getPosts` query endpoint
+// 为 `getPosts` Query endpoint 导出自动生成的 h'o'o'k's
 export const { useGetPostsQuery } = apiSlice
 ```
 
-RTK Query's functionality is based on a single method, called `createApi`. All of the Redux Toolkit APIs we've seen so far are UI-agnostic, and could be used with _any_ UI layer. The RTK Query core logic is the same way. However, RTK Query also includes a React-specific version of `createApi`, and since we're using RTK and React together, we need to use that to take advantage of RTK's React integration. So, we import from `'@reduxjs/toolkit/query/react'` specifically.
+RTK Query 的功能基于一个名为 “createApi” 的方法。到目前为止，我们看到的所有 Redux Toolkit API 都与 UI 无关，并且可以与 _任意_ UI 层一起使用。RTK Query 核心逻辑也是同理。但是，RTK Query 还包含一个特定于 React 的版本的 `createApi`，由于我们同时使用 RTK 和 React，我们需要使用它来利用 RTK 的 React 集成。因此，我们专门从 `'@reduxjs/toolkit/query/react'` 导入。
 
 :::tip
 
-**Your application is expected to have only one `createApi` call in it**. This one API slice should contain _all_ endpoint definitions that talk to the same base URL. For example, endpoints `/api/posts` and `/api/users` are both fetching data from the same server, so they would go in the same API slice. If your app does fetch data from multiple servers, you can either specify full URLs in each endpoint, or if necessary create separate API slices for each server.
+**你的应用程序中应该只有一个 `createApi` 调用**。这一 API Slice 应包含与同一基本 URL 对话的 _所有_ 端点定义。例如，端点 `/api/posts` 和 `/api/users` 都从同一个服务器获取数据，因此它们将进入同一个 API slice。如果你的应用确实从多个服务器获取数据，你可以在每个端点中指定完整的 URL，或者在必要时为每个服务器创建单独的 API slice。
 
-Endpoints are normally defined directly inside the `createApi` call. If you're looking to split up your endpoints between multiple files, see [the "Injecting Endpoints" section in Part 8](./part-8-rtk-query-advanced.md#injecting-endpoints) section of the docs!
+端点通常直接在 `createApi` 调用中定义。如果你希望在多个文件之间拆分端点，请参阅文档的 [第 8 部分中的“注入端点”部分](./part-8-rtk-query-advanced.md#injecting-endpoints) 部分！
 
 :::
 
-#### API Slice Parameters
+#### API Slice 参数
 
-When we call `createApi`, there are two fields that are required:
+当我们调用 `createApi` 时，需要两个字段：
 
-- `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers.
-- `endpoints`: a set of operations that we've defined for interacting with this server. Endpoints can be **_queries_**, which return data for caching, or **_mutations_**, which send an update to the server. The endpoints are defined using a callback function that accepts a `builder` parameter and returns an object containing endpoint definitions created with `builder.query()` and `builder.mutation()`.
+- `baseQuery`：一个知道如何从服务器获取数据的函数。RTK Query 包括 `fetchBaseQuery`，一个围绕标准 `fetch()` 函数的小包装器，用于处理请求和响应的典型处理。当我们创建一个 `fetchBaseQuery` 实例时，我们可以传入所有未来请求的基本 URL，以及覆盖修改请求标头等行为。
+- `endpoints`：我们为与此服务器交互而定义的一组操作。端点可以是 **_queries_**，它返回用于缓存的数据，或者是 **_mutations_**，它向服务器发送更新。 端点是使用回调函数定义的，该函数接受 `builder` 参数并返回一个对象，该对象包含使用 `builder.query()` 和 `builder.mutation()` 创建的端点定义。
 
-`createApi` also accepts a `reducerPath` field, which defines the expected top-level state slice field for the generated reducer. For our other slices like `postsSlice`, there's no guarantee that it will be used to update `state.posts` - we _could_ have attached the reducer anywhere in the root state, like `someOtherField: postsReducer`. Here, `createApi` expects us to tell it where the cache state will exist when we add the cache reducer to the store. If you don't provide a `reducerPath` option, it defaults to `'api'`, so all your RTKQ cache data will be stored under `state.api`.
+`createApi` 还接受一个 `reducerPath` 字段，它为生成的 reducer 定义了预期的顶级状态 slice 字段。对于我们的其他 slice，如`postsSlice`，不能保证它会用于更新`state.posts` - 我们 _可以_ 已将 reducer 附加到根状态的任何位置，例如`someOtherField：postsReducer`。在这里，`createApi` 期望我们告诉它，当我们将缓存减速器添加到存储时，缓存状态将存在于何处。如果不提供 `reducerPath` 选项，则默认为 `'api'`，因此你的所有 RTKQ 缓存数据都将存储在 `state.api` 下。
+如果你忘记将 reducer 添加到 store，或者将其附加到与 `reducerPath` 中指定的键不同的键上，RTKQ 将记录一个错误，让你知道这需要修复。
 
-If you forget to add the reducer to the store, or attach it at a different key than what is specified in `reducerPath`, RTKQ will log an error to let you know this needs to be fixed.
+#### 定义 Endpoints
 
-#### Defining Endpoints
+所有请求的 URL 的第一部分在 `fetchBaseQuery` 定义中定义为 `'/fakeApi'`。
 
-The first part of the URL for all requests is defined as `'/fakeApi'` in the `fetchBaseQuery` definition.
+第一步，我们要添加一个端点，该端点将返回来自假 API 服务器的整个帖子列表。我们将包含一个名为 `getPosts` 的端点，并使用 `builder.query()` 将其定义为 **query endpoint**。此方法接受许多选项来配置如何发出请求和处理响应。现在，我们需要做的就是通过定义一个 `query` 选项来提供 URL 路径的剩余部分，并带有一个返回 URL 字符串的回调：`() => '/posts'`。
 
-For our first step, we want to add an endpoint that will return the entire list of posts from the fake API server. We'll include an endpoint called `getPosts`, and define it as a **query endpoint** using `builder.query()`. This method accepts many options for configuring how to make the request and process the response. For now, all we need to do is supply the remaining piece of the URL path by defining a `query` option, with a callback that returns the URL string: `() => '/posts'`.
+默认情况下，查询端点将使用 `GET` HTTP 请求，但你可以通过返回类似 `{url: '/posts', method: 'POST', body: newPost}` 的对象来覆盖它，而不仅仅是 URL 字符串 本身。你还可以通过这种方式为请求定义几个其他选项，例如设置标头。
 
-By default, query endpoints will use a `GET` HTTP request, but you can override that by returning an object like `{url: '/posts', method: 'POST', body: newPost}` instead of just the URL string itself. You can also define several other options for the request this way, such as setting headers.
+#### 导出 API Slice 和 Hooks
 
-#### Exporting API Slices and Hooks
+在我们之前的 slice 文件中，我们只是导出了 action creators 和 slice reducers，因为其他文件中只需要这些。使用 RTK Query，我们通常会导出整个 API slice 对象本身，因为它有几个可能有用的字段。
 
-In our earlier slice files, we just exported the action creators and the slice reducers, because those are all that's needed in other files. With RTK Query, we typically export the entire "API slice" object itself, because it has several fields that may be useful.
+最后，仔细查看这个文件的最后一行。这个 `useGetPostsQuery` 值来自哪里？
 
-Finally, look carefully at the last line of this file. Where's this `useGetPostsQuery` value coming from?
+**RTK Query 的 React 集成会自动为我们定义的 _每个_ 端点生成 React hooks！** 这些 hooks 封装了在组件挂载时触发请求的过程，以及在处理请求和数据可用时重新渲染组件的过程。我们可以从这个 API slice 文件中导出这些 hooks，以便在我们的 React 组件中使用。
 
-**RTK Query's React integration will automatically generate React hooks for _every_ endpoint we define!** Those hooks encapsulate the process of triggering a request when a component mounts, and re-rendering the component as the request is processed and data is available. We can export those hooks out of this API slice file for use in our React components.
+hooks 根据标准约定自动命名：
 
-The hooks are automatically named based on a standard convention:
+- `use`，任何 React hooks 的正常前缀
+- 端点名称，大写
+- 端点的类型，`Query` 或 `Mutation`
 
-- `use`, the normal prefix for any React hook
-- The name of the endpoint, capitalized
-- The type of the endpoint, `Query` or `Mutation`
+在这种情况下，我们的端点是 `getPosts`，它是一个查询端点，所以生成的 hooks 是 `useGetPostsQuery`。
 
-In this case, our endpoint is `getPosts` and it's a query endpoint, so the generated hook is `useGetPostsQuery`.
+### 配置 Store
 
-### Configuring the Store
-
-We now need to hook up the API slice to our Redux store. We can modify the existing `store.js` file to add the API slice's cache reducer to the state. Also, the API slice generates a custom middleware that needs to be added to the store. This middleware _must_ be added as well - it manages cache lifetimes and expiration.
+我们现在需要将 API Slice 连接到我们的 Redux 存储。我们可以修改现有的 `store.js` 文件，将 API slice 的 cache reducer 添加到状态中。此外，API slice 会生成需要添加到 store 的自定义 middleware。这个 middleware _必须_ 被添加——它管理缓存的生命周期和控制是否过期。
 
 ```js title="app/store.js"
 import postsReducer from '../features/posts/postsSlice'
@@ -207,19 +206,18 @@ export default configureStore({
 })
 ```
 
-We can reuse the `apiSlice.reducerPath` field as a computed key in the `reducer` parameter, to ensure that the caching reducer is added in the right place.
+我们可以在 `reducer` 参数中重用 `apiSlice.reducerPath` 字段作为计算键，以确保在正确的位置添加缓存 reducer。
 
-We need to keep all of the existing standard middleware like `redux-thunk` in the store setup, and the API slice's middleware typically goes after those. We can do that by supplying the `middleware` argument to `configureStore`, calling the provided `getDefaultMiddleware()` method, and adding `apiSlice.middleware` at the end of the returned middleware array.
+我们需要在 store 设置中保留所有现有的标准 middleware，例如“redux-thunk”，而 API slice 的 middleware 通常会在这些 middleware 之后使用。我们可以通过向 `configureStore` 提供 `middleware` 参数，调用提供的 `getDefaultMiddleware()` 方法，并在返回的 middleware 数组的末尾添加 `apiSlice.middleware` 来做到这一点。
+## 显示带有查询的帖子
 
-## Displaying Posts with Queries
+### 在组件中使用 Query Hooks
 
-### Using Query Hooks in Components
+现在我们已经定义了 API slice 并将其添加到 store 中，我们可以将生成的 `useGetPostsQuery` hooks 导入我们的 `<PostsList>` 组件并在那里使用它。
 
-Now that we have the API slice defined and added to the store, we can import the generated `useGetPostsQuery` hook into our `<PostsList>` component and use it there.
+目前，`<PostsList>` 专门导入 `useSelector`、`useDispatch` 和 `useEffect`，从存储中读取帖子数据和加载状态，并在 mount 时调度 `fetchPosts()` thunk 以触发数据获取。** `useGetPostsQueryHook` 取代了所有这些！**
 
-Currently, `<PostsList>` is specifically importing `useSelector`, `useDispatch`, and `useEffect`, reading posts data and loading state from the store, and dispatching the `fetchPosts()` thunk on mount to trigger the data fetch. **The `useGetPostsQueryHook` replaces all of that!**
-
-Let's see how `<PostsList>` looks when we use this hook:
+让我们看看使用这个 hooks时 `<PostsList>` 的样子：
 
 ```jsx title="features/posts/PostsList.js"
 import React from 'react'
@@ -285,28 +283,28 @@ export const PostsList = () => {
 }
 ```
 
-Conceptually, `<PostsList>` is still doing all the same work it was before, but we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`.
+从概念上讲，`<PostsList>` 仍然在做与以前一样的工作，但我们能够用对 `useGetPostsQuery()` 的单个调用来替换多个 `useSelector` 调用和 `useEffect` 调度。
 
-Each generated query hook returns a "result" object containing several fields, including:
+每个生成的 Query hooks 都会返回一个包含多个字段的“结果”对象，包括：
 
-- `data`: the actual response contents from the server. **This field will be `undefined` until the response is received**.
-- `isLoading`: a boolean indicating if this hook is currently making the _first_ request to the server. (Note that if the parameters change to request different data, `isLoading` will remain false.)
-- `isFetching`: a boolean indicating if the hook is currently making _any_ request to the server
-- `isSuccess`: a boolean indicating if the hook has made a successful request and has cached data available (ie, `data` should be defined now)
-- `isError`: a boolean indicating if the last request had an error
-- `error`: a serialized error object
+- `data`:来自服务器的实际响应内容。 **在收到响应之前，该字段将是 “undefined”**。
+- `isLoading`: 一个 boolean，指示此 hooks 当前是否正在向服务器发出 _第一次_ 请求。（请注意，如果参数更改以请求不同的数据，`isLoading` 将保持为 false。）
+- `isFetching`: 一个 boolean，指示 hooks 当前是否正在向服务器发出 _any_ 请求
+- `isSuccess`: 一个 boolean，指示 hooks 是否已成功请求并有可用的缓存数据（即，现在应该定义 data）
+- `isError`: 一个 boolean，指示最后一个请求是否有错误
+- `error`: 一个 serialized 错误对象
 
-It's common to destructure fields from the result object, and possibly rename `data` to a more specific variable like `posts` to describe what it contains. We can then use the status booleans and the `data/error` fields to render the UI that we want. However, if you're using TypeScript, you may need to keep the original object as-is and refer to flags as `result.isSuccess` in your conditional checks, so that TS can correctly infer that `data` is valid.
+从结果对象中解构字段是很常见的，并且可能将 `data` 重命名为更具体的变量，例如 `posts` 来描述它包含的内容。然后我们可以使用状态 boolean 和 `data/error` 字段来呈现我们想要的 UI。 但是，如果你使用的是 TypeScript，你可能需要保持原始对象不变，并在条件检查中将标志引用为 `result.isSuccess`，以便 TS 可以正确推断 `data` 是有效的。
 
-Previously, we were selecting a list of post IDs from the store, passing a post ID to each `<PostExcerpt>` component, and selecting each individual `Post` object from the store separately. Since the `posts` array already has all of the post objects, we've switched back to passing the post objects themselves down as props.
+以前，我们从 store 中选择一个帖子 ID 列表，将一个帖子 ID 传递给每个 `<PostExcerpt>` 组件，然后分别从 store 中选择每个单独的 `Post` 对象。由于 `posts` 数组已经包含了所有的 post 对象，我们已经切换回将 post 对象本身作为 props 向下传递。
 
-### Sorting Posts
+### 帖子排序
 
-Unfortunately, the posts are now being displayed out of order. Previously, we were sorting them by date at the reducer level with `createEntityAdapter`'s sorting option. Since the API slice is just caching the exact array returned from the server, there's no specific sorting happening - whatever order the server sent back is what we've got.
+不幸的是，这些帖子现在显示不正确。以前，我们使用 `createEntityAdapter` 的排序选项在 reducer 级别按日期对它们进行排序。由于 API slice 只是缓存从服务器返回的确切数组，因此不会发生特定的排序 - 服务器发回的任何顺序都是我们得到的。
 
-There's a few different options for how to handle this. For now, we'll do the sorting inside of `<PostsList>` itself, and we'll talk about the other options and their tradeoffs later.
+有几个不同的选择可以处理这个问题。现在，我们将在 `<PostsList>` 本身内部进行排序，稍后我们将讨论其他选项及其权衡。
 
-We can't just call `posts.sort()` directly, because `Array.sort()` mutates the existing array, so we'll need to make a copy of it first. To avoid re-sorting on every rerender, we can do the sorting in a `useMemo()` hook. We'll also want to give `posts` a default empty array in case it's `undefined`, so that we always have an array to sort on.
+我们不能直接调用 `posts.sort()`，因为 `Array.sort()` 会改变现有数组，所以我们需要先复制它。为了避免在每次重新渲染时重新排序，我们可以在 `useMemo()` 挂钩中进行排序。 我们还想给`posts`一个默认的空数组，以防它是`undefined`，这样我们总是有一个数组可以排序。
 
 ```jsx title="features/posts/PostsList.js"
 // omit setup
@@ -350,17 +348,17 @@ export const PostsList = () => {
 }
 ```
 
-## Displaying Individual Posts
+## 显示单个帖子
 
-We've updated `<PostsList>` to fetch a list of _all_ posts, and we're showing pieces of each `Post` inside the list. But, if we click on "View Post" for any of them, our `<SinglePostPage>` component will fail to find a post in the old `state.posts` slice and show us a "Post not found!" error. We need to update `<SinglePostPage>` to use RTK Query as well.
+我们更新了`<PostsList>` 以获取 _所有_ 帖子的列表，并且我们在列表中显示了每个 `Post` 的片段。但是，如果我们点击其中任何一个的 “查看帖子”，我们的 `<SinglePostPage>` 组件将无法在旧的 `state.posts` slice 中找到帖子，并向我们显示 “找不到帖子！” 错误。我们还需要更新 `<SinglePostPage>` 以使用 RTK Query。
 
-There's a couple ways we could do this. One would be to have `<SinglePostPage>` call the same `useGetPostsQuery()` hook, get the _entire_ array of posts, and find just the one `Post` object it needs to display. Query hooks also have a `selectFromResult` option that would allow us to do that same lookup earlier, inside the hook itself - we'll see this in action later.
+我们有几种方法可以做到这一点。一种方法是让 `<SinglePostPage>` 调用相同的 `useGetPostsQuery()`  hooks ，获取 _整个_ 帖子数组，然后只找到它需要显示的一个 `Post` 对象。Query hooks 还有一个 `selectFromResult` 选项，它允许我们在 hooks 本身内部更早地进行相同的查找 - 我们稍后会看到这一点。
 
-Instead, we're going to try adding another endpoint definition that will let us request a single post from the server based on its ID. This is somewhat redundant, but it will allow us to see how RTK Query can be used to customize query requests based on arguments.
+相反，我们将尝试添加另一个端点定义，让我们根据其 ID 从服务器请求单个帖子。 这有点多余，但它可以让我们看到如何使用 RTK Query 来自定义基于参数的查询请求。
 
-### Adding the Single Post Query Endpoint
+### 添加单个 Post Query 端点
 
-In `apiSlice.js`, we're going to add another query endpoint definition, called `getPost` (no 's' this time):
+在 `apiSlice.js` 中，我们将添加另一个查询端点定义，称为 `getPost`（这次没有 's'）：
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -382,13 +380,13 @@ export const apiSlice = createApi({
 export const { useGetPostsQuery, useGetPostQuery } = apiSlice
 ```
 
-The `getPost` endpoint looks much like the existing `getPosts` endpoint, but the `query` parameter is different. Here, `query` takes an argument called `postId`, and we're using that `postId` to construct the server URL. That way we can make a server request for just one specific `Post` object.
+`getPost` 端点看起来很像现有的 `getPosts` 端点，但 `query` 参数不同。 在这里，`query` 接受一个名为 `postId` 的参数，我们使用该 `postId` 来构造服务器 URL。 这样我们就可以只对一个特定的 `Post` 对象发出服务器请求。
 
-This also generates a new `useGetPostQuery` hook, so we export that as well.
+这也会生成一个新的 `useGetPostQuery` 挂钩，因此我们也将其导出。
 
-### Query Arguments and Cache Keys
+### 查询参数和缓存键
 
-Our `<SinglePostPage>` is currently reading one `Post` entry from `state.posts` based on ID. We need to update it to call the new `useGetPostQuery` hook, and use similar loading state as the main list.
+我们的 `<SinglePostPage>` 当前正在根据 ID 从 `state.posts` 中读取一个 `Post` 条目。 我们需要更新它以调用新的 `useGetPostQuery`  hooks ，并使用与主列表类似的加载状态。
 
 ```jsx title="features/posts/SinglePostPage.js"
 import React from 'react'
@@ -435,38 +433,38 @@ export const SinglePostPage = ({ match }) => {
 }
 ```
 
-Notice that we're taking the `postId` we've read from the router match, and passing it as an argument to `useGetPostQuery`. The query hook will then use that to construct the request URL, and fetch this specific `Post` object.
+请注意，我们正在获取从路由器匹配中读取的`postId`，并将其作为参数传递给`useGetPostQuery`。 然后 Query hooks 将使用它来构造请求 URL，并获取这个特定的 `Post` 对象。
 
-So how is all this data being cached, anyway? Let's click "View Post" for one of our post entries, then take a look at what's inside the Redux store at this point.
+那么，所有这些数据是如何被缓存的呢？ 让我们点击“查看帖子”查看我们的一个帖子条目，然后看看此时 Redux 存储中的内容。
 
-![RTK Query data cached in the store state](/img/tutorials/essentials/devtools-rtkq-cache.png)
+![RTK Query 缓存在 store 状态的数据](/img/tutorials/essentials/devtools-rtkq-cache.png)
 
-We can see that we have a top-level `state.api` slice, as expected from the store setup. Inside of there is a section called `queries`, and it currently has two items. The key `getPosts(undefined)` represents the metadata and response contents for the request we made with the `getPosts` endpoint. Similarly, the key `getPost('abcd1234')` is for the specific request we just made for this one post.
+我们可以看到我们有一个顶级的 `state.api` slice ，正如商店设置中所预期的那样。里面有一个叫做 “Query” 的部分，它目前有两个项目。 键 `getPosts(undefined)` 表示我们使用 `getPosts` 端点发出的请求的元数据和响应内容。 同样，键 `getPost('abcd1234')` 是针对我们刚刚为这篇文章提出的特定请求。
 
-RTK Query creates a "cache key" for each unique endpoint + argument combination, and stores the results for each cache key separately. That means that **you can use the same query hook multiple times, pass it different query parameters, and each result will be cached separately in the Redux store**.
+RTK Query 为每个唯一的端点 + 参数组合创建一个 “cache key”，并分别存储每个 cache key 的结果。这意味着**你可以多次使用同一个 Query  hooks ，传递不同的查询参数，每个结果将单独缓存在 Redux 存储中**。
 
-It's also important to note that **the query parameter must be a _single_ value!** If you need to pass through multiple parameters, you must pass an object containing multiple fields (exactly the same as with `createAsyncThunk`). RTK Query will do a "shallow stable" comparison of the fields, and re-fetch the data if any of them have changed.
+还需要注意的是**查询参数必须是 _单一_ 值！**如果需要传递多个参数，则必须传递一个包含多个字段的对象（与`createAsyncThunk`完全相同）。 RTK Query 将对字段进行浅稳定比较，如果其中任何一个发生更改，则重新获取数据。
 
-Notice that the names of the actions in the left-hand list are much more generic and less descriptive: `api/executeQuery/fulfilled`, instead of `posts/fetchPosts/fulfilled`. This is a tradeoff of using an additional abstraction layer. The individual actions do contain the specific endpoint name under `action.meta.arg.endpointName`, but it's not as easily viewable in the action history list.
+请注意，左侧列表中的操作名称更加通用且描述性更少：`api/executeQuery/fulfilled`，而不是`posts/fetchPosts/fulfilled`。 这是使用附加抽象层的权衡。 各个动作确实包含在 “action.meta.arg.endpointName” 下的特定端点名称，但它在 action 历史列表中并不容易查看。
 
 :::tip
 
-The Redux team is working on a new RTK Query view for the Redux DevTools that will specifically show RTK Query data in a more usable format. This includes info on each endpoint and cache result, stats on query timing, and much more. This will be added to the DevTools Extension in the near future. For a preview, see:
+Redux 团队正在为 Redux DevTools 开发一个新的 RTK Query 视图，它将专门以更可用的格式显示 RTK Query 数据。 这包括每个端点和缓存结果的信息、查询时间的统计信息等等。 这将在不久的将来添加到 DevTools 扩展中。 有关预览，请参阅：
 
 - [Redux DevTools #750: Add RTK Query-Inspector monitor](https://github.com/reduxjs/redux-devtools/pull/750)
 - [RTK Query Monitor preview demo](https://rtk-query-monitor-demo.netlify.app/)
 
 :::
 
-## Creating Posts with Mutations
+## 创建带有 Mutations 的帖子
 
-We've seen how we can fetch data from the server by defining "query" endpoints, but what about sending updates to the server?
+我们已经看到了如何通过定义查询端点从服务器获取数据，但是向服务器发送更新呢？
 
-RTK Query lets us define **mutation endpoints** that update data on the server. Let's add a mutation that will let us add a new post.
+RTK Query 让我们定义 **mutation 端点** 来更新服务器上的数据。让我们添加一个可以让我们添加新帖子的 Mutation。
 
-### Adding the New Post Mutation Endpoint
+### 添加新的 Mutations 后端点
 
-Adding a mutation endpoint is very similar to adding a query endpoint. The biggest difference is that we define the endpoint using `builder.mutation()` instead of `builder.query()`. Also, we now need to change the HTTP method to be a `'POST'` request, and we have to provide the body of the request as well.
+添加 Mutation 端点与添加查询端点非常相似。 最大的不同是我们使用 `builder.mutation()` 而不是 `builder.query()` 来定义端点。 此外，我们现在需要将 HTTP 方法更改为“POST”请求，并且我们还必须提供请求的正文。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -500,13 +498,13 @@ export const {
 } = apiSlice
 ```
 
-Here our `query` option returns an object containing `{url, method, body}`. Since we're using `fetchBaseQuery` to make the requests, the `body` field will automatically be JSON-serialized for us.
+这里我们的 `query` 选项返回一个包含 `{url, method, body}` 的对象。 由于我们使用 `fetchBaseQuery` 来发出请求，`body` 字段将自动为我们进行 JSON 序列化。
 
-Like with query endpoints, the API slice automatically generates a React hook for the mutation endpoint - in this case, `useAddNewPostMutation`.
+与查询端点一样，API slice 会自动为 Mutation 端点生成一个 React hooks - 在本例中为 `useAddNewPostMutation`。
 
-### Using Mutation Hooks in Components
+### 在组件中使用 Mutation Hooks
 
-Our `<AddPostForm>` is already dispatching an async thunk to add a post whenever we click the "Save Post" button. To do that, it has to import `useDispatch` and the `addNewPost` thunk. The mutation hooks replace both of those, and the usage pattern is very similar.
+每当我们单击“保存帖子”按钮时，我们的 `<AddPostForm>` 已经调度了一个异步 thunk 来添加帖子。 为此，它必须导入 `useDispatch` 和 `addNewPost` thunk。  Mutation  hooks 取代了这两者，并且使用模式非常相似。
 
 ```js title="features/posts/AddPostForm"
 import React, { useState } from 'react'
@@ -550,28 +548,28 @@ export const AddPostForm = () => {
 }
 ```
 
-Mutation hooks return an array with two values:
+Mutation hooks 返回一个包含两个值的数组：
 
-- The first value is a "trigger function". When called, it makes the request to the server, with whatever argument you provide. This is effectively like a thunk that has already been wrapped to immediately dispatch itself.
-- The second value is an object with metadata about the current in-progress request, if any. This includes an `isLoading` flag to indicate if a request is in-progress.
+- 第一个值是触发函数。当被调用时，它会使用你提供的任何参数向服务器发出请求。这实际上就像一个已经被包装以立即调度自身的 thunk。
+- 第二个值是一个对象，其中包含有关当前正在进行的请求（如果有）的元数据。这包括一个 `isLoading` 标志以指示请求是否正在进行中。
 
-We can replace the existing thunk dispatch and component loading state with the trigger function and `isLoading` flag from the `useAddNewPostMutation` hook, and the rest of the component stays the same.
+我们可以用 `useAddNewPostMutation` hooks 中的触发函数和 `isLoading` 标志替换现有的 thunk 调度和组件加载状态，组件的其余部分保持不变。
 
-As with the thunk dispatch, we call `addNewPost` with the initial post object. This returns a special `Promise` with a `.unwrap()` method, and we can `await addNewPost().unwrap()` to handle any potential errors with a standard `try/catch` block.
+与 thunk 调度一样，我们使用初始 post 对象调用 `addNewPost`。 这会返回一个带有 .unwrap() 方法的特殊 Promise ，我们可以 `await addNewPost().unwrap()` 使用标准的 `try/catch` 块来处理任何潜在的错误。
 
-## Refreshing Cached Data
+## 刷新缓存数据
 
-When we click "Save Post", we can view the Network tab in the browser DevTools and confirm that the HTTP `POST` request succeeded. But, the new post isn't showing up in our `<PostsList>` if we go back there. We still have the same cached data in memory.
+当我们点击 “Save Post” 时，我们可以在浏览器 DevTools 中查看 Network 选项卡，确认 HTTP `POST` 请求成功。 但是，如果我们回到那里，新帖子不会出现在我们的`<PostsList>` 中。我们在内存中仍然有相同的缓存数据。
 
-We need to tell RTK Query to refresh its cached list of posts so that we can see the new post we just added.
+我们需要告诉 RTK Query 刷新其缓存的帖子列表，以便我们可以看到我们刚刚添加的新帖子。
 
-### Refetching Posts Manually
+### 手动重新获取帖子
 
-The first option is to manually force RTK Query to refetch data for a given endpoint. Query hook result objects include a `refetch` function that we can call to force a refetch. We can temporarily add a "Refetch Posts" button to `<PostsList>` and click that after adding a new post.
+第一个选项是手动强制 RTK Query 重新获取给定端点的数据。Query hooks 结果对象包含一个 “refetch” 函数，我们可以调用它来强制重新获取。 我们可以暂时将“重新获取帖子”按钮添加到`<PostsList>`，并在添加新帖子后单击该按钮。
 
-Also, earlier we saw that query hooks have both an `isLoading` flag, which is `true` if this is the _first_ request for data, and an `isFetching` flag, which is `true` while _any_ request for data is in progress. We could look at the `isFetching` flag, and replace the entire list of posts with a loading spinner again while the refetch is in progress. But, that could be a bit annoying, and besides - we already have all these posts, why should we completely hide them?
+此外，之前我们看到 Query  hooks 有一个 `isLoading` 标志，如果这是第一个数据请求，则为 `true`，以及一个 `isFetching` 标志，当 _任意_ 数据请求正在进行时为`true` . 我们可以查看 `isFetching` 标志，并在重新获取过程中再次用加载微调器替换整个帖子列表。 但是，这可能有点烦人，而且 - 我们已经拥有所有这些帖子，为什么要完全隐藏它们？
 
-Instead, we could make the existing list of posts partially transparent to indicate the data is stale, but keep them visible while the refetch is happening. As soon as the request completes, we can return to showing the posts list as normal.
+相反，我们可以使现有的帖子列表部分透明以指示数据已过时，但在重新获取发生时保持它们可见。 一旦请求完成，我们就可以恢复正常显示帖子列表。
 
 ```jsx title="features/posts/PostsList.js"
 import React, { useMemo } from 'react'
@@ -630,23 +628,23 @@ export const PostsList = () => {
 }
 ```
 
-If we add a new post and then click "Refetch Posts", we should now see the posts list go semi-transparent for a couple seconds, then re-render with the new post added at the top.
+如果我们添加一个新帖子，然后单击 “Refetch Posts”，我们现在应该会看到帖子列表半透明几秒钟，然后在顶部添加新帖子重新渲染。
 
-### Automatic Refreshing with Cache Invalidation
+### 缓存失效自动刷新
 
-Having users manually click to refetch data is occasionally necessary, but definitely not a good solution for normal usage.
+有时需要让用户手动单击以重新获取数据，但对于正常使用而言绝对不是一个好的解决方案。
 
-We know that our "server" has a complete list of all posts, including the one we just added. Ideally, we want to have our app automatically refetch the updated list of posts as soon as the mutation request has completed. That way we know our client-side cached data is in sync with what the server has.
+我们知道我们的服务器拥有所有帖子的完整列表，包括我们刚刚添加的帖子。 理想情况下，我们希望我们的应用程序在 Mutation 请求完成后自动重新获取更新的帖子列表。 这样我们就知道我们的客户端缓存数据与服务器所拥有的数据是同步的。
 
-**RTK Query lets us define relationships between queries and mutations to enable automatic data refetching, using "tags"**. A "tag" is a string or small object that lets you name certain types of data, and _invalidate_ portions of the cache. When a cache tag is invalidated, RTK Query will automatically refetch the endpoints that were marked with that tag.
+**RTK Query 让我们定义查询和 mutations 之间的关系，以启用自动数据重新获取，使用标签**。标签是一个字符串或小对象，可让你命名某些类型的数据和缓存的 _无效_ 部分。当缓存标签失效时，RTK Query 将自动重新获取标记有该标签的端点。
 
-Basic tag usage requires adding three pieces of information to our API slice:
+基本标签使用需要向我们的 API slice 添加三条信息：
 
-- A root `tagTypes` field in the API slice object, declaring an array of string tag names for data types such as `'Post'`
-- A `providesTags` array in query endpoints, listing a set of tags describing the data in that query
-- An `invalidatesTags` array in mutation endpoints, listing a set of tags that are invalidated every time that mutation runs
+- API slice 对象中的根 `tagTypes` 字段，声明数据类型的字符串标签名称数组，例如 `'Post'`
+- 查询端点中的 “providesTags” 数组，列出了一组描述该查询中数据的标签
+- Mutation 端点中的“invalidatesTags”数组，列出了每次 Mutation 运行时失效的一组标签
 
-We can add a single tag called `'Post'` to our API slice that will let us automatically refetch our `getPosts` endpoint any time we add a new post:
+我们可以在 API slice 中添加一个名为 `'Post'` 的标签，让我们在添加新帖子时自动重新获取 `getPosts` 端点：
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -676,13 +674,13 @@ export const apiSlice = createApi({
 })
 ```
 
-That's all we need! Now, if we click "Save Post", you should see the `<PostsList>` component automatically gray out after a couple seconds, and then rerender with the newly added post at the top.
+这就是我们所需要的！ 现在，如果我们单击 “Save Post”，你应该会看到 `<PostsList>` 组件在几秒钟后自动变灰，然后在顶部重新渲染新添加的帖子。
 
-Note that there's nothing special about the literal string `'Post'` here. We could have called it `'Fred'`, `'qwerty'`, or anything else. It just needs to be the same string in each field, so that RTK Query knows "when this mutation happens, invalidate all endpoints that have that same tag string listed".
+请注意，这里的文字字符串 `'Post'` 没有什么特别之处。 我们可以称它为“Fred”、“qwerty”或其他任何名称。 它只需要在每个字段中使用相同的字符串，以便 RTK Query 知道“当发生这种 Mutation 时，使列出相同标签字符串的所有端点无效”。
 
-## What You've Learned
+## 你的所学
 
-With RTK Query, the actual details of how to manage data fetching, caching, and loading state are abstracted away. This simplifies application code considerably, and lets us focus on higher-level concerns about intended app behavior instead. Since RTK Query is implemented using the same Redux Toolkit APIs we've already seen, we can still use the Redux DevTools to view the changes in our state over time.
+使用 RTK Query，如何管理数据获取、缓存和加载状态的实际细节被抽象出来。 这大大简化了应用程序代码，并让我们专注于对预期应用程序行为的更高级别的关注。 由于 RTK Query 是使用我们已经看到的相同 Redux Toolkit API 实现的，我们仍然可以使用 Redux DevTools 来查看我们的状态随时间的变化。
 
 <iframe
   class="codesandbox"
@@ -694,22 +692,22 @@ With RTK Query, the actual details of how to manage data fetching, caching, and 
 
 :::tip Summary
 
-- **RTK Query is a data fetching and caching solution included in Redux Toolkit**
-  - RTK Query abstracts the process of managing cached server data for you, and eliminates the need to write logic for loading state, storing results, and making requests
-  - RTK Query builds on top of the same patterns used in Redux, like async thunks
-- **RTK Query uses a single "API slice" per application, defined using `createApi`**
-  - RTK Query provides UI-agnostic and React-specific versions of `createApi`
-  - API slices define multiple "endpoints" for different server operations
-  - The API slice includes auto-generated React hooks if using the React integration
-- **Query endpoints allow fetching and caching data from the server**
-  - Query hooks return a `data` value, plus loading status flags
-  - The query can be re-fetched manually, or automatically using "tags" for cache invalidation
-- **Mutation endpoints allow updating data on the server**
-  - Mutation hooks return a "trigger" function that sends an update request, plus loading status
-  - The trigger function returns a Promise that can be "unwrapped" and awaited
+- **RTK Query 是 Redux Toolkit 中包含的数据获取和缓存解决方案**
+  - RTK Query 为你抽象了管理缓存服务器数据的过程，无需编写加载状态、存储结果和发出请求的逻辑
+  - RTK Query 建立在 Redux 中使用的相同模式之上，例如异步 thunk
+- **RTK Query 对每个应用程序使用单个 “API slice”，使用 `createApi` 定义**
+  - RTK Query 提供与 UI 无关和特定于 React 的 `createApi` 版本
+  - API slice 为不同的服务器操作定义了多个“端点”
+  - 如果使用 React 集成，API slice 包括自动生成的 React  hooks 
+- **查询端点允许从服务器获取和缓存数据**
+  - Query Hooks 返回一个 “data” 值，以及加载状态标志
+  - 查询可以手动重新获取，或者使用标签自动重新获取缓存失效
+- **Mutation 端点允许更新服务器上的数据**
+  - Mutation  hooks 返回一个发送更新请求的“触发”函数，以及加载状态
+  - 触发函数返回一个可以解包并等待的 Promise
 
 :::
 
-## What's Next?
+## 下一步
 
-RTK Query provides solid default behavior, but also includes many options for customizing how requests are managed and working with cached data. In [Part 8: RTK Query Advanced Patterns](./part-8-rtk-query-advanced.md), we'll see how to use these options to implement useful features like optimistic updates.
+RTK Query 提供可靠的默认行为，但还包括许多用于自定义如何管理请求和使用缓存数据的选项。 在 [第 8 节：RTK 查询高级模式](./part-8-rtk-query-advanced.md) 中，我们将了解如何使用这些选项来实现有用的功能，例如 optimistic updates。
