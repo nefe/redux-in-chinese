@@ -310,10 +310,10 @@ renderApp()
 
 ## 使用 Redux Starter Kit 简化设置
 
-Redux 核心库特意设置为最轻量化的。它可以让您决定如何处理所有内容，例如 store
-设置、您的 state 包含的内容、以及您希望如何构建 Reducer。
+Redux 核心库特意设置为最轻量化的。它可以让你决定如何处理所有内容，例如 store
+设置、你的 state 包含的内容、以及你希望如何构建 Reducer。
 
-这在某些情况下是好的，因为它为您提供了灵活性，但我们并不总是需要这种灵活性。有时我们只想要使用一个包含默认配置的开箱即用的方法。
+这在某些情况下是好的，因为它为你提供了灵活性，但我们并不总是需要这种灵活性。有时我们只想要使用一个包含默认配置的开箱即用的方法。
 
 [Redux Starter Kit](https://redux-starter-kit.js.org/) 包旨在帮助简化几个常见的 Redux 用例，包括 store 设置。
 让我们看看它如何帮助改善 store 设置流程。
@@ -333,11 +333,11 @@ const store = configureStore({
 export default store
 ```
 
-请注意，它接受具有命名参数的对象，以使您更清楚地展示所传入的内容。
+请注意，它接受具有命名参数的对象，以使你更清楚地展示所传入的内容。
 
 默认情况下，Redux Starter Kit 中 的 `configureStore` 将：
 
-- 调用 `applyMiddleware` 来使用 [默认的多个中间件, 包括 `redux-thunk`](https://redux-starter-kit.js.org/api/getDefaultMiddleware), 以及一些仅用于开发环境的中间件，例如用来捕获类似 state 变异错误的中间件。
+- 调用 `applyMiddleware` 来使用 [默认的多个 middleware, 包括 `redux-thunk`](https://redux-starter-kit.js.org/api/getDefaultMiddleware), 以及一些仅用于开发环境的 middleware，例如用来捕获类似 state Mutation 错误的 middleware。
 - 调用 `composeWithDevTools` 来设置 Redux DevTools 扩展
 
 以下是使用 Redux Starter Kit 的 hot reloading 示例：

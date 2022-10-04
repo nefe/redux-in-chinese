@@ -6,9 +6,9 @@ hide_title: false
 
 # 代码分割
 
-在大型 Web 应用程序中，通常需要将应用程序代码拆分为多个可以按需加载的 JS 包。 这种称为“代码分割”的策略通过减小初次加载时的 JS 的包的大小，来提高应用程序的性能。
+在大型 Web 应用程序中，通常需要将应用程序代码拆分为多个可以按需加载的 JS 包。这种称为“代码分割”的策略通过减小初次加载时的 JS 的包的大小，来提高应用程序的性能。
 
-要使用 Redux 进行代码拆分，我们希望能够将 reducer 动态添加到 store。 但是，Redux 实际上只有一个 root reducer 函数。 这个 root reducer 通常是在初始化应用程序时通过调用 `combineReducers（）` 或类似函数生成的。 为了动态添加更多的 reducer，我们需要再次调用该函数来重新生成 root reducer。 下面，我们将讨论可以解决此问题的一些方法，并推荐提供此功能的两个库。
+要使用 Redux 进行代码拆分，我们希望能够将 reducer 动态添加到 store。但是，Redux 实际上只有一个 root reducer 函数。这个 root reducer 通常是在初始化应用程序时通过调用 `combineReducers（）` 或类似函数生成的。为了动态添加更多的 reducer，我们需要再次调用该函数来重新生成 root reducer。下面，我们将讨论可以解决此问题的一些方法，并推荐提供此功能的两个库。
 
 ## 基本原则
 
@@ -40,7 +40,7 @@ const staticReducers = {
   posts: postsReducer
 }
 
-// Configure the store
+// 配置 store
 export default function configureStore(initialState) {
   const store = createStore(createReducer(), initialState)
 
@@ -70,7 +70,7 @@ function createReducer(asyncReducers) {
 
 ### 使用 'Reducer Manager'
 
-另一种方法是创建一个 'Reducer Manager' 对象，它跟踪所有已注册的 Reducer 并暴露出 `reduce()` 函数。 请参考以下示例：
+另一种方法是创建一个 'Reducer Manager' 对象，它跟踪所有已注册的 Reducer 并暴露出 `reduce()` 函数。请参考以下示例：
 
 ```js
 export function createReducerManager(initialReducers) {
@@ -155,8 +155,8 @@ export function configureStore(initialState) {
 
 ## 库和框架
 
-以下有一些优秀的库可以帮助您自动添加上述功能：
+以下有一些优秀的库可以帮助你自动添加上述功能：
 
 - [`redux-dynamic-modules`](https://github.com/Microsoft/redux-dynamic-modules):
-  该库引入了“Redux Module”的概念，它是一组应该动态加载的 Redux 部件（Reducer，middleware）。它还暴露出一个 React 高阶组件用来在应用组件加载后加载 Module。 此外，它还与诸如 `redux-thunk` 和 `redux-saga` 之类的库集成，以使这些库可以动态加载他们的部件（thunk，sagas）。
+  该库引入了“Redux Module”的概念，它是一组应该动态加载的 Redux 部件（Reducer，middleware）。并且还暴露出一个 React 高阶组件用来在应用组件加载后加载 Module。此外，它还与诸如 `redux-thunk` 和 `redux-saga` 之类的库集成，以使这些库可以动态加载他们的部件（thunk，sagas）。
 - [Redux 生态系统链接: Reducer - Reducer 动态注入](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md#dynamic-reducer-injection)
