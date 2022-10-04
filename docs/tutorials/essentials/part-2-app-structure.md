@@ -65,7 +65,7 @@ npx create-react-app redux-essentials-example --template redux
 
 DevTools 将向我们展示 Store 中的 state 是如何变化的。
 
-让我们先玩一下这个应用程序，看看它有什么作用。单击应用程序中的“+”按钮，然后查看 Redux DevTools 中的“Diff”选项卡：
+让我们先玩一下这个应用程序，看看它有什么作用。单击应用程序中的“+”按钮，然后查看 Redux DevTools 中的 “Diff” 选项卡：
 
 ![Redux DevTools: first dispatched action](/img/tutorials/essentials/devtools-first-action.png)
 
@@ -95,11 +95,11 @@ DevTools 将向我们展示 Store 中的 state 是如何变化的。
 }
 ```
 
-如果你单击“差异”选项卡，你可以看到 `state.counter.value` 字段响应该 action 从 `3` 更改为 `6`。
+如果你单击 “Diff” 选项卡，你可以看到 `state.counter.value` 字段响应该 action 从 `3` 更改为 `6`。
 
 查看我们的应用程序内部发生的事情以及我们的状态如何随时间变化的能力非常强大！
 
-DevTools 有更多命令和选项可帮助你调试应用程序。尝试单击右上角的“跟踪 Trace”选项卡。 你应该在面板中看到一个 JavaScript 函数堆栈跟踪，其中有几段源代码显示了当 action 到达 store 时正在执行的行。特别应该突出显示一行：我们从 `<Counter>` 组件 dispatch 此 action 的代码行：
+DevTools 有更多命令和选项可帮助你调试应用程序。尝试单击右上角的 “Trace” 选项卡。 你应该在面板中看到一个 JavaScript 函数堆栈跟踪，其中有几段源代码显示了当 action 到达 store 时正在执行的行。特别应该突出显示一行：我们从 `<Counter>` 组件 dispatch 此 action 的代码行：
 
 ![Redux DevTools: action stack traces](/img/tutorials/essentials/devtools-action-stacktrace.png)
 
