@@ -1,191 +1,191 @@
 ---
-id: code-structure
-title: Code Structure
+id: 代码结构
+title: 代码结构
 hide_title: false
 ---
 
 import { DetailedExplanation } from '../components/DetailedExplanation'
 
-# Redux FAQ: Code Structure
+# Redux FAQ: 代码结构
 
-## Table of Contents
+## 目录
 
-- [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
-- [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
-- [Why should I use action creators?](#why-should-i-use-action-creators)
-- [Where should websockets and other persistent connections live?](#where-should-websockets-and-other-persistent-connections-live)
-- [How can I use the Redux store in non-component files?](#how-can-i-use-the-redux-store-in-non-component-files)
+- [我的文件结构应该是什么样的？应该如何在项目中对 action creator 和 reducer 进行分组？ selector 应该放在哪里？](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
+- [我应该如何在 reducer 和 action creator 之间划分逻辑？“业务逻辑”应该放在哪里？](#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
+- [为什么我应该使用 action creator ？](#why-should-i-use-action-creators)
+- [websockets 和其他持久连接应该在哪里？](#where-should-websockets-and-other-persistent-connections-live)
+- [如何在非组件文件中使用 Redux store？](#how-can-i-use-the-redux-store-in-non-component-files)
 
-## What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?
+## 我的文件结构应该是什么样的？应该如何在项目中对 action creator 和 reducer 进行分组？selector应该放在哪里？
 
-Since Redux is just a data store library, it has no direct opinion on how your project should be structured. However, there are a few common patterns that most Redux developers tend to use:
+由于 Redux 只是一个数据存储库，对于项目的结构没有直接的意见。但是，有一些大多数 Redux 开发人员倾向于使用的常见模式：
 
-- Rails-style: separate folders for “actions”, “constants”, “reducers”, “containers”, and “components”
-- "Feature folders" / "Domain"-style : separate folders per feature or domain, possibly with sub-folders per file type
-- “Ducks/Slices”: similar to domain style, but explicitly tying together actions and reducers, often by defining them in the same file
+- Rails 样式：“actions”、“constants”、“reducers”、“containers”和“components”的单独文件夹
+-“功能文件夹”/“域”样式：每个功能或域的单独文件夹，每个文件类型可能带有子文件夹
+- “Ducks/Slices”：类似于领域风格，但明确地将 reducer 和 action 绑定在一起，通常通过在同一个文件中定义它们
 
-It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
+通常建议 selector 与 reducer 一起定义并导出，然后在其他地方重用（例如在 `mapStateToProps` 函数、异步操作创建器或 sagas 中）以将所有知道状态树实际形状的代码放在 reducer 文件中。
 
 :::tip
 
-**We specifically recommend organizing your logic into "feature folders", with all the Redux logic for a given feature in a single "slice/ducks" file"**.
+**我们特别建议将你的逻辑组织到“功能文件夹”中，将给定功能的所有 Redux 逻辑都放在一个“Ducks/Slices”文件中"**.
 
-See this section for an example:
+有关示例，请参见本节：
 
 <DetailedExplanation title="Detailed Explanation: Example Folder Structure">
-An example folder structure might look something like:
+示例文件夹结构可能类似于：
 
 - `/src`
-  - `index.tsx`: Entry point file that renders the React component tree
+  - `index.tsx`: React 组件树的入口点文件
   - `/app`
-    - `store.ts`: store setup
-    - `rootReducer.ts`: root reducer (optional)
-    - `App.tsx`: root React component
-  - `/common`: hooks, generic components, utils, etc
-  - `/features`: contains all "feature folders"
-    - `/todos`: a single feature folder
-      - `todosSlice.ts`: Redux reducer logic and associated actions
-      - `Todos.tsx`: a React component
+    - `store.ts`: store 设置
+    - `rootReducer.ts`: 根 reducer (可选择的)
+    - `App.tsx`: 根 React 组件
+  - `/common`: hooks, 通用组件, utils, 等
+  - `/features`: 包含所有“功能文件夹”
+    - `/todos`: 单个功能文件夹
+      - `todosSlice.ts`: Redux reducer 逻辑和相关操作
+      - `Todos.tsx`: 一个 React 组件
 
-`/app` contains app-wide setup and layout that depends on all the other folders.
+`/app` 包含依赖于所有其他文件夹的应用程序范围的设置和布局。
 
-`/common` contains truly generic and reusable utilities and components.
+`/common` 包含真正通用和可重用的实用程序和组件。
 
-`/features` has folders that contain all functionality related to a specific feature. In this example, `todosSlice.ts` is a "duck"-style file that contains a call to RTK's `createSlice()` function, and exports the slice reducer and action creators.
+`/features` 具有包含与特定功能相关的所有功能的文件夹。 在此示例中，`todosSlice.ts` 是一个 “duck” 风格的文件，其中包含对 RTK 的`createSlice()` 函数的调用，并导出切片 reducer 和 action creator。
 
 </DetailedExplanation>
 
 :::
 
-While it ultimately doesn't matter how you lay out your code on disk, it's important to remember that actions and reducers should not be considered in isolation. It's entirely possible (and encouraged) for a reducer defined in one folder to respond to an action defined in another folder.
+虽然最终如何在磁盘上布置代码并不重要，但重要的是要记住不应孤立地考虑 action 和 reducer。 一个文件夹中定义的 reducer 完全有可能（并且鼓励）响应另一个文件夹中定义的 action。
 
-#### Further information
+#### 更多信息
 
-**Documentation**
+**文档**
 
-- [Style Guide: Structure Files as Feature Folders with Single-File Logic](../style-guide/style-guide.md##structure-files-as-feature-folders-with-single-file-logic)
+- [Style Guide: 使用单文件逻辑将文件结构作为功能文件夹](../style-guide/style-guide.md##structure-files-as-feature-folders-with-single-file-logic)
 - [Redux Essentials tutorial: App Structure](../tutorials/essentials/part-2-app-structure.md)
-- [FAQ: Actions - "1:1 mapping between reducers and actions?"](./Actions.md#actions-reducer-mappings)
+- [FAQ: Actions - “reducer 和 action 之间的 1:1 映射？”](./Actions.md#actions-reducer-mappings)
 
-**Articles**
+**文章**
 
-- [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
-- [Redux Best Practices](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
-- [Rules For Structuring (Redux) Applications ](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
-- [A Better File Structure for React/Redux Applications](https://marmelab.com/blog/2015/12/17/react-directory-structure.html)
-- [Organizing Large React Applications](http://engineering.kapost.com/2016/01/organizing-large-react-applications/)
-- [Four Strategies for Organizing Code](https://medium.com/@msandin/strategies-for-organizing-code-2c9d690b6f33)
-- [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
-- [Redux Reducer/Selector Asymmetry](https://randycoulman.com/blog/2016/09/20/redux-reducer-selector-asymmetry/)
-- [Modular Reducers and Selectors](https://randycoulman.com/blog/2016/09/27/modular-reducers-and-selectors/)
-- [My journey towards a maintainable project structure for React/Redux](https://medium.com/@mmazzarolo/my-journey-toward-a-maintainable-project-structure-for-react-redux-b05dfd999b5)
-- [React/Redux Links: Architecture - Project File Structure](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
+- [如何扩展 React 应用程序](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
+- [Redux 最佳实践](https://medium.com/lexical-labs-engineering/redux-best-practices-64d59775802e)
+- [结构化 (Redux) 应用程序的规则](http://jaysoo.ca/2016/02/28/organizing-redux-application/)
+- [为 React/Redux 应用程序提供更好的文件结构](https://marmelab.com/blog/2015/12/17/react-directory-structure.html)
+- [组织大型 React 应用程序](http://engineering.kapost.com/2016/01/organizing-large-react-applications/)
+- [组织代码的四种策略](https://medium.com/@msandin/strategies-for-organizing-code-2c9d690b6f33)
+- [封装 Redux 状态树](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
+- [非对称 Redux Reducer/Selector](https://randycoulman.com/blog/2016/09/20/redux-reducer-selector-asymmetry/)
+- [模块化 Reducers and Selectors](https://randycoulman.com/blog/2016/09/27/modular-reducers-and-selectors/)
+- [我的 React/Redux 可维护项目结构之旅](https://medium.com/@mmazzarolo/my-journey-toward-a-maintainable-project-structure-for-react-redux-b05dfd999b5)
+- [React/Redux Links: 架构 - 项目文件结构](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#project-file-structure)
 
-**Discussions**
+**讨论**
 
-- [#839: Emphasize defining selectors alongside reducers](https://github.com/reduxjs/redux/issues/839)
+- [#839: 强调在 reducer 旁边定义 selector](https://github.com/reduxjs/redux/issues/839)
 - [#943: Reducer querying](https://github.com/reduxjs/redux/issues/943)
 - [React Boilerplate #27: Application Structure](https://github.com/mxstbr/react-boilerplate/issues/27)
-- [Stack Overflow: How to structure Redux components/containers](https://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
-- [Twitter: There is no ultimate file structure for Redux](https://twitter.com/dan_abramov/status/783428282666614784)
+- [Stack Overflow: 如何构建 Redux 组件/容器](https://stackoverflow.com/questions/32634320/how-to-structure-redux-components-containers/32921576)
+- [Twitter: Redux 没有终极的文件结构](https://twitter.com/dan_abramov/status/783428282666614784)
 
-## How should I split my logic between reducers and action creators? Where should my “business logic” go?
+## 我应该如何在 reducer 和 action creator 之间划分逻辑？“业务逻辑”应该放在哪里？
 
-There's no single clear answer to exactly what pieces of logic should go in a reducer or an action creator. Some developers prefer to have “fat” action creators, with “thin” reducers that simply take the data in an action and blindly merge it into the corresponding state. Others try to emphasize keeping actions as small as possible, and minimize the usage of `getState()` in an action creator. (For purposes of this question, other async approaches such as sagas and observables fall in the "action creator" category.)
+对于 reducer 或 action creator 中应该包含哪些逻辑，没有一个明确的答案。 一些开发人员更喜欢拥有 “fat” 的 action creator，而 “thin” 的 reducer 只是简单地将 action 中的数据合并到相应的 state 中。 其他人试图强调保持action 尽可能小，并尽量减少在 action creator 使用 `getState()`。 （对于这个问题，其他异步方法，如 sagas 和 observables 属于 “action creator” 类别。）
 
-There are several potential benefits from putting more logic into your reducers. It's likely that the action types would be more semantic and more meaningful (such as `"USER_UPDATED"` instead of `"SET_STATE"`). In addition, having more logic in reducers means that more functionality will be affected by time travel debugging.
+将更多逻辑放入 reducer 有几个潜在的好处。 action 类型可能会更语义化和更有意义（例如 `"USER_UPDATED"` 而不是 `"SET_STATE"`）。 此外，在 reducer 中有更多的逻辑意味着更多的功能会受到时间旅行调试的影响。
 
-This comment sums up the dichotomy nicely:
+这条评论很好地总结了二分法：
 
-> Now, the problem is what to put in the action creator and what in the reducer, the choice between fat and thin action objects. If you put all the logic in the action creator, you end up with fat action objects that basically declare the updates to the state. Reducers become pure, dumb, add-this, remove that, update these functions. They will be easy to compose. But not much of your business logic will be there.
-> If you put more logic in the reducer, you end up with nice, thin action objects, most of your data logic in one place, but your reducers are harder to compose since you might need info from other branches. You end up with large reducers or reducers that take additional arguments from higher up in the state.
+> 现在，问题是在 action creator 中放入什么，在 reducer 中放入什么，在 “fat” action 对象和 “thin” action 对象之间进行选择。 如果你把所有的逻辑都放在 action creator 中，你最终会得到基本上声明 state 更新的 “fat” action creator 对象。 Reducers 变得纯粹、傻瓜式、添加这个、删除那个、更新这些功能。 他们将很容易组成。 但是你的业务逻辑并不多。
+> 如果你在 reducer 中加入更多逻辑，你最终会得到漂亮、精简的 action 对象，大部分数据逻辑都在一个地方，但是你的 reducer 更难组合，因为你可能需要来自其他分支的信息。 您最终会得到大型 reducer 或从该州更高层获取额外参数的 reducer。
 
 :::tip
 
-**We recommend putting as much logic as possible into reducers**. There are times when you may need some logic to help prepare what goes into the action, but reducers should do most of the work.
+**建议将尽可能多的逻辑放入 reducer**. 有时您可能需要一些逻辑来帮助准备 action 中的内容，但 reducer 应该完成大部分工作。
 
 :::
 
-#### Further information
+#### 更多的信息
 
-**Documentation**
+**文档**
 
-- [Style Guide: Put as Much Logic as Possible in Reducers](../style-guide/style-guide.md#put-as-much-logic-as-possible-in-reducers)
-- [Style Guide: Model Actions as "Events", not "Setters"](../style-guide/style-guide.md#model-actions-as-events-not-setters)
+- [Style Guide: 在 Reducer 中尽可能多地添加逻辑](../style-guide/style-guide.md#put-as-much-logic-as-possible-in-reducers)
+- [Style Guide: 将 Actions 作为 “Events”, 而不是 “Setters”](../style-guide/style-guide.md#model-actions-as-events-not-setters)
 
-**Articles**
+**文章**
 
-- [Where do I put my business logic in a React/Redux application?](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
-- [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
-- [The Tao of Redux, Part 2 - Practice and Philosophy. Thick and thin reducers.](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
+- [我应该将业务逻辑放在 React/Redux 应用程序的什么位置？](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
+- [如何扩展 React 应用程序](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
+- [Redux 之道，第 2 部分 - 实践与哲学。 厚重和轻量的 reducer。](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
+
+**讨论**
+
+- [在 action creator 中放置过多的逻辑会如何影响调试](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
+- [#384:reducer 中的内容越多，您可以通过时间旅行重播的内容越多](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
+- [#1165: 在哪里放置业务逻辑/验证？](https://github.com/reduxjs/redux/issues/1165)
+- [#1171: 关于 action-creator、reducer 和 selector 的最佳实践建议](https://github.com/reduxjs/redux/issues/1171)
+- [Stack Overflow: 在 action-creator 中访问 Redux state？](https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
+- [#2796: 明确“业务逻辑”](https://github.com/reduxjs/redux/issues/2796#issue-289298280)
+- [Twitter: 远离不明确的术语...](https://twitter.com/FwardPhoenix/status/952971237004926977)
+
+## 为什么应该使用 action creator？
+
+Redux 不需要 action creator。 您可以以任何最适合您的方式自由创建 action，包括简单地将对象文字传递给 `dispatch`。 action creator从 [Flux 架构](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) 中出现并被 Redux 社区采用，因为它们提供了几个好处。
+
+Action creator 更易于维护。可以在一个地方对 action 进行更新，并在任何地方应用。 保证 action 的所有实例具有相同的状态和相同的默认值。
+
+Action creator 是可测试的。必须手动验证内联 action 的正确性。 与任何函数一样，action creator 的测试可以编写一次并自动运行。
+
+Action creator 更容易记录。Action creator 的参数枚举 action 的依赖关系。action 定义的集中化为文档注释提供了一个方便的地方。内联编写 action 时，这些信息更难捕获和交流。
+
+Action creator 是一个更强大的抽象。 创建 action 通常涉及转换数据或发出 AJAX 请求。 Action creator 为这种不同的逻辑提供了统一的接口。 这种抽象释放了一个组件来 dispatch 一个动作，而不会因为该 action 的创建细节而变得复杂。
+
+#### 更多信息
+
+**文章**
+
+- [惯用的 Redux：为什么使用 action creator ？](https://blog.isquaredsoftware.com/2016/10/idiomatic-redux-why-use-action-creators/)
 
 **Discussions**
 
-- [How putting too much logic in action creators could affect debugging](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
-- [#384: The more that's in a reducer, the more you can replay via time travel](https://github.com/reduxjs/redux/issues/384#issuecomment-127393209)
-- [#1165: Where to put business logic / validation?](https://github.com/reduxjs/redux/issues/1165)
-- [#1171: Recommendations for best practices regarding action-creators, reducers, and selectors](https://github.com/reduxjs/redux/issues/1171)
-- [Stack Overflow: Accessing Redux state in an action creator?](https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575)
-- [#2796: Gaining clarity on "business logic"](https://github.com/reduxjs/redux/issues/2796#issue-289298280)
-- [Twitter: Moving away from unclear terminology...](https://twitter.com/FwardPhoenix/status/952971237004926977)
+- [Reddit: Redbox - 使 Redux action 创建变得简单](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
 
-## Why should I use action creators?
+## Websockets 和其他持久连接应该放在哪里？
 
-Redux does not require action creators. You are free to create actions in any way that is best for you, including simply passing an object literal to `dispatch`. Action creators emerged from the [Flux architecture](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) and have been adopted by the Redux community because they offer several benefits.
+Middleware 是 Redux 应用程序中持续连接（如 websockets）的正确位置，原因如下：
 
-Action creators are more maintainable. Updates to an action can be made in one place and applied everywhere. All instances of an action are guaranteed to have the same shape and the same default values.
+- Middleware 存在于应用程序的生命周期中
+- 与 store 本身一样，你可能只需要整个应用程序中可以使用的给定连接的单个实例
+- Middleware 可以看到所有 dispatch 的 action 和自己 dispatch 的 action 。 这意味着 middleware 可以采取 dispatch 的 action 并将其转换为通过 websocket 发送的消息，并在通过 websocket 接收到消息时 dispatch 新的 action。
+- websocket 连接实例不可序列化，因此[它不属于 store state 本身](/faq/organizing-state#organizing-state-non-serializable)
 
-Action creators are testable. The correctness of an inline action must be verified manually. Like any function, tests for an action creator can be written once and run automatically.
+请参阅 [此示例显示 socket middleware 如何 dispatch 和响应 Redux action](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
 
-Action creators are easier to document. The action creator's parameters enumerate the action's dependencies. And centralization of the action definition provides a convenient place for documentation comments. When actions are written inline, this information is harder to capture and communicate.
+有许多用于 websocket 和其他类似连接的现有 middleware - 请参阅下面的链接。
 
-Action creators are a more powerful abstraction. Creating an action often involves transforming data or making AJAX requests. Action creators provide a uniform interface to this varied logic. This abstraction frees a component to dispatch an action without being complicated by the details of that action's creation.
-
-#### Further information
-
-**Articles**
-
-- [Idiomatic Redux: Why use action creators?](https://blog.isquaredsoftware.com/2016/10/idiomatic-redux-why-use-action-creators/)
-
-**Discussions**
-
-- [Reddit: Redbox - Redux action creation made simple](https://www.reddit.com/r/reactjs/comments/54k8js/redbox_redux_action_creation_made_simple/d8493z1/?context=4)
-
-## Where should websockets and other persistent connections live?
-
-Middleware are the right place for persistent connections like websockets in a Redux app, for several reasons:
-
-- Middleware exist for the lifetime of the application
-- Like with the store itself, you probably only need a single instance of a given connection that the whole app can use
-- Middleware can see all dispatched actions and dispatch actions themselves. This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
-- A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](/faq/organizing-state#organizing-state-non-serializable)
-
-See [this example that shows how a socket middleware might dispatch and respond to Redux actions](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
-
-There's many existing middleware for websockets and other similar connections - see the link below.
-
-**Libraries**
+**库**
 
 - [Middleware: Socket and Adapters](https://github.com/markerikson/redux-ecosystem-links/blob/master/middleware-sockets-adapters.md)
 
-## How can I use the Redux store in non-component files?
+## 如何在非组件文件中使用 Redux store？
 
-There should only be a single Redux store per application. This makes it effectively a singleton in terms of the app architecture. When used with React, the store is injected into the components at runtime by rendering a `<Provider store={store}>` around the root `<App>` component, so only the application setup logic needs to import the store directly.
+每个应用程序应该只有一个 Redux store。 这使得它在应用程序架构方面实际上是一个单例。 与 React 一起使用时，通过在根 `<App>` 组件周围渲染 `<Provider store={store}>`，将 store 在运行时注入到组件中，因此只有应用程序设置逻辑需要直接导入 store。
 
-However, there may be times when other parts of the codebase need to interact with the store as well.
+但是，有时代码库的其他部分也需要与 store 交互。
 
-**You should avoid importing the store directly into other codebase files**. While it may work in some cases, that often ends up causing circular import dependency errors.
+**您应该避免将 store 直接导入其他代码库文件**. 虽然它在某些情况下可能会起作用，但这通常会导致循环导入依赖错误。
 
-Some possible solutions are:
+一些可能的解决方案：
 
-- Write your store-dependent logic as a thunk, and then dispatch that thunk from a component
-- Pass along references to `dispatch` from components as arguments the relevant functions
-- Write the logic as middleware and add them to the store at setup time
-- Inject the store instance into the relevant files as the app is being created.
+- 将依赖于 store 的逻辑编写为 thunk，然后从组件中 dispatch 该 thunk。
+- 将组件中对 “dispatch” 的引用作为相关函数的参数传递。
+- 将逻辑编写为 middleware，并在设置时将它们添加到 store 中。
+- 在创建应用程序时将 store 实例注入相关文件。
 
-One common use case is reading API authorization information such as a token from the Redux state, inside of an Axios interceptor. The interceptor file needs to reference `store.getState()`, but also needs to be imported into API layer files, and this leads to circular imports.
+一个常见的用例是在 Axios 拦截器内部读取 API 授权信息，例如来自 Redux state 的令牌。 拦截器文件需要引用 `store.getState()`，还需要导入API层文件，导致循环导入。
 
-You can expose an `injectStore` function from the interceptor file instead:
+您可以从拦截器文件中暴露一个 `injectStore` 函数：
 
 ```js title="common/api.js"
 let store
@@ -202,7 +202,7 @@ axiosInstance.interceptors.request.use(
 )
 ```
 
-Then, in your entry point file, inject the store into the API setup file:
+然后，在你的入口点文件中，将 store 注入 API 设置文件：
 
 ```js title="index.js"
 import store from "./app/store".
@@ -210,4 +210,4 @@ import {injectStore} from "./common/api";
 injectStore(store);
 ```
 
-This way, the application setup is the only code that has to import the store, and the file dependency graph avoids circular dependencies.
+这样，应用程序设置是唯一必须导入 store 的代码，文件依赖图避免了循环依赖。
