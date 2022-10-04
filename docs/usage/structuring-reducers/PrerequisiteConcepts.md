@@ -5,15 +5,15 @@ description: '组织 Reducer > 必备概念：Redux 必需知道的几个原则'
 hide_title: false
 ---
 
-# Reducer 必备概念
+# Reducer 预置知识
 
-就像 [前面教程的 Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md) 中描述的一样，一个 Redux reducer 函数需要具备：
+如 ["Redux 深入浅出"， 第三节: State， Actions， 和 Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md) 中描述的一样，一个 Redux reducer 函数需要具备：
 
 - 格式为 `(previousState, action) => newState` 这样的签名，与 [Array.prototype.reduce(reducer, ?initialValue)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 这个函数很相似。
 - 应该是"纯"函数，纯函数意味着
   - 无副作用（禁止调用 API，修改非本地对象或变量）
   - 不能调用非纯函数。比如 `Date.now()` 或 `Math.random()`
-  - 不能修改它的 state。这意味着 state 的更新应该在 **"不可变（immutable）"**的理念下完成，这就是说**总是去返回一个新的更新后的对象**，而不是直接去修改原始的 state tree。
+  - 不能可变修改 state。这意味着 state 的更新应该在 **"不可变（immutable）"**的理念下完成，这就是说**总是去返回一个新的更新后的对象**，而不是直接去修改原始的 state tree。
 
 > ##### 关于不可变（immutability）和突变（mutation）以及副作用
 >
@@ -78,7 +78,7 @@ hide_title: false
 - [Immutable 数据从零开始](https://ryanfunduk.com/articles/immutable-data-from-scratch/)
 - [Redux 文档: 使用对象展开符](../UsingObjectSpreadOperator.md)
 
-#### 范式化数据
+#### 归一化数据
 
 **核心概念**：
 
@@ -91,10 +91,10 @@ hide_title: false
 
 **阅读列表**：
 
-- [用简单的英语介绍数据库范式化](http://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/)
-- [Redux 惯用法: 范式化 State Shape](https://egghead.io/lessons/javascript-redux-normalizing-the-state-shape)
-- [范式化文档](https://github.com/paularmstrong/normalizr)
-- [让 Redux 变得更干净：范式化](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
+- [用简单的英语介绍数据库归一化](http://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/)
+- [Redux 惯用法: 归一化 State Shape](https://egghead.io/lessons/javascript-redux-normalizing-the-state-shape)
+- [归一化文档](https://github.com/paularmstrong/normalizr)
+- [让 Redux 变得更干净：归一化](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [查询 Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 - [维基百科: 关联实体](https://en.wikipedia.org/wiki/Associative_entity)
 - [数据库设计: 多对多](http://www.tomjewett.com/dbdesign/dbdesign.php?page=manymany.php)
