@@ -302,7 +302,7 @@ const rootReducer = combineReducers({
 
 ```js
 const initialUserState = {
-  status: 'idle', // 表示状态
+  status: 'idle', // 显式的表示状态
   user: null,
   error: null
 }
@@ -360,11 +360,11 @@ const fetchUserReducer = (state, action) => {
 
 </DetailedExplanation>
 
-### 将复杂的嵌套/关联式 State 规范化
+### 将复杂的嵌套/关联式 State 归一化
 
 很多应用需要在 store 需要缓存复杂数据。数据经常是通过 API 获取的嵌套的表单结构，或者数据之间包含着相关联的实体（比如一条博客数据包含用户数据、帖子数据以及评论数据）。
 
-**在 store 中使用[“规范化的”格式](../usage/structuring-reducers/NormalizingStateShape.md)**来存储以上数据是更优的。这使得基于项目 ID 查找项目和更新 store 中的单个项目变得更容易，并最终更好的性能模式。
+**在 store 中使用[“归一化的”格式](../usage/structuring-reducers/NormalizingStateShape.md)**来存储以上数据是更优的。这使得基于项目 ID 查找项目和更新 store 中的单个项目变得更容易，并最终更好的性能模式。
 
 ### 保持 state 的最小化，其他的值派生出来
 
