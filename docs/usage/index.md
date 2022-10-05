@@ -1,41 +1,43 @@
 ---
 id: index
-title: Usage Guides Index
-sidebar_label: Usage Guides Index
+title: 使用引导首页
+sidebar_label: 使用引导首页
 ---
 
-# Usage Guides
+# 使用引导
 
-The Usage Guides section provides practical guidance on how to correctly use Redux in real-world applications, including project setup and architecture, patterns, practices, and techniques.
+使用指南部分提供了关于如何在实际应用程序中正确使用 Redux 的实用指南，包括项目设置和架构、模式、实践和技术。
 
 :::info 预置知识
 
 The pages in this category assume you understand the core Redux terms and concepts explained in [the "Redux Fundamentals" tutorial](../tutorials/fundamentals/part-1-overview.md), including actions, reducers, stores, immutability, React-Redux, and async logic.
 
+这本目录下的文章假设您了解 [”Redux 基础“教程](../tutorials/fundamentals/part-1-overview.md) 中介绍的核心 Redux 术语和概念，包括 actions，reducers，stores，immutability，React-Redux 和异步逻辑。
+
 :::
 
-## Setup and Organization
+## 设置和组织
 
-This section covers information on how to set up and organize Redux-based projects.
+本节介绍如何设置和组织基于 Redux 的项目。
 
-- [Configuring Your Store](ConfiguringYourStore.md)
-- [Code Splitting](CodeSplitting.md)
-- [Server Rendering](ServerRendering.md)
-- [Isolating Redux Sub-Apps](IsolatingSubapps.md)
+- [配置 store](ConfiguringYourStore.md)
+- [代码分割](CodeSplitting.md)
+- [服务端渲染](ServerRendering.md)
+- [隔离 Redux 子 app](IsolatingSubapps.md)
 
-## Code Quality
+## 代码质量
 
-This section provides information on tools and techniques used to improve the quality of your Redux code.
+本节提供了有关用于提高 Redux 代码质量的工具和技术的信息。
 
-- [Usage with TypeScript](UsageWithTypescript.md)
-- [Writing Tests](WritingTests.mdx)
-- [Troubleshooting](Troubleshooting.md)
+- [和 TypeScript 一起使用](UsageWithTypescript.md)
+- [编写测试](WritingTests.mdx)
+- [故障排除](Troubleshooting.md)
 
-## Redux Logic and Patterns
+## Redux 逻辑和模式
 
-This section provides information about typical Redux patterns and approaches for writing different kinds of Redux logic.
+本节提供有关典型 Redux 模式和编写不同类型 Redux 逻辑的方法的信息。
 
-- [Structuring Reducers](structuring-reducers/StructuringReducers.md)
-- [Reducing Boilerplate](ReducingBoilerplate.md)
-- [Deriving Data with Selectors](../usage/deriving-data-selectors.md)
-- [Implementing Undo History](ImplementingUndoHistory.md)
+- [结构化 Reducers](structuring-reducers/StructuringReducers.md)
+- [减少 Boilerplate](ReducingBoilerplate.md)
+- [使用 Selectors 来派生数据](../usage/deriving-data-selectors.md)
+- [Undo 历史的实现](ImplementingUndoHistory.md)
