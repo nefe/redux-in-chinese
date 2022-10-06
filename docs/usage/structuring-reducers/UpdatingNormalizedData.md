@@ -1,19 +1,19 @@
 ---
 id: updating-normalized-data
-title: 更新范式化数据
-sidebar_label: 更新范式化数据
-description: '组织 Reducers > 更新范式化数据: 更新范式化数据的模式'
+title: 更新归一化数据
+sidebar_label: 更新归一化数据
+description: '组织 Reducers > 更新归一化数据: 更新归一化数据的模式'
 ---
 
-# 管理范式化数据
+# 管理归一化数据
 
-如 [范式化数据](./NormalizingStateShape.md) 章节所提及的，我们经常使用 Normaizr 库将嵌套式数据转化为适合集成到 store 中的范式化数据。但这并不解决针对范式化的数据进一步更新后在应用的其他地方使用的问题。根据喜好有很多种方法可供使用。下面展示一个向文章添加评论处理 mutations 的示例。
+如 [归一化数据](./NormalizingStateShape.md) 章节所提及的，我们经常使用 Normaizr 库将嵌套式数据转化为适合集成到 store 中的归一化数据。但这并不解决针对归一化的数据进一步更新后在应用的其他地方使用的问题。根据喜好有很多种方法可供使用。下面展示一个向文章添加评论处理 mutations 的示例。
 
 ## 标准方法
 
 ### 简单合并
 
-一种方法是将 action 的内容合并到现有的 state。在这种情况下，我们需要一个对数据的深拷贝（非浅拷贝）。以允许使用部分项目的 actions 来更新 stored state。Lodash 的 `merge` 方法可以帮我们处理这个：
+一种方法是将 action 的内容合并到现有的 state。在这种情况下，我们可以使用深度递归 merge，而不是浅拷贝，来允许包含部分评论的 action 更新store 中的评论。Lodash 的 `merge` 方法可以帮我们处理这个：
 
 ```js
 import merge from 'lodash/merge'
@@ -36,7 +36,7 @@ function commentsById(state = {}, action) {
 
 如果我们有一个由 slice reducer 组成的嵌套树，每个 slice reducer 都需要知道如何适当地响应这个 action。因为我们需要让 action 囊括所有相关的数据。譬如更新相应的 Post 对象需要生成一个 comment 的 id，然后使用 id 作为 key 创建一个新的 comment 对象，并且让这个 comment 的 id 包含在所有的 comment id 列表中。下面是一个如何组合这样数据的例子：
 
-> 译者注：结合上章节中范式化之后的 state 阅读
+> 译者注：结合上章节中归一化之后的 state 阅读
 
 ```js
 // actions.js
@@ -197,7 +197,7 @@ const rootReducer = reduceReducers(
 
 ### Redux-ORM
 
-[Redux-ORM](https://github.com/tommikaikkonen/redux-orm) 库提供了一个非常有用的抽象层，用于管理 Redux store 中存储的范式化数据。它允许你声明 Model 类并且定义他们之间的关系。然后它可以为你的数据类型生成新“表”，充当用于查找数据的特殊选择器工具，并且对数据执行不可变更新。
+[Redux-ORM](https://github.com/tommikaikkonen/redux-orm) 库提供了一个非常有用的抽象层，用于管理 Redux store 中存储的归一化数据。它允许你声明 Model 类并且定义他们之间的关系。然后它可以为你的数据类型生成新“表”，充当用于查找数据的特殊选择器工具，并且对数据执行不可变更新。
 
 有几种方法可以用 Redux-ORM 执行数据更新。首选，Redux-ORM 文档建议在每个 Model 子类上定义 reducer 函数，然后将自动生成的组合 reducer 函数放到 store 中：
 
