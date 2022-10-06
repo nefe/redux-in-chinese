@@ -52,9 +52,9 @@ RTK Query 从其他开创数据获取解决方案的工具中汲取灵感，例�
 
 - 数据获取和缓存逻辑构建在 Redux Toolkit 的 `createSlice` 和 `createAsyncThunk` API 之上
 - 由于 Redux Toolkit 与 UI 无关，因此 RTK Query 的功能可以与任何 UI 层一起使用
-- API 端点是提前定义的，包括如何从参数生成查询参数和转换响应以进行缓存
+- API 请求接口是提前定义的，包括如何从参数生成查询参数和转换响应以进行缓存
 - RTK Query 还可以生成封装整个数据获取过程的 React  hooks ，为组件提供 `data` 和 `isFetching` 字段，并在组件挂载和卸载时管理缓存数据的生命周期
-- RTK Query 提供“缓存条目生命周期”选项，支持在获取初始数据后通过 websocket 消息流式传输缓存更新等用例
+- RTK Query 提供“缓冲数据项生命周期函数”选项，支持在获取初始数据后通过 websocket 消息流式传输缓存更新等用例
 - 我们有从 OpenAPI 和 GraphQL 模式生成 API slice 代码的早期工作示例
 - 最后，RTK Query 完全用 TypeScript 编写，旨在提供出色的 TS 使用体验
 
@@ -68,29 +68,29 @@ RTK Query 包含在核心 Redux Toolkit 包的安装中。它可以通过以下�
 import { createApi } from '@reduxjs/toolkit/query'
 
 /* 自动生成的特定于 React 的入口点
-    对应于定义端点的 hooks  */
+    对应于定义请求接口的 hooks  */
 import { createApi } from '@reduxjs/toolkit/query/react'
 ```
 
 RTK Query 主要由两个 API 组成：
 
-- [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi)：RTK Query 功能的核心。它允许你定义一组端点来描述如何从一系列端点检索数据，包括如何获取和转换该数据的配置。在大多数情况下，你应该在每个应用程序中使用一次，根据经验，“每个基本 URL 一个 API slice”。
+- [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi)：RTK Query 功能的核心。它允许你定义一组请求接口来描述如何从一系列请求接口检索数据，包括如何获取和转换该数据的配置。在大多数情况下，你应该在每个应用程序中使用一次，根据经验，“每个基本 URL 一个 API slice”。
 - [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): [`fetch`](https://developer.mozilla.org/en) 的一个小包装 -US/docs/Web/API/Fetch_API），旨在简化请求。旨在为大多数用户在 `createApi` 中使用推荐的 `baseQuery`。
 
 #### Bundle 大小
 
 RTK Query 将固定的一次性数量添加到应用程序的捆绑包大小。由于 RTK Query 构建在 Redux Toolkit 和 React-Redux 之上，因此增加的大小取决于你是否已经在应用程序中使用它们。估计的 min+gzip 包大小为：
 
-- 如果你已经在使用 RTK：~9kb 用于 RTK Query，~2kb 用于挂钩。
+- 如果你已经在使用 RTK：~9kb 用于 RTK Query，~2kb 用于hooks。
 - 如果你尚未使用 RTK：
   - 没有 React：17 kB 用于 RTK+依赖项+RTK Query
   - 使用 React：19kB + React-Redux，这是一个对等依赖项
 
-添加额外的端点定义应该只根据 “端点” 定义中的实际代码增加大小，通常只有几个字节。
+添加额外的请求接口定义应该只根据请求接口定义中的实际代码增加大小，通常只有几个字节。
 
 RTK Query 中包含的功能可以快速支付增加的包大小，对于大多数有意义的应用程序来说，消除手写数据获取逻辑应该是大小的净改进。
 
-### 对于 RTK Query 缓存的思考
+### RTK Query 缓冲的设计思想
 
 Redux 一直强调可预测性和显式行为。Redux 没有“魔法”——你应该能够理解应用程序中发生了什么，因为**所有 Redux 逻辑都遵循相同的基本模式，即通过 reducers 调度操作和更新状态**。这确实意味着有时你必须编写更多代码才能使事情发生，但权衡是应该非常清楚数据流和行为是什么。
 
@@ -132,7 +132,7 @@ export const apiSlice = createApi({
   })
 })
 
-// 为 `getPosts` Query endpoint 导出自动生成的 h'o'o'k's
+// 为 `getPosts` Query endpoint 导出自动生成的 hooks
 export const { useGetPostsQuery } = apiSlice
 ```
 
@@ -140,9 +140,9 @@ RTK Query 的功能基于一个名为 “createApi” 的方法。到目前为�
 
 :::tip
 
-**你的应用程序中应该只有一个 `createApi` 调用**。这一 API Slice 应包含与同一基本 URL 对话的 _所有_ 端点定义。例如，端点 `/api/posts` 和 `/api/users` 都从同一个服务器获取数据，因此它们将进入同一个 API slice。如果你的应用确实从多个服务器获取数据，你可以在每个端点中指定完整的 URL，或者在必要时为每个服务器创建单独的 API slice。
+**你的应用程序中应该只有一个 `createApi` 调用**。这一 API Slice 应包含与同一基本 URL 对话的 _所有_ 请求接口定义。例如，请求接口 `/api/posts` 和 `/api/users` 都从同一个服务器获取数据，因此它们将进入同一个 API slice。如果你的应用确实从多个服务器获取数据，你可以在每个请求接口中指定完整的 URL，或者在必要时为每个服务器创建单独的 API slice。
 
-端点通常直接在 `createApi` 调用中定义。如果你希望在多个文件之间拆分端点，请参阅文档的 [第 8 部分中的“注入端点”部分](./part-8-rtk-query-advanced.md#injecting-endpoints) 部分！
+请求接口通常直接在 `createApi` 调用中定义。如果你希望在多个文件之间拆分请求接口，请参阅文档的 [第 8 部分中的“注入请求接口”部分](./part-8-rtk-query-advanced.md#injecting-endpoints) 部分！
 
 :::
 
@@ -151,7 +151,7 @@ RTK Query 的功能基于一个名为 “createApi” 的方法。到目前为�
 当我们调用 `createApi` 时，需要两个字段：
 
 - `baseQuery`：一个知道如何从服务器获取数据的函数。RTK Query 包括 `fetchBaseQuery`，一个围绕标准 `fetch()` 函数的小包装器，用于处理请求和响应的典型处理。当我们创建一个 `fetchBaseQuery` 实例时，我们可以传入所有未来请求的基本 URL，以及覆盖修改请求标头等行为。
-- `endpoints`：我们为与此服务器交互而定义的一组操作。端点可以是 **_queries_**，它返回用于缓存的数据，或者是 **_mutations_**，它向服务器发送更新。 端点是使用回调函数定义的，该函数接受 `builder` 参数并返回一个对象，该对象包含使用 `builder.query()` 和 `builder.mutation()` 创建的端点定义。
+- `endpoints`：我们为与此服务器交互而定义的一组操作。请求接口可以是 **_queries_**，它返回用于缓存的数据，或者是 **_mutations_**，它向服务器发送更新。 请求接口是使用回调函数定义的，该函数接受 `builder` 参数并返回一个对象，该对象包含使用 `builder.query()` 和 `builder.mutation()` 创建的请求接口定义。
 
 `createApi` 还接受一个 `reducerPath` 字段，它为生成的 reducer 定义了预期的顶级状态 slice 字段。对于我们的其他 slice，如`postsSlice`，不能保证它会用于更新`state.posts` - 我们 _可以_ 已将 reducer 附加到根状态的任何位置，例如`someOtherField：postsReducer`。在这里，`createApi` 期望我们告诉它，当我们将缓存减速器添加到存储时，缓存状态将存在于何处。如果不提供 `reducerPath` 选项，则默认为 `'api'`，因此你的所有 RTKQ 缓存数据都将存储在 `state.api` 下。
 如果你忘记将 reducer 添加到 store，或者将其附加到与 `reducerPath` 中指定的键不同的键上，RTKQ 将记录一个错误，让你知道这需要修复。
@@ -160,9 +160,9 @@ RTK Query 的功能基于一个名为 “createApi” 的方法。到目前为�
 
 所有请求的 URL 的第一部分在 `fetchBaseQuery` 定义中定义为 `'/fakeApi'`。
 
-第一步，我们要添加一个端点，该端点将返回来自假 API 服务器的整个帖子列表。我们将包含一个名为 `getPosts` 的端点，并使用 `builder.query()` 将其定义为 **query endpoint**。此方法接受许多选项来配置如何发出请求和处理响应。现在，我们需要做的就是通过定义一个 `query` 选项来提供 URL 路径的剩余部分，并带有一个返回 URL 字符串的回调：`() => '/posts'`。
+第一步，我们要添加一个请求接口，该请求接口将返回来自假 API 服务器的整个帖子列表。我们将包含一个名为 `getPosts` 的请求接口，并使用 `builder.query()` 将其定义为 **query endpoint**。此方法接受许多选项来配置如何发出请求和处理响应。现在，我们需要做的就是通过定义一个 `query` 选项来提供 URL 路径的剩余部分，并带有一个返回 URL 字符串的回调：`() => '/posts'`。
 
-默认情况下，查询端点将使用 `GET` HTTP 请求，但你可以通过返回类似 `{url: '/posts', method: 'POST', body: newPost}` 的对象来覆盖它，而不仅仅是 URL 字符串 本身。你还可以通过这种方式为请求定义几个其他选项，例如设置标头。
+默认情况下，查询请求接口将使用 `GET` HTTP 请求，但你可以通过返回类似 `{url: '/posts', method: 'POST', body: newPost}` 的对象来覆盖它，而不仅仅是 URL 字符串 本身。你还可以通过这种方式为请求定义几个其他选项，例如设置标头。
 
 #### 导出 API Slice 和 Hooks
 
@@ -170,15 +170,15 @@ RTK Query 的功能基于一个名为 “createApi” 的方法。到目前为�
 
 最后，仔细查看这个文件的最后一行。这个 `useGetPostsQuery` 值来自哪里？
 
-**RTK Query 的 React 集成会自动为我们定义的 _每个_ 端点生成 React hooks！** 这些 hooks 封装了在组件挂载时触发请求的过程，以及在处理请求和数据可用时重新渲染组件的过程。我们可以从这个 API slice 文件中导出这些 hooks，以便在我们的 React 组件中使用。
+**RTK Query 的 React 集成会自动为我们定义的 _每个_ 请求接口生成 React hooks！** 这些 hooks 封装了在组件挂载时触发请求的过程，以及在处理请求和数据可用时重新渲染组件的过程。我们可以从这个 API slice 文件中导出这些 hooks，以便在我们的 React 组件中使用。
 
 hooks 根据标准约定自动命名：
 
 - `use`，任何 React hooks 的正常前缀
-- 端点名称，大写
-- 端点的类型，`Query` 或 `Mutation`
+- 请求接口名称，大写
+- 请求接口的类型，`Query` 或 `Mutation`
 
-在这种情况下，我们的端点是 `getPosts`，它是一个查询端点，所以生成的 hooks 是 `useGetPostsQuery`。
+在这种情况下，我们的请求接口是 `getPosts`，它是一个查询请求接口，所以生成的 hooks 是 `useGetPostsQuery`。
 
 ### 配置 Store
 
@@ -304,7 +304,7 @@ export const PostsList = () => {
 
 有几个不同的选择可以处理这个问题。现在，我们将在 `<PostsList>` 本身内部进行排序，稍后我们将讨论其他选项及其权衡。
 
-我们不能直接调用 `posts.sort()`，因为 `Array.sort()` 会改变现有数组，所以我们需要先复制它。为了避免在每次重新渲染时重新排序，我们可以在 `useMemo()` 挂钩中进行排序。 我们还想给`posts`一个默认的空数组，以防它是`undefined`，这样我们总是有一个数组可以排序。
+我们不能直接调用 `posts.sort()`，因为 `Array.sort()` 会改变现有数组，所以我们需要先复制它。为了避免在每次重新渲染时重新排序，我们可以在 `useMemo()` hooks 中进行排序。 我们还想给`posts`一个默认的空数组，以防它是`undefined`，这样我们总是有一个数组可以排序。
 
 ```jsx title="features/posts/PostsList.js"
 // omit setup
@@ -354,11 +354,11 @@ export const PostsList = () => {
 
 我们有几种方法可以做到这一点。一种方法是让 `<SinglePostPage>` 调用相同的 `useGetPostsQuery()`  hooks ，获取 _整个_ 帖子数组，然后只找到它需要显示的一个 `Post` 对象。Query hooks 还有一个 `selectFromResult` 选项，它允许我们在 hooks 本身内部更早地进行相同的查找 - 我们稍后会看到这一点。
 
-相反，我们将尝试添加另一个端点定义，让我们根据其 ID 从服务器请求单个帖子。 这有点多余，但它可以让我们看到如何使用 RTK Query 来自定义基于参数的查询请求。
+相反，我们将尝试添加另一个请求接口定义，让我们根据其 ID 从服务器请求单个帖子。 这有点多余，但它可以让我们看到如何使用 RTK Query 来自定义基于参数的查询请求。
 
-### 添加单个 Post Query 端点
+### 添加单个 Post Query 请求接口
 
-在 `apiSlice.js` 中，我们将添加另一个查询端点定义，称为 `getPost`（这次没有 's'）：
+在 `apiSlice.js` 中，我们将添加另一个查询请求接口定义，称为 `getPost`（这次没有 's'）：
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -380,9 +380,9 @@ export const apiSlice = createApi({
 export const { useGetPostsQuery, useGetPostQuery } = apiSlice
 ```
 
-`getPost` 端点看起来很像现有的 `getPosts` 端点，但 `query` 参数不同。 在这里，`query` 接受一个名为 `postId` 的参数，我们使用该 `postId` 来构造服务器 URL。 这样我们就可以只对一个特定的 `Post` 对象发出服务器请求。
+`getPost` 请求接口看起来很像现有的 `getPosts` 请求接口，但 `query` 参数不同。 在这里，`query` 接受一个名为 `postId` 的参数，我们使用该 `postId` 来构造服务器 URL。 这样我们就可以只对一个特定的 `Post` 对象发出服务器请求。
 
-这也会生成一个新的 `useGetPostQuery` 挂钩，因此我们也将其导出。
+这也会生成一个新的 `useGetPostQuery` h'o'o'k's，因此我们也将其导出。
 
 ### 查询参数和缓存键
 
@@ -439,17 +439,17 @@ export const SinglePostPage = ({ match }) => {
 
 ![RTK Query 缓存在 store 状态的数据](/img/tutorials/essentials/devtools-rtkq-cache.png)
 
-我们可以看到我们有一个顶级的 `state.api` slice ，正如商店设置中所预期的那样。里面有一个叫做 “Query” 的部分，它目前有两个项目。 键 `getPosts(undefined)` 表示我们使用 `getPosts` 端点发出的请求的元数据和响应内容。 同样，键 `getPost('abcd1234')` 是针对我们刚刚为这篇文章提出的特定请求。
+我们可以看到我们有一个顶级的 `state.api` slice ，正如商店设置中所预期的那样。里面有一个叫做 “Query” 的部分，它目前有两个项目。 键 `getPosts(undefined)` 表示我们使用 `getPosts` 请求接口发出的请求的元数据和响应内容。 同样，键 `getPost('abcd1234')` 是针对我们刚刚为这篇文章提出的特定请求。
 
-RTK Query 为每个唯一的端点 + 参数组合创建一个 “cache key”，并分别存储每个 cache key 的结果。这意味着**你可以多次使用同一个 Query  hooks ，传递不同的查询参数，每个结果将单独缓存在 Redux 存储中**。
+RTK Query 为每个唯一的请求接口 + 参数组合创建一个 “cache key”，并分别存储每个 cache key 的结果。这意味着**你可以多次使用同一个 Query  hooks ，传递不同的查询参数，每个结果将单独缓存在 Redux 存储中**。
 
 还需要注意的是**查询参数必须是 _单一_ 值！**如果需要传递多个参数，则必须传递一个包含多个字段的对象（与`createAsyncThunk`完全相同）。 RTK Query 将对字段进行浅稳定比较，如果其中任何一个发生更改，则重新获取数据。
 
-请注意，左侧列表中的操作名称更加通用且描述性更少：`api/executeQuery/fulfilled`，而不是`posts/fetchPosts/fulfilled`。 这是使用附加抽象层的权衡。 各个动作确实包含在 “action.meta.arg.endpointName” 下的特定端点名称，但它在 action 历史列表中并不容易查看。
+请注意，左侧列表中的操作名称更加通用且描述性更少：`api/executeQuery/fulfilled`，而不是`posts/fetchPosts/fulfilled`。 这是使用附加抽象层的权衡。 各个动作确实包含在 “action.meta.arg.endpointName” 下的特定请求接口名称，但它在 action 历史列表中并不容易查看。
 
 :::tip
 
-Redux 团队正在为 Redux DevTools 开发一个新的 RTK Query 视图，它将专门以更可用的格式显示 RTK Query 数据。 这包括每个端点和缓存结果的信息、查询时间的统计信息等等。 这将在不久的将来添加到 DevTools 扩展中。 有关预览，请参阅：
+Redux 团队正在为 Redux DevTools 开发一个新的 RTK Query 视图，它将专门以更可用的格式显示 RTK Query 数据。 这包括每个请求接口和缓存结果的信息、查询时间的统计信息等等。 这将在不久的将来添加到 DevTools 扩展中。 有关预览，请参阅：
 
 - [Redux DevTools #750: Add RTK Query-Inspector monitor](https://github.com/reduxjs/redux-devtools/pull/750)
 - [RTK Query Monitor preview demo](https://rtk-query-monitor-demo.netlify.app/)
@@ -458,13 +458,13 @@ Redux 团队正在为 Redux DevTools 开发一个新的 RTK Query 视图，它�
 
 ## 创建带有 Mutations 的帖子
 
-我们已经看到了如何通过定义查询端点从服务器获取数据，但是向服务器发送更新呢？
+我们已经看到了如何通过定义查询请求接口从服务器获取数据，但是向服务器发送更新呢？
 
-RTK Query 让我们定义 **mutation 端点** 来更新服务器上的数据。让我们添加一个可以让我们添加新帖子的 Mutation。
+RTK Query 让我们定义 **mutation 请求接口** 来更新服务器上的数据。让我们添加一个可以让我们添加新帖子的 Mutation。
 
-### 添加新的 Mutations 后端点
+### 添加新的 Mutations 后请求接口
 
-添加 Mutation 端点与添加查询端点非常相似。 最大的不同是我们使用 `builder.mutation()` 而不是 `builder.query()` 来定义端点。 此外，我们现在需要将 HTTP 方法更改为“POST”请求，并且我们还必须提供请求的正文。
+添加 Mutation 请求接口与添加查询请求接口非常相似。 最大的不同是我们使用 `builder.mutation()` 而不是 `builder.query()` 来定义请求接口。 此外，我们现在需要将 HTTP 方法更改为“POST”请求，并且我们还必须提供请求的正文。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -500,7 +500,7 @@ export const {
 
 这里我们的 `query` 选项返回一个包含 `{url, method, body}` 的对象。 由于我们使用 `fetchBaseQuery` 来发出请求，`body` 字段将自动为我们进行 JSON 序列化。
 
-与查询端点一样，API slice 会自动为 Mutation 端点生成一个 React hooks - 在本例中为 `useAddNewPostMutation`。
+与查询请求接口一样，API slice 会自动为 Mutation 请求接口生成一个 React hooks - 在本例中为 `useAddNewPostMutation`。
 
 ### 在组件中使用 Mutation Hooks
 
@@ -565,7 +565,7 @@ Mutation hooks 返回一个包含两个值的数组：
 
 ### 手动重新获取帖子
 
-第一个选项是手动强制 RTK Query 重新获取给定端点的数据。Query hooks 结果对象包含一个 “refetch” 函数，我们可以调用它来强制重新获取。 我们可以暂时将“重新获取帖子”按钮添加到`<PostsList>`，并在添加新帖子后单击该按钮。
+第一个选项是手动强制 RTK Query 重新获取给定请求接口的数据。Query hooks 结果对象包含一个 “refetch” 函数，我们可以调用它来强制重新获取。 我们可以暂时将“重新获取帖子”按钮添加到`<PostsList>`，并在添加新帖子后单击该按钮。
 
 此外，之前我们看到 Query  hooks 有一个 `isLoading` 标志，如果这是第一个数据请求，则为 `true`，以及一个 `isFetching` 标志，当 _任意_ 数据请求正在进行时为`true` . 我们可以查看 `isFetching` 标志，并在重新获取过程中再次用加载微调器替换整个帖子列表。 但是，这可能有点烦人，而且 - 我们已经拥有所有这些帖子，为什么要完全隐藏它们？
 
@@ -636,15 +636,15 @@ export const PostsList = () => {
 
 我们知道我们的服务器拥有所有帖子的完整列表，包括我们刚刚添加的帖子。 理想情况下，我们希望我们的应用程序在 Mutation 请求完成后自动重新获取更新的帖子列表。 这样我们就知道我们的客户端缓存数据与服务器所拥有的数据是同步的。
 
-**RTK Query 让我们定义查询和 mutations 之间的关系，以启用自动数据重新获取，使用标签**。标签是一个字符串或小对象，可让你命名某些类型的数据和缓存的 _无效_ 部分。当缓存标签失效时，RTK Query 将自动重新获取标记有该标签的端点。
+**RTK Query 让我们定义查询和 mutations 之间的关系，以启用自动数据重新获取，使用标签**。标签是一个字符串或小对象，可让你命名某些类型的数据和缓存的 _无效_ 部分。当缓存标签失效时，RTK Query 将自动重新获取标记有该标签的请求接口。
 
 基本标签使用需要向我们的 API slice 添加三条信息：
 
 - API slice 对象中的根 `tagTypes` 字段，声明数据类型的字符串标签名称数组，例如 `'Post'`
-- 查询端点中的 “providesTags” 数组，列出了一组描述该查询中数据的标签
-- Mutation 端点中的“invalidatesTags”数组，列出了每次 Mutation 运行时失效的一组标签
+- 查询请求接口中的 “providesTags” 数组，列出了一组描述该查询中数据的标签
+- Mutation 请求接口中的“invalidatesTags”数组，列出了每次 Mutation 运行时失效的一组标签
 
-我们可以在 API slice 中添加一个名为 `'Post'` 的标签，让我们在添加新帖子时自动重新获取 `getPosts` 端点：
+我们可以在 API slice 中添加一个名为 `'Post'` 的标签，让我们在添加新帖子时自动重新获取 `getPosts` 请求接口：
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -676,7 +676,7 @@ export const apiSlice = createApi({
 
 这就是我们所需要的！ 现在，如果我们单击 “Save Post”，你应该会看到 `<PostsList>` 组件在几秒钟后自动变灰，然后在顶部重新渲染新添加的帖子。
 
-请注意，这里的文字字符串 `'Post'` 没有什么特别之处。 我们可以称它为“Fred”、“qwerty”或其他任何名称。 它只需要在每个字段中使用相同的字符串，以便 RTK Query 知道“当发生这种 Mutation 时，使列出相同标签字符串的所有端点无效”。
+请注意，这里的文字字符串 `'Post'` 没有什么特别之处。 我们可以称它为“Fred”、“qwerty”或其他任何名称。 它只需要在每个字段中使用相同的字符串，以便 RTK Query 知道“当发生这种 Mutation 时，使列出相同标签字符串的所有请求接口无效”。
 
 ## 你的所学
 
@@ -697,12 +697,12 @@ export const apiSlice = createApi({
   - RTK Query 建立在 Redux 中使用的相同模式之上，例如异步 thunk
 - **RTK Query 对每个应用程序使用单个 “API slice”，使用 `createApi` 定义**
   - RTK Query 提供与 UI 无关和特定于 React 的 `createApi` 版本
-  - API slice 为不同的服务器操作定义了多个“端点”
+  - API slice 为不同的服务器操作定义了多个“请求接口”
   - 如果使用 React 集成，API slice 包括自动生成的 React  hooks 
-- **查询端点允许从服务器获取和缓存数据**
+- **查询请求接口允许从服务器获取和缓存数据**
   - Query Hooks 返回一个 “data” 值，以及加载状态标志
   - 查询可以手动重新获取，或者使用标签自动重新获取缓存失效
-- **Mutation 端点允许更新服务器上的数据**
+- **Mutation 请求接口允许更新服务器上的数据**
   - Mutation  hooks 返回一个发送更新请求的“触发”函数，以及加载状态
   - 触发函数返回一个可以解包并等待的 Promise
 

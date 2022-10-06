@@ -646,7 +646,7 @@ const usersSlice = createSlice({
 
 export default usersSlice.reducer
 ```
-你可能已经注意到，这一次 case reducer 根本没有使用 `state` 变量。相反，我们直接返回 `action.payload`。Immer 让我们以两种方式更新状态：要么 _mutating_ 现有状态值，要么 _returning_ 一个新结果。如果我们返回一个新值，它将用我们返回的任何内容完全替换现有状态。（请注意，如果你想手动返回一个新值，则由你编写任何可能需要的不可变更新逻辑。）
+你可能已经注意到，这一次 case reducer 根本没有使用 `state` 变量。相反，我们直接返回 `action.payload`。Immer 让我们以两种方式更新状态：要么 _mutate_ 现有状态值，要么 _return_ 一个新结果。如果我们返回一个新值，它将用我们返回的任何内容完全替换现有状态。（请注意，如果你想手动返回一个新值，则由你编写任何可能需要的不可变更新逻辑。）
 
 在这种情况下，初始状态是一个空数组，我们可能可以使用 state.push(...action.payload) 来改变它。但是，在例子中，我们真的想用服务器返回的任何内容替换用户列表，这样可以避免意外复制状态中的用户列表。
 
@@ -659,7 +659,7 @@ export default usersSlice.reducer
 我们只需要获取一次用户列表，我们希望在应用程序启动时就完成。我们可以在我们的 `index.js` 文件中做到这一点，并直接 dispatch `fetchUsers` thunk，因为我们在那里有 `store`：
 
 ```js title="index.js"
-// omit other imports
+// 忽略部分依赖
 
 // highlight-next-line
 import { fetchUsers } from './features/users/usersSlice'
@@ -667,7 +667,7 @@ import { fetchUsers } from './features/users/usersSlice'
 import { worker } from './api/server'
 
 async function main() {
-  // Start our mock API server
+  // 启动 mock API server
 
   await worker.start({ onUnhandledRequest: 'bypass' })
 
