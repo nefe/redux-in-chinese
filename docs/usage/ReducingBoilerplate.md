@@ -1,12 +1,11 @@
 ---
 id: reducing-boilerplate
 title: 减少样板代码
-hide_title: false
 ---
 
 # 减少样板代码
 
-Redux 很大部分 [受到 Flux 的启发](../understanding/history-and-design/PriorArt.md)，而最常见的关于 Flux 的抱怨是必须写一大堆的样板代码。在这章中，我们将考虑 Redux 如何根据个人风格，团队偏好，长期可维护性等自由决定代码的繁复程度。
+Redux 很大部分 [受到 Flux 的启发](../understanding/history-and-design/PriorArt.md)，而最常见的关于 Flux 的抱怨是必须写一大堆的样板代码。在这章中，我们将考虑 Redux 如何根据个人风格，团队偏好，长期可维护性等来自由决定代码的详细繁复程度。
 
 ## Actions
 
@@ -32,9 +31,9 @@ const REMOVE_TODO = 'REMOVE_TODO'
 const LOAD_ARTICLE = 'LOAD_ARTICLE'
 ```
 
-这么做的优势是什么？**人们通常认为常量不是必要的，这句话对于小项目也许正确。** 对于大的项目，将 action types 定义为常量有如下好处：
+这么做的优势是什么？**人们通常认为常量不是必要的，这句话对于小项目也许正确。** 但对于大的项目，将 action types 定义为常量有如下好处：
 
-- 帮助维护命名一致性，因为所有的 action type 汇总在同一位置。
+- 它有助于保持命名一致，因为所有的 action type 汇总在同一位置。
 - 有时，在开发一个新功能之前你想看到所有现存的 actions 。而你的团队里可能已经有人添加了你所需要的 action，而你并不知道。
 - Action types 列表在 Pull Request 中能查到所有添加，删除，修改的记录。这能帮助团队中的所有人及时追踪新功能的范围与实现。
 - 如果你在 import 一个 Action 常量的时候拼写错了，你会得到 `undefined` 。在 dispatch 这个 action 的时候，Redux 会立即抛出这个错误，你也会马上发现错误。
@@ -77,7 +76,7 @@ import { addTodo } from './actionCreators'
 dispatch(addTodo('Use Redux'))
 ```
 
-Action creators 总被当作样板代码受到批评。好吧，其实你并不非得把他们写出来！**如果你觉得更适合你的项目，你可以选用对象字面量** 然而，你应该知道写 action creators 是存在某种优势的。
+Action creators 总被当作样板代码受到批评。好吧，其实你并不非得把他们写出来！**如果你觉得更适合你的项目，你可以选用对象字面量** 但是，你应该知道写 action creators 是存在某些好处的。
 
 假设有个设计师看完我们的原型之后回来说，我们最多只允许三个 todo 。我们可以使用 [redux-thunk](https://github.com/gaearon/redux-thunk) 中间件，并添加一个提前退出，把我们的 action creator 重写成回调形式：
 
@@ -106,7 +105,7 @@ export function addTodo(text) {
 
 ### Action Creators 生成器
 
-某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 常量。这个想法是说你不需要同时定义 `ADD_TODO` 常量和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 常量，但他们是隐式生成的、间接级，会造成混乱。因此我们建议直接清晰地创建 action type 常量。
+某些框架如 [Flummox](https://github.com/acdlite/flummox) 自动从 action creator 函数定义生成 action type 常量。这个想法是说你不需要同时定义 `ADD_TODO` 常量和 `addTodo()` action creator 。这样的方法在底层也生成了 action type 常量，但他们是隐式生成的、因此它是一种间接级别，可能会引起混淆。因此我们建议直接清晰地创建 action type 常量。
 
 写简单的 action creator 很容易让人厌烦，且往往最终生成多余的样板代码：
 
@@ -204,7 +203,7 @@ import {
 
 class Posts extends Component {
   loadData(userId) {
-    // 调用 React Redux `connect()` 注入的 props ：
+    // 通过 React Redux `connect()` 调用注入到 props 中：
     const { dispatch, posts } = this.props
 
     if (posts[userId]) {
@@ -252,7 +251,7 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-然而，不久就需要再来一遍，因为不同的 components 从同样的 API 端点请求数据。而且我们想要在多个 components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
+但是，这很快就会重复，因为不同的 components 从相同的 API 端点请求数据。而且我们想要在多个 components 中重用一些逻辑（比如，当缓存数据有效的时候提前退出）。
 
 **中间件让我们能写表达更清晰的、潜在的异步 action creators。** 它允许我们 dispatch 普通对象之外的东西，并且解释它们的值。比如，中间件能 “捕捉” 到已经 dispatch 的 Promises 并把他们变为一对请求和成功/失败的 action.
 
@@ -364,7 +363,7 @@ function callAPIMiddleware({ dispatch, getState }) {
     const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
 
     if (!types) {
-      // Normal action: pass it on
+      // 正常 action: 传下去
       return next(action)
     }
 
@@ -530,6 +529,6 @@ function createReducer(initialState, handlers) {
 }
 ```
 
-不难对吧？鉴于写法多种多样，Redux 没有默认提供这样的辅助函数。可能你想要自动地将普通 JS 对象变成 Immutable 对象，以填满服务器状态的对象数据。可能你想合并返回状态和当前状态。有多种多样的方法来 “获取所有” handler，具体怎么做则取决于项目中你和你的团队的约定。
+这并不难对吧？鉴于写法多种多样，Redux 没有默认提供这样的辅助函数。可能你想要自动地将普通 JS 对象变成 Immutable 对象，以填满服务器状态的对象数据。可能你想合并返回状态和当前状态。有多种多样的方法来 “获取所有” handler，具体怎么做则取决于项目中你和你的团队的约定。
 
 Redux reducer 的 API 是 `(state, action) => newState`，但是怎么创建这些 reducers 由你来定。
