@@ -1,6 +1,6 @@
 ---
-id: 代码结构
-title: 代码结构
+id: code-structure
+title: Code Structure
 hide_title: false
 ---
 
