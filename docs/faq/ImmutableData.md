@@ -23,7 +23,7 @@ hide_title: false
   - [不变性如何使浅检查能够检测对象改变？](#how-does-immutability-enable-a-shallow-check-to-detect-object-mutations)
   - [reducer 中的不变性如何导致组件不必要地渲染？](#how-can-immutability-in-your-reducers-cause-components-to-render-unnecessarily)
   - [mapStateToProps 中的不变性如何导致组件不必要地渲染？](#how-can-immutability-in-mapstatetoprops-cause-components-to-render-unnecessarily)
-- [有哪些方法可以处理数据不变性？ 我必须使用 Immer 吗？](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
+- [有哪些方法可以处理数据不变性？我必须使用 Immer 吗？](#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
 - [使用 JavaScript 进行不可变操作有什么问题？](#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 
 ## 不变性有什么好处？
@@ -43,7 +43,7 @@ hide_title: false
 
 ## 为什么 Redux 需要不可变性？
 
-- Redux 和 React-Redux 都使用 [浅相等检查](#how-do-shallow-and-deep-equality-checking-differ)。 特别是： - Redux 的 `combineReducers` 实用程序 [浅检查引用更改]（#how-does-redux-use-shallow-equality-checking）由它调用的 reducer 引起。 - React-Redux 的 `connect` 方法生成 [浅检查对根状态的引用更改]（#how-does-react-redux-use-shallow-equality-checking）的组件，以及来自 `mapStateToProps` 函数的返回值看看被包装的组件是否真的需要重新渲染。这样的[浅检查需要不变性]。（#why-will-shallow-equality-checking-not-work-with-mutable-objects）才能正常工作。
+- Redux 和 React-Redux 都使用 [浅相等检查](#how-do-shallow-and-deep-equality-checking-differ)。特别是： - Redux 的 `combineReducers` 实用程序 [浅检查引用更改]（#how-does-redux-use-shallow-equality-checking）由它调用的 reducer 引起。- React-Redux 的 `connect` 方法生成 [浅检查对根状态的引用更改]（#how-does-react-redux-use-shallow-equality-checking）的组件，以及来自 `mapStateToProps` 函数的返回值看看被包装的组件是否真的需要重新渲染。这样的[浅检查需要不变性]。（#why-will-shallow-equality-checking-not-work-with-mutable-objects）才能正常工作。
 - 不可变的数据管理最终使数据处理更安全。
 - 时间旅行调试要求 reducer 是没有副作用的纯函数，这样你就可以正确地在不同的 state 之间跳转。
 
@@ -102,17 +102,17 @@ where:
 - 键 `todos` 和 `counter` 分别指向一个单独的 state slice；
 - 值 `myTodosReducer` 和 `myCounterReducer` 是 reducer 函数，每个函数都作用于由相应键标识的 state slice。
 
-`combineReducers` 遍历每个键/值对。 对于每次迭代，它：
+`combineReducers` 遍历每个键/值对。对于每次迭代，它：
 
 - 创建对每个键所引用的当前 state slice 的引用；
 - 调用适当的 reducer 并将 slice 传递给它；
 - 创建对 reducer 返回的可能改变的 state slice 的引用。
 
-随着迭代的继续，`combineReducers` 将构造一个新的 state 对象，其中包含从每个 reducer 返回的 state slice。 这个新的 state 对象可能与当前 state 对象不同，也可能不同。 正是在这里，`combineReducers` 使用浅相等检查来确定 state 是否已更改。
+随着迭代的继续，`combineReducers` 将构造一个新的 state 对象，其中包含从每个 reducer 返回的 state slice。这个新的 state 对象可能与当前 state 对象不同，也可能不同。正是在这里，`combineReducers` 使用浅相等检查来确定 state 是否已更改。
 
-具体来说，在迭代的每个阶段，`combineReducers` 对当前 state slice 和从 reducer 返回的 state slice 执行浅相等检查。 如果 reducer 返回一个新对象，浅相等检查将失败，并且 `combineReducers` 会将 `hasChanged` 标志设置为 true。
+具体来说，在迭代的每个阶段，`combineReducers` 对当前 state slice 和从 reducer 返回的 state slice 执行浅相等检查。如果 reducer 返回一个新对象，浅相等检查将失败，并且 `combineReducers` 会将 `hasChanged` 标志设置为 true。
 
-迭代完成后，`combineReducers` 将检查 `hasChanged` 标志的 state。 如果为真，则返回新构造的 state 对象。 如果为 false，则返回 _current_ state 对象。
+迭代完成后，`combineReducers` 将检查 `hasChanged` 标志的 state。如果为真，则返回新构造的 state 对象。如果为 false，则返回 _current_ state 对象。
 
 这一点值得强调：_如果 reducer 都返回传递给它们的相同 `state` 对象，那么 `combineReducers` 将返回 *current* 根 state 对象，而不是新更新的。_
 
@@ -121,7 +121,7 @@ where:
 **文档**
 
 - [API: combineReducers](../api/combineReducers.md)
-- [Redux FAQ - 如何在两个 reducer 之间共享 state？ 我必须使用 “combineReducers” 吗？](./Reducers.md#reducers-share-state)
+- [Redux FAQ - 如何在两个 reducer 之间共享 state？我必须使用 “combineReducers” 吗？](./Reducers.md#reducers-share-state)
 
 **Video**
 
@@ -234,7 +234,7 @@ export default connect(mapStateToProps)(TodoApp)
 
 如果该对象是可变的，则不能使用浅相等检查来检测函数是否改变了传递给它的对象。
 
-这是因为引用同一个对象的两个变量 _总是_ 相等，无论对象的值是否改变，因为它们都引用同一个对象。 因此，以下将始终返回 true：
+这是因为引用同一个对象的两个变量 _总是_ 相等，无论对象的值是否改变，因为它们都引用同一个对象。因此，以下将始终返回 true：
 
 ```js
 function mutateObj(obj) {
@@ -265,7 +265,7 @@ param === returnVal
 
 如果是这样，`combineReducers` 执行的浅相等检查将始终通过，因为 reducer 返回的 state slice 的值可能已经发生了变化，但对象本身没有 - 它仍然是传递给 reducer。
 
-因此，`combineReducers` 不会设置它的 `hasChanged` 标志，即使 state 已经改变。 如果没有其他 reducer 返回一个新的、更新的 state slice，`hasChanged` 标志将保持设置为 false，导致 `combineReducers` 返回 _existing_ 根 state 对象。
+因此，`combineReducers` 不会设置它的 `hasChanged` 标志，即使 state 已经改变。如果没有其他 reducer 返回一个新的、更新的 state slice，`hasChanged` 标志将保持设置为 false，导致 `combineReducers` 返回 _existing_ 根 state 对象。
 
 store 仍然会使用根 state 的新值进行更新，但是由于根 state 对象本身仍然是同一个对象，绑定到 Redux 的库，例如 React-Redux，将不会意识到 state 的变化，并且 所以不会触发包装组件的重新渲染。
 
@@ -354,7 +354,7 @@ a.userRecord === b.userRecord
 
 当你改变副本时这完全没问题，但是在 reducer 的上下文中，如果你返回一个 _hasn't_ 被改变的副本，Redux 的 `combineReducers` 函数仍然会认为 state 需要更新，因为你正在返回与传入的 state slice 对象完全不同的对象。
 
-然后，`combineReducers` 会将这个新的根 state 对象返回给 store。 新对象将具有与当前根 state 对象相同的值，但由于它是不同的对象，它将导致存储更新，最终将导致所有连接的组件不必要地重新渲染。
+然后，`combineReducers` 会将这个新的根 state 对象返回给 store。新对象将具有与当前根 state 对象相同的值，但由于它是不同的对象，它将导致存储更新，最终将导致所有连接的组件不必要地重新渲染。
 
 为了防止这种情况发生，你必须 _总是返回传递给 reducer 的 state slice 对象，如果 reducer 没有改变 state。_
 
@@ -424,9 +424,9 @@ a.visibleToDos === b.visibleToDos
 
 ## 有哪些方法可以处理数据不变性？我必须使用 Immer 吗？
 
-你不需要将 Immer 与 Redux 一起使用。 如果编写正确，纯 JavaScript 完全能够提供不可变性，而无需使用以不可变为中心的库。
+你不需要将 Immer 与 Redux 一起使用。如果编写正确，纯 JavaScript 完全能够提供不可变性，而无需使用以不可变为中心的库。
 
-然而，用 JavaScript 保证不变性是很困难的，而且很容易意外地改变一个对象，导致你的应用程序中的错误非常难以定位。 因此，使用 Immer 等不可变更新实用程序库可以显着提高应用程序的可靠性，并使应用程序的开发更加容易。
+然而，用 JavaScript 保证不变性是很困难的，而且很容易意外地改变一个对象，导致你的应用程序中的错误非常难以定位。因此，使用 Immer 等不可变更新实用程序库可以显着提高应用程序的可靠性，并使应用程序的开发更加容易。
 
 #### 更多信息
 
@@ -441,7 +441,7 @@ JavaScript 从未被设计为提供有保证的不可变操作。因此，如果
 
 ### 意外地改变对象
 
-使用 JavaScript，你可能很容易意外地改变一个对象（例如 Redux state 树）而没有意识到。 例如，更新深度嵌套的属性、为对象创建新的 _reference_ 而不是新对象，或者执行浅拷贝而不是深拷贝，都可能导致无意中的对象改变，甚至可能使最有经验的 JavaScript 程序员绊倒。
+使用 JavaScript，你可能很容易意外地改变一个对象（例如 Redux state 树）而没有意识到。例如，更新深度嵌套的属性、为对象创建新的 _reference_ 而不是新对象，或者执行浅拷贝而不是深拷贝，都可能导致无意中的对象改变，甚至可能使最有经验的 JavaScript 程序员绊倒。
 
 为避免这些问题，请确保遵循推荐的 [ES6 的不可变更新模式](../recipes/structuring-reducers/ImmutableUpdatePatterns.md)。
 

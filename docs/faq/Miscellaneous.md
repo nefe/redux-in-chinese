@@ -4,14 +4,14 @@ title: Miscellaneous
 hide_title: false
 ---
 
-# Redux FAQ: 各种各样的
+# Redux FAQ: 其他
 
 ## 目录
 
 - [有没有更大的、“真正的” Redux 项目？](#are-there-any-larger-real-redux-projects)
 - [如何在 Redux 中实现身份验证？](#how-can-i-implement-authentication-in-redux)
 
-## 各种各样的
+## 其他
 
 ### 有没有更大的、“真正的” Redux 项目？
 
@@ -37,13 +37,13 @@ hide_title: false
 
 ### 如何在 Redux 中实现身份验证？
 
-身份验证对于任何实际应用程序都是必不可少的。在进行身份验证时，你必须记住，组织应用程序的方式不会发生任何变化，并且你应该以与任何其他功能相同的方式实现身份验证。 它相对简单：
+身份验证对于任何实际应用程序都是必不可少的。在进行身份验证时，你必须记住，组织应用程序的方式不会发生任何变化，并且你应该以与任何其他功能相同的方式实现身份验证。它相对简单：
 
 1. 为 `LOGIN_SUCCESS`、`LOGIN_FAILURE` 等创建动作常量。
 
 2. 创建将凭据、表示身份验证是否成功的标志、令牌或错误消息作为有效负载的操作创建者。
 
-3. 使用 Redux Thunk middleware 或你认为适合的任何 middleware 创建异步 action creator，以向 API 发起网络请求，如果凭据有效，则返回令牌。 然后将令牌保存在本地 store 中，或者如果失败则向用户显示响应。 你可以在上一步中编写的 action creator 中执行这些副作用。
+3. 使用 Redux Thunk middleware 或你认为适合的任何 middleware 创建异步 action creator，以向 API 发起网络请求，如果凭据有效，则返回令牌。然后将令牌保存在本地 store 中，或者如果失败则向用户显示响应。你可以在上一步中编写的 action creator 中执行这些副作用。
 
 4. 创建一个 reducer，为每个可能的身份验证情况（`LOGIN_SUCCESS`、`LOGIN_FAILURE`等）返回下一个 state。
 

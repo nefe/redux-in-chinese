@@ -4,15 +4,15 @@ title: General
 hide_title: false
 ---
 
-# Redux FAQ: 通用的
+# Redux FAQ: 常见问题
 
 ## 我应该什么时候学习 Redux？
 
-对于 JavaScript 开发人员来说，学习什么可能是一个压倒性的问题。可以通过你在工作中发现的问题并专注于一次学习一种知识来缩小选择范围。Redux 是一种用于管理应用程序状态的模式。 如果你在状态管理方面没有问题，你可能对于 Redux 的好处更难理解。一些 UI 库（如 React）有自己的状态管理系统。 如果你正在使用其中一个库，特别是如果刚刚学习使用它们，我们鼓励你首先了解该内置系统的功能。 这可能是你构建应用程序所需的全部内容。 如果你的应用程序变得很复杂以至于你对状态存储在哪里或状态如何变化感到困惑，那么现在是学习 Redux 的好时机。
+对于 JavaScript 开发人员来说，学习什么可能是一个压倒性的问题。可以通过你在工作中发现的问题并专注于一次学习一种知识来缩小选择范围。Redux 是一种用于管理应用程序状态的模式。如果你在状态管理方面没有问题，你可能对于 Redux 的好处更难理解。一些 UI 库（如 React）有自己的状态管理系统。如果你正在使用其中一个库，特别是如果刚刚学习使用它们，我们鼓励你首先了解该内置系统的功能。这可能是你构建应用程序所需的全部内容。如果你的应用程序变得很复杂以至于你对状态存储在哪里或状态如何变化感到困惑，那么现在是学习 Redux 的好时机。
 
 :::tip
 
-**我们建议大多数新学习者应该先专注于学习 React，等到熟悉 React 后再学习 Redux**。 这样，一次学习的新概念就更少了，并且更清楚哪些概念是 React 的一部分，哪些概念是 Redux 的一部分。 你还将更好地了解如何将 Redux 用于 React 应用程序，以及 Redux 为何有用。
+**我们建议大多数新学习者应该先专注于学习 React，等到熟悉 React 后再学习 Redux**。这样，一次学习的新概念就更少了，并且更清楚哪些概念是 React 的一部分，哪些概念是 Redux 的一部分。你还将更好地了解如何将 Redux 用于 React 应用程序，以及 Redux 为何有用。
 
 :::
 
@@ -36,13 +36,13 @@ hide_title: false
 
 ## 我什么时候应该使用 Redux？
 
-**并非所有应用都需要 Redux。 了解你正在构建的应用程序类型、需要解决的问题类型以及哪些工具可以最好地解决你面临的问题非常重要。**
+**并非所有应用都需要 Redux。了解你正在构建的应用程序类型、需要解决的问题类型以及哪些工具可以最好地解决你面临的问题非常重要。**
 
-Redux 可帮助你处理共享状态管理，但与任何工具一样，它也需要权衡取舍。它并非旨在成为编写代码的最短或最快方式。它旨在通过可预测的行为来帮助回答“某部分状态何时发生变化，数据来自何处？”的问题。有更多的概念要学习，也有更多的代码要编写。 它还为你的代码添加了一些间接性，并要求你遵循某些限制。这是短期和长期生产力之间的权衡。
+Redux 可帮助你处理共享状态管理，但与任何工具一样，它也需要权衡取舍。它并非旨在成为编写代码的最短或最快方式。它旨在通过可预测的行为来帮助回答“某部分状态何时发生变化，数据来自何处？”的问题。有更多的概念要学习，也有更多的代码要编写。它还为你的代码添加了一些间接性，并要求你遵循某些限制。这是短期和长期生产力之间的权衡。
 
 正如 React 的早期贡献者之一 Pete Hunt 所说：
 
-> 你会知道何时需要 Flux。 如果你不确定你是否需要它，你就不需要它。
+> 你会知道何时需要 Flux。如果你不确定你是否需要它，你就不需要它。
 
 同样，Redux 的创建者之一 Dan Abramov 说：
 
@@ -63,7 +63,7 @@ Redux 可帮助你处理共享状态管理，但与任何工具一样，它也�
 如果你不确定 Redux 是否适合你的应用程序，这些资源会提供更多指导：
 
 - **[何时（以及何时不）接触 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[Redux 之道, 第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- **[Redux 之道，第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[你或许不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
 :::
@@ -79,7 +79,7 @@ Redux 可帮助你处理共享状态管理，但与任何工具一样，它也�
 **文章**
 
 - **[何时（以及何时不）接触 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[Redux 之道, 第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- **[Redux 之道，第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - [你或许不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [Flux 示例](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
 
@@ -101,12 +101,12 @@ Redux 可帮助你处理共享状态管理，但与任何工具一样，它也�
 
 ## Redux 只能与 React 一起使用吗？
 
-Redux 可以用作任何 UI 层的数据存储。 最常见的用法是使用 React 和 React Native，但也有适用于 Angular、Angular 2、Vue、Mithril 等的绑定。 Redux 只是提供了一种订阅机制，任何其他代码都可以使用它。也就是说，当与可以从状态更改推断 UI 更新的声明性视图库结合使用时，它是最有用的，例如 React 或可用的类似库之一。
+Redux 可以用作任何 UI 层的数据存储。最常见的用法是使用 React 和 React Native，但也有适用于 Angular、Angular 2、Vue、Mithril 等的绑定。Redux 只是提供了一种订阅机制，任何其他代码都可以使用它。也就是说，当与可以从状态更改推断 UI 更新的声明性视图库结合使用时，它是最有用的，例如 React 或可用的类似库之一。
 
 ## 我是否需要特定的构建工具才能使用 Redux？
 
-Redux 最初是用 ES6 编写的，并使用 Webpack 和 Babel 转译为 ES5 以用于生产。 无论你的 JavaScript 构建过程如何，你都应该能够使用它。 Redux 还提供了一个 UMD 构建，可以直接使用，而无需任何构建过程。 [counter-vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) 示例演示了基本的 ES5 用法，其中 Redux 包含在 `<script>` 标记中。 正如相关的拉取请求所说：
+Redux 最初是用 ES6 编写的，并使用 Webpack 和 Babel 转译为 ES5 以用于生产。无论你的 JavaScript 构建过程如何，你都应该能够使用它。Redux 还提供了一个 UMD 构建，可以直接使用，而无需任何构建过程。[counter-vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) 示例演示了基本的 ES5 用法，其中 Redux 包含在 `<script>` 标记中。正如相关的拉取请求所说：
 
 > 新的 Counter Vanilla 示例旨在消除 Redux 需要 Webpack、React、热重载、sagas、动作创建者、常量、Babel、npm、CSS 模块、装饰器、流利的拉丁语、Egghead 订阅、PhD 或 超出预期 O.W.L. 等级。
 >
-> 不，它只是 HTML、一些手工的 `<script>` 标签和简单的旧 DOM 操作。 享受它吧！
+> 不，它只是 HTML、一些手工的 `<script>` 标签和简单的旧 DOM 操作。享受它吧！

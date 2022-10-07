@@ -10,7 +10,7 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 ## 目录
 
-- [我的文件结构应该是什么样的？应该如何在项目中对 action creator 和 reducer 进行分组？ selector 应该放在哪里？](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
+- [我的文件结构应该是什么样的？应该如何在项目中对 action creator 和 reducer 进行分组？selector 应该放在哪里？](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
 - [我应该如何在 reducer 和 action creator 之间划分逻辑？“业务逻辑”应该放在哪里？](#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
 - [为什么我应该使用 action creator ？](#why-should-i-use-action-creators)
 - [websockets 和其他持久连接应该在哪里？](#where-should-websockets-and-other-persistent-connections-live)
@@ -41,7 +41,7 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
     - `store.ts`: store 设置
     - `rootReducer.ts`: 根 reducer (可选择的)
     - `App.tsx`: 根 React 组件
-  - `/common`: hooks, 通用组件, utils, 等
+  - `/common`: hooks，通用组件，utils，等
   - `/features`: 包含所有“功能文件夹”
     - `/todos`: 单个功能文件夹
       - `todosSlice.ts`: Redux reducer 逻辑和相关操作
@@ -51,13 +51,13 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 `/common` 包含真正通用和可重用的实用程序和组件。
 
-`/features` 具有包含与特定功能相关的所有功能的文件夹。 在此示例中，`todosSlice.ts` 是一个 “duck” 风格的文件，其中包含对 RTK 的`createSlice()` 函数的调用，并导出切片 reducer 和 action creator。
+`/features` 具有包含与特定功能相关的所有功能的文件夹。在此示例中，`todosSlice.ts` 是一个 “duck” 风格的文件，其中包含对 RTK 的`createSlice()` 函数的调用，并导出切片 reducer 和 action creator。
 
 </DetailedExplanation>
 
 :::
 
-虽然最终如何在磁盘上布置代码并不重要，但重要的是要记住不应孤立地考虑 action 和 reducer。 一个文件夹中定义的 reducer 完全有可能（并且鼓励）响应另一个文件夹中定义的 action。
+虽然最终如何在磁盘上布置代码并不重要，但重要的是要记住不应孤立地考虑 action 和 reducer。一个文件夹中定义的 reducer 完全有可能（并且鼓励）响应另一个文件夹中定义的 action。
 
 #### 更多信息
 
@@ -91,14 +91,14 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 ## 我应该如何在 reducer 和 action creator 之间划分逻辑？“业务逻辑”应该放在哪里？
 
-对于 reducer 或 action creator 中应该包含哪些逻辑，没有一个明确的答案。 一些开发人员更喜欢拥有 “fat” 的 action creator，而 “thin” 的 reducer 只是简单地将 action 中的数据合并到相应的 state 中。 其他人试图强调保持action 尽可能小，并尽量减少在 action creator 使用 `getState()`。 （对于这个问题，其他异步方法，如 sagas 和 observables 属于 “action creator” 类别。）
+对于 reducer 或 action creator 中应该包含哪些逻辑，没有一个明确的答案。一些开发人员更喜欢拥有 “fat” 的 action creator，而 “thin” 的 reducer 只是简单地将 action 中的数据合并到相应的 state 中。其他人试图强调保持action 尽可能小，并尽量减少在 action creator 使用 `getState()`。（对于这个问题，其他异步方法，如 sagas 和 observables 属于 “action creator” 类别。）
 
-将更多逻辑放入 reducer 有几个潜在的好处。 action 类型可能会更语义化和更有意义（例如 `"USER_UPDATED"` 而不是 `"SET_STATE"`）。 此外，在 reducer 中有更多的逻辑意味着更多的功能会受到时间旅行调试的影响。
+将更多逻辑放入 reducer 有几个潜在的好处。action 类型可能会更语义化和更有意义（例如 `"USER_UPDATED"` 而不是 `"SET_STATE"`）。此外，在 reducer 中有更多的逻辑意味着更多的功能会受到时间旅行调试的影响。
 
 这条评论很好地总结了二分法：
 
-> 现在，问题是在 action creator 中放入什么，在 reducer 中放入什么，在 “fat” action 对象和 “thin” action 对象之间进行选择。 如果你把所有的逻辑都放在 action creator 中，你最终会得到基本上声明 state 更新的 “fat” action creator 对象。 Reducers 变得纯粹、傻瓜式、添加这个、删除那个、更新这些功能。 他们将很容易组成。 但是你的业务逻辑并不多。
-> 如果你在 reducer 中加入更多逻辑，你最终会得到漂亮、精简的 action 对象，大部分数据逻辑都在一个地方，但是你的 reducer 更难组合，因为你可能需要来自其他分支的信息。 您最终会得到大型 reducer 或从该州更高层获取额外参数的 reducer。
+> 现在，问题是在 action creator 中放入什么，在 reducer 中放入什么，在 “fat” action 对象和 “thin” action 对象之间进行选择。如果你把所有的逻辑都放在 action creator 中，你最终会得到基本上声明 state 更新的 “fat” action creator 对象。Reducers 变得纯粹、傻瓜式、添加这个、删除那个、更新这些功能。他们将很容易组成。但是你的业务逻辑并不多。
+> 如果你在 reducer 中加入更多逻辑，你最终会得到漂亮、精简的 action 对象，大部分数据逻辑都在一个地方，但是你的 reducer 更难组合，因为你可能需要来自其他分支的信息。您最终会得到大型 reducer 或从该州更高层获取额外参数的 reducer。
 
 :::tip
 
@@ -111,13 +111,13 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 **文档**
 
 - [Style Guide: 在 Reducer 中尽可能多地添加逻辑](../style-guide/style-guide.md#put-as-much-logic-as-possible-in-reducers)
-- [Style Guide: 将 Actions 作为 “Events”, 而不是 “Setters”](../style-guide/style-guide.md#model-actions-as-events-not-setters)
+- [Style Guide: 将 Actions 作为 “Events”，而不是 “Setters”](../style-guide/style-guide.md#model-actions-as-events-not-setters)
 
 **文章**
 
 - [我应该将业务逻辑放在 React/Redux 应用程序的什么位置？](https://medium.com/@jeffbski/where-do-i-put-my-business-logic-in-a-react-redux-application-9253ef91ce1)
 - [如何扩展 React 应用程序](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/)
-- [Redux 之道，第 2 部分 - 实践与哲学。 厚重和轻量的 reducer。](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
+- [Redux 之道，第 2 部分 - 实践与哲学。厚重和轻量的 reducer。](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/#thick-and-thin-reducers)
 
 **讨论**
 
@@ -131,15 +131,15 @@ import { DetailedExplanation } from '../components/DetailedExplanation'
 
 ## 为什么应该使用 action creator？
 
-Redux 不需要 action creator。 您可以以任何最适合您的方式自由创建 action，包括简单地将对象文字传递给 `dispatch`。 action creator从 [Flux 架构](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) 中出现并被 Redux 社区采用，因为它们提供了几个好处。
+Redux 不需要 action creator。您可以以任何最适合您的方式自由创建 action，包括简单地将对象文字传递给 `dispatch`。action creator从 [Flux 架构](https://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#actions-and-actioncreators) 中出现并被 Redux 社区采用，因为它们提供了几个好处。
 
-Action creator 更易于维护。可以在一个地方对 action 进行更新，并在任何地方应用。 保证 action 的所有实例具有相同的状态和相同的默认值。
+Action creator 更易于维护。可以在一个地方对 action 进行更新，并在任何地方应用。保证 action 的所有实例具有相同的状态和相同的默认值。
 
-Action creator 是可测试的。必须手动验证内联 action 的正确性。 与任何函数一样，action creator 的测试可以编写一次并自动运行。
+Action creator 是可测试的。必须手动验证内联 action 的正确性。与任何函数一样，action creator 的测试可以编写一次并自动运行。
 
 Action creator 更容易记录。Action creator 的参数枚举 action 的依赖关系。action 定义的集中化为文档注释提供了一个方便的地方。内联编写 action 时，这些信息更难捕获和交流。
 
-Action creator 是一个更强大的抽象。 创建 action 通常涉及转换数据或发出 AJAX 请求。 Action creator 为这种不同的逻辑提供了统一的接口。 这种抽象释放了一个组件来 dispatch 一个动作，而不会因为该 action 的创建细节而变得复杂。
+Action creator 是一个更强大的抽象。创建 action 通常涉及转换数据或发出 AJAX 请求。Action creator 为这种不同的逻辑提供了统一的接口。这种抽象释放了一个组件来 dispatch 一个动作，而不会因为该 action 的创建细节而变得复杂。
 
 #### 更多信息
 
@@ -157,7 +157,7 @@ Middleware 是 Redux 应用程序中持续连接（如 websockets）的正确位
 
 - Middleware 存在于应用程序的生命周期中
 - 与 store 本身一样，你可能只需要整个应用程序中可以使用的给定连接的单个实例
-- Middleware 可以看到所有 dispatch 的 action 和自己 dispatch 的 action 。 这意味着 middleware 可以采取 dispatch 的 action 并将其转换为通过 websocket 发送的消息，并在通过 websocket 接收到消息时 dispatch 新的 action。
+- Middleware 可以看到所有 dispatch 的 action 和自己 dispatch 的 action 。这意味着 middleware 可以采取 dispatch 的 action 并将其转换为通过 websocket 发送的消息，并在通过 websocket 接收到消息时 dispatch 新的 action。
 - websocket 连接实例不可序列化，因此[它不属于 store state 本身](/faq/organizing-state#organizing-state-non-serializable)
 
 请参阅 [此示例显示 socket middleware 如何 dispatch 和响应 Redux action](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
@@ -170,7 +170,7 @@ Middleware 是 Redux 应用程序中持续连接（如 websockets）的正确位
 
 ## 如何在非组件文件中使用 Redux store？
 
-每个应用程序应该只有一个 Redux store。 这使得它在应用程序架构方面实际上是一个单例。 与 React 一起使用时，通过在根 `<App>` 组件周围渲染 `<Provider store={store}>`，将 store 在运行时注入到组件中，因此只有应用程序设置逻辑需要直接导入 store。
+每个应用程序应该只有一个 Redux store。这使得它在应用程序架构方面实际上是一个单例。与 React 一起使用时，通过在根 `<App>` 组件周围渲染 `<Provider store={store}>`，将 store 在运行时注入到组件中，因此只有应用程序设置逻辑需要直接导入 store。
 
 但是，有时代码库的其他部分也需要与 store 交互。
 
@@ -183,7 +183,7 @@ Middleware 是 Redux 应用程序中持续连接（如 websockets）的正确位
 - 将逻辑编写为 middleware，并在设置时将它们添加到 store 中。
 - 在创建应用程序时将 store 实例注入相关文件。
 
-一个常见的用例是在 Axios 拦截器内部读取 API 授权信息，例如来自 Redux state 的令牌。 拦截器文件需要引用 `store.getState()`，还需要导入API层文件，导致循环导入。
+一个常见的用例是在 Axios 拦截器内部读取 API 授权信息，例如来自 Redux state 的令牌。拦截器文件需要引用 `store.getState()`，还需要导入API层文件，导致循环导入。
 
 您可以从拦截器文件中暴露一个 `injectStore` 函数：
 
