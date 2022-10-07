@@ -21,7 +21,7 @@ sidebar_label: 实现历史撤销重做
 
 - 不存在多个数据模型，只有一个 state 子树需要跟踪。
 - state 已经是 immutable 的，mutation 已经被描述为离散的 action，这已经很接近于撤销堆栈的真实堆栈模型。
-- Reducer `(state, action) => state` 签名使得实现通用的“reducer enhencer”或“高阶 reducer”变得很自然。它们是在保留其签名的同时，使用一些附加功能来增强 reducer 的函数。历史撤销重做就是一个典型场景。
+- Reducer `(state, action) => state` 签名使得实现通用的“reducer enhancer”或“高阶 reducer”变得很自然。它们是在保留其签名的同时，使用一些附加功能来增强 reducer 的函数。历史撤销重做就是一个典型场景。
 
 在本秘诀的第一部分，我们将说明实现撤销重做的用到的一些基本概念。
 
@@ -262,13 +262,13 @@ function undoable(state = initialState, action) {
 
 看起来 reducer 不是正确的抽象方式，但非常接近。
 
-### 了解 Reducer Enhencer
+### 了解 Reducer enhancer
 
-你可能熟悉[高阶函数](https://en.wikipedia.org/wiki/Higher-order_function)。如果使用 React，也许你熟悉[高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750）。下面是应用于 reducer 的同一模式的变体。
+你可能熟悉[高阶函数](https://en.wikipedia.org/wiki/Higher-order_function)。如果使用 React，可能也熟悉[高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750）。下面是应用于 reducer 的同一模式的变体。
 
-_reducer enhencer_ （或者说*高阶 reducer*）是一个接受 reducer 的函数，并返回一个新的能够处理新 action 的 reducer，将其不能理解的 action 的控制权委托给内部 reducer。从技术上讲，这不是一个新模式，[`combineReducers（）`]（../api/combineReducters.md）也是一个 reducer enhencer，因为它接受 reducer 并返回一个新的 reducer。
+_reducer enhancer_ （或者说*高阶 reducer*）作为一个函数，接收 reducer 作为参数并返回一个新的 reducer，这个新的 reducer 可以处理新的 action，或者维护更多的 state，亦或者将它无法处理的 action 委托给原始的 reducer 处理。这不是什么新模式，[`combineReducers()`](../api/combineReducers.md)也是 reducer enhancer，因为它同样接收多个 reducer 并返回一个新的 reducer。
 
-一个不做任何事情的 reducer enhencer 长这样：
+一个不做任何事情的 reducer enhancer 长这样：
 
 ```js
 function doNothingWith(reducer) {
@@ -279,13 +279,13 @@ function doNothingWith(reducer) {
 }
 ```
 
-结合其他 reducer 的 reducer enhencer 可能长这样：
+组合其他 reducer 的 reducer enhancer 可能长这样：
 
 ```js
 function combineReducers(reducers) {
   return function (state = {}, action) {
     return Object.keys(reducers).reduce((nextState, key) => {
-      // 用它管理的状态部分调用每个 reducer
+      // 调用每一个 reducer 并将其管理的部分 state 传给它
       nextState[key] = reducers[key](state[key], action)
       return nextState
     }, {})
@@ -293,20 +293,20 @@ function combineReducers(reducers) {
 }
 ```
 
-### 第二次尝试： 写一个 Reducer enhencer
+### 第二次尝试： 写一个 Reducer enhancer
 
-现在我们对 reducer enhencer 有了更深的了解，我们可以看到这正是 `undoable` 的原因：
+现在我们对 reducer enhancer 有了更深的了解，这正是 `undoable` 的原因：
 
 ```js
 function undoable(reducer) {
-  // 使用空操作调用 reducer 以填充初始状态
+  // 使用一个空 action 调用 reducer 以填充初始状态
   const initialState = {
     past: [],
     present: reducer(undefined, {}),
     future: []
   }
 
-  // 返回处理撤消和重做的还原程序
+  // 返回处理撤消和重做的 reducer
   return function (state = initialState, action) {
     const { past, present, future } = state
 
@@ -343,7 +343,7 @@ function undoable(reducer) {
 }
 ```
 
-现在，我们可以将任何 reducer 包装到 `undoable` reducer enhencer 中，让它对 `UNDO` 和 `REDO` action 做出响应。
+现在，我们可以将任何 reducer 包装到 `undoable` reducer enhancer 中，让它对 `UNDO` 和 `REDO` action 做出响应。
 
 ```js
 // 这是个 reducer
@@ -390,7 +390,7 @@ store.dispatch({
 npm install redux-undo
 ```
 
-安装的包将会提供 `undoable` reducer enhencer。
+安装的包将会提供 `undoable` reducer enhancer。
 
 ### 封装 Reducer
 
