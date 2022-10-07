@@ -7,11 +7,7 @@ hide_title: false
 
 # 初始化 State
 
-主要有两种方法可以用来初始化你的应用的 state 。
-
-1. 可以通过 `createStore` 方法，该方法接受可选的 `preloadedState` 做为其第二个参数；
-
-2. reducer 中 state 参数的默认值为 `undefined` ，修改其默认值也可以用来初始化应用的 state，可以在 reducer 中检查 state 值是否为 `undefined` 从而显式的添加默认值，也可以通过 ES6 中默认参数的语法来添加默认值：`function myReducer(state = someDefaultValue, action)`
+主要有两种方法可以用来初始化你的应用的 state 。通过 `createStore` 方法，该方法接受可选的 `preloadedState` 做为其第二个参数。在 reducer 函数中 state 参数为 `undefined` 时，返回我们指定的初始化值作为默认值。可以通过在 reducer 中检查 state 值是否为 `undefined` 从而显式的添加默认值，或者通过 ES6 中默认参数的语法来添加默认值：`function myReducer(state = someDefaultValue, action)`。
 
 两种初始化 State 的方法会如何相互影响并没有那么直观，不过好在它们相互作用的过程遵守下面的这些明确的规则。
 
@@ -54,7 +50,7 @@ console.log(store.getState()) // 0
 ```
 
 结果我们得到的初始的 state 的值为 0 ，为什么呢？
-因为你传给 `createStore` 的第二个参数是 `undefined`，也就是说你传给 reducer 中的 state 的初始值也是 `undefined` 。当 Redux 初始化时，实际上会触发一个 “dummy” action 来填充 store。当 reducer `counter` 被调用时，由于传入的 `state` 等于 `undefined` ，默认参数生效了。因此 state 的值为设定的默认值 0。
+因为你传给 `createStore` 的第二个参数是 `undefined`，也就是说你传给 reducer 中的 state 的初始值也是 `undefined` 。当 Redux 初始化时，实际上会触发一个 “dummy” action 来填充 state 。当 reducer `counter` 被调用时，由于传入的 `state` 等于 `undefined` ，默认参数生效了。因此 state 的值为设定的默认值 0。
 
 我们来看看另一种不同的场景：
 
@@ -128,4 +124,4 @@ function combined(state = {}, action) {
 
 ## 总结
 
-总结一下，如果你使用 redux 的推荐做法，在 reducer 中给定 state 参数的默认值（最简单的方法是通过 ES6 的默认值语法），你将拥有一个表现良好的组合 reducer。**这个组合 reducer 会优先使用你通过 `preloadedState` 传递来的对应的值，不过就算你没传递或者不存在对应的值，也会使用你设定的默认值。**这种机制非常棒，它提供了设置初始值并注入的途径，也保留了 reducer 设置默认值的能力。加上`combineReducers()` 可以在不同级别上使用，这种模式可以递归的使用。
+总结一下，如果你使用 redux 的推荐做法，在 reducer 中给定 state 参数的默认值（最简单的方法是通过 ES6 的默认值语法），你将拥有一个表现良好的组合 reducer。**这个组合 reducer 会优先使用你通过 `preloadedState` 传递来的对应的值，不过就算你没传递或者不存在对应的值，也会使用你设定的默认值。**这种机制非常棒，它提供了设置初始值并注入的途径，也保留了 reducer 设置默认值的能力。加上 `combineReducers()` 可以在不同级别上使用，这种模式可以递归的使用。
