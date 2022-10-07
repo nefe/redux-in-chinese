@@ -85,7 +85,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-当用户按下“重做”时，我们希望前进到未来一步：
+当用户按下“重做”时，我们希望前进到未来一步状态：
 
 ```js
 {
@@ -97,7 +97,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-最后，如果用户在我们处于撤消堆栈的中间状态时执行操作（例如减少 reducer），我们将放弃现有的未来堆栈：
+最后，如果用户在我们处于撤消堆栈的中间状态时执行操作（例如，减少计数），我们将丢弃现有的未来堆栈：
 
 ```js
 {
@@ -109,7 +109,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-有趣的是，我们是否要保留数字、字符串、数组或对象的撤消堆栈并不重要。结构将始终相同：
+有趣的是，在撤消堆栈中保存数字、字符串、数组或对象并不重要。结构将始终相同：
 
 ```js
 {
@@ -153,7 +153,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-是否保留一段顶级最顶层的历史也取决于我们自己：
+是否保留单个顶层的历史也取决于我们自己：
 
 ```js
 {
@@ -167,7 +167,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-或许多细粒度历史记录，以便用户可以独立撤消和重做其中的操作：
+或者将历史记录划分为多种粒度，以便用户可以独立撤消和重做其中的 action：
 
 ```js
 {
@@ -184,11 +184,11 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-接下来看我们的方法怎么让我们选择撤销重做的粒度
+接下来看我们的方法是怎么选择撤销重做的粒度的
 
 ### 算法设计
 
-无论特定的数据类型如何，撤消历史状态的形状都是相同的：
+无论特定的数据类型如何，撤消历史 state 的形状都是相同的：
 
 ```js
 {
@@ -198,24 +198,24 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-让我们讨论一下操作上述状态形状的算法。我们可以定义两个 action 来操作此状态：`UNDO` 和 `REDO`。在我们的 reducer 中，我们将执行以下步骤来处理这些操作：
+让我们讨论一下操作上述 state 形状的算法。我们可以定义两个 action 来操作此状态：`UNDO` 和 `REDO`。在我们的 reducer 中，我们将执行以下步骤来处理这些操作：
 
 #### 处理撤销
 
 - 从 `past` 移除*最后一个*元素。
-- 把`present` 设为上一步移出的元素。
+- 把上一步移出的元素赋值给 `present`。
 - 把老的 `present` 状态插入到 `future` _开头_。
 
 #### 处理重做
 
 - 从 `future` 中移除*第一个*元素。
-- 把 `present` 设为前一步移出的那个元素。
+- 将前一步移出的那个元素赋值给 `present`。
 - 把老的 `present` 状态插入到 `past` 的*末尾*。
 
 #### 处理其他 action
 
 - 把 `present` 插入到 `past` 的末尾。
-- 把 `present` 设为执行 action 后的新 state。
+- 将执行 action 后的新 state 赋值给 `present`。
 - 清空 `future`。
 
 ### 第一次尝试：编写 Reducer
@@ -257,12 +257,12 @@ function undoable(state = initialState, action) {
 此实现行不通，因为它忽略了三个重要问题：
 
 - 我们从哪里得到初始的 `present` state？我们似乎事先不知道。
-- 对于将 `present` 保存为 `past` 的外部 action，我们在哪里做出响应？
-- 我们如何实际将对 `present` state 的控制委托给定制的 reducer？
+- 执行完外部 action 之后，在什么时候在哪里将 `present` 保存为 `past`？
+- 我们如何实际将对 `present` state 的控制委托给自定义的 reducer？
 
-看起来 reducer 不是正确的抽象，但非常接近。
+看起来 reducer 不是正确的抽象方式，但非常接近。
 
-### 了解 Reducer 的增强功能
+### 了解 Reducer Enhencer
 
 你可能熟悉[高阶函数](https://en.wikipedia.org/wiki/Higher-order_function)。如果使用 React，也许你熟悉[高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750）。下面是应用于 reducer 的同一模式的变体。
 
@@ -295,7 +295,7 @@ function combineReducers(reducers) {
 
 ### 第二次尝试： 写一个 Reducer enhencer
 
-现在我们对 reducer 增强剂有了更深的了解，我们可以看到这正是 `undoable` 的原因：
+现在我们对 reducer enhencer 有了更深的了解，我们可以看到这正是 `undoable` 的原因：
 
 ```js
 function undoable(reducer) {
