@@ -374,11 +374,11 @@ store.dispatch({
 
 有一个重要的问题：记得在检索当前 state 的时候附加上 `.present`。你也可能分别检查 `.past.length` 和 `.future.length` 来决定启用或禁用撤销重做的按钮。
 
-你可能听说过 Redux 受到 [Elm Architecture](https://github.com/evancz/elm-architecture-tutorial/) 的影响。这个例子与 [elm-undo-redo 包](https://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0)非常相似，这并不奇怪。
+你可能听说过 Redux 受到 [Elm 架构](https://github.com/evancz/elm-architecture-tutorial/) 的影响。这个例子与 [elm-undo-redo 包](https://package.elm-lang.org/packages/TheSeamau5/elm-undo-redo/2.0.0)非常相似，这并不奇怪。
 
 ## 使用 Redux Undo
 
-以上都是非常有用的信息，但我们不能直接删除一个库并使用它，而不是自己实现 `undoable` 吗？当然可以！去看 [Redux Undo](https://github.com/omnidan/redux-undo)，这是一个给你的 Redux 树中任意部分提供撤销重做功能的库。
+以上都是非常有用的信息，但是有没有一个库能帮助我们实现 `undoable` 功能，而不是由我们自己编写呢？当然有！去看 [Redux Undo](https://github.com/omnidan/redux-undo)，这是一个给你的 Redux 树中任意部分提供撤销重做功能的库。
 
 在这个部分，你将学习如何让一个小的 “todo list” 应用逻辑支持撤销重做。你可以在 Redux 附带的 [`todos with undo`示例中找到完整源代码](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
@@ -414,8 +414,6 @@ export default undoableTodos
 
 也有 [很多其他选择 options](https://github.com/omnidan/redux-undo#configuration) 用来配置 undoable reducer，比如为撤销或重做的 action 设置特殊的 action type。
 
-Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
-
 注意，`combineReducers()`调用将保持原样，但 `todos` reducer 现在将引用被 Redux Undo 增强的 reducer：
 
 #### `reducers/index.js`
@@ -433,7 +431,7 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-你可能在 reducer 组合层任意级，在 `undoable` 中封装一个或多个 reducer。我们选择封装 `todos` 而不是顶层组合 reducer，这样对于 `visibilityFilter` 的修改就不会被反映在撤销的历史中。
+你可能在 reducer 组合层任意级，在 `undoable` 中封装一个或多个 reducer。我们选择封装 `todos` 而不是顶层组合 reducer，这样对于 `visibilityFilter` 的修改就不会被反应在撤销的历史中。
 
 ### 更新 Selectors
 
@@ -478,7 +476,7 @@ const mapStateToProps = state => {
 
 现在，只需要为“撤消”和“重做”操作添加按钮。
 
-首先为这些按钮创建一个称为 `UndoRedo` 的容器组件。我们不会将演示部分拆分为单独的文件，因为很小：
+首先为这些按钮创建一个称为 `UndoRedo` 的容器组件。由于展示部分非常简单，我们不再需要把它们分离到单独的文件去：
 
 #### `containers/UndoRedo.js`
 
