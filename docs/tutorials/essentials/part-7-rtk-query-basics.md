@@ -54,7 +54,7 @@ RTK Query 从其他开创数据获取解决方案的工具中汲取灵感，例�
 - 由于 Redux Toolkit 与 UI 无关，因此 RTK Query 的功能可以与任何 UI 层一起使用
 - API 请求接口是提前定义的，包括如何从参数生成查询参数和转换响应以进行缓存
 - RTK Query 还可以生成封装整个数据获取过程的 React  hooks ，为组件提供 `data` 和 `isFetching` 字段，并在组件挂载和卸载时管理缓存数据的生命周期
-- RTK Query 提供“缓冲数据项生命周期函数”选项，支持在获取初始数据后通过 websocket 消息流式传输缓存更新等用例
+- RTK Query 提供“缓存数据项生命周期函数”选项，支持在获取初始数据后通过 websocket 消息流式传输缓存更新等用例
 - 我们有从 OpenAPI 和 GraphQL 模式生成 API slice 代码的早期工作示例
 - 最后，RTK Query 完全用 TypeScript 编写，旨在提供出色的 TS 使用体验
 
@@ -90,7 +90,7 @@ RTK Query 将固定的一次性数量添加到应用程序的捆绑包大小。�
 
 RTK Query 中包含的功能可以快速支付增加的包大小，对于大多数有意义的应用程序来说，消除手写数据获取逻辑应该是大小的净改进。
 
-### RTK Query 缓冲的设计思想
+### RTK Query 缓存的设计思想
 
 Redux 一直强调可预测性和显式行为。Redux 没有“魔法”——你应该能够理解应用程序中发生了什么，因为**所有 Redux 逻辑都遵循相同的基本模式，即通过 reducers 调度操作和更新状态**。这确实意味着有时你必须编写更多代码才能使事情发生，但权衡是应该非常清楚数据流和行为是什么。
 
@@ -382,7 +382,7 @@ export const { useGetPostsQuery, useGetPostQuery } = apiSlice
 
 `getPost` 请求接口看起来很像现有的 `getPosts` 请求接口，但 `query` 参数不同。 在这里，`query` 接受一个名为 `postId` 的参数，我们使用该 `postId` 来构造服务器 URL。 这样我们就可以只对一个特定的 `Post` 对象发出服务器请求。
 
-这也会生成一个新的 `useGetPostQuery` h'o'o'k's，因此我们也将其导出。
+这也会生成一个新的 `useGetPostQuery` hooks，因此我们也将其导出。
 
 ### 查询参数和缓存键
 
