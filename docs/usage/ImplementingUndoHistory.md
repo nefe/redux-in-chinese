@@ -13,19 +13,19 @@ sidebar_label: 实现历史撤销重做
 
 :::
 
-传统上，在应用程序中构建撤销和重做功能需要开发人员故意设计。对于经典的 MVC 框架来说，这不是一个容易的问题，因为你需要通过克隆所有相关的模型来跟踪每个过去的状态。此外，你需要注意撤消堆栈，因为用户发起的更改应该是可撤消的。
+以往，在应用程序中实现撤销和重做功能需要开发人员有意设计。对于经典的 MVC 框架来说，这不是一个容易的问题，因为你需要通过克隆所有相关的模型来跟踪每个过去的状态。此外，你需要注意撤消堆栈，因为用户发起的更改应该是可撤消的。
 
 这意味着在 MVC 应用程序中实现 Undo 和 Redo 通常会迫使你重写应用程序的某些部分，以使用特定的数据变化的模式 ，如 [Command](https://en.wikipedia.org/wiki/Command_pattern).
 
-然而，对于 Redux，实现撤销历史记录是一件轻而易举的事。这有三个原因：
+然而，对于 Redux，实现撤销历史记录是一件轻而易举的事。原因有三：
 
-- 没有多个数据模型，只有一个状态子树需要跟踪。
+- 不存在多个数据模型，只有一个状态子树需要跟踪。
 - 状态已经是 immutable 的，mutation 已经被描述为离散的动作，这接近于撤销堆栈的真实模型。
-- Reducer `(state, action) => state` 签名使得实现通用的“reducer 增强器”或“高阶 reducer”变得很自然。它们是在保留其签名的同时，使用一些附加功能来增强 reducer 的函数。撤销历史就是这样一种情况。
+- Reducer `(state, action) => state` 签名使得实现通用的“reducer 增强器”或“高阶 reducer”变得很自然。它们是在保留其签名的同时，使用一些附加功能来增强 reducer 的函数。历史撤销重做就是这种情况。
 
-在本秘诀的第一部分，我们将解释使撤销和重做能够以通用方式实现的基本概念。
+在本秘诀的第一部分，我们将说明如何实现撤销重做的基本概念。
 
-在第二部分中，我们会展示怎么使用 [Redux Undo](https://github.com/omnidan/redux-undo) 这个提供了此功能现成的包。
+在第二部分中，我们会展示怎么使用 [Redux Undo](https://github.com/omnidan/redux-undo) 这个提供了此功能的现成的包。
 
 [![todos-with-undo 的 demo](https://i.imgur.com/lvDFHkH.gif)](https://twitter.com/dan_abramov/status/647038407286390784)
 
@@ -33,7 +33,7 @@ sidebar_label: 实现历史撤销重做
 
 ### State 形状设计
 
-撤销历史记录也是应用程序 state 的一部分，我们不能以不同的方式来处理它。无论 state 的类型随时间而变化，当实现 Undo 和 Redo 时，都希望在不同的时间点跟踪此状态的*历史*。
+撤销历史记录也是应用程序 state 的一部分，我们不能以不同的方式来处理它。无论 state 的类型随时间怎么变化，当实现 Undo 和 Redo 时，都希望在不同的时间点跟踪此状态的*历史*。
 
 例如，计数器应用程序的 state 形状可能如下所示：
 
@@ -85,7 +85,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-当用户按下“重做”时，我们希望回到未来一步：
+当用户按下“重做”时，我们希望前进到未来一步：
 
 ```js
 {
@@ -97,7 +97,7 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-最后，如果用户在我们处于撤消堆栈的中间状态时执行操作（例如减少 reducer），我们将放弃现有的未来：
+最后，如果用户在我们处于撤消堆栈的中间状态时执行操作（例如减少 reducer），我们将放弃现有的未来堆栈：
 
 ```js
 {
@@ -198,19 +198,19 @@ sidebar_label: 实现历史撤销重做
 }
 ```
 
-让我们讨论一下操作上述状态形状的算法。我们可以定义两个操作来操作此状态：`UNDO` 和 `REDO`。在我们的 reducer 中，我们将执行以下步骤来处理这些操作：
+让我们讨论一下操作上述状态形状的算法。我们可以定义两个 action 来操作此状态：`UNDO` 和 `REDO`。在我们的 reducer 中，我们将执行以下步骤来处理这些操作：
 
 #### 处理撤销
 
 - 从 `past` 移除*最后一个*元素。
-- 把`present` 设为上一步一处的元素。
+- 把`present` 设为上一步移出的元素。
 - 把老的 `present` 状态插入到 `future` _开头_。
 
 #### 处理重做
 
 - 从 `future` 中移除*第一个*元素。
-- 把 e `present` 设为前一步移出的那个元素。
-- Insert the old 把老的 `present` 状态插入到 `past` 的*末尾*。
+- 把 `present` 设为前一步移出的那个元素。
+- 把老的 `present` 状态插入到 `past` 的*末尾*。
 
 #### 处理其他 action
 
@@ -264,7 +264,7 @@ function undoable(state = initialState, action) {
 
 ### 了解 Reducer 的增强功能
 
-您可能熟悉[高阶函数](https://en.wikipedia.org/wiki/Higher-order_function)。如果使用 React，您可能熟悉[高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750）。下面是应用于 reducer 的同一模式的变体。
+您可能熟悉[高阶函数](https://en.wikipedia.org/wiki/Higher-order_function)。如果使用 React，您也许熟悉[高阶组件](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750）。下面是应用于 reducer 的同一模式的变体。
 
 _reducer 增强器_ （或者说*高阶 reducer*）是一个接受 reducer 的函数，并返回一个新的能够处理新 action 的 reducer，将其不能理解的 action 的控制权委托给内部 reducer。从技术上讲，这不是一个新模式，[`combineReducers（）`]（../api/combineReducters.md）也是一个 reducer 增强器，因为它接受 reducer 并返回一个新的 reducer。
 
@@ -343,7 +343,7 @@ function undoable(reducer) {
 }
 ```
 
-现在，我们可以将任何 reducer 包装到 `undoable` reducer 增强器中，教它对 `UNDO` 和 `REDO` action 做出响应。
+现在，我们可以将任何 reducer 包装到 `undoable` reducer 增强器中，让它对 `UNDO` 和 `REDO` action 做出响应。
 
 ```js
 // 这是个 reducer
@@ -378,7 +378,7 @@ store.dispatch({
 
 ## 使用 Redux Undo
 
-这都是非常有用的信息，但我们不能直接删除一个库并使用它，而不是自己实现 `undoable` 吗？当然，我们可以！去看 [Redux Undo](https://github.com/omnidan/redux-undo)，这是一个给你的 Redux 树中任意部分提供撤销重做功能的库。
+以上都是非常有用的信息，但我们不能直接删除一个库并使用它，而不是自己实现 `undoable` 吗？当然可以！去看 [Redux Undo](https://github.com/omnidan/redux-undo)，这是一个给你的 Redux 树中任意部分提供撤销重做功能的库。
 
 在这个部分，你将学习如何让一个小的 “todo list” 应用逻辑支持撤销重做。你可以在 Redux 附带的 [`todos with undo`示例中找到完整源代码](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
@@ -393,8 +393,6 @@ npm install redux-undo
 安装的包将会提供 `undoable` reducer 增强器。
 
 ### 封装 Reducer
-
-You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you exported a `todos` reducer from a dedicated file, you will want to change it to export the result of calling `undoable()` with the reducer you wrote:
 
 你需要使用 `undoable` 函数封装想要增强的 reducer。例如，如果从对应文件中导出了一个 `todos` reducer，则需要更改它以导出使用你编写的 reducer 调用 `undoable()` 的结果：
 
@@ -532,7 +530,7 @@ UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 export default UndoRedo
 ```
 
-现在你能在 `App` 组件中国添加 `UndoRedo` 组件了：
+现在你能在 `App` 组件中添加 `UndoRedo` 组件了：
 
 #### `components/App.js`
 
