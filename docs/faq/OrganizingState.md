@@ -1,145 +1,144 @@
 ---
 id: organizing-state
 title: Organizing State
-hide_title: false
+sidebar_label: Organizing State
 ---
 
-# Redux FAQ: Organizing State
+# Redux 常见问答：组织 State
 
-## Table of Contents
+## 目录
 
-- [Redux FAQ: Organizing State](#redux-faq-organizing-state)
-  - [Table of Contents](#table-of-contents)
-  - [Organizing State](#organizing-state)
-    - [Do I have to put all my state into Redux? Should I ever use React's `setState()`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
-      - [Further information](#further-information)
-    - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
-      - [Further information](#further-information-1)
-    - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
-      - [Further information](#further-information-2)
-    - [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
-      - [Further Information](#further-information-3)
+- [Redux 常见问答：组织 State](#redux-faq-organizing-state)
+  - [目录](#table-of-contents)
+  - [组织 State](#organizing-state)
+    - [必须将所有的 state 都放入 Redux 吗？应该使用 React 的 setState() 吗？](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)
+      - [更多信息](#further-information)
+    - [可以将函数、promises 或其他不可序列化的项放入 store state 吗？](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
+      - [更多信息](#further-information-1)
+    - [如何组织 state 中的嵌套或重复数据？](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
+      - [更多信息](#further-information-2)
+    - [应该将表单 state 或其他 UI state 放在 store 中吗？](#should-i-put-form-state-or-other-ui-state-in-my-store)
+      - [更多信息](#further-information-3)
 
-## Organizing State
+## 组织 State
 
-### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
+### 必须将所有的 state 都放入 Redux 吗？应该使用 React 的 setState() 吗？
 
-There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state.
+对此没有“绝对正确”的答案。一些用户喜欢将每一条数据都保存在 Redux 中，以始终维护其应用程序的完全可序列化和受控的版本。其他人更喜欢在组件的内部 state 中保留非关键的或 UI state，例如“此下拉列表当前是否打开”。
 
-**_Using local component state is fine_**. As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live. Find a balance that works for you, and go with it.
+**_使用本地组件 state 是 OK 的_**。作为开发人员，由你自己决定构成应用程序的 state 类型以及每个 state 应该存在的位置。找到一个适合你的平衡点，并坚持下去。
 
-Some common rules of thumb for determining what kind of data should be put into Redux:
+下面是应该将哪些数据放入 Redux 的一些常见经验法则：
 
-- Do other parts of the application care about this data?
-- Do you need to be able to create further derived data based on this original data?
-- Is the same data being used to drive multiple components?
-- Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
-- Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
-- Do you want to keep this data consistent while hot-reloading UI components (which may lose their internal state when swapped)?
+- 应用程序的其他部分是否关心这些数据？
+- 你是否需要基于这些原始数据创建进一步的派生数据？
+- 是否使用相同的数据来驱动多个组件？
+- 将此 state 恢复到给定的时间点（即时间旅行调试）对你有价值吗？
+- 你是否要缓存数据（即，如果它已经存在，则使用 state 中的内容而不是重新请求它）？
+- 在热重载 UI 组件（交换时可能会丢失其内部 state）时，你需要保持这些数据一致吗？
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more. It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
+有许多社区包实现了在 Redux store 中存储每个组件 state 的各种方法，例如 [redux-component](https://github.com/tomchentw/redux-component)、[redux-react-local](https://github.com/threepointone/redux-react-local) 等。也可以按照 `this.setState( (previousState) => reducer(previousState, someAction))` 的方式将 Redux 的原理和 reducer 概念应用于更新本地组件 state 的任务中。
 
-#### Further information
+#### 更多信息
 
-**Articles**
+**文献**
 
-- [When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
-- [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
-- [Finding `state`'s place with React and Redux](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
-- [A Case for setState](https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73)
-- [How to handle state in React: the missing FAQ](https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c)
-- [Where to Hold React Component Data: state, store, static, and this](https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00)
-- [The 5 Types of React Application State](http://jamesknelson.com/5-types-react-application-state/)
-- [Shape Your Redux Store Like Your Database](https://hackernoon.com/shape-your-redux-store-like-your-database-98faa4754fd5)
+- [何时（何时不）使用 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)
+- [使用 React 和 Redux 找到 state 的位置](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
+- [一个 setState 的案例](https://medium.com/@zackargyle/a-case-for-setstate-1f1c47cd3f73)
+- [如何在 React 中处理 state：缺失的常见问答](https://medium.com/react-ecosystem/how-to-handle-state-in-react-6f2d3cd73a0c)
+- [在哪里保存 React 组件数据：state、store、static 和 this](https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00)
+- [React 应用程序 State 的 5 种类型](http://jamesknelson.com/5-types-react-application-state/)
+- [像数据库一样塑造 Redux Store](https://hackernoon.com/shape-your-redux-store-like-your-database-98faa4754fd5)
 
-**Discussions**
+**讨论**
 
-- [#159: Investigate using Redux for pseudo-local component state](https://github.com/reduxjs/redux/issues/159)
-- [#1098: Using Redux in reusable React component](https://github.com/reduxjs/redux/issues/1098)
-- [#1287: How to choose between Redux's store and React's state?](https://github.com/reduxjs/redux/issues/1287)
-- [#1385: What are the disadvantages of storing all your state in a single immutable atom?](https://github.com/reduxjs/redux/issues/1385)
-- [Twitter: Should I keep something in React component state?](https://twitter.com/dan_abramov/status/749710501916139520)
-- [Twitter: Using a reducer to update a component](https://twitter.com/dan_abramov/status/736310245945933824)
-- [React Forums: Redux and global state vs local state](https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187)
-- [Reddit: "When should I put something into my Redux store?"](https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8)
-- [Stack Overflow: Why is state all in one place, even state that isn't global?](https://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
-- [Stack Overflow: Should all component state be kept in Redux store?](https://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
+- [#159：研究使用 Redux 来处理伪本地（pseudo-local）组件 state](https://github.com/reduxjs/redux/issues/159)
+- [#1098：在可重用的 React 组件中使用 Redux](https://github.com/reduxjs/redux/issues/1098)
+- [#1287：如何在 Redux 的 store 和 React 的 state 之间进行选择？](https://github.com/reduxjs/redux/issues/1287)
+- [#1385：将所有 state 存储在一个不可变原子中的缺点是什么？](https://github.com/reduxjs/redux/issues/1385)
+- [Twitter：应该将某些值存放在 React 组件的 state 里吗？](https://twitter.com/dan_abramov/status/749710501916139520)
+- [Twitter：使用 reducer 更新组件](https://twitter.com/dan_abramov/status/736310245945933824)
+- [React 论坛：Redux 和全局 state vs 本地 state](https://discuss.reactjs.org/t/redux-and-global-state-vs-local-state/4187)
+- [Reddit：“我什么时候应该在 Redux store 里放东西？”](https://www.reddit.com/r/reactjs/comments/4w04to/when_using_redux_should_all_asynchronous_actions/d63u4o8)
+- [Stack Overflow：为什么 state（甚至不是全局的 state）都集中在一个地方？](https://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
+- [Stack Overflow：所有组件 state 都应该保存在 Redux store 中吗？](https://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
 
-**Libraries**
+**相关库**
 
-- [Redux Addons Catalog: Component State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
+- [Redux 插件目录：组件 State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
 
-### Can I put functions, promises, or other non-serializable items in my store state?
+### 可以将函数、promises 或其他不可序列化的项放入 store state 吗？
 
-It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's _technically_ possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store, as well as interfere with time-travel debugging.
+强烈建议你只将普通的可序列化对象、数组和原始类型放入 store 中。虽然 _技术上_ 可以将不可序列化的项插入到 store 中，但这样做会破坏 store 内容的持久化和再水化能力，并影响时间旅行调试。
 
-If you are okay with things like persistence and time-travel debugging potentially not working as intended, then you are totally welcome to put non-serializable items into your Redux store. Ultimately, it's _your_ application, and how you implement it is up to you. As with many other things about Redux, just be sure you understand what tradeoffs are involved.
+如果你不在意持久性和时间旅行调试等可能无法按预期进行，那么完全可以将不可序列化的项放入 Redux store 中。当然，它是 _你的_ 应用程序，你有最终的决定权。与有关 Redux 的许多其他事情一样，请确保你了解所涉及的权衡利弊。
 
-#### Further information
+#### 更多信息
 
-**Discussions**
+**讨论**
 
-- [#1248: Is it ok and possible to store a react component in a reducer?](https://github.com/reduxjs/redux/issues/1248)
-- [#1279: Have any suggestions for where to put a Map Component in Flux?](https://github.com/reduxjs/redux/issues/1279)
-- [#1390: Component Loading](https://github.com/reduxjs/redux/issues/1390)
-- [#1407: Just sharing a great base class](https://github.com/reduxjs/redux/issues/1407)
-- [#1793: React Elements in Redux State](https://github.com/reduxjs/redux/issues/1793)
+- [#1248：是否可以将 react 组件存储在 reducer 中？](https://github.com/reduxjs/redux/issues/1248)
+- [#1279：对于在 Flux 中把 Map 组件放在哪里有什么建议吗?](https://github.com/reduxjs/redux/issues/1279)
+- [#1390：组件加载](https://github.com/reduxjs/redux/issues/1390)
+- [#1407：分享一个很棒的基类](https://github.com/reduxjs/redux/issues/1407)
+- [#1793：Redux State 下 React 的元素](https://github.com/reduxjs/redux/issues/1793)
 
-### How do I organize nested or duplicate data in my state?
+### 如何组织 state 中的嵌套或重复数据？
 
-Data with IDs, nesting, or relationships should generally be stored in a “normalized” fashion: each object should be stored once, keyed by ID, and other objects that reference it should only store the ID rather than a copy of the entire object. It may help to think of parts of your store as a database, with individual “tables” per item type. Libraries such as [normalizr](https://github.com/paularmstrong/normalizr) and [redux-orm](https://github.com/tommikaikkonen/redux-orm) can provide help and abstractions in managing normalized data.
+具有 ID、嵌套结构或关系型的数据，通常应以“归一化”方式存储：每个对象应以 ID 为键仅存储一次，其他引用它的对象应仅存储 ID，而不是整个对象的副本。将 store 的某些部分看作数据库，每项类型都有单独的“表”，这样可能可以帮助理解。[Normalizr](https://github.com/paularmstrong/normalizr) 和 [redux-orm](https://github.com/tommikaikkonen/redux-orm) 等，这些库可以在管理归一化数据上提供帮助和抽象能力。
 
-#### Further information
+#### 更多信息
 
-**Documentation**
+**文档**
 
-- [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
-- [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
-- [Examples: Real World example](../introduction/Examples.md#real-world)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](../recipes/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
-- [Recipes: Structuring Reducers - Normalizing State Shape](../recipes/structuring-reducers/NormalizingStateShape.md)
-- [Examples: Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
+- [Redux 深入浅出：异步逻辑和数据流](../tutorials/fundamentals/part-6-async-logic.md)
+- [Redux 深入浅出：标准 Redux 模式](../tutorials/fundamentals/part-7-standard-patterns.md)
+- [示例：真实示例](../introduction/Examples.md#real-world)
+- [Redux 使用指南：结构化 Reducers——预置知识](../usage/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
+- [Redux 使用指南：结构化 Reducers——State 归一化](../usage/structuring-reducers/NormalizingStateShape.md)
+- [示例：Tree View](https://github.com/reduxjs/redux/tree/master/examples/tree-view)
 
-**Articles**
+**文献**
 
-- [High-Performance Redux](https://somebody32.github.io/high-performance-redux/)
-- [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
+- [高性能 Redux](https://somebody32.github.io/high-performance-redux/)
+- [查询 Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
-**Discussions**
+**讨论**
 
-- [#316: How to create nested reducers?](https://github.com/reduxjs/redux/issues/316)
-- [#815: Working with Data Structures](https://github.com/reduxjs/redux/issues/815)
-- [#946: Best way to update related state fields with split reducers?](https://github.com/reduxjs/redux/issues/946)
-- [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reduxjs/redux/issues/994)
-- [#1255: Normalizr usage with nested objects in React/Redux](https://github.com/reduxjs/redux/issues/1255)
-- [#1269: Add tree view example](https://github.com/reduxjs/redux/pull/1269)
-- [#1824: Normalising state and garbage collection](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
-- [Twitter: state shape should be normalized](https://twitter.com/dan_abramov/status/715507260244496384)
-- [Stack Overflow: How to handle tree-shaped entities in Redux reducers?](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
-- [Stack Overflow: How to optimize small updates to props of nested components in React + Redux?](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
+- [#316：如何创建嵌套 reducers？](https://github.com/reduxjs/redux/issues/316)
+- [#815：使用数据结构](https://github.com/reduxjs/redux/issues/815)
+- [#946：使用拆分 reducers 以更新相关 state 字段的最佳方法是什么？](https://github.com/reduxjs/redux/issues/946)
+- [#994：更新嵌套对象时如何削减样板代码？](https://github.com/reduxjs/redux/issues/994)
+- [#1255: Normalizr 在 React/Redux 中与嵌套对象一起使用](https://github.com/reduxjs/redux/issues/1255)
+- [#1269：添加树视图示例](https://github.com/reduxjs/redux/pull/1269)
+- [#1824：归一化 state 和垃圾回收](https://github.com/reduxjs/redux/issues/1824#issuecomment-228585904)
+- [Twitter：state 结构应该归一化](https://twitter.com/dan_abramov/status/715507260244496384)
+- [Stack Overflow：如何处理 Redux reducer 中的树形实体？](https://stackoverflow.com/questions/32798193/how-to-handle-tree-shaped-entities-in-redux-reducers)
+- [Stack Overflow：如何优化嵌套组件里 props 的很小改动？](https://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
 
-### Should I put form state or other UI state in my store?
+### 应该将表单 state 或其他 UI state 放在 store 中吗？
 
-The [same rules of thumb for deciding what should go in the Redux store](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate) apply for this question as well.
+[决定把什么放入 Redux store 的经验法则](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-setstate)同样也适用于这个问题。
 
-**Based on those rules of thumb, most form state doesn't need to go into Redux**, as it's probably not being shared between components. However, that decision is always going to be specific to you and your application. You might choose to keep some form state in Redux because you are editing data that came from the store originally, or because you do need to see the work-in-progress values reflected in other components elsewhere in the application. On the other hand, it may be a lot simpler to keep the form state local to the component, and only dispatch an action to put the data in the store once the user is done with the form.
+**根据这些经验法则，大多数表单 state 不需要放入 Redux**，因为它一般不需要在组件之间共享。但是，最终取决于你和你的应用程序。你可能会选择在 Redux 中保留某些表单 state，因为你需要修改最初来自 store 的数据，或者你需要查看显示在应用程序其他组件中的正在处理的数据。另一方面，将表单 state 保存在组件本地可能要简单得多，并在用户完成表单后才 dispatch action 来将数据放入 store 中。
 
-Based on this, in most cases you probably don't need a Redux-based form management library either. We suggest trying these approaches, in this order:
+基于此，在大多数情况下，你可能也不需要基于 Redux 的表单管理库。我们建议你按以下顺序尝试这些方法：
 
-- Even if the data is coming from the Redux store, start by writing your form logic by hand. It's likely this is all you'll need. (See [**Gosha Arinich's posts on working with forms in React**](https://goshakkk.name/on-forms-react/) for some excellent guidance on this.)
-- If you decide that writing forms "manually" is too difficult, try a React-based form library like [Formik](https://github.com/jaredpalmer/formik) or [React-Final-Form](https://github.com/final-form/react-final-form).
-- If you are absolutely sure you _must_ use a Redux-based form library because the other approaches aren't sufficient, then you may finally want to look at [Redux-Form](https://github.com/erikras/redux-form) and [React-Redux-Form](https://github.com/davidkpiano/react-redux-form).
+- 即使数据来自 Redux store，也请先手动编写表单逻辑。很肯能这就是你想要的。（请参阅 [**Gosha Arinich 关于在 React 中使用表单的帖子**](https://goshakkk.name/on-forms-react/)来获得一些好的指导。）
+- 如果你认为“手动”编写表单太难，请尝试使用基于 React 的表单库，例如 [Formik](https://github.com/jaredpalmer/formik) 或 [React-Final-Form](https://github.com/final-form/react-final-form)。
+- 如果你确信你必须使用基于 Redux 的表单库，因为其他办法还不能满足，那么你可以看看 [Redux-Form](https://github.com/erikras/redux-form) 和 [React-Redux-Form](https://github.com/davidkpiano/react-redux-form)。
 
-If you are keeping form state in Redux, you should take some time to consider performance characteristics. Dispatching an action on every keystroke of a text input probably isn't worthwhile, and you may want to look into [ways to buffer keystrokes to keep changes local before dispatching](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/). As always, take some time to analyze the overall performance needs of your own application.
+如果你在 Redux 中保存表单 state，你应该花一些时间来考虑性能。对文本框的每次输入变化 dispatch action 也许是没有必要的，你可能需要研究[在 dispatch 前缓存输入变化以保存本地更改的方法](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/)。与往常一样，你需要花一些时间来分析应用程序的整体性能需求。
 
-Other kinds of UI state follow these rules of thumb as well. The classic example is tracking an `isDropdownOpen` flag. In most situations, the rest of the app doesn't care about this, so in most cases it should stay in component state. However, depending on your application, it may make sense to use Redux to [manage dialogs and other popups](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/), tabs, expanding panels, and so on.
+其他类型的 UI state 也遵循这些经验法则。经典示例是追踪 `isDropdownOpen` 标志。在大多数情况下，应用程序的其余部分并不关心它，因此它应该保存在组件 state 里。但是，根据应用程序的实际情况，使用 Redux 来[管理对话框和其他弹出窗口](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/)、选项卡、扩展面板等是有意义的。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文献**
 
-- [Gosha Arinich: Writings on Forms in React](https://goshakkk.name/on-forms-react/)
-- [Practical Redux, Part 6: Connected Lists and Forms](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
-- [Practical Redux, Part 7: Form Change Handling](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/)
-- [Practical Redux, Part 10: Managing Modals and Context Menus](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/)
-- [React/Redux Links: Redux UI Management](https://github.com/markerikson/react-redux-links/blob/master/redux-ui-management.md)
+- [Gosha Arinich：关于 React 表单的著作](https://goshakkk.name/on-forms-react/)
+- [实用 Redux，第 6 节：连接列表和表单](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
+- [实用 Redux，第 7 节：表单更改处理](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/)
+- [实用 Redux，第 10 节：管理模态框和上下文菜单](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/)
+- [React/Redux 链接：Redux UI 管理](https://github.com/markerikson/react-redux-links/blob/master/redux-ui-management.md)
