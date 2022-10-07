@@ -380,7 +380,7 @@ store.dispatch({
 
 这都是非常有用的信息，但我们不能直接删除一个库并使用它，而不是自己实现 `undoable` 吗？当然，我们可以！去看 [Redux Undo](https://github.com/omnidan/redux-undo)，这是一个给你的 Redux 树中任意部分提供撤销重做功能的库。
 
-在这个部分，你将学习如何使一个小的 “todo list” 应用逻辑支持撤销重做。你可以在 Redux 附带的 [`todos with undo`示例中找到完整源代码](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
+在这个部分，你将学习如何让一个小的 “todo list” 应用逻辑支持撤销重做。你可以在 Redux 附带的 [`todos with undo`示例中找到完整源代码](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo).
 
 ### 安装
 
@@ -390,11 +390,13 @@ store.dispatch({
 npm install redux-undo
 ```
 
-This installs the package that provides the `undoable` reducer enhancer.
+安装的包将会提供 `undoable` reducer 增强器。
 
-### Wrapping the Reducer
+### 封装 Reducer
 
 You will need to wrap the reducer you wish to enhance with `undoable` function. For example, if you exported a `todos` reducer from a dedicated file, you will want to change it to export the result of calling `undoable()` with the reducer you wrote:
+
+你需要使用 `undoable` 函数封装想要增强的 reducer。例如，如果从对应文件中导出了一个 `todos` reducer，则需要更改它以导出使用你编写的 reducer 调用 `undoable()` 的结果：
 
 #### `reducers/todos.js`
 
@@ -412,9 +414,11 @@ const undoableTodos = undoable(todos)
 export default undoableTodos
 ```
 
-There are [many other options](https://github.com/omnidan/redux-undo#configuration) to configure your undoable reducer, like setting the action type for Undo and Redo actions.
+也有 [很多其他选择 options](https://github.com/omnidan/redux-undo#configuration) 用来配置 undoable reducer，比如为撤销或重做的 action 设置特殊的 action type。
 
 Note that your `combineReducers()` call will stay exactly as it was, but the `todos` reducer will now refer to the reducer enhanced with Redux Undo:
+
+注意，`combineReducers()`调用将保持原样，但 `todos` reducer 现在将引用被 Redux Undo 增强的 reducer：
 
 #### `reducers/index.js`
 
@@ -431,11 +435,11 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-You may wrap one or more reducers in `undoable` at any level of the reducer composition hierarchy. We choose to wrap `todos` instead of the top-level combined reducer so that changes to `visibilityFilter` are not reflected in the undo history.
+你可能在 reducer 组合层任意级，在 `undoable` 中封装一个或多个 reducer。我们选择封装 `todos` 而不是顶层组合 reducer，这样对于 `visibilityFilter` 的修改就不会被反映在撤销的历史中。
 
-### Updating the Selectors
+### 更新 Selectors
 
-Now the `todos` part of the state looks like this:
+现在 state 中关于 `todos` 的部分长这样:
 
 ```js
 {
@@ -460,8 +464,7 @@ Now the `todos` part of the state looks like this:
 }
 ```
 
-This means you need to access your state with `state.todos.present` instead of
-just `state.todos`:
+就是说你要通过 `state.todos.present` 来访问 state，而不仅仅是 `state.todos`：
 
 #### `containers/VisibleTodoList.js`
 
@@ -473,11 +476,11 @@ const mapStateToProps = state => {
 }
 ```
 
-### Adding the Buttons
+### 添加撤销重做按钮
 
-Now all you need to do is add the buttons for the Undo and Redo actions.
+现在，只需要为“撤消”和“重做”操作添加按钮。
 
-First, create a new container component called `UndoRedo` for these buttons. We won't bother to split the presentational part into a separate file because it is very small:
+首先为这些按钮创建一个称为 `UndoRedo` 的容器组件。我们不会将演示部分拆分为单独的文件，因为很小：
 
 #### `containers/UndoRedo.js`
 
@@ -498,7 +501,7 @@ let UndoRedo = ({ canUndo, canRedo, onUndo, onRedo }) => (
 )
 ```
 
-You will use `connect()` from [React Redux](https://github.com/reduxjs/react-redux) to generate a container component. To determine whether to enable Undo and Redo buttons, you can check `state.todos.past.length` and `state.todos.future.length`. You won't need to write action creators for performing undo and redo because Redux Undo already provides them:
+你将使用来自 [React Redux](https://github.com/reduxjs/react-redux) 的 `connect()` 来创建一个容器组件。为了判断撤销重做的按钮是否被禁用，可以检查 `state.todos.past.length` 和 `state.todos.future.length`。不需要编写 action creator 来执行撤消和重做，因为 Redux Undo 已经提供了这些功能：
 
 #### `containers/UndoRedo.js`
 
@@ -529,7 +532,7 @@ UndoRedo = connect(mapStateToProps, mapDispatchToProps)(UndoRedo)
 export default UndoRedo
 ```
 
-Now you can add `UndoRedo` component to the `App` component:
+现在你能在 `App` 组件中国添加 `UndoRedo` 组件了：
 
 #### `components/App.js`
 
@@ -552,4 +555,4 @@ const App = () => (
 export default App
 ```
 
-This is it! Run `npm install` and `npm start` in the [example folder](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) and try it out!
+就是这样！在 [example 文件夹](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) 运行 `npm install` 和 `npm start` 试试！
