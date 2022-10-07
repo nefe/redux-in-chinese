@@ -4,121 +4,121 @@ title: Design Decisions
 hide_title: false
 ---
 
-# Redux FAQ: Design Decisions
+# Redux FAQ: 设计决策
 
-## Table of Contents
+## 目录
 
-- [Why doesn't Redux pass the state and action to subscribers?](#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
-- [Why doesn't Redux support using classes for actions and reducers?](#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
-- [Why does the middleware signature use currying?](#why-does-the-middleware-signature-use-currying)
-- [Why does applyMiddleware use a closure for dispatch?](#why-does-applymiddleware-use-a-closure-for-dispatch)
-- [Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?](#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
-- [Why doesn't mapDispatchToProps allow use of return values from `getState()` or `mapStateToProps()`?](#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
+- [为什么 Redux 不将 state 和 action 传递给订阅者？](#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
+- [为什么 Redux 不支持对 action 和 reducer 使用类？](#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
+- [为什么 middleware 签名使用柯里化？](#why-does-the-middleware-signature-use-currying)
+- [为什么 applyMiddleware 使用闭包进行 dispatch？](#why-does-applymiddleware-use-a-closure-for-dispatch)
+- [为什么 `combineReducers` 在调用每个 reducer 时不包含整个 state 的第三个参数？](#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
+- [为什么 mapDispatchToProps 不允许使用来自 `getState()` 或 `mapStateToProps()` 的返回值？](#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 
-## Design Decisions
+## 设计决策
 
-### Why doesn't Redux pass the state and action to subscribers?
+### 为什么 Redux 不将 state 和 action 传递给订阅者？
 
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](./Performance.md#performance-update-events) to avoid repeated re-rendering.
+订阅者旨在响应 state 值本身，而不是 action。对 state 的更新是同步处理的，但是给订阅者的通知可以被批处理或去抖动，这意味着订阅者并不总是被通知每个 action。这是一种常见的[性能优化](./Performance.md#performance-update-events)，以避免重复重新渲染。
 
-Batching or debouncing is possible by using enhancers to override `store.dispatch` to change the way that subscribers are notified. Also, there are libraries that change Redux to process actions in batches to optimize performance and avoid repeated re-rendering:
+通过使用增强器覆盖 “store.dispatch” 来改变通知订阅者的方式，可以进行批处理或去抖动。此外，还有一些库将 Redux 更改为批量处理操作以优化性能并避免重复重新渲染：
 
-- [redux-batch](https://github.com/manaflair/redux-batch) allows passing an array of actions to `store.dispatch()` with only one notification,
-- [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) allows batching of subscribe notifications that occur as a result of dispatches.
+- [redux-batch](https://github.com/manaflair/redux-batch) 只需要一个通知，将一组操作传递给 `store.dispatch()`。
+- [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) 允许批处理由于 dispatch 而发生的订阅通知。
 
-The intended guarantee is that Redux eventually calls all subscribers with the most recent state available, but not that it always calls each subscriber for each action. The store state is available in the subscriber simply by calling `store.getState()`. The action cannot be made available in the subscribers without breaking the way that actions might be batched.
+预期的保证是 Redux 最终以可用的最新 state 调用所有订阅者，但并不总是为每个 action 调用每个订阅者。只需调用 store.getState() 即可在订阅者中获得存储 state。如果不破坏可能对 action 进行批处理的方式，则无法在订阅者中使用该 action。
 
-A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Instead, re-rendering should be controlled through:
+在订阅者内部使用该 action 的潜在用例（这是一个不受支持的功能）是确保组件仅在某些类型的 action 后重新呈现。相反，应通过以下方式控制重新渲染：
 
-1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
+1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) 生命周期方法
 2. the [virtual DOM equality check (vDOMEq)](https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconciliation)
 3. [React.PureComponent](https://facebook.github.io/react/docs/optimizing-performance.html#examples)
-4. Using React-Redux: use [mapStateToProps](https://react-redux.js.org/api#connect) to subscribe components to only the parts of the store that they need.
+4. Using React-Redux: use [mapStateToProps](https://react-redux.js.org/api#connect) 将组件订阅到他们需要的 store 部分
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 
-- [How can I reduce the number of store update events?](./Performance.md#performance-update-events)
+- [如何减少 store 更新事件的数量？](./Performance.md#performance-update-events)
 
-**Discussions**
+**讨论**
 
-- [#580: Why doesn't Redux pass the state to subscribers?](https://github.com/reactjs/redux/issues/580)
+- [#580: 为什么 Redux 不将 state 传递给订阅者？](https://github.com/reactjs/redux/issues/580)
 - [#2214: Alternate Proof of Concept: Enhancer Overhaul -- more on debouncing](https://github.com/reactjs/redux/pull/2214)
 
-### Why doesn't Redux support using classes for actions and reducers?
+### 为什么 Redux 不支持对 action 和 reducer 使用类？
 
-The pattern of using functions, called action creators, to return action objects may seem counterintuitive to programmers with a lot of Object Oriented Programming experience, who would see this is a strong use-case for Classes and instances. Class instances for action objects and reducers are not supported because class instances make serialization and deserialization tricky. Deserialization methods like `JSON.parse(string)` will return a plain old Javascript object rather than class instances.
+对于具有大量面向对象编程经验的程序员来说，使用称为 action creator 的函数返回动作对象的模式似乎违反直觉，他们会认为这是类和实例的强大用例。不支持 action 对象和 reducer 的类实例，因为类实例使序列化和反序列化变得棘手。像 `JSON.parse(string)` 这样的反序列化方法将返回一个普通的旧 Javascript 对象而不是类实例。
 
-As described in the [Store FAQ](./OrganizingState.md#organizing-state-non-serializable), if you are okay with things like persistence and time-travel debugging not working as intended, you are welcome to put non-serializable items into your Redux store.
+如 [Store FAQ](./OrganizingState.md#organizing-state-non-serializable) 中所述，如果您可以接受诸如持久性和时间旅行调试之类的事情无法按预期工作，欢迎你也可以在 Redux store 使用非序列化对象。
 
-Serialization enables the browser to store all actions that have been dispatched, as well as the previous store states, with much less memory. Rewinding and 'hot reloading' the store is central to the Redux developer experience and the function of Redux DevTools. This also enables deserialized actions to be stored on the server and re-serialized in the browser in the case of server-side rendering with Redux.
+序列化使浏览器能够以更少的内存存储所有已 dispatch 的 action，以及之前的store state。回退和 “热重新加载” store 是 Redux 开发人员体验和 Redux DevTools 功能的核心。这也使得反序列化的操作能够存储在服务器上，并在使用 Redux 进行服务器端渲染的情况下在浏览器中重新序列化。
 
-#### Further Information
+#### 更多信息
 
-**Articles**
+**文章**
 
-- [Can I put functions, promises, or other non-serializable items in my store state?](./OrganizingState.md#organizing-state-non-serializable)
+- [我可以将函数，promises，或其他不可序列化的项目放在 store state 中吗?](./OrganizingState.md#organizing-state-non-serializable)
 
-**Discussions**
+**讨论**
 
-- [#1171: Why doesn't Redux use classes for actions and reducers?](https://github.com/reactjs/redux/issues/1171#issuecomment-196819727)
+- [#1171: 为什么 Redux 不使用类作为 action 和 reducer？](https://github.com/reactjs/redux/issues/1171#issuecomment-196819727)
 
-### Why does the middleware signature use currying?
+### 为什么 middleware 签名使用柯里化？
 
-Redux middleware are written using a triply-nested function structure that looks like `const middleware = storeAPI => next => action => {}`, rather than a single function that looks like `const middleware = (storeAPI, next, action) => {}`. There's a few reasons for this.
+为什么 Redux 不使用类作为 action 和 reducer？Redux middleware 是使用三重嵌套的函数结构编写的，看起来像 `const middleware = storeAPI => next => action => {}`，而不是看起来像的单个函数 比如`const middleware = (storeAPI, next, action) => {}`。以下有几个原因。
 
-One is that "currying" functions is a standard functional programming technique, and Redux was explicitly intended to use functional programming principles in its design. Another is that currying functions creates closures where you can declare variables that exist for the lifetime of the middleware (which could be considered a functional equivalent to instance variables that exist for the lifetime of a class instance). Finally, it's simply the approach that was chosen when Redux was initially designed.
+其中一个原因是 “currying” 函数是一种标准的函数式编程技术，Redux明确打算在其设计中使用函数式编程原则。另一个原因是 currying 函数创建闭包，你可以在闭包中声明 middleware 生存期内存在的变量（可以将其视为与类实例生存期内的实例变量等效的函数）。最后，它是最初设计 Redux 时选择的方法。
 
-The [curried function signature](https://github.com/reactjs/redux/issues/1744) of declaring middleware is [deemed unnecessary](https://github.com/reactjs/redux/pull/784) by some, because both store and next are available when the applyMiddleware function is executed. This issue has been determined to not be [worth introducing breaking changes](https://github.com/reactjs/redux/issues/1744), as there are now hundreds of middleware in the Redux ecosystem that rely on the existing middleware definition.
+声明 middleware 的 [柯里化的函数签名](https://github.com/reactjs/redux/issues/1744) 被某些人[认为没有必要](https://github.com/reactjs/redux/pull/784)，因为执行 applyMiddleware 函数时 store 和 next 都可用。这个问题已被确定为不 [值得引入重大更改](https://github.com/reactjs/redux/issues/1744)，因为现在 Redux 生态系统中有数百个 middleware 依赖于现有的 middleware 定义 .
 
-#### Further Information
+#### 更多信息
 
-**Discussions**
+**讨论**
 
-- Why does the middleware signature use currying?
-  - Prior discussions: [#55](https://github.com/reactjs/redux/pull/55), [#534](https://github.com/reactjs/redux/issues/534), [#784](https://github.com/reactjs/redux/pull/784), [#922](https://github.com/reactjs/redux/issues/922), [#1744](https://github.com/reactjs/redux/issues/1744)
-  - [React Boston 2017: You Might Need Redux (And Its Ecosystem)](https://blog.isquaredsoftware.com/2017/09/presentation-might-need-redux-ecosystem/)
+- 为什么 middleware 签名使用柯里化？
+  - 之前的讨论： [#55](https://github.com/reactjs/redux/pull/55)，[#534](https://github.com/reactjs/redux/issues/534)，[#784](https://github.com/reactjs/redux/pull/784)，[#922](https://github.com/reactjs/redux/issues/922)，[#1744](https://github.com/reactjs/redux/issues/1744)
+  - [React Boston 2017: 你可能需要 Redux（及其生态系统）](https://blog.isquaredsoftware.com/2017/09/presentation-might-need-redux-ecosystem/)
 
-### Why does `applyMiddleware` use a closure for `dispatch`?
+### 为什么 applyMiddleware 使用闭包进行 dispatch？
 
-`applyMiddleware` takes the existing dispatch from the store and closes over it to create the initial chain of middlewares that have been invoked with an object that exposes the getState and dispatch functions, which enables middlewares that [rely on dispatch during initialization](https://github.com/reactjs/redux/pull/1592) to run.
+`applyMiddleware` 从 store 中获取现有的 dispatch 并关闭它以创建初始 middleware 链，这些 middleware 已使用公开 getState 和 dispatch 函数的对象调用，这使得 middleware [在初始化期间依赖dispatch]（https： //github.com/reactjs/redux/pull/1592) 运行。
 
-#### Further Information
+#### 更多信息
 
-**Discussions**
+**讨论**
 
-- Why does applyMiddleware use a closure for dispatch?
-  - See - [#1592](https://github.com/reactjs/redux/pull/1592) and [#2097](https://github.com/reactjs/redux/issues/2097)
+- 为什么 applyMiddleware 使用闭包进行 dispatch？
+  - 见 - [#1592](https://github.com/reactjs/redux/pull/1592) 和 [#2097](https://github.com/reactjs/redux/issues/2097)
 
-### Why doesn't `combineReducers` include a third argument with the entire state when it calls each reducer?
+### 为什么 `combineReducers` 在调用每个 reducer 时不包含整个 state 的第三个参数？
 
-`combineReducers` is opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../recipes/structuring-reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer.
+`combineReducers` 被认为是鼓励按域拆分 reducer 逻辑。正如 [Beyond `combineReducers`](../recipes/structuring-reducers/BeyondCombineReducers.md) 中所述，`combineReducers` 被故意限制为处理单个常见用例：通过委托更新作为普通 Javascript 对象的 state 树，将每个 state 切片更新为特定切片 reducer。
 
-It's not immediately obvious what a potential third argument to each reducer should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/acdlite/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state.
+每个 reducer 的潜在第三个参数应该是什么并不是很明显，可以为：整个 state 树、一些回调函数、state 树的其他部分等。如果 `combineReducers` 不适合你的用例，请考虑使用类似的库 [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) 或 [reduceReducers](https://github.com/acdlite/reduce-reducers) 用于具有深度嵌套的 reducer 和需要  reducer 的其他选项访问全局状态。
 
-If none of the published utilities solve your use case, you can always write a function yourself that does just exactly what you need.
+如果已发布的实用程序都不能解决你的用例，你始终可以自己编写一个完全满足你需要的函数。
 
-#### Further information
+#### 更多信息
 
-**Articles**
+**文章**
 
 - [Beyond `combineReducers`](../recipes/structuring-reducers/BeyondCombineReducers.md)
 
-**Discussions**
+**讨论**
 
-- [#1768 Allow reducers to consult global state](https://github.com/reactjs/redux/pull/1768)
+- [#1768 允许 reducer 查询全局状态](https://github.com/reactjs/redux/pull/1768)
 
-### Why doesn't `mapDispatchToProps` allow use of return values from `getState()` or `mapStateToProps()`?
+### 为什么 mapDispatchToProps 不允许使用来自 `getState()` 或 `mapStateToProps()` 的返回值？
 
-There have been requests to use either the entire `state` or the return value of `mapState` inside of `mapDispatch`, so that when functions are declared inside of `mapDispatch`, they can close over the latest returned values from the store.
+如果已经有请求在 `mapDispatch` 中使用整个 `state` 或 `mapState` 的返回值中，当在 `mapDispatch` 中声明函数时，它们可以关闭来自 store 的最新返回值。
 
-This approach is not supported in `mapDispatch` because it would mean also calling `mapDispatch` every time the store is updated. This would cause the re-creation of functions with every state update, thus adding a lot of performance overhead.
+`mapDispatch` 不支持这种方法，因为这意味着每次更新 store 时也要调用 `mapDispatch`。这将导致在每次 state 更新时重新创建函数，从而增加大量性能开销。
 
-The preferred way to handle this use-case--needing to alter props based on the current state and mapDispatchToProps functions--is to work from mergeProps, the third argument to the connect function. If specified, it is passed the result of `mapStateToProps()`, `mapDispatchToProps()`, and the container component's props. The plain object returned from `mergeProps` will be passed as props to the wrapped component.
+处理这个用例的首选方法——需要根据当前 state 和 mapDispatchToProps 函数来改变 props——使用 mergeProps，connect 函数的第三个参数。如果指定，则传递 `mapStateToProps()`、`mapDispatchToProps()` 和容器组件的 props 的结果。从 `mergeProps` 返回的普通对象将作为道具传递给包装的组件。
 
-#### Further information
+#### 更多信息
 
-**Discussions**
+**讨论**
 
-- [#237 Why doesn't mapDispatchToProps allow use of return values from getState() or mapStateToProps()?](https://github.com/reactjs/react-redux/issues/237)
+- [#237 为什么 mapDispatchToProps 不允许使用 getState() 或 mapStateToProps()？](https://github.com/reactjs/react-redux/issues/237)

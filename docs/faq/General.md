@@ -4,109 +4,109 @@ title: General
 hide_title: false
 ---
 
-# Redux FAQ: General
+# Redux FAQ: 常见问题
 
-## When should I learn Redux?
+## 我应该什么时候学习 Redux？
 
-What to learn can be an overwhelming question for a JavaScript developer. It helps to narrow the range of options by learning one thing at a time and focusing on problems you find in your work. Redux is a pattern for managing application state. If you do not have problems with state management, you might find the benefits of Redux harder to understand. Some UI libraries (like React) have their own state management system. If you are using one of these libraries, especially if you are just learning to use them, we encourage you to learn the capabilities of that built-in system first. It might be all you need to build your application. If your application becomes so complex that you are confused about where state is stored or how state changes, then it is a good time to learn Redux.
+对于 JavaScript 开发人员来说，学习什么可能是一个压倒性的问题。可以通过你在工作中发现的问题并专注于一次学习一种知识来缩小选择范围。Redux 是一种用于管理应用程序状态的模式。如果你在状态管理方面没有问题，你可能对于 Redux 的好处更难理解。一些 UI 库（如 React）有自己的状态管理系统。如果你正在使用其中一个库，特别是如果刚刚学习使用它们，我们鼓励你首先了解该内置系统的功能。这可能是你构建应用程序所需的全部内容。如果你的应用程序变得很复杂以至于你对状态存储在哪里或状态如何变化感到困惑，那么现在是学习 Redux 的好时机。
 
 :::tip
 
-**We recommend that most new learners should focus on learning React first, and wait to learn Redux until after you're already comfortable with React**. That way, there's fewer new concepts to learn at once, and it's more clear what concepts are part of React and what concepts are part of Redux. You'll also have a better understanding of how using Redux fits into a React app, and why Redux can be useful.
+**我们建议大多数新学习者应该先专注于学习 React，等到熟悉 React 后再学习 Redux**。这样，一次学习的新概念就更少了，并且更清楚哪些概念是 React 的一部分，哪些概念是 Redux 的一部分。你还将更好地了解如何将 Redux 用于 React 应用程序，以及 Redux 为何有用。
 
 :::
 
-#### Further information
+#### 更多信息
 
-**Articles**
+**文章**
 
-- [Deciding What Not To Learn](https://gedd.ski/post/what-not-to-learn/)
-- [How to learn web frameworks](https://ux.shopify.com/how-to-learn-web-frameworks-9d447cb71e68)
-- [Redux vs MobX vs Flux vs... Do you even need that?](https://goshakkk.name/redux-vs-mobx-vs-flux-etoomanychoices/)
+- [决定不学什么](https://gedd.ski/post/what-not-to-learn/)
+- [如何学习网络框架](https://ux.shopify.com/how-to-learn-web-frameworks-9d447cb71e68)
+- [Redux vs MobX vs Flux vs... 你甚至需要那个吗？](https://goshakkk.name/redux-vs-mobx-vs-flux-etoomanychoices/)
 
-**Discussions**
+**讨论**
 
-- [Ask HN: Overwhelmed with learning front-end, how do I proceed?](https://news.ycombinator.com/item?id=12882816)
-- [Twitter: If you want to teach someone to use an abstraction...](https://twitter.com/acemarke/status/901329101088215044)
-- [Twitter: it was never intended to be learned before...](https://twitter.com/dan_abramov/status/739961787295117312)
-- [Twitter: Learning Redux before React?](https://twitter.com/dan_abramov/status/739962098030137344)
-- [Twitter: The first time I used React, people told me I needed Redux...](https://twitter.com/raquelxmoss/status/901576285020856320)
-- [Twitter: This was my experience with Redux...](https://twitter.com/garetmckinley/status/901500556568645634)
-- [Dev.to: When is it time to use Redux?](https://dev.to/dan_abramov/comment/1n2k)
+- [Ask HN: 学习前端不知所措，我该如何进行？](https://news.ycombinator.com/item?id=12882816)
+- [Twitter: 如果你想教某人使用抽象...](https://twitter.com/acemarke/status/901329101088215044)
+- [Twitter: 以前从来没有打算学过...](https://twitter.com/dan_abramov/status/739961787295117312)
+- [Twitter: 在 React 之前学习 Redux？](https://twitter.com/dan_abramov/status/739962098030137344)
+- [Twitter: 我第一次使用 React 时，人们告诉我需要 Redux ......](https://twitter.com/raquelxmoss/status/901576285020856320)
+- [Twitter: 这是我对 Redux 的体验...](https://twitter.com/garetmckinley/status/901500556568645634)
+- [Dev.to: 什么时候可以使用 Redux？](https://dev.to/dan_abramov/comment/1n2k)
 
-## When should I use Redux?
+## 我什么时候应该使用 Redux？
 
-**Not all apps need Redux. It's important to understand the kind of application you're building, the kinds of problems that you need to solve, and what tools can best solve the problems you're facing.**
+**并非所有应用都需要 Redux。了解你正在构建的应用程序类型、需要解决的问题类型以及哪些工具可以最好地解决你面临的问题非常重要。**
 
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. It's not designed to be the shortest or fastest way to write code. It's intended to help answer the question "When did a certain slice of state change, and where did the data come from?", with predictable behavior. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+Redux 可帮助你处理共享状态管理，但与任何工具一样，它也需要权衡取舍。它并非旨在成为编写代码的最短或最快方式。它旨在通过可预测的行为来帮助回答“某部分状态何时发生变化，数据来自何处？”的问题。有更多的概念要学习，也有更多的代码要编写。它还为你的代码添加了一些间接性，并要求你遵循某些限制。这是短期和长期生产力之间的权衡。
 
-As Pete Hunt, one of the early contributors to React, says:
+正如 React 的早期贡献者之一 Pete Hunt 所说：
 
-> You'll know when you need Flux. If you aren't sure if you need it, you don't need it.
+> 你会知道何时需要 Flux。如果你不确定你是否需要它，你就不需要它。
 
-Similarly, Dan Abramov, one of the creators of Redux, says:
+同样，Redux 的创建者之一 Dan Abramov 说：
 
-> I would like to amend this: don't use Redux until you have problems with vanilla React.
+> 我想修正这一点：在你对 vanilla React 有问题之前不要使用 Redux。
 
-**Redux is most useful when in cases when**:
+**Redux 在以下情况下最有用**：
 
-- You have large amounts of application state that are needed in many places in the app
-- The app state is updated frequently
-- The logic to update that state may be complex
-- The app has a medium or large-sized codebase, and might be worked on by many people
-- You need to see how that state is being updated over time
+- 你在应用程序的许多地方都需要大量的应用程序状态
+- 应用状态更新频繁
+- 更新该状态的逻辑可能很复杂
+- 该应用程序有一个中型或大型的代码库，并且可能由许多人开发
+- 你需要查看该状态如何随着时间的推移而更新
 
-There are also many other tools available that can help solve some of the same problems Redux does: state management, caching fetched server data, and passing data through the UI.
+还有许多其他工具可以帮助解决 Redux 遇到的一些相同问题：状态管理、缓存获取的服务器数据以及通过 UI 传递数据。
 
 :::info
 
-If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
+如果你不确定 Redux 是否适合你的应用程序，这些资源会提供更多指导：
 
-- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-- **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
+- **[何时（以及何时不）接触 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[Redux 之道，第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- **[你或许不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
 :::
 
-In the end, Redux is just a tool. It's a great tool, and there are some great reasons to use it, but there are also reasons you might not want to use it. Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
+归根结底，Redux 只是一个工具。它是一个很棒的工具，使用它有一些很好的理由，但也有一些你可能不想使用它的理由。对你的工具做出明智的决策，并了解每个决策中涉及的权衡。
 
-#### Further information
+#### 更多信息
 
-**Documentation**
+**文档**
 
-- [Thinking in Redux: Motivation](../understanding/thinking-in-redux/Motivation.md)
+- [Redux 中的思考: 动机](../understanding/thinking-in-redux/Motivation.md)
 
-**Articles**
+**文章**
 
-- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-- [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
-- [The Case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
+- **[何时（以及何时不）接触 Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+- **[Redux 之道，第 1 部分 - 实现和意图](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- [你或许不需要 Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
+- [Flux 示例](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
 
-**Discussions**
+**讨论**
 
-- [Twitter: Don't use Redux until...](https://twitter.com/dan_abramov/status/699241546248536064)
-- [Twitter: Redux is designed to be predictable, not concise](https://twitter.com/dan_abramov/status/733742952657342464)
-- [Twitter: Redux is useful to eliminate deep prop passing](https://twitter.com/dan_abramov/status/732912085840089088)
-- [Twitter: Don't use Redux unless you're unhappy with local component state](https://twitter.com/dan_abramov/status/725089243836588032)
-- [Twitter: You don't need Redux if your data never changes](https://twitter.com/dan_abramov/status/737036433215610880)
-- [Twitter: If your reducer looks boring, don't use redux](https://twitter.com/dan_abramov/status/802564042648944642)
-- [Reddit: You don't need Redux if your app just fetches something on a single page](https://www.reddit.com/r/reactjs/comments/5exfea/feedback_on_my_first_redux_app/dagglqp/)
-- [Stack Overflow: Why use Redux over Facebook Flux?](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
-- [Stack Overflow: Why should I use Redux in this example?](https://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
-- [Stack Overflow: What could be the downsides of using Redux instead of Flux?](https://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
-- [Stack Overflow: When should I add Redux to a React app?](https://stackoverflow.com/questions/36631761/when-should-i-add-redux-to-a-react-app)
-- [Stack Overflow: Redux vs plain React?](https://stackoverflow.com/questions/39260769/redux-vs-plain-react/39261546#39261546)
-- [Twitter: Redux is a platform for developers to build customized state management with reusable things](https://twitter.com/acemarke/status/793862722253447168)
+- [Twitter: 不要用 Redux 除非...](https://twitter.com/dan_abramov/status/699241546248536064)
+- [Twitter: Redux 的设计是可预测的，而不是简洁的](https://twitter.com/dan_abramov/status/733742952657342464)
+- [Twitter: Redux 对于消除深度 prop 传递很有用](https://twitter.com/dan_abramov/status/732912085840089088)
+- [Twitter: 除非你对本地组件 state 不满意，否则不要使用 Redux](https://twitter.com/dan_abramov/status/725089243836588032)
+- [Twitter: 如果你的数据从不改变，你就不需要 Redux](https://twitter.com/dan_abramov/status/737036433215610880)
+- [Twitter: 如果你的 reducer 看起来很单调，不要使用 redux](https://twitter.com/dan_abramov/status/802564042648944642)
+- [Reddit: 如果你的应用只是在单个页面上获取某些内容，则不需要 Redux](https://www.reddit.com/r/reactjs/comments/5exfea/feedback_on_my_first_redux_app/dagglqp/)
+- [Stack Overflow: 为什么使用 Redux 而不是 Facebook Flux？](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux)
+- [Stack Overflow: 为什么我应该在这个例子中使用 Redux？](https://stackoverflow.com/questions/35675339/why-should-i-use-redux-in-this-example)
+- [Stack Overflow: 使用 Redux 而不是 Flux 的缺点是什么？](https://stackoverflow.com/questions/32021763/what-could-be-the-downsides-of-using-redux-instead-of-flux)
+- [Stack Overflow: 我应该何时将 Redux 添加到 React 应用程序？](https://stackoverflow.com/questions/36631761/when-should-i-add-redux-to-a-react-app)
+- [Stack Overflow: Redux 与普通 React？](https://stackoverflow.com/questions/39260769/redux-vs-plain-react/39261546#39261546)
+- [Twitter: Redux 是一个供开发人员使用可重用事物构建自定义状态管理的平台](https://twitter.com/acemarke/status/793862722253447168)
 
-## Can Redux only be used with React?
+## Redux 只能与 React 一起使用吗？
 
-Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code. That said, it is most useful when combined with a declarative view implementation that can infer the UI updates from the state changes, such as React or one of the similar libraries available.
+Redux 可以用作任何 UI 层的数据存储。最常见的用法是使用 React 和 React Native，但也有适用于 Angular、Angular 2、Vue、Mithril 等的绑定。Redux 只是提供了一种订阅机制，任何其他代码都可以使用它。也就是说，当与可以从状态更改推断 UI 更新的声明性视图库结合使用时，它是最有用的，例如 React 或可用的类似库之一。
 
-## Do I need to have a particular build tool to use Redux?
+## 我是否需要特定的构建工具才能使用 Redux？
 
-Redux is originally written in ES6 and transpiled for production into ES5 with Webpack and Babel. You should be able to use it regardless of your JavaScript build process. Redux also offers a UMD build that can be used directly without any build process at all. The [counter-vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) example demonstrates basic ES5 usage with Redux included as a `<script>` tag. As the relevant pull request says:
+Redux 最初是用 ES6 编写的，并使用 Webpack 和 Babel 转译为 ES5 以用于生产。无论你的 JavaScript 构建过程如何，你都应该能够使用它。Redux 还提供了一个 UMD 构建，可以直接使用，而无需任何构建过程。[counter-vanilla](https://github.com/reduxjs/redux/tree/master/examples/counter-vanilla) 示例演示了基本的 ES5 用法，其中 Redux 包含在 `<script>` 标记中。正如相关的拉取请求所说：
 
-> The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
+> 新的 Counter Vanilla 示例旨在消除 Redux 需要 Webpack、React、热重载、sagas、动作创建者、常量、Babel、npm、CSS 模块、装饰器、流利的拉丁语、Egghead 订阅、PhD 或 超出预期 O.W.L. 等级。
 >
-> Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
+> 不，它只是 HTML、一些手工的 `<script>` 标签和简单的旧 DOM 操作。享受它吧！
