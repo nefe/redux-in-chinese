@@ -20,7 +20,7 @@ Redux 不是一个单一的框架，而是一系列的约定和[一些让他们�
 
 - 通过创建 `createFluxStore(reducer)` 的方法来将每个 Flux Store 逐步重写为 Reducer，这个过程中你的应用中其他部分代码感知不到任何变化，仍可以和原来一样使用 Flux Store 。
 
-- 当重写你的 Store 时，你会发现你应该避免一些明显违反 Flux 模式的使用方法，例如在 Store 中请求 API、或者在 Store 中触发 action。一旦你将 Flux 代码移植为基于 reducer，它会变得更易于理解！
+- 当重写 Store 时，你会发现你应该避免一些明显违反 Flux 模式的使用方法，例如在 Store 中请求 API、或者在 Store 中触发 action。一旦将 Flux 代码移植为基于 reducer 的代码，它会变得更易于理解！
 
 - 当你所有的 Flux Store 全部基于 reducer 来实现时，你就可以利用 [`combineReducers(reducers)`](../api/combineReducers.md) 将多个 reducer 合并到一起，然后在应用里使用这个唯一的 Redux Store。
 

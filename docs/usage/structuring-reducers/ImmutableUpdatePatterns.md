@@ -157,7 +157,7 @@ var newState = immer.produce(usersState, draftState => {
 state = dotProp.set(state, `todos.${index}.complete`, true)
 ```
 
-其他的，例如 [immutability-helper](https://github.com/kolodny/immutability-helper)（现以弃用的 React Immutability Helpers 插件的一个复制），使用嵌套数据和辅助函数：
+其他的，例如 [immutability-helper](https://github.com/kolodny/immutability-helper)（现已弃用的 React Immutability Helpers 插件的一个复制），使用嵌套数据和辅助函数：
 
 ```js
 var collection = [1, 2, { a: [12, 17, 15] }]
@@ -173,7 +173,7 @@ var newCollection = update(collection, {
 ## 使用 Redux Toolkit 简化不可变更新
 
 我们的 **[Redux Toolkit](https://redux-toolkit.js.org/)** 包中包含在内部使用了 Immer 的[`createReducer` 实用程序](https://redux-starter-kit.js.org/api/createReducer)。
-因此，您可以编写看似“可变”状态的 Reducer，但更新实际上是不可改变的。
+因此，您可以编写看似“ mutable ”状态的 Reducer，但更新实际上是 immutable 的。
 
 这允许以更简单的方式编写不可变更新逻辑。这是[嵌套数据示例](#正确方法：复制嵌套数据的所有层级)
 可能看起来像使用 `createReducer`：

@@ -363,7 +363,7 @@ function callAPIMiddleware({ dispatch, getState }) {
     const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action
 
     if (!types) {
-      // 正常 action: 传下去
+      // 普通 action: 传下去
       return next(action)
     }
 
