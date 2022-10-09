@@ -20,7 +20,7 @@ sidebar_label: Reducers
 
 ### 如何在两个 reducers 之间共享 state？必须使用 combineReducers 吗？
 
-Redux store 的建议结构是将 state 对象按键拆分为多个 slices 或 domains，并提供单独的 reducer 函数来管理每个 slice。这类似于标准 Flux 模式包含多个独立 stores 的方式，Redux 提供了 [`combineReducers`](../api/combineReducers.md) 实用函数来使这种模式变得更容易。然而，需要重点注意 `combineReducers` _不是_ 必需的——它只是一个实用函数，适用于每个 state slice 只有一个 reducer 函数的常见用例，数据是纯 JavaScript 对象。
+Redux store 的建议结构是将 state 对象按键拆分为多个 slices 或 domains，并提供单独的 reducer 函数来管理每个 slice。这类似于标准 Flux 模式包含多个独立 stores 的方式，Redux 提供了 [`combineReducers`](../api/combineReducers.md) 工具函数来使这种模式变得更容易。然而，需要重点注意 `combineReducers` _不是_ 必需的——它只是一个工具函数，适用于每个 state slice 只有一个 reducer 函数的常见用例，数据是纯 JavaScript 对象。
 
 很多用户后来想尝试在两个 reducer 之间共享数据，但发现 `combineReducers` 不允许这样做。有几种解决办法：
 
