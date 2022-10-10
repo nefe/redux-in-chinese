@@ -1,9 +1,11 @@
 ---
 id: beyond-combinereducers
 title: 进阶 combineReducer
-description: '组织 Reducers > 进阶 combineReducer: Examples of reducer logic for other use cases not handled by combineReducers'
-hide_title: false
+description: '组织 Reducers > 进阶 combineReducer: combineReducers 未处理的其他用例的 reducer 逻辑示例'
+hide_title: true
 ---
+
+&nbsp;
 
 # `combineReducers` 进阶
 
@@ -11,7 +13,7 @@ Redux 引入了非常实用的 `combineReducers` 工具函数，但我们却有�
 
 于是一个常见问题出现了，“`combineReducers` 如何处理这些应用场景呢？”通常给出的回答只是“你不能这么做，你可能需要通过其他方式解决”。**一旦你突破 `combineReducers` 的这种限制，就是创建各色各样的“自定义” reducer 的时候了**，不管是为了解决一次性场景的特殊 reducer，还是能够被广泛复用的 reducer。本文为几种典型的应用场景提供了建议，但你也可以自由发挥。
 
-## 不同 reducers 之间共享数据
+## 在 slice reducer 之间共享数据
 
 类似地，如果 `sliceReducerA` 为了处理特殊的 action 正好需要来自 `sliceReducerB` 的部分 state 数据，或者 `sliceReducerB` 正好需要全部的 state 作为参数，单单就 `combineReducers` 是无法解决这种问题的。可以这样来解决：把所需数据当额外参数的形式传递给自定义函数，例如：
 
@@ -62,7 +64,7 @@ function someSpecialActionCreator() {
 }
 ```
 
-因为 B 的数据已经存在于 action 中，所以它的父级 reducer 不需要做任何特殊的处理就能把数据暴露给 `sliceReducerA`。
+因为 B 的 slice 的数据已经存在于 action 中，所以它的父级 reducer 不需要做任何特殊的处理就能把数据暴露给 `sliceReducerA`。
 
 第三种方法是：使用 `combineReducers` 组合 reducer 来处理“简单”的场景，每个 reducer 依旧只更新自己的数据；同时新加一个 reducer 来处理多块数据交叉的“复杂”场景；最后写一个包裹函数依次调用这两类 reducer 并得到最终结果：
 
@@ -104,7 +106,7 @@ const rootReducer = reduceReducers(combinedReducers, crossSliceReducer)
 
 ## 更多建议
 
-再次强调，Reducer *只是*普通的函数，明确这一概念非常重要。`combineReducers` 虽然实用也只是冰山一角。除了用 switch 语句编写函数，还可以用条件逻辑；函数不仅可以彼此组合，也可以调用其他函数。也许你可能需要这样的一个 reducer，它既能够重置 state，也能够响应特定的 action。你可以这样做：
+再次强调，Reducer *只是*普通的函数，明确这一概念非常重要。`combineReducers` 虽然很实用，但也只是冰山一角。除了用 switch 语句编写函数，还可以用条件逻辑；函数不仅可以彼此组合，也可以调用其他函数。也许你可能需要这样的一个 reducer，它既能够重置 state，也能够响应特定的 action。你可以这样做：
 
 ```js
 const undoableFilteredSliceA = compose(
@@ -118,6 +120,6 @@ const rootReducer = combineReducers({
 })
 ```
 
-注意 `combineReducers` 无需知道也不关心任何一个负责管理 `a` 数据的 reducer。所以我们并不需要像以往一样修改 `combineReducers` 来实现撤销功能 —— 我们只需把各种函数组合成一个新函数即可。
+注意 `combineReducers` 无需知道也不关心任何一个负责管理 `a` 数据的 reducer。所以我们并不需要像以往一样修改 `combineReducers` 来实现撤销功能 —— 我们只用将需要的部分构建到一个新的组合函数中。
 
-另外 `combineReducers` 只是 Redux 内置的 reducer 工具，大量形式各异的可复用的第三方 reducer 工具层出不穷。在 [Redux Addons 目录](https://github.com/markerikson/redux-ecosystem-links)中列举了很多可供使用的第三方工具。也许这些工具解决不了你的应用场景，但你随时都可以实现一个能够满足你需求的工具函数。
+另外 `combineReducers` 只是 Redux 内置的 reducer 工具，还有大量形式各异的可复用的第三方 reducer 工具层出不穷。在 [Redux Addons 目录](https://github.com/markerikson/redux-ecosystem-links)中列举了很多可供使用的第三方工具。也许这些工具解决不了你的应用场景，但你随时都可以实现一个能够满足你需求的工具函数。

@@ -33,15 +33,15 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ```jsx
 function Counter() {
-  // State: a counter value
+  // State: 计数器值
   const [counter, setCounter] = useState(0)
 
-  // Action: code that causes an update to the state when something happens
+  // Action: 发生某些事情时导致状态更新的代码
   const increment = () => {
     setCounter(prevCounter => prevCounter + 1)
   }
 
-  // View: the UI definition
+  // View: 定义UI
   return (
     <div>
       Value: {counter} <button onClick={increment}>Increment</button>
@@ -52,7 +52,7 @@ function Counter() {
 
 它是一个独立的应用程序，具有以下部分：
 
-- **state**，驱动我们应用程序的来源;
+- **state**，驱动我们应用程序的来源；
 - **view**， 基于当前状态的 UI 声明性描述
 - **actions**， 基于用户交互在应用中发生的事件，并触发状态更新
 
@@ -65,9 +65,9 @@ function Counter() {
 
 ![One-way data flow](/img/tutorials/essentials/one-way-data-flow.png)
 
-然而，当我们有**多个组件需要共享和使用相同state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state"](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
+然而，当我们有**多个组件需要共享和使用相同 state**时，可能会变得很复杂，尤其是当这些组件位于应用程序的不同部分时。有时这可以通过 ["提升 state "](https://reactjs.org/docs/lifting-state-up.html) 到父组件来解决，但这并不总是有效。
 
-解决这个问题的一种方法是从组件中提取共享 state，并将其放入组件树之外的一个集中位置。这样，我们的组件树就变成了一个大“view”，任何组件都可以访问 state 或触发 action，无论它们在树中的哪个位置！
+解决这个问题的一种方法是从组件中提取共享 state，并将其放入组件树之外的一个集中位置。这样，我们的组件树就变成了一个大” view “，任何组件都可以访问 state 或触发 action，无论它们在树中的哪个位置！
 
 通过定义和分离 state 管理中涉及的概念并强制执行维护 view 和 state 之间独立性的规则，代码变得更结构化和易于维护。
 
@@ -140,7 +140,7 @@ arr3.push('c')
 
 ## Redux 术语
 
-在我们继续之前，您需要熟悉一些重要的 Redux 术语：
+在我们继续之前，你需要熟悉一些重要的 Redux 术语：
 
 ### Actions
 
@@ -205,10 +205,9 @@ function counterReducer(state = initialState, action) {
 
 Reducer 可以在内部使用任何类型的逻辑来决定新状态应该是什么，如 `if/else`、`switch`、循环等等。
 
-
 <DetailedExplanation title="细节说明：Reducer 名字的来历" >
 
-[`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 方法处理数组的方式是，一次处理数组中的每一项，并返回一个最终结果。您可以将其视为“将数组减少到一个值”。
+[`Array.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) 方法处理数组的方式是，一次处理数组中的每一项，并返回一个最终结果。你可以将其视为“将数组减少到一个值”。
 
 `Array.reduce()` 将回调函数作为参数，该函数将为数组中的每一项调用一次。它需要两个参数：
 
@@ -258,7 +257,7 @@ console.log(finalResult)
 // {value: 3}
 ```
 
-我们可以说 **Redux reducer 将一组操作（随着时间的推移）减少到单个状态**。不同之处在于，使用 `Array.reduce()` 时它会一次性发生，而使用 Redux 时，它会在您正在运行的应用程序的整个生命周期内发生。
+我们可以说 **Redux reducer 将一组操作（随着时间的推移）减少到单个状态**。不同之处在于，使用 `Array.reduce()` 时它会一次性发生，而使用 Redux 时，它会在你正在运行的应用程序的整个生命周期内发生。
 
 </DetailedExplanation>
 
@@ -314,19 +313,19 @@ console.log(currentValue)
 
 :::tip
 
-这并 _不_ 意味着应用中的 _所有_ 状态都必须放进 Redux store 管理！您应该根据需要的位置来决定一段状态是属于 Redux 还是属于您的 UI 组件。
+这并 _不_ 意味着应用中的 _所有_ 状态都必须放进 Redux store 管理！你应该根据需要的位置来决定一段状态是属于 Redux 还是属于你的 UI 组件。
 
 :::
 
 ### State 是只读的
 
-更改状态的唯一方法是 dispatch 一个 **action**，这是一个描述所发生情况的对象。
+更改状态的唯一方法是 dispatch 一个 **action**，这是一个描述所发生事件的对象。
 
 这样，UI 就不会意外覆盖数据，并且更容易跟踪发生状态更新的原因。由于 actions 是普通的 JS 对象，因此可以记录、序列化、存储这些操作，并在以后重放这些操作以进行调试或测试。
 
 ### 使用 Reducer 纯函数进行更改
 
-若要指定如何基于 action 更新状态树，请编写 **reducer** 函数。Reducers 是纯函数，它们采用旧 state 和 action，并返回新 state。与任何其他函数一样，您可以将 Reducer 拆分为较小的函数以帮助完成工作，或者为常见任务编写可重用的 Reducer。
+若要指定如何基于 action 更新状态树，请编写 **reducer** 函数。Reducers 是纯函数，它接收旧 state 和 action，并返回新 state。与任何其他函数一样，你可以将 Reducer 拆分为较小的函数以帮助完成工作，或者为常见任务编写可重用的 Reducer。
 
 ## Redux 数据流
 

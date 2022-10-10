@@ -1,8 +1,8 @@
 ---
 id: basic-reducer-structure
 title: Reducer 的基本结构
-description: '组织 Reducer > Reducer 的基本结构: Overview of how reducer functions work with Redux state'
-hide_title: false
+sidebar_label: Reducer 的基本结构
+description: '组织 Reducers > Reducer 的基本结构: reducer 函数和 Redux state 是如何协同工作的'
 ---
 
 # Reducer 和 State 的基本结构
@@ -18,11 +18,12 @@ hide_title: false
 
 写 reducer 最简单的方式是把所有的逻辑放在一个单独的函数声明中，就像这样：
 
-```javascript
+```js
 function counter(state, action) {
   if (typeof state === 'undefined') {
     state = 0 // 如果 state 是 undefined，用这个默认值初始化 store
   }
+
   if (action.type === 'INCREMENT') {
     return state + 1
   } else if (action.type === 'DECREMENT') {
@@ -37,7 +38,7 @@ function counter(state, action) {
 
 这里有一些对这个 reducer 的简单调整。首先，重复的 `if/else` 语句看上去是很烦人的，可以使用 `switch` 语句代替他。其次，我们可以使用 ES6 的默认参数来处理初始 state 不存在的情况。有了这些变化，reducer 看上去会长成这样：
 
-```javascript
+```js
 function counter(state = 0, action) {
   switch (action.type) {
     case 'INCREMENT':
@@ -50,15 +51,15 @@ function counter(state = 0, action) {
 }
 ```
 
-这是典型 Redux reducer 的基本结构。
+这是典型 Redux reducer 函数的基本结构。
 
 ## State 的基本结构
 
-Redux 鼓励你根据要管理的数据来思考你的应用程序。数据就是你应用的 state，state 的结构和组织方式通常会称为 "shape"。在你组织 reducer 的逻辑时，state 的 shape 通常扮演一个重要的角色。
+Redux 鼓励你根据要管理的数据来思考你的应用程序。任何给定时间点的数据就是你应用的 "_state_"，state 的结构和组织方式通常会称为 "_shape_"。在你构建 reducer 的逻辑时，state 的 shape 通常扮演一个重要的角色。
 
-Redux state 中顶层的状态树通常是一个普通的 JavaScript 对象（当然也可以是其他类型的数据，比如：数字、数据或者其他专门的数据结构，但大多数库的顶层值都是一个普通对象）。在顶层对象中组织数据最常见的方式是将数据划分为子树，每个顶层的 key 对应着和特定域或者切片相关联的数据。例如，Todo 应用的 state 通常长这样：
+Redux state 中顶层的 state 树通常是一个普通的 JavaScript 对象（当然也可以是其他类型的数据，比如：数字、数组或者其他专门的数据结构，但大多数库的顶层值都是一个普通对象）。在顶层对象中组织数据最常见的方式是将数据划分为子树，每个顶层的 key 对应着和特定域或者 "slice" 相关联的数据。例如，Todo 应用的 state 通常长这样：
 
-```javascript
+```js
 {
   visibilityFilter: 'SHOW_ALL',
   todos: [
@@ -74,21 +75,21 @@ Redux state 中顶层的状态树通常是一个普通的 JavaScript 对象（�
 }
 ```
 
-在这个例子中，`todos` 和 `visibilityFilter` 都是 state 的顶层 Key，他们分别代表着一个某个特定概念的数据切片。
+在这个例子中，`todos` 和 `visibilityFilter` 都是 state 的顶层 Key，他们分别代表着某个特定概念的 "slice"。
 
 大多数应用会处理多种数据类型，通常可以分为以下三类：
 
-- 域数据（Domain data）: 应用需要展示、使用或者修改的数据（比如 从服务器检索到的所有 todos
-- 应用状态（App state）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行一个获取 Todos 的请求”）
-- UI 状态（UI state）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
+- _域数据_（_Domain data_）: 应用需要展示、使用或者修改的数据（比如 "从服务器检索到的所有 todos ")
+- _应用状态_（_App state_）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行获取 Todos 的请求”）
+- _UI 状态_（_UI state_）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
 
-Store 代表着应用核心，因此应该用域数据（Domain data）和应用状态数据（App state）定义 State，而不是用 UI 状态（UI state）。举个例子，`state.leftPane.todoList.todos` 这样的结构就是一个坏主意，因为整个应用的核心是 “todos” 而不仅仅是 UI 的一个模块。 `todos` 这个切片才应该是 state 结构的顶层。
+Store 代表着应用核心，你应该**用域数据（Domain data）和应用状态数据（App state）定义 State，而不是用 UI 组件树（UI state）**。举个例子，`state.leftPane.todoList.todos` 这样的结构并不太好，因为整个应用的核心是 “todos” 而不仅仅是 UI 的一个模块。 `todos` 这个 slice 才应该是 state 树的顶层。
 
 UI 树和状态树之间很少有 1 对 1 的关系。除非你想明确的跟踪你的 Redux Store 中存储的 UI 数据的各个方面，但即使是这样，UI 数据的结构和域数据的结构也是不一样的。
 
 一个典型的应用 state 大致会长这样：
 
-```javascript
+```js
 {
     domainData1 : {},
     domainData2 : {},

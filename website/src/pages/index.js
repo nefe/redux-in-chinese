@@ -96,7 +96,7 @@ const otherLibraries = [
   {
     content: 'Redux 官方实现的 React 绑定',
     title: 'React-Redux',
-    link: 'https://react-redux.js.org',
+    link: 'https://cn.react-redux.js.org',
     image: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

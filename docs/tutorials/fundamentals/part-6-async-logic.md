@@ -1,70 +1,69 @@
 ---
 id: part-6-async-logic
-title: 'Redux Fundamentals, Part 6: Async Logic and Data Fetching'
-sidebar_label: 'Async Logic and Data Fetching'
-hide_title: false
-description: 'The official Redux Fundamentals tutorial: learn how to use async logic with Redux'
+title: 'Redux 深入浅出，第 6 节：异步逻辑和数据获取'
+sidebar_label: '异步逻辑和数据获取'
+description: '官方 Redux 基础教程：学习如何在 Redux 中使用异步逻辑'
 ---
 
-# Redux Fundamentals, Part 6: Async Logic and Data Fetching
+# Redux 深入浅出，第 6 节：异步逻辑和数据获取
 
 :::tip 你将学到
 
-- How the Redux data flow works with async data
-- How to use Redux middleware for async logic
-- Patterns for handling async request state
+- Redux 数据流如何处理异步数据
+- 如何使用 Redux middleware 处理异步逻辑
+- 处理异步请求 state 的模式
 
 :::
 
-:::info Prerequisites
+:::info 预置知识
 
-- Familiarity with using AJAX requests to fetch and update data from a server
-- Understanding asynchronous logic in JS, including Promises
+- 熟悉使用 AJAX 请求从服务器获取和更新数据
+- 理解 JS 中的异步逻辑，包括 Promise
 
 :::
 
 ## 简介
 
-In [Part 5: UI and React](./part-5-ui-and-react.md), we saw how to use the React-Redux library to let our React components interact with a Redux store, including calling `useSelector` to read Redux state, calling `useDispatch` to give us access to the `dispatch` function, and wrapping our app in a `<Provider>` component to give those hooks access to the store.
+[第 5 节：视图和 React](./part-5-ui-and-react.md)，展示了如何使用 React-Redux 库使得 React 组件与 Redux store 能够交互，包括调用 `useSelector` 来读取 Redux state，调用 `useDispatch` 来访问 `dispatch` 函数，以及使用 `<Provider>` 组件包裹应用程序来让这些 hook 函数可以访问 store。
 
-So far, all the data we've worked with has been directly inside of our React+Redux client application. However, most real applications need to work with data from a server, by making HTTP API calls to fetch and save items.
+到目前为止，我们所使用的数据都直接来自 React+Redux 客户端应用程序。但是，大多数实际应用程序需要通过调用 HTTP API 来获取并保存来自服务器的数据。
 
-In this section, we'll update our todo app to fetch the todos from an API, and add new todos by saving them to the API.
+在本节中，我们将改写 todos 程序：通过 API 的方式获取并保存数据。
 
-### Example REST API and Client
+### REST API 和客户端示例
 
-To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mirage.js mock API tool](https://miragejs.com/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/todos`. It's defined in `src/api/server.js`.
+为了保持示例项目独立但具真实性，初始项目已经预置了一个虚拟的内存 REST API（使用 [Mirage.js 模拟 API 工具](https://miragejs.com/) 进行配置）。它使用 `/fakeApi` 作为基本 URL，并支持 `/fakeApi/todos` 常用的 HTTP 方法如：`GET/POST/PUT/DELETE`，它们定义在 `src/api/server.js`。
 
-The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.js`.
+该项目还包括一个小型 HTTP API 客户端对象，它公开了 client.get() 和 client.post() 方法，类似于流行的 HTTP 库，如 axios。它定义在 `src/api/client.js`。
 
-We'll use the `client` object to make HTTP calls to our in-memory fake REST API for this section.
+在本节中，我们将使用 `client` 对象对虚拟 REST API 进行 HTTP 调用。
 
-## Redux Middleware and Side Effects
+## Redux Middleware 和副作用
 
-By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
+Redux store 本身无法处理异步逻辑。它只会同步地 dispatch action，并通过调用根 reducer 函数来更新 state，然后通知视图更新。任何异步都必须在 store 之外发生。
 
-Earlier, we said that Redux reducers must never contain "side effects". **A "side effect" is any change to state or behavior that can be seen outside of returning a value from a function**. Some common kinds of side effects are things like:
+之前提过 Redux reducer 绝对不能包含“副作用”。**“副作用”是指除函数返回值之外的任何变更，包括 state 的更改或者其他行为**。一些常见的副作用是：
 
-- Logging a value to the console
-- Saving a file
-- Setting an async timer
-- Making an AJAX HTTP request
-- Modifying some state that exists outside of a function, or mutating arguments to a function
-- Generating random numbers or unique random IDs (such as `Math.random()` or `Date.now()`)
+- 在控制台打印日志
+- 保存文件
+- 设置异步定时器
+- 发送 AJAX HTTP 请求
+- 修改存在于函数之外的某些 state，或改变函数的参数
+- 生成随机数或唯一随机 ID（例如 `Math.random()` 或 `Date.now()`）
 
-However, any real app will need to do these kinds of things _somewhere_. So, if we can't put side effects in reducers, where _can_ we put them?
+但是事实上应用程序都需要在 _某处_ 做这些事情。所以如果不能把副作用放在 reducer 中，那可以放在哪里呢？
 
-**Redux middleware were designed to enable writing logic that has side effects**.
+**Redux middleware 就是用来放这些副作用逻辑代码的地方**。
 
-As we said [in Part 4](./part-4-store.md#middleware-use-cases), a Redux middleware can do _anything_ when it sees a dispatched action: log something, modify the action, delay the action, make an async call, and more. Also, since middleware form a pipeline around the real `store.dispatch` function, this also means that we could actually pass something that _isn't_ a plain action object to `dispatch`, as long as a middleware intercepts that value and doesn't let it reach the reducers.
+正如[第 4 节](./part-4-store.md#middleware-use-cases)介绍的，当 Redux middleware 执行 dispatch action 时，它可以做 _任何事情_：记录某些内容、修改 action、延迟 action，进行异步调用等。此外，由于 middleware 围绕真正的 `store.dispatch` 函数形成了一个管道，这也意味着我们实际上可以将一些 _不是_ 普通 action 对象的东西传递给 `dispatch`，只要 middleware 截获该值并且不让它到达 reducer。
 
-Middleware also have access to `dispatch` and `getState`. That means you could write some async logic in a middleware, and still have the ability to interact with the Redux store by dispatching actions.
+Middleware 也可以访问 `dispatch` 和 `getState`。这意味着你可以在 middleware 中编写一些异步逻辑，并且仍然能够通过 dispatch action 与 Redux store 进行交互。
 
-### Using Middleware to Enable Async Logic
+### 使用 Middleware 启用异步逻辑
 
-Let's look at a couple examples of how middleware can enable us to write some kind of async logic that interacts with the Redux store.
+下面是几个示例，用来说明 middleware 如何使我们能够编写与 Redux store 交互的异步逻辑。
 
-One possibility is writing a middleware that looks for specific action types, and runs async logic when it sees those actions, like these examples:
+一个契机是编写 middleware 来查找特定的 action type，并在执行这些 action 时运行异步逻辑，例如以下示例：
 
 ```js
 import { client } from '../api/client'
@@ -72,7 +71,7 @@ import { client } from '../api/client'
 const delayedActionMiddleware = storeAPI => next => action => {
   if (action.type === 'todos/todoAdded') {
     setTimeout(() => {
-      // Delay this action by one second
+      // 将这个 action 延迟1秒执行
       next(action)
     }, 1000)
     return
@@ -83,9 +82,9 @@ const delayedActionMiddleware = storeAPI => next => action => {
 
 const fetchTodosMiddleware = storeAPI => next => action => {
   if (action.type === 'todos/fetchTodos') {
-    // Make an API call to fetch todos from the server
+    // 发送 API 从服务器获取 todos
     client.get('todos').then(todos => {
-      // Dispatch an action with the todos we received
+      // 使用获取到的 todos 数据来 dispatch 一个 action
       storeAPI.dispatch({ type: 'todos/todosLoaded', payload: todos })
     })
   }
@@ -94,97 +93,101 @@ const fetchTodosMiddleware = storeAPI => next => action => {
 }
 ```
 
-:::info
+:::info 提示
 
-For more details on why and how Redux uses middleware for async logic, see these StackOverflow answers by Redux creator Dan Abramov:
+有关 Redux 为什么以及如何使用 middleware 处理异步逻辑的更多详细信息，请参阅 Redux 创建者 Dan Abramov 在 StackOverflow 上的回答：
 
-- ["How to dispatch a Redux action with a timeout?"](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
-- ["Why do we need middleware for async flow?"](https://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594)
+- [如何 dispatch 延迟 action？](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
+- [为什么我们需要 middleware 来实现异步流？](https://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux/34599594#34599594)
 
 :::
 
-### Writing an Async Function Middleware
+### 编写异步函数 Middleware
 
-Both of the middleware in that last section were very specific and only do one thing. It would be nice if we had a way to write _any_ async logic ahead of time, separate from the middleware itself, and still have access to `dispatch` and `getState` so that we can interact with the store.
+最后一节中的两个 middleware 都非常具体，只做了一件事。如果有办法可以提前编写 _任何_ 异步逻辑，不但与 middleware 本身分开，而且仍然可以访问 `dispatch` 和 `getState` 来和 store 进行交互，那就太好了。
 
-**What if we wrote a middleware that let us pass a _function_ to `dispatch`, instead of an action object**? We could have our middleware check to see if the "action" is actually a function instead, and if it's a function, call the function right away. That would let us write async logic in separate functions, outside of the middleware definition.
+**假设我们实现这样的 middleware，它可以传递 _函数_ 给 `dispatch`，而不是 action 对象呢**？可以让这个 middleware 判断 action 是否为函数，如果是函数，就立即调用。这样就可以在 middleware 定义之外的其他函数中编写异步逻辑了。
 
-Here's what that middleware might look like:
+middleware 看起来像这样：
 
-```js title="Example async function middleware"
+```js title="异步函数 middleware 示例"
 const asyncFunctionMiddleware = storeAPI => next => action => {
-  // If the "action" is actually a function instead...
+  // 如果 action 实际上是一个函数...
   if (typeof action === 'function') {
-    // then call the function and pass `dispatch` and `getState` as arguments
+    // 调用该函数并传入 `dispatch` 和 `getState` 作为参数
     return action(storeAPI.dispatch, storeAPI.getState)
   }
 
-  // Otherwise, it's a normal action - send it onwards
+  // 否则，它就是一个普通 action，那就继续执行
   return next(action)
 }
 ```
 
-And then we could use that middleware like this:
+然后就可以像这样使用该 middleware：
 
 ```js
 const middlewareEnhancer = applyMiddleware(asyncFunctionMiddleware)
 const store = createStore(rootReducer, middlewareEnhancer)
 
-// Write a function that has `dispatch` and `getState` as arguments
+// 编写一个接收 `dispatch` 和 `getState` 作为参数的函数
 const fetchSomeData = (dispatch, getState) => {
-  // Make an async HTTP request
+  // 发送一个异步 HTTP 请求
   client.get('todos').then(todos => {
-    // Dispatch an action with the todos we received
+    // 使用获取的 todos 来 dispatch action
     dispatch({ type: 'todos/todosLoaded', payload: todos })
-    // Check the updated store state after dispatching
+    // 在 dispatch 后检查更新后的 store
     const allTodos = getState().todos
     console.log('Number of todos after loading: ', allTodos.length)
   })
 }
 
-// Pass the _function_ we wrote to `dispatch`
+// 向 `dispatch` 传入 _函数_ 
 store.dispatch(fetchSomeData)
-// logs: 'Number of todos after loading: ###'
+// 打印日志：'加载完成后 todos 的数量：###'
 ```
 
-Again, notice that **this "async function middleware" let us pass a _function_ to `dispatch`!** Inside that function, we were able to write some async logic (an HTTP request), then dispatch a normal action object when the request completed.
+再次注意，**这个异步函数 middleware 使得我们可以给 `dispatch` 传入 _函数_ ！**在该函数中，可以编写一些异步逻辑（比如 HTTP 请求），然后在请求完成后 dispatch 一个普通的 action。
 
-## Redux Async Data Flow
+## Redux 异步数据流
 
-So how do middleware and async logic affect the overall data flow of a Redux app?
+那么 middleware 和异步逻辑如何影响 Redux 应用程序的整体数据流呢？
 
-Just like with a normal action, we first need to handle a user event in the application, such as a click on a button. Then, we call `dispatch()`, and pass in _something_, whether it be a plain action object, a function, or some other value that a middleware can look for.
+就像普通 action 一样，首先需要在应用程序中处理用户事件，比如点击按钮。然后，调用 `dispatch()`，并传入 _一些内容_，无论是普通的 action 对象、函数，还是 middleware 可以找到的其他值。
 
-Once that dispatched value reaches a middleware, it can make an async call, and then dispatch a real action object when the async call completes.
+一旦 dispatch 的值到达 middleware，它就可以进行异步调用，然后在异步调用完成时 dispatch 一个正真的 action 对象。
 
-Earlier, we saw [a diagram that represents the normal synchronous Redux data flow](./part-2-concepts-data-flow.md#redux-application-data-flow). When we add async logic to a Redux app, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+前面，我们看了[Redux 同步数据流程图](./part-2-concepts-data-flow.md#redux-application-data-flow)。当我们向 Redux 应用程序添加异步逻辑时，额外添加了 middleware 步骤，可以在其中运行 AJAX 请求等逻辑，然后 dispatch action。这使得异步数据流看起来像这样：
 
-![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
+![Redux 异步数据流程图](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
-## Using the Redux Thunk Middleware
+## 使用 Redux Thunk Middleware
 
-As it turns out, Redux already has an official version of that "async function middleware", called the [**Redux "Thunk" middleware**](https://github.com/reduxjs/redux-thunk). The thunk middleware allows us to write functions that get `dispatch` and `getState` as arguments. The thunk functions can have any async logic we want inside, and that logic can dispatch actions and read the store state as needed.
+实际上，Redux 已经有了异步函数 middleware 的正式版本，称为 [**Redux “Thunk” middleware**](https://github.com/reduxjs/redux-thunk)。thunk middleware 允许我们编写以 `dispatch` 和 `getState` 作为参数的函数。thunk 函数可以包含我们想要的任何异步逻辑，并且该逻辑可以根据需要 dispatch action 以及读取 store state。
 
-**Writing async logic as thunk functions allows us to reuse that logic without knowing what Redux store we're using ahead of time**.
+**将异步逻辑写成 thunk 函数允许我们在不知道使用的 Redux store 的情况下能够重用该逻辑。**
 
-:::info
+:::info 提示
 
-The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). For more details, see these posts:
+“thunk” 是一个编程术语，意思是["一段执行延迟工作的代码"](https://en.wikipedia.org/wiki/Thunk)。有关如何使用 thunk 的更多详细信息，请参阅 thunk 使用指南页面：
 
-- [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
-- [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
+- [使用指南：使用 Thunk 编写异步逻辑](../../usage/writing-logic-thunks.mdx)
+
+以及这些帖子：
+
+- [什么是 thunk？](https://daveceddia.com/what-is-a-thunk/)
+- [Redux 中的 thunk：基础知识](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
 
 :::
 
-### Configuring the Store
+### 配置 Store
 
-The Redux thunk middleware is available on NPM as a package called `redux-thunk`. We need to install that package to use it in our app:
+Redux thunk middleware 在 NPM 上作为一个名为 redux-thunk 的包提供。需要安装该软件包后才能在应用程序中使用：
 
 ```bash
 npm install redux-thunk
 ```
 
-Once it's installed, we can update the Redux store in our todo app to use that middleware:
+安装后，我们可以更新 todo 应用程序中的 Redux store 来使用该 middleware：
 
 ```js title="src/store.js"
 import { createStore, applyMiddleware } from 'redux'
@@ -196,16 +199,16 @@ import rootReducer from './reducer'
 // highlight-next-line
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware))
 
-// The store now has the ability to accept thunk functions in `dispatch`
+// store 现在就可以在 `dispatch` 中接收 thunk 函数了
 const store = createStore(rootReducer, composedEnhancer)
 export default store
 ```
 
-### Fetching Todos from a Server
+### 从服务器获取 Todos
 
-Right now our todo entries can only exist in the client's browser. We need a way to load a list of todos from the server when the app starts up.
+目前我们的 todo 条目只能存在于客户端的浏览器中。我们需要一种在应用启动时从服务器加载 todos 列表的方法。
 
-We'll start by writing a thunk function that makes an AJAX call to our `/fakeApi/todos` endpoint to request an array of todo objects, and then dispatch an action containing that array as the payload. Since this is related to the todos feature in general, we'll write the thunk function in the `todosSlice.js` file:
+首先编写一个 thunk 函数，该函数向 `/fakeApi/todos` 端点进行 AJAX 请求获取到一个 todo 对象数组，然后 dispatch 包含该数组作为 payload 的 action。因为这部分内容和 todos 功能相关，所以我们在 `todosSlice.js` 文件中编写 thunk 函数：
 
 ```js title="src/features/todos/todosSlice.js"
 import { client } from '../../api/client'
@@ -213,10 +216,10 @@ import { client } from '../../api/client'
 const initialState = []
 
 export default function todosReducer(state = initialState, action) {
-  // omit reducer logic
+  // 省略 reducer 逻辑
 }
 
-// Thunk function
+// Thunk 函数
 // highlight-start
 export async function fetchTodos(dispatch, getState) {
   const response = await client.get('/fakeApi/todos')
@@ -225,13 +228,13 @@ export async function fetchTodos(dispatch, getState) {
 // highlight-end
 ```
 
-We only want to make this API call once, when the application loads for the first time. There's a few places we _could_ put this:
+我们只需要在应用程序第一次加载时调用这个 API。以下是 _可以_ 放这个 thunk 函数的地方：
 
-- In the `<App>` component, in a `useEffect` hook
-- In the `<TodoList>` component, in a `useEffect` hook
-- In the `index.js` file directly, right after we import the store
+- 在`<App>` 组件的 `useEffect` hook 函数中
+- 在 `<TodoList>` 组件的 `useEffect` hook 函数中
+- 直接放在 `index.js` 导入 store 之后的地方
 
-For now, let's try putting this directly in `index.js`:
+现在，尝试将其直接放在 `index.js` 中：
 
 ```js title="src/index.js"
 import React from 'react'
@@ -259,13 +262,13 @@ ReactDOM.render(
 )
 ```
 
-If we reload the page, there's no visible change in the UI. However, if we open up the Redux DevTools extension, we should now see that a `'todos/todosLoaded'` action was dispatched, and it should contain some todo objects that were generated by our fake server API:
+重新加载页面后，虽然 UI 没有变化，但如果我们打开 Redux DevTools，就可以看到一个 `'todos/todosLoaded'` action 被 dispatch 了，并且它包含一些由虚拟服务器 API 生成的 todo 对象：
 
 ![Devtools - todosLoaded action contents](/img/tutorials/fundamentals/devtools-todosLoaded-action.png)
 
-Notice that even though we've dispatched an action, nothing's happening to change the state. **We need to handle this action in our todos reducer to have the state updated.**
+请注意，即使我们已经 dispatch 了一个 action，state 仍没有任何改变。**我们需要在 todos reducer 中处理这个 action 来更新 state。**
 
-Let's add a case to the reducer to load this data into the store. Since we're fetching the data from the server, we want to completely replace any existing todos, so we can return the `action.payload` array to make it be the new todos `state` value:
+让我们在 reducer 中添加一个 case，来将这些数据载入 store。因为我们需要从服务器获取数据，并完全替换现有的 todos，所以可以返回 `action.payload` 数组，使其成为新的 todos `state` 值：
 
 ```js title="src/features/todos/todosSlice.js"
 import { client } from '../../api/client'
@@ -274,10 +277,10 @@ const initialState = []
 
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
-    // omit other reducer cases
+    // 省略其他 reducer cases
     // highlight-start
     case 'todos/todosLoaded': {
-      // Replace the existing state entirely by returning the new value
+      // 通过返回的新值完全替换现有 state
       return action.payload
     }
     // highlight-end
@@ -292,7 +295,7 @@ export async function fetchTodos(dispatch, getState) {
 }
 ```
 
-Since dispatching an action immediately updates the store, we can also call `getState` in the thunk to read the updated state value after we dispatch. For example, we could log the number of total todos to the console before and after dispatching the `'todos/todosLoaded'` action:
+由于 dispatch action 会立即更新 store，所以我们也可以在 dispatch 后调用 thunk 中的 getState 来读取更新后的 state 值。例如，我们可以在 dispatch `'todos/todosLoaded'` 操作前后将 todos 总数打印到控制台：
 
 ```js
 export async function fetchTodos(dispatch, getState) {
@@ -310,15 +313,15 @@ export async function fetchTodos(dispatch, getState) {
 }
 ```
 
-### Saving Todo Items
+### 保存 Todo 条目
 
-We also need to update the server whenever we try to create a new todo item. Instead of dispatching the `'todos/todoAdded'` action right away, we should make an API call to the server with the initial data, wait for the server to send back a copy of the newly saved todo item, and _then_ dispatch an action with that todo item.
+每次创建新的 todo 条目后，都需要更新服务器的数据。我们应该使用初始数据对服务器进行 API 调用，等待服务器返回新保存的 todo 条目副本，_然后_ 使用那些 todo 条目来 dispatch action，而不是立即 dispatch `'todos/todoAdded'` action。
 
-However, if we start trying to write this logic as a thunk function, we're going to run into a problem: since we're writing the thunk as a separate function in the `todosSlice.js` file, the code that makes the API call doesn't know what the new todo text is supposed to be:
+但是，尝试将此逻辑编写为 thunk 函数，将会遇到一个问题：由于我们将 thunk 编写成 `todosSlice.js` 文件中的独立函数，所以进行 API 调用的代码不知道新的 todo 文本应该是什么：
 
 ```js title="src/features/todos/todosSlice.js"
 async function saveNewTodo(dispatch, getState) {
-  // ❌ We need to have the text of the new todo, but where is it coming from?
+  // ❌ 我们需要有新的 todo 文本，但它来自哪里？
   // highlight-next-line
   const initialTodo = { text }
   const response = await client.post('/fakeApi/todos', { todo: initialTodo })
@@ -326,14 +329,14 @@ async function saveNewTodo(dispatch, getState) {
 }
 ```
 
-We need a way to write one function that accepts `text` as its parameter, but then creates the actual thunk function so that it can use the `text` value to make the API call. Our outer function should then return the thunk function so that we can pass to `dispatch` in our component.
+我们需要实现一个接受 `text` 作为参数的函数，接着创建实际的 thunk 函数，以便它可以使用 `text` 值进行 API 调用。然后，外部函数应该返回 thunk 函数，以便可以传递给组件中的 `dispatch`。
 
 ```js title="src/features/todos/todosSlice.js"
-// Write a synchronous outer function that receives the `text` parameter:
+// 编写一个接收 `text` 参数的同步外部函数：
 export function saveNewTodo(text) {
-  // And then creates and returns the async thunk function:
+  // 然后创建并返回异步 thunk 函数：
   return async function saveNewTodoThunk(dispatch, getState) {
-    // ✅ Now we can use the text value and send it to the server
+    // ✅ 现在可以使用文本值并将其发送到服务器了
     const initialTodo = { text }
     const response = await client.post('/fakeApi/todos', { todo: initialTodo })
     dispatch({ type: 'todos/todoAdded', payload: response.todo })
@@ -341,7 +344,7 @@ export function saveNewTodo(text) {
 }
 ```
 
-Now we can use this in our `<Header>` component:
+现在我们可以在 `<Header>` 组件中使用它：
 
 ```js title="src/features/header/Header.js"
 import React, { useState } from 'react'
@@ -357,13 +360,13 @@ const Header = () => {
   const handleChange = e => setText(e.target.value)
 
   const handleKeyDown = e => {
-    // If the user pressed the Enter key:
+    // 如果用户按下 Enter 键：
     const trimmedText = text.trim()
     if (e.which === 13 && trimmedText) {
       // highlight-start
-      // Create the thunk function with the text the user wrote
+      // 使用用户编写的文本创建 thunk 函数
       const saveNewTodoThunk = saveNewTodo(trimmedText)
-      // Then dispatch the thunk function itself
+      // 然后 dispatch thunk 函数本身
       dispatch(saveNewTodoThunk)
       // highlight-end
       setText('')
@@ -374,16 +377,15 @@ const Header = () => {
 }
 ```
 
-Since we know we're going to immediately pass the thunk function to `dispatch` in the
-component, we can skip creating the temporary variable. Instead, we can call `saveNewTodo(text)`, and pass the resulting thunk function straight to `dispatch`:
+因为我们将立即传递 thunk 函数给组件中的 `dispatch`，所以可以跳过创建临时变量的步骤。相反，我们可以调用 `saveNewTodo(text)`，并将生成的 thunk 函数直接传递给 `dispatch`：
 
 ```js title="src/features/header/Header.js"
 const handleKeyDown = e => {
-  // If the user pressed the Enter key:
+  // 如果用户按下 Enter 键：
   const trimmedText = text.trim()
   if (e.which === 13 && trimmedText) {
     // highlight-start
-    // Create the thunk function and immediately dispatch it
+    // 创建 thunk 函数并立即 dispatch
     dispatch(saveNewTodo(trimmedText))
     // highlight-end
     setText('')
@@ -391,15 +393,15 @@ const handleKeyDown = e => {
 }
 ```
 
-Now the component doesn't actually know that it's even dispatching a thunk function - the `saveNewTodo` function is encapsulating what's actually happening. The `<Header>` component only knows that it needs to dispatch _some value_ when the user presses enter.
+现在组件实际上并不知道它甚至在 dispatch 一个 thunk 函数 - `saveNewTodo` 函数正在封装实际发生的事情。`<Header>` 组件只知道它需要在用户按下回车键时 dispatch _一些值_。
 
-This pattern of writing a function to prepare something that will get passed to `dispatch` is called **the "action creator" pattern**, and we'll talk about that more in [the next section](./part-7-standard-patterns.md).
+编写预备传递给`dispatch`内容的函数，这一模式称为**action creator 模式**，我们将在[下一节](./part-7-standard-patterns.md)详细讨论。
 
-We can now see the updated `'todos/todoAdded'` action being dispatched:
+现在可以看到更新后的 `'todos/todoAdded'` action 被 dispatch 了：
 
 ![Devtools - async todoAdded action contents](/img/tutorials/fundamentals/devtools-async-todoAdded-action.png)
 
-The last thing we need to change here is updating our todos reducer. When we make a POST request to `/fakeApi/todos`, the server will return a completely new todo object (including a new ID value). That means our reducer doesn't have to calculate a new ID, or fill out the other fields - it only needs to create a new `state` array that includes the new todo item:
+这里最后需要做的事情是更新 todos reducer。当我们向 `/fakeApi/todos` 发出 POST 请求时，服务器将返回一个全新的 todo 对象（包括一个新的 ID 值）。这意味着 reducer 不必计算新的 ID，或填充其他字段 - 它只需要创建一个包含新 todo 条目的新 `state` 数组：
 
 ```js title="src/features/todos/todosSlice.js"
 const initialState = []
@@ -408,34 +410,34 @@ export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     // highlight-start
     case 'todos/todoAdded': {
-      // Return a new todos state array with the new todo item at the end
+      // 返回一个新的 todos state 数组，最后带有新的 todo 条目
       return [...state, action.payload]
     }
     // highlight-end
-    // omit other cases
+    // 省略其他 case
     default:
       return state
   }
 }
 ```
 
-And now adding a new todo will work correctly:
+现在添加一个新的 todo 将会正常工作：
 
 ![Devtools - async todoAdded state diff](/img/tutorials/fundamentals/devtools-async-todoAdded-diff.png)
 
-:::tip
+:::tip 提示
 
-Thunk functions can be used for both asynchronous _and_ synchronous logic. Thunks provide a way to write any reusable logic that needs access to `dispatch` and `getState`.
+Thunk 函数可用于处理异步 _和_ 同步逻辑。Thunks 提供了一种方法来编写任何需要访问 `dispatch` 和 `getState` 的可重用逻辑。
 
 :::
 
-## 你学到了
+## 你的所学
 
-We've now succesfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
+现在我们已经成功地更新了 todo 应用程序，因此可以使用 thunk 函数对虚拟服务器 API 进行 AJAX 调用，来获取 todo 列表并保存新的 todo 条目。
 
-In the process, we saw how Redux middleware are used to let us make async calls and interact with the store by dispatching actions with after the async calls have completed.
+在这个过程中，我们看到了如何使用 Redux middleware 进行异步调用，并在异步调用完成后通过 dispatch action 来和 store 进行交互的。
 
-Here's what the current app looks like:
+这是当前应用程序的展示：
 
 <iframe
   class="codesandbox"
@@ -447,23 +449,23 @@ Here's what the current app looks like:
 
 :::tip 总结
 
-- **Redux middleware were designed to enable writing logic that has side effects**
-  - "Side effects" are code that changes state/behavior outside a function, like AJAX calls, modifying function arguments, or generating random values
-- **Middleware add an extra step to the standard Redux data flow**
-  - Middleware can intercept other values passed to `dispatch`
-  - Middleware have access to `dispatch` and `getState`, so they can dispatch more actions as part of async logic
-- **The Redux "Thunk" middleware lets us pass functions to `dispatch`**
-  - "Thunk" functions let us write async logic ahead of time, without knowing what Redux store is being used
-  - A Redux thunk function receives `dispatch` and `getState` as arguments, and can dispatch actions like "this data was received from an API response"
+- **Redux middleware 旨在支持编写具有副作用的逻辑**
+  - “副作用”是指更改函数外部 state 或行为的代码，例如 AJAX 调用、修改函数参数或生成随机值
+- **middleware 为标准 Redux 数据流增加了一个额外的步骤**
+  - middleware 可以拦截传递给 `dispatch` 的其他值
+  - middleware 可以访问 `dispatch` 和 `getState`，因此它们可以作为异步逻辑的一部分 dispatch 更多 action
+- **Redux “Thunk” middleware 使得可以传递函数给 `dispatch`**
+  - “Thunk” 函数让我们可以提前编写异步逻辑，而不需要知道当前使用的 Redux store
+  - Redux thunk 函数接收 `dispatch` 和 `getState` 作为参数，并且可以 dispatch 诸如“此数据是从 API 响应中接收到的”之类的 action
 
 :::
 
 ## 下一步
 
-We've now covered all the core pieces of how to use Redux! You've seen how to:
+目前为止已经涵盖了如何使用 Redux 的所有核心部分！你已经了解如何：
 
-- Write reducers that update state based on dispatched actions,
-- Create and configure a Redux store with a reducer, enhancers, and middleware
-- Use middleware to write async logic that dispatches actions
+- 编写基于 dispatch action 来更新 state 的 reducer
+- 使用 reducer、enhancer 和 middleware 创建及配置 Redux store
+- 使用 middleware 编写 dispatch action 的异步逻辑
 
-In [Part 7: Standard Redux Patterns](./part-7-standard-patterns.md), we'll look at several code patterns that are typically used by real-world Redux apps to make our code more consistent and scale better as the application grows.
+在[第 7 节：标准 Redux 模式](./part-7-standard-patterns.md)中，我们将了解现实中 Redux 应用程序常用的几种代码模式，以使代码随着应用程序的扩张能够更加一致并更具扩展性。

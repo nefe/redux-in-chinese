@@ -13,13 +13,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 :::tip 你将学到
 
 - 一个典型的 React + Redux 应用程序的结构
-- 如何在 Redux DevTools Extension 中查看状态变化
+- 如何在 Redux DevTools Extension 中查看 state 变化
 
 :::
 
 ## 简介
 
-在 [第一节：Redux 概述和概念](./part-1-overview-concepts.md) 中，我们研究了 Redux 为何有用、用于描述 Redux 代码不同部分的术语和概念，以及数据如何在 Redux 应用程序中流动。
+在 [第一节：Redux 概述和概念](./part-1-overview-concepts.md) 中 ，我们研究了 Redux 为何有用 ，和用于描述 Redux 代码不同部分的术语和概念，以及数据如何在 Redux 应用程序中流动。
 
 现在，让我们看一个真实的工作示例，看看这些部分是如何组合在一起的。
 
@@ -27,9 +27,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 我们将看到的示例项目是一个小型计数器应用程序，它允许我们在单击按钮时对数字进行加减运算。它可能不是很令人兴奋，但它展示了一个 React + Redux 应用程序的所有重要部分。
 
-本项目使用 [Create-React-App 的官方 Redux 模板](https://github.com/reduxjs/cra-template-redux) 创建。开箱即用，它已经配置了标准的 Redux 应用程序结构，使用 [Redux Toolkit](https://redux-toolkit.js.org) 创建 Redux 存储和逻辑，以及 [React-Redux]( https://react-redux.js.org) 将 Redux 存储和 React 组件连接在一起。
+本项目使用 [Create-React-App 的官方 Redux 模板](https://github.com/reduxjs/cra-template-redux) 创建。开箱即用，它已经配置了标准的 Redux 应用程序结构，使用 [Redux Toolkit](https://redux-toolkit.js.org) 创建 Redux store 和逻辑，以及 [React-Redux](https://react-redux.js.org) 将 Redux store 和 React 组件连接在一起。
 
-这是该项目的实时版本。 您可以通过单击右侧应用程序预览中的按钮来试用它，并浏览左侧的源文件。
+这是该项目的实时版本。 你可以通过单击右侧应用程序预览中的按钮来试用它，并浏览左侧的源文件。
 
 <iframe
   class="codesandbox"
@@ -49,7 +49,7 @@ npx create-react-app redux-essentials-example --template redux
 
 计数器应用程序已经设置好，让我们可以在使用时观察内部发生的情况。
 
-打开浏览器的 DevTools。 然后，在 DevTools 中选择“Redux”选项卡，然后单击右上角工具栏中的“State”按钮。 您应该会看到如下所示的内容：
+打开浏览器的 DevTools。 然后，在 DevTools 中选择 “Redux” 选项卡，然后单击右上角工具栏中的“State”按钮。 你应该会看到如下所示的内容：
 
 ![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
 
@@ -65,7 +65,7 @@ npx create-react-app redux-essentials-example --template redux
 
 DevTools 将向我们展示 Store 中的 state 是如何变化的。
 
-让我们先玩一下这个应用程序，看看它有什么作用。单击应用程序中的“+”按钮，然后查看 Redux DevTools 中的“Diff”选项卡：
+让我们先玩一下这个应用程序，看看它有什么作用。单击应用程序中的“+”按钮，然后查看 Redux DevTools 中的 “Diff” 选项卡：
 
 ![Redux DevTools: first dispatched action](/img/tutorials/essentials/devtools-first-action.png)
 
@@ -80,9 +80,9 @@ DevTools 将向我们展示 Store 中的 state 是如何变化的。
 - 单击“-”按钮一次。显示的值现在应该是 1。
 - 单击“添加金额”按钮。显示的值现在应该是 3。
 - 将文本框中的数字“2”更改为“3”
-- 单击“添加异步”按钮。您应该会看到一个进度条填充按钮，几秒钟后，显示的值应更改为 6。
+- 单击“添加异步”按钮。你应该会看到一个进度条填充按钮，几秒钟后，显示的值应更改为 6。
 
-回到 Redux DevTools。您应该会看到总共 dispatch 了五个 action，每单击一个按钮触发一次。现在从左侧列表中选择最后一个 `"counter/incrementByAmount"` 条目，然后单击右侧的 "Action" 选项卡：
+回到 Redux DevTools。你应该会看到总共 dispatch 了五个 action，每单击一个按钮触发一次。现在从左侧列表中选择最后一个 `"counter/incrementByAmount"` 条目，然后单击右侧的 "Action" 选项卡：
 
 ![Redux DevTools: done clicking buttons](/img/tutorials/essentials/devtools-done-clicking.png)
 
@@ -95,31 +95,31 @@ DevTools 将向我们展示 Store 中的 state 是如何变化的。
 }
 ```
 
-如果您单击“差异”选项卡，您可以看到 `state.counter.value` 字段响应该 action 从 `3` 更改为 `6`。
+如果你单击 “Diff” 选项卡，你可以看到 `state.counter.value` 字段响应该 action 从 `3` 更改为 `6`。
 
 查看我们的应用程序内部发生的事情以及我们的状态如何随时间变化的能力非常强大！
 
-DevTools 有更多命令和选项可帮助您调试应用程序。尝试单击右上角的“跟踪 Trace”选项卡。 您应该在面板中看到一个 JavaScript 函数堆栈跟踪，其中有几段源代码显示了当 action 到达 store 时正在执行的行。特别应该突出显示一行：我们从 `<Counter>` 组件 dispatch 此 action 的代码行：
+DevTools 有更多命令和选项可帮助你调试应用程序。尝试单击右上角的 “Trace” 选项卡。 你应该在面板中看到一个 JavaScript 函数堆栈跟踪，其中有几段源代码显示了当 action 到达 store 时正在执行的行。特别应该突出显示一行：我们从 `<Counter>` 组件 dispatch 此 action 的代码行：
 
 ![Redux DevTools: action stack traces](/img/tutorials/essentials/devtools-action-stacktrace.png)
 
 这使得跟踪代码的哪一部分 dispatch 了特定 action 变得更加容易。
 
-## Application 实现
+## 应用目录
 
 你已经知道了应用的功能，现在看一下代码实现。
 
 以下是构成此应用程序的关键文件：
 
 - `/src`
-  - `index.js`: the starting point for the app
-  - `App.js`: the top-level React component
+  - `index.js`: app 入口
+  - `App.js`: 顶级 React 组件
   - `/app`
-    - `store.js`: creates the Redux store instance
+    - `store.js`: 创建 Redux store 实例
   - `/features`
     - `/counter`
-      - `Counter.js`: a React component that shows the UI for the counter feature
-      - `counterSlice.js`: the Redux logic for the counter feature
+      - `Counter.js`: 展示 counter 特性的 React 组件
+      - `counterSlice.js`: counter 特性相关的 redux 逻辑
 
 让我们先看看 Redux store 是如何创建的。
 
@@ -144,13 +144,13 @@ Redux store 是使用 Redux Toolkit 中的 `configureStore` 函数创建的。`c
 
 我们有一个名为 `features/counter/counterSlice.js` 的文件，它为计数器逻辑导出了一个 reducer 函数。 我们可以在此处导入 `counterReducer` 函数，并在创建 store 时包含它。
 
-当我们传入一个像 `{counter: counterReducer}` 这样的对象时，它表示我们希望在 Redux 状态对象中有一个 `state.counter` 部分，并且我们希望 `counterReducer` 函数负责决定是否以及如何在 dispatch action 时更新 `state.counter` 部分。
+当我们传入一个像 `{counter: counterReducer}` 这样的对象时，它表示我们希望在 Redux 状态对象中有一个 `state.counter` 部分，并且我们希望每当 dispatch action 时 `counterReducer` 函数负责决定是否以及如何更新 `state.counter` 部分。
 
-Redux 允许使用不同类型的插件（“中间件”和“增强器”）自定义 store 设置。`configureStore` 默认会自动在 store setup 中添加几个中间件以提供良好的开发者体验，并且还设置 store 以便 Redux DevTools Extension 可以检查其内容。
+Redux 允许使用不同类型的插件（“middleware”和“enhancers”）自定义 store 设置。`configureStore` 默认会自动在 store setup 中添加几个中间件以提供良好的开发者体验，并且还设置 store 以便 Redux DevTools Extension 可以检查其内容。
 
-#### Redux 切片（Slice）
+#### Redux Slice
 
-**“切片”是应用中单个功能的 Redux reducer 逻辑和 action 的集合**, 通常一起定义在一个文件中。该名称来自于将根 Redux 状态对象拆分为多个状态“切片”。
+**“slice” 是应用中单个功能的 Redux reducer 逻辑和 action 的集合**, 通常一起定义在一个文件中。该名称来自于将根 Redux 状态对象拆分为多个状态 “slice”。
 
 比如，在一个博客应用中，store 的配置大致长这样：
 
@@ -169,11 +169,11 @@ export default configureStore({
 })
 ```
 
-例子中，`state.users`，`state.posts`，和 `state.comments` 均是 Redux state 的一个切片“slice”。由于 `usersReducer` 负责更新 `state.users` 切片，我们将其称为“slice reducer”函数。
+例子中，`state.users`，`state.posts`，和 `state.comments` 均是 Redux state 的一个 独立的 “slice”。由于 `usersReducer` 负责更新 `state.users` slice，我们将其称为 “slice reducer” 函数。
 
 <DetailedExplanation title="细节说明：Reducer 与 State 的结构">
 
-Redux store 需要在创建时传入一个“root reducer”函数。因此，如果我们有许多不同的 slice reducer 函数，我们如何获得单个 root reducer，以及它如何定义 Redux store 中 state 的内容呢？
+Redux store 需要在创建时传入一个 “root reducer” 函数。因此，如果我们有许多不同的 slice reducer 函数，我们如何获得单个 root reducer，以及它如何定义 Redux store 中 state 的内容呢？
 
 如果我们尝试手动调用所有 slice 的 reducer，它可能如下所示：
 
@@ -187,7 +187,7 @@ function rootReducer(state = {}, action) {
 }
 ```
 
-这会单独调用每个 slice reducer，传入 Redux 状态的特定切片，并将每个返回值包含在最终的新 Redux 状态对象中。
+这会单独调用每个 slice reducer，传入 Redux state 的特定 slice，并将每个返回值包含在最终的新 Redux state 对象中。
 
 Redux 有一个名为 [`combineReducers`](../../api/combineReducers.md) 的函数，它会自动为我们执行此操作。它接受一个全是 slice reducer 的对象作为其参数，并返回一个函数，该函数在调度操作时调用每个 slice reducer。每个 slice reducer 的结果都组合成一个对象作为最终结果。我们可以使用 `combineReducers` 做和前面例子一样的事情：
 
@@ -225,10 +225,10 @@ export const counterSlice = createSlice({
   },
   reducers: {
     increment: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+      // Redux Toolkit 允许我们在 reducers 写 "可变" 逻辑。
+      // 并不是真正的改变 state 因为它使用了 immer 库
+      // 当 immer 检测到 "draft state" 改变时，会基于这些改变去创建一个新的
+      // 不可变的 state
       state.value += 1
     },
     decrement: state => {
@@ -245,7 +245,7 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
-早些时候，我们看到单击 UI 中的不同按钮会 dispatch 三种不同类型的 Redux action：
+早些时候，我们看到单击视图中的不同按钮会 dispatch 三种不同类型的 Redux action：
 
 - `{type: "counter/increment"}`
 - `{type: "counter/decrement"}`
@@ -253,9 +253,9 @@ export default counterSlice.reducer
 
 我们知道 action 是带有 `type` 字段的普通对象，`type` 字段总是一个字符串，并且我们通常有 action creator 函数来创建和返回 action 对象。那么在哪里定义 action 对象、类型字符串和 action creator 呢？
 
-我们_可以_每次都手写。但是，那会很乏味。此外，Redux 中_真正_重要的是 reducer 函数，以及其中计算新状态的逻辑。
+我们*可以*每次都手写。但是，那会很乏味。此外，Redux 中*真正*重要的是 reducer 函数，以及其中计算新状态的逻辑。
 
-Redux Toolkit 有一个名为 `createSlice` 的函数，它负责生成 action 类型字符串、action creator 函数和 action 对象的工作。您所要做的就是为这个切片定义一个名称，编写一个包含 reducer 函数的对象，它会自动生成相应的 action 代码。`name` 选项的字符串用作每个 action 类型的第一部分，每个 reducer 函数的键名用作第二部分。因此，`"counter"` 名称 + `"increment"` reducer 函数生成了一个 action 类型 `{type: "counter/increment"}`。（毕竟，如果计算机可以为我们做，为什么要手写！）
+Redux Toolkit 有一个名为 `createSlice` 的函数，它负责生成 action 类型字符串、action creator 函数和 action 对象的工作。你所要做的就是为这个 slice 定义一个名称，编写一个包含 reducer 函数的对象，它会自动生成相应的 action 代码。`name` 选项的字符串用作每个 action 类型的第一部分，每个 reducer 函数的键名用作第二部分。因此，`"counter"` 名称 + `"increment"` reducer 函数生成了一个 action 类型 `{type: "counter/increment"}`。（毕竟，如果计算机可以为我们做，为什么要手写！）
 
 除了 `name` 字段，`createSlice` 还需要我们为 reducer 传入初始状态值，以便在第一次调用时就有一个 `state`。在这种情况下，我们提供了一个对象，它有一个从 0 开始的 `value` 字段。
 
@@ -289,16 +289,16 @@ console.log(newState)
 
 但为什么这些规则很重要？有几个不同的原因：
 
-- Redux 的目标之一是使您的代码可预测。当函数的输出仅根据输入参数计算时，更容易理解该代码的工作原理并对其进行测试。
+- Redux 的目标之一是使你的代码可预测。当函数的输出仅根据输入参数计算时，更容易理解该代码的工作原理并对其进行测试。
 - 另一方面，如果一个函数依赖于自身之外的变量，或者行为随机，你永远不知道运行它时会发生什么。
-- 如果一个函数 mutate 了其他对象，比如它的参数，这可能会意外地改变应用程序的工作方式。这可能是错误的常见来源，例如“我更新了我的状态，但现在我的 UI 没有在应该更新的时候更新！”
+- 如果一个函数 mutate 了其他对象，比如它的参数，这可能会意外地改变应用程序的工作方式。这可能是错误的常见来源，例如“我更新了我的状态，但现在我的视图没有在应该更新的时候更新！”
 - Redux DevTools 的一些功能取决于你的 reducer 是否正确遵循这些规则
 
 “不可变更新（Immutable Updates）” 这个规则尤其重要，值得进一步讨论。
 
-### Reducer 与 不可变更新
+### Reducer 与 Immutable 更新
 
-前面讲过 “可变更新 mutation”（更新已有对象/数组的值）与“不可变更新 immutability”（认为值是不可以改变的）
+前面讲过 “mutation”（更新已有对象/数组的值）与 “immutability”（认为值是不可以改变的）
 
 在 Redux 中，**_永远_ 不允许在 reducer 中更改 state 的原始对象！**
 
@@ -311,7 +311,7 @@ state.value = 123
 
 不能在 Redux 中更改 state 有几个原因：
 
-- 它会导致 bug，例如 UI 未正确更新以显示最新值
+- 它会导致 bug，例如视图未正确更新以显示最新值
 - 更难理解状态更新的原因和方式
 - 编写测试变得更加困难
 - 它打破了正确使用“时间旅行调试”的能力
@@ -321,7 +321,7 @@ state.value = 123
 
 :::tip
 
-**Reducer 中必需要先创建原始值的_副本_，然后可以改变副本。**
+**Reducer 中必需要先创建原始值的*副本*，然后可以改变副本。**
 
 ```js
 // ✅ 这样操作是安全的，因为创建了副本
@@ -333,13 +333,13 @@ return {
 
 :::
 
-我们已经看到我们可以[手动编写不可变更新](./part-1-overview-concepts.md#immutability)，通过使用 JavaScript 的数组/对象扩展运算符和其他返回原始值副本的函数。但是，如果您认为“以这种方式手动编写不可变更新看起来很难记住和正确执行”……是的，您是对的！:)
+我们已经看到我们可以[手动编写 immutable 更新](./part-1-overview-concepts.md#immutability)，通过使用 JavaScript 的数组/对象扩展运算符和其他返回原始值副本的函数。但是，如果你认为“以这种方式手动编写 immutable 更新看起来很难记住和正确执行”……是的，你是对的！:)
 
 手动编写不可变的更新逻辑确实繁琐，而且在 reducer 中意外改变状态是 Redux 用户最常犯的一个错误。
 
-**这就是为什么 Redux Toolkit 的 `createSlice` 函数可以让您以更简单的方式编写不可变更新！**
+**这就是为什么 Redux Toolkit 的 `createSlice` 函数可以让你以更简单的方式编写不可变更新！**
 
-`createSlice` 内部使用了一个名为 [Immer](https://immerjs.github.io/immer/) 的库。 Immer 使用一种称为 “Proxy” 的特殊 JS 工具来包装您提供的数据，当你尝试 ”mutate“ 这些数据的时候，奇迹发生了，**Immer 会跟踪您尝试进行的所有更改，然后使用该更改列表返回一个安全的、不可变的更新值**，就好像您手动编写了所有不可变的更新逻辑一样。
+`createSlice` 内部使用了一个名为 [Immer](https://immerjs.github.io/immer/) 的库。 Immer 使用一种称为 “Proxy” 的特殊 JS 工具来包装你提供的数据，当你尝试 ”mutate“ 这些数据的时候，奇迹发生了，**Immer 会跟踪你尝试进行的所有更改，然后使用该更改列表返回一个安全的、不可变的更新值**，就好像你手动编写了所有不可变的更新逻辑一样。
 
 所以，下面的代码：
 
@@ -375,7 +375,7 @@ function reducerWithImmer(state, action) {
 
 :::caution 警告
 
-**你_只能_在 Redux Toolkit 的 `createSlice` 和 `createReducer` 中编写 “mutation” 逻辑，因为它们在内部使用 Immer！如果你在没有 Immer 的 reducer 中编写 mutation 逻辑，它_将_改变状态并导致错误！**
+**你*只能*在 Redux Toolkit 的 `createSlice` 和 `createReducer` 中编写 “mutation” 逻辑，因为它们在内部使用 Immer！如果你在没有 Immer 的 reducer 中编写 mutation 逻辑，它*将*改变状态并导致错误！**
 
 :::
 
@@ -389,10 +389,10 @@ export const counterSlice = createSlice({
   },
   reducers: {
     increment: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+      // Redux Toolkit 允许我们在 reducers 写 "可变" 逻辑。
+      // 并不是真正的改变 state 因为它使用了 immer 库
+      // 当 immer 检测到 "draft state" 改变时，会基于这些改变去创建一个新的
+      // 不可变的 state
       state.value += 1
     },
     decrement: state => {
@@ -414,7 +414,7 @@ export const counterSlice = createSlice({
 
 :::info 想了解更多？
 
-关于不变性和编写不可变更新的更多信息，请参阅 [“不可变更新模式”文档页面](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) 和 [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)。
+关于不变性和编写 immutable 更新的更多信息，请参阅 [“immutable 更新模式”文档页面](../../recipes/structuring-reducers/ImmutableUpdatePatterns.md) 和 [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)。
 
 :::
 
@@ -430,10 +430,10 @@ export const counterSlice = createSlice({
 从 `counterSlice` 导出的函数就是一个 thunk action creator 的例子。
 
 ```js title="features/counter/counterSlice.js"
-// The function below is called a thunk and allows us to perform async logic.
-// It can be dispatched like a regular action: `dispatch(incrementAsync(10))`.
-// This will call the thunk with the `dispatch` function as the first argument.
-// Async code can then be executed and other actions can be dispatched
+// 下面这个函数就是一个 thunk ，它使我们可以执行异步逻辑
+// 你可以 dispatched 异步 action `dispatch(incrementAsync(10))` 就像一个常规的 action
+// 调用 thunk 时接受 `dispatch` 函数作为第一个参数
+// 当异步代码执行完毕时，可以 dispatched actions
 export const incrementAsync = amount => dispatch => {
   setTimeout(() => {
     dispatch(incrementByAmount(amount))
@@ -449,7 +449,7 @@ store.dispatch(incrementAsync(5))
 
 但是，使用 thunk 需要在创建时将 `redux-thunk` _middleware_（一种 Redux 插件）添加到 Redux store 中。幸运的是，Redux Toolkit 的 `configureStore` 函数已经自动为我们配置好了，所以我们可以继续在这里使用 thunk。
 
-当您需要进行 AJAX 调用以从服务器获取数据时，您可以将该调用放入 thunk 中。这是一个写得有点长的例子，所以你可以看到它是如何定义的：
+当你需要进行 AJAX 调用以从服务器获取数据时，你可以将该调用放入 thunk 中。这是一个写得有点长的例子，所以你可以看到它是如何定义的：
 
 ```js title="features/counter/counterSlice.js"
 // 外部的 thunk creator 函数
@@ -486,11 +486,11 @@ setTimeout(() => {
 
 但是，在真正的 Redux 应用程序中，我们不允许将 store 导入到其他文件中，尤其是在我们的 React 组件中，因为它使代码更难以测试和重用。
 
-另外，我们经常需要编写一些我们知道最终会与_一些_ store 一起使用的异步逻辑，但我们不知道_是哪块_ store。
+另外，我们经常需要编写一些我们知道最终会与*一些* store 一起使用的异步逻辑，但我们不知道*是哪块* store。
 
-Redux 的 store 可以使用“中间件”进行扩展，中间件是一种可以添加额外功能的附加组件或插件。使用中间件的最常见原因是让您编写具有异步逻辑的代码，但同时仍能与 store 对话。他们还可以修改 store，以便我们可以调用 `dispatch()` 并传入普通 action 对象_以外_的值，例如函数或 Promise。
+Redux 的 store 可以使用 “middleware” 进行扩展，中间件是一种可以添加额外功能的附加组件或插件。使用中间件的最常见原因是让你编写具有异步逻辑的代码，但同时仍能与 store 对话。他们还可以修改 store，以便我们可以调用 `dispatch()` 并传入普通 action 对象*以外*的值，例如函数或 Promise。
 
-Redux Thunk 中间件修改了 store 以让您将函数传递给 `dispatch`。事实上，代码很短，只有下面几行：
+Redux Thunk 中间件修改了 store 以让你将函数传递给 `dispatch`。事实上，代码很短，只有下面几行：
 
 ```js
 const thunkMiddleware =
@@ -511,11 +511,11 @@ const thunkMiddleware =
 
 </DetailedExplanation>
 
-此文件中还有一个函数，我们稍后会在查看 `<Counter>` UI 组件时讨论它。
+此文件中还有一个函数，我们稍后会在查看 `<Counter>`视图组件时讨论它。
 
 :::info 想了解更多？
 
-查看 [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) and the [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) for more information.
+查看 [the Redux Thunk docs](https://github.com/reduxjs/redux-thunk), the post [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/) 以及 [Redux FAQ entry on "why do we use middleware for async?"](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior) 获取更多信息。
 
 :::
 
@@ -586,9 +586,9 @@ export function Counter() {
 `counterSlice.js` 在底部有这个 selector 函数：
 
 ```js title="features/counter/counterSlice.js"
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
+// selector 函数允许我们从 state 中获取值
+// Selectors 也可以在使用的地方内联的方式定义
+// 而不是仅仅只能在 slice 文件中。例如 : `useSelector((state) => state.counter.value)`
 export const selectCount = state => state.counter.value
 ```
 
@@ -608,7 +608,7 @@ console.log(count)
 const count = useSelector(selectCount)
 ```
 
-我们也不是_只能_使用已经导出的 selector。例如，我们可以编写一个选择器函数作为 `useSelector` 的内联参数：
+我们也不是*只能*使用已经导出的 selector。例如，我们可以编写一个选择器函数作为 `useSelector` 的内联参数：
 
 ```js
 const countPlusTwo = useSelector(state => state.counter.value + 2)
@@ -674,7 +674,7 @@ return (
 )
 ```
 
-我们_可以_在 Redux store 中保留当前数字字符串，方法是在输入的 `onChange` 处理程序中 dispatch action 并将其保存在我们的 reducer 中。但是，这并没有给我们带来任何好处。唯一使用文本字符串的地方是这里，在 `<Counter>` 组件中。（当然，在这个例子中只有一个其他组件：`<App>`。但即使我们有一个包含许多组件的更大的应用程序，也只有 `<Counter>` 关心这个输入值。）
+我们*可以*在 Redux store 中保留当前数字字符串，方法是在输入的 `onChange` 处理程序中 dispatch action 并将其保存在我们的 reducer 中。但是，这并没有给我们带来任何好处。唯一使用文本字符串的地方是这里，在 `<Counter>` 组件中。（当然，在这个例子中只有一个其他组件：`<App>`。但即使我们有一个包含许多组件的更大的应用程序，也只有 `<Counter>` 关心这个输入值。）
 
 因此，将该值保留在 `<Counter>` 组件中的 `useState` 的 hooks 中是有意义的。
 
@@ -682,14 +682,14 @@ return (
 
 **在 React + Redux 应用中，你的全局状态应该放在 Redux store 中，你的本地状态应该保留在 React 组件中。**
 
-如果您不确定该放在哪里，这里有一些常用的经验法则，用于确定应该将哪种数据放入 Redux：
+如果你不确定该放在哪里，这里有一些常用的经验法则，用于确定应该将哪种数据放入 Redux：
 
 - 应用程序的其他部分是否关心这些数据？
-- 您是否需要能够基于这些原始数据创建进一步的派生数据？
+- 你是否需要能够基于这些原始数据创建进一步的派生数据？
 - 是否使用相同的数据来驱动多个组件？
-- 能够将这种状态恢复到给定的时间点（即时间旅行调试）对您是否有价值？
+- 能够将这种状态恢复到给定的时间点（即时间旅行调试）对你是否有价值？
 - 是否要缓存数据（即，如果数据已经存在，则使用它的状态而不是重新请求它）？
-- 您是否希望在热重载 UI 组件（交换时可能会丢失其内部状态）时保持此数据一致？
+- 你是否希望在热重载视图组件（交换时可能会丢失其内部状态）时保持此数据一致？
 
 这也是一般如何在 Redux 中考虑表单的一个很好的例子。 **大多数表单的 state 不应该保存在 Redux 中。** 相反，在编辑表单的时候把数据存到表单组件中，当用户提交表单的时候再 dispatch action 来更新 store。
 
@@ -738,7 +738,7 @@ ReactDOM.render(
   - `configureStore` 自动使用默认值来配置 store
 - **在 slice 文件中编写 Redux 逻辑**
   - 一个 slice 包含一个特定功能或部分的 state 相关的 reducer 逻辑和 action
-  - Redux Toolkit 的 `createSlice` API 为您提供的每个 reducer 函数生成 action creator 和 action 类型
+  - Redux Toolkit 的 `createSlice` API 为你提供的每个 reducer 函数生成 action creator 和 action 类型
 - **Redux reducer 必须遵循以下原则**
   - 必须依赖 `state` 和 `action` 参数去计算出一个新 state
   - 必须通过拷贝旧 state 的方式去做 _不可变更新_ (_immutable updates_)
@@ -748,13 +748,13 @@ ReactDOM.render(
   - Thunks 接收 `dispatch` 和 `getState` 作为参数
   - Redux Toolkit 内置并默认启用了 `redux-thunk` 中间件
 - **使用 React-Redux 来做 React 组件和 Redux store 的通信**
-  - 在应用程序根组件包裹 `<Provider store={store}>` 使得所有组件都能访问到 store 
+  - 在应用程序根组件包裹 `<Provider store={store}>` 使得所有组件都能访问到 store
   - 全局状态应该维护在 Redux store 内，局部状态应该维护在局部 React 组件内
 
 :::
 
 ## 下一步
 
-现在您已经看到了 Redux 应用程序的所有部分，是时候编写自己的应用程序了！ 在本教程的其余部分，您将构建一个更大的使用 Redux 的示例应用程序。 在此过程中，我们将介绍正确使用 Redux 所需了解的所有关键思想。
+现在你已经看到了 Redux 应用程序的所有部分，是时候编写自己的应用程序了！ 在本教程的其余部分，你将构建一个更大的使用 Redux 的示例应用程序。 在此过程中，我们将介绍正确使用 Redux 所需了解的所有关键思想。
 
 继续阅读 [第 3 部分：Redux 数据流基础](./part-3-data-flow.md) 以开始构建示例应用程序。

@@ -10,7 +10,7 @@ hide_title: false
 
 随着应用程序的增长，在 reducer 逻辑中开始出现一些常见的模式。你可能会发现一部分 reducer 逻辑对于不同类型的数据做着相同的工作，你想通过对每种数据类型复用相同的公共逻辑来减少重复的代码。或者，你可能想要在 store 中处理某个类型的数据的多个”实例“。然而，Redux store 采用全局结构的设计本身就是一种折衷：优点是易于追踪应用程序的整体状态，但是，也可能更难的”命中“那些需要更新特定一部分状态的 action，特别是当你使用了 `combineReducers`。
 
-例如，假设想在程序中追踪多个计数器，分别命名为 A，B，和 C。定义初始的 `counter` reducer，然后使用 `combineReducers` 去设置状态。
+例如，假设想在程序中追踪多个计数器，分别命名为 A，B 和 C。定义初始的 `counter` reducer，然后使用 `combineReducers` 去设置 state：
 
 ```javascript
 function counter(state = 0, action) {
@@ -31,9 +31,9 @@ const rootReducer = combineReducers({
 })
 ```
 
-不幸的是，这样设置有一个问题。因为 `combineReducers` 将会使用相同的 action 调用每一个 reducer，发送 `{type: 'INCREMENT'}` 实际上将会导致所有三个计数器的值被增加，而不仅仅是其中一个。我们需要一些方法去封装 `counter` 的逻辑，以此来保证只有我们关心的计数器被更新。
+不幸的是，这样设置有一个问题。因为 `combineReducers` 将会使用相同的 action 调用每一个 reducer，dispatch `{type: 'INCREMENT'}` 时实际上将会导致三个计数器的值被增加，而不仅仅是其中一个。我们需要一些方法去封装 `counter` 的逻辑，以此来保证只有我们关心的计数器被更新。
 
-## 使用高阶 Reducer 来定制行为
+## 使用高阶 Reducer 来自定义行为
 
 正如在 [Reducer 逻辑拆分](SplittingReducerLogic.md) 定义的那样，高阶 reducer 是一个接收 reducer 函数作为参数，并返回新的 reducer 函数的函数。它也可以被看作成一个“reducer 工厂”。`combineReducers` 就是一个高阶 reduce 的例子。我们可以使用这种模式来创建特定版本的 reducer 函数，每个版本只响应特定的 action。
 
@@ -70,7 +70,7 @@ function createCounterWithNameData(counterName = '') {
 }
 ```
 
-现在我们应该可以使用它们任何一个去生成我们特定的计数器 reducer，然后发送 action，并只会影响关心的那部分的 state：
+现在我们应该可以使用它们任何一个去生成我们特定的计数器 reducer，然后 dispatch action，并只会影响关心的那部分的 state：
 
 ```javascript
 const rootReducer = combineReducers({
@@ -84,7 +84,7 @@ console.log(store.getState())
 // {counterA : 0, counterB : 1, counterC : 0}
 ```
 
-我们在某种程度上也可以改变这个方法，创建一个更加通用的高阶 reducer，它可以接收一个给定的 reducer，一个名字或者标识符：
+我们在某种程度上也可以改变这个方法，创建一个更加通用的高阶 reducer，它可以接收一个给定的 reducer 函数，一个名字或者标识符：
 
 ```javascript
 function counter(state = 0, action) {
@@ -142,4 +142,46 @@ const rootReducer = combineReducers({
 })
 ```
 
-这些基本的模式可以让你在 UI 内处理一个智能连接的 component 的多个实例。对于像分页或者排序这些通用的功能，可以复用相同的逻辑。
+这些基本的模式可以让你在 UI 内处理一个智能连接的组件的多个实例。对于像分页或者排序这些通用的功能，可以复用相同的逻辑。
+
+除了以这种方式生成 reducer 之外，还可以使用相同的方法生成 action creator，并且可以使用 helper 函数同时生成它们。See for action/reducer utilities.
+有关 action/reducer 的工具函数，请参阅 [Action/Reducer 生成器](https://github.com/markerikson/redux-ecosystem-links/blob/master/action-reducer-generators.md) 和 [Reducers](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md) 库。
+
+## Reducer 集合/项目模式
+
+这种模式允许拥有多个 state，根据 action 对象内部的附加参数，使用公共 reducer 更新每个 state。
+
+```javascript
+function counterReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT" : return state + 1;
+        case "DECREMENT" : return state - 1;
+    }
+}
+
+function countersArrayReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT":
+        case "DECREMENT":
+            return state.map( (counter, index) => {
+                if(index !== action.index) return counter;
+                return counterReducer(counter, action);
+            });
+        default:
+            return state;
+    }
+}
+
+function countersMapReducer(state, action) {
+    switch(action.type) {
+        case "INCREMENT":
+        case "DECREMENT":
+            return {
+                ...state,
+                state[action.name] : counterReducer(state[action.name], action)
+            };
+        default:
+            return state;
+    }
+}
+```

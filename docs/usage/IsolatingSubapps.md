@@ -1,7 +1,6 @@
 ---
 id: isolating-redux-sub-apps
 title: 子应用隔离
-hide_title: false
 ---
 
 # 子应用隔离
@@ -27,8 +26,8 @@ class BigApp extends Component {
 
 这些 `<SubApp>` 是完全独立的。它们并不会共享数据或 action，也互不可见且不需要通信。
 
-这时最好的做法是不要把它混入到标准 Redux 的 reducer 组件中。
-对于一般型的应用，还是建议使用 reducer 组件。但对于 “应用集合”，“仪表板”，或者企业级软件这些把多个本来独立的工具凑到一起打包的场景，可以试下子应用的方案。
+最好不要将这种方法与标准 Redux 的 reducer 组合混合使用。
+对于一般型的 Web 应用，还是建议使用 reducer 组件。但对于 “应用集合”，“仪表板”，或者企业级软件这些把多个本来独立的工具凑到一起打包的场景，可以试下子应用的方案。
 
 子应用的方案还适用于有多个产品或垂直业务的大团队。小团队可以独立发布子应用或者互相独立于自己的“应用壳”中。
 
@@ -49,6 +48,7 @@ export default connect(mapStateToProps)(App)
 ```js
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import reducer from './reducers'
 import App from './App'
 
@@ -71,6 +71,6 @@ class SubApp extends Component {
 这样的话每个实例都是独立的。
 
 如果应用间需要共享数据，_不_ 推荐使用这个模式。
-但是，如果大应用完全不需要访问子应用内部数据的话非常有用，
+但是，如果大应用完全不需要访问子应用内部数据的话，它会非常有用，
 同时我们还想把 Redux 作为一种内部细节实现方式对外部隐藏。
 每个组件实例都有它自己的 store，所以它们彼此是*不可见*的。

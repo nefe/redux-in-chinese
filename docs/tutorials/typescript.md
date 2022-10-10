@@ -1,46 +1,46 @@
 ---
 id: typescript-quick-start
-title: TypeScript Quick Start
-sidebar_label: TypeScript Quick Start
+title: TypeScript 快速开始
+sidebar_label: TypeScript 快速开始
 ---
 
-# Redux Toolkit TypeScript Quick Start
+# Redux Toolkit TypeScript 快速开始
 
-:::tip What You'll Learn
+:::tip 你将学到什么
 
-- How to set up and use Redux Toolkit and React-Redux with TypeScript
-
-:::
-
-:::info Prerequisites
-
-- Knowledge of React [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- Understanding of [Redux terms and concepts](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow)
-- Understanding of TypeScript syntax and concepts
+- 如何通过 TypeScript 设置和使用 Redux Toolkit 和 React-Redux
 
 :::
 
-## Introduction
+:::info 预置知识
 
-Welcome to the Redux Toolkit TypeScript Quick Start tutorial! **This tutorial will briefly show how to use TypeScript with Redux Toolkit**.
+- React [Hooks]相关知识(https://reactjs.org/docs/hooks-intro.html)
+- 理解 [Redux 术语和概念](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow)
+- 了解 TypeScript 语法和概念
 
-This page focuses on just how to set up the TypeScript aspects . For explanations of what Redux is, how it works, and full examples of how to use Redux Toolkit, [see the tutorials linked in the "Tutorials Index" page](./tutorials-index.md).
+:::
 
-Redux Toolkit is already written in TypeScript, so its TS type definitions are built in.
+## 介绍
 
-[React Redux](https://react-redux.js.org) has its type definitions in a separate [`@types/react-redux` typedefs package](https://npm.im/@types/react-redux) on NPM. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
+欢迎来到 Redux Toolkit TypeScript 快速入门教程！ **本教程将简要展示如何将 TypeScript 与 Redux Toolkit 一起使用**。
 
-As of React Redux v7.2.3, the `react-redux` package has a dependency on `@types/react-redux`, so the type definitions will be automatically installed with the library. Otherwise, you'll need to manually install them yourself (typically `npm install @types/react-redux` ).
+本页重点介绍如何设置 TypeScript 相关的方面。 了解 Redux 是什么、它是如何工作的，以及如何使用 Redux Toolkit 的完整示例, [请参阅“教程索引”页面中链接的教程。](./tutorials-index.md)
 
-The [Redux+TS template for Create-React-App](https://github.com/reduxjs/cra-template-redux-typescript) comes with a working example of these patterns already configured.
+Redux Toolkit 已经用 TypeScript 编写，所以它的 TS 类型定义是内置的。
 
-## Project Setup
+[React Redux](https://react-redux.js.org) 在 NPM 上有一个单独的 [`@types/react-redux` 类型定义包](https://npm.im/@types/react-redux)有它的类型定义。除了引入类型库函数之外，这些类型还导出了一些帮助器，以便更轻松地在 Redux 存储 store 和 React 组件之间编写安全的类型接口。
 
-### Define Root State and Dispatch Types
+从 React Redux v7.2.3, `react-redux` 包依赖于`@types/react-redux`, 因此类型定义将与库一起自动安装。 除非，你需要自己手动安装它们（通常是 `npm install @types/react-redux` ）。
 
-[Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
+[Create-React-App 的 Redux+TS 模板](https://github.com/reduxjs/cra-template-redux-typescript) 附带了已配置的这些模式的工作示例。
 
-Since those are types, it's safe to export them directly from your store setup file such as `app/store.ts` and import them directly into other files.
+## 启动项目
+
+### 定义根 State 和 Dispatch 类型
+
+[Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) 不需要任何额外的类型。 但是，你需要提取 `RootState` 类型和 `Dispatch` 类型。以便可以根据需要引用它们。从 store 本身推断这些类型，意味着它们会随着你添加更多 state slices 或修改 middleware 设置而正确更新。
+
+因为有了这些是类型定义，可以安全地直接从你的 store 设置文件（例如 `app/store.ts`）导出它们，然后将它们直接导入其他文件。
 
 ```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
@@ -55,54 +55,54 @@ const store = configureStore({
 })
 
 // highlight-start
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// 从 store 本身推断出 `RootState` 和 `AppDispatch` 类型
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+// 推断出类型: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 // highlight-end
 ```
 
-### Define Typed Hooks
+### 定义 Hooks 类型
 
-While it's possible to import the `RootState` and `AppDispatch` types into each component, it's **better to create typed versions of the `useDispatch` and `useSelector` hooks for usage in your application**. This is important for a couple reasons:
+尽管你可以将 `RootState` 和 `AppDispatch` 类型导入每个组件, **更好的方式是创建 `useDispatch` 和 `useSelector` 钩子的类型定义，以便在你的应用程序中使用** 有几个重要的原因：
 
-- For `useSelector`, it saves you the need to type `(state: RootState)` every time
-- For `useDispatch`, the default `Dispatch` type does not know about thunks. In order to correctly dispatch thunks, you need to use the specific customized `AppDispatch` type from the store that includes the thunk middleware types, and use that with `useDispatch`. Adding a pre-typed `useDispatch` hook keeps you from forgetting to import `AppDispatch` where it's needed.
+- 对于 `useSelector` ，它不需要你每次输入`(state: RootState)`
+- 对于 `useDispatch` ，默认的 Dispatch 类型不知道 thunk 。为了正确调度 thunk ，你需要使用 store 中包含 thunk 中间件类型的特定自定义 `AppDispatch` 类型，并将其与 `useDispatch` 一起使用。添加一个预先输入的 `useDispatch` 钩子可以防止你忘记在需要的地方导入 `AppDispatch`。
 
-Since these are actual variables, not types, it's important to define them in a separate file such as `app/hooks.ts`, not the store setup file. This allows you to import them into any component file that needs to use the hooks, and avoids potential circular import dependency issues.
+由于这些是实际变量，而不是类型，因此将它们定义在单独的文件中很重要，例如 `app/hooks.ts`，而不是 store 设置文件。这允许你将它们导入到需要使用挂钩的任何组件文件中，并避免潜在的循环导入依赖问题。
 
 ```ts title="app/hooks.ts"
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from './store'
 
 // highlight-start
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
+// 在整个应用程序中使用，而不是简单的 `useDispatch` 和 `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 // highlight-end
 ```
 
-## Application Usage
+## 应用程序中使用
 
-### Define Slice State and Action Types
+### 定义 slice state 和 action 类型
 
-Each slice file should define a type for its initial state value, so that `createSlice` can correctly infer the type of `state` in each case reducer.
+每个 slice 文件都应该为其初始 state 定义一个类型，以便`createSlice` 可以在每种情况下正确推断`state` 的类型 reducer。
 
-All generated actions should be defined using the `PayloadAction<T>` type from Redux Toolkit, which takes the type of the `action.payload` field as its generic argument.
+所有生成的动作都应该使用 Redux Toolkit 中的 `PayloadAction<T>` 类型定义，该类型将 `action.payload` 字段的类型作为其通用参数。
 
-You can safely import the `RootState` type from the store file here. It's a circular import, but the TypeScript compiler can correctly handle that for types. This may be needed for use cases like writing selector functions.
+你可以从此处的 store 文件中安全地导入 `RootState` 类型。这是一个循环导入，但 TypeScript 编译器可以正确处理类型。 这对于编写选择器函数等用例可能是必需的。
 
 ```ts title="features/counter/counterSlice.ts"
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
 // highlight-start
-// Define a type for the slice state
+// 为 slice state 定义一个类型
 interface CounterState {
   value: number
 }
 
-// Define the initial state using that type
+// 使用该类型定义初始 state
 const initialState: CounterState = {
   value: 0
 }
@@ -110,7 +110,7 @@ const initialState: CounterState = {
 
 export const counterSlice = createSlice({
   name: 'counter',
-  // `createSlice` will infer the state type from the `initialState` argument
+  // `createSlice` 将从 `initialState` 参数推断 state 类型
   initialState,
   reducers: {
     increment: state => {
@@ -120,7 +120,7 @@ export const counterSlice = createSlice({
       state.value -= 1
     },
     // highlight-start
-    // Use the PayloadAction type to declare the contents of `action.payload`
+    // 使用 PayloadAction 类型声明 `action.payload` 的内容
     incrementByAmount: (state, action: PayloadAction<number>) => {
       // highlight-end
       state.value += action.payload
@@ -129,27 +129,26 @@ export const counterSlice = createSlice({
 })
 
 export const { increment, decrement, incrementByAmount } = counterSlice.actions
-
-// Other code such as selectors can use the imported `RootState` type
+// 选择器等其他代码可以使用导入的 `RootState` 类型
 export const selectCount = (state: RootState) => state.counter.value
 
 export default counterSlice.reducer
 ```
 
-The generated action creators will be correctly typed to accept a `payload` argument based on the `PayloadAction<T>` type you provided for the reducer. For example, `incrementByAmount` requires a `number` as its argument.
+生成的 action creator 将根据你为 reducer 提供的 `PayloadAction<T>` 类型来校验 `payload` 参数类型的正确性。例如，`incrementByAmount` 需要一个“数字”作为其参数。
 
-In some cases, [TypeScript may unnecessarily tighten the type of the initial state](https://github.com/reduxjs/redux-toolkit/pull/827). If that happens, you can work around it by casting the initial state using `as`, instead of declaring the type of the variable:
+在某些情况下，[TypeScript 可能会对初始 state 进行不必要的类型收束](https://github.com/reduxjs/redux-toolkit/pull/827). 如果发生这种情况，你可以通过使用 `as` 转换初始 state 来解决它，而不是声明变量的类型：
 
 ```ts
-// Workaround: cast state instead of declaring variable type
+// 解决方法：强制转换 state 而不是声明变量类型
 const initialState = {
   value: 0
 } as CounterState
 ```
 
-### Use Typed Hooks in Components
+### 在组件中使用标注过类型的钩子
 
-In component files, import the pre-typed hooks instead of the standard hooks from React-Redux.
+在组件文件中，从 React-Redux 导入预类型的钩子而不是标准的钩子。
 
 ```tsx title="features/counter/Counter.tsx"
 import React from 'react'
@@ -161,18 +160,18 @@ import { decrement, increment } from './counterSlice'
 
 export function Counter() {
   // highlight-start
-  // The `state` arg is correctly typed as `RootState` already
+  // `state` 参数已正确推断为 `RootState` 类型
   const count = useAppSelector(state => state.counter.value)
   const dispatch = useAppDispatch()
   // highlight-end
 
-  // omit rendering logic
+  // 省略渲染逻辑
 }
 ```
 
-### Full Counter App Example
+### 完整的 Counter 应用示例
 
-Here's the complete TS counter application as a running CodeSandbox:
+这是运行在 CodeSandbox 的完整 TS 计数器应用程序：
 
 <iframe
   class="codesandbox"
@@ -182,6 +181,6 @@ Here's the complete TS counter application as a running CodeSandbox:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-## What's Next?
+## 下一步是什么？
 
-See [the "Usage with TypeScript" page](../usage/UsageWithTypescript.md) for extended details on how to use Redux Toolkit's APIs with TypeScript.
+有关如何将 Redux Toolkit API 与 TypeScript 一起使用的详细信息，请参阅 [“使用 TypeScript”页面](../usage/UsageWithTypescript.md)。

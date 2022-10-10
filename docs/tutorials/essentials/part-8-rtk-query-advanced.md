@@ -1,46 +1,46 @@
 ---
 id: part-8-rtk-query-advanced
-title: 'Redux Essentials, Part 8: RTK Query Advanced Patterns'
-sidebar_label: 'RTK Query Advanced Patterns'
-description: 'The official Redux Essentials tutorial: learn advanced patterns for fetching data with RTK Query'
+title: 'Redux Essentials，第八节：RTK 查询高级模式'
+sidebar_label: 'RTK 查询高级模式'
+description: '官方 Redux Essentials 教程：学习使用 RTK Query 获取数据的高级模式'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-:::tip What You'll Learn
+:::tip 你将学到
 
-- How to use tags with IDs to manage cache invalidation and refetching
-- How to work with the RTK Query cache outside of React
-- Techniques for manipulating response data
+- 如何使用带有 ID 的标签来管理缓存失效和重新获取
+- 如何在 React 之外使用 RTK 查询缓存
+- 处理响应数据的技术
 - Implementing optimistic updates and streaming updates
 
 :::
 
-:::info Prerequisites
+:::info 预置知识
 
-- Completion of [Part 7](./part-7-rtk-query-basics.md) to understand RTK Query setup and basic usage
+- 完成 [第 7 部分](./part-7-rtk-query-basics.md) 以了解 RTK Query 设置和基本用法
 
 :::
 
-## Introduction
+## 简介
 
-In [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md), we saw how to set up and use the RTK Query API to handle data fetching and caching in our application. We added an "API slice" to our Redux store, defined "query" endpoints to fetch posts data, and a "mutation" endpoint to add a new post.
+在 [第 7 部分：RTK 查询基础知识](./part-7-rtk-query-basics.md) 中，我们了解了如何设置和使用 RTK Query API 来处理应用程序中的数据获取和缓存。我们在 Redux 存储中添加了一个 “API slice ”，定义了查询请求接口来获取帖子数据，以及一个 “Mutate” 请求接口来添加新帖子。
 
-In this section, we'll continue migrating our example app to use RTK Query for the other data types, and see how to use some of its advanced features to simplify the codebase and improve user experience.
+在本节中，我们将继续迁移我们的示例应用程序以将 RTK Query 用于其他数据类型，并了解如何使用其一些高级功能来简化代码库并改善用户体验。
 
 :::info
 
-Some of the changes in this section aren't strictly necessary - they're included to demonstrate RTK Query's features and show some of the things you _can_ do, so you can see how to use these features if you need them.
+本节中的某些更改并非绝对必要 - 包含这些更改是为了演示 RTK Query 的功能并展示你 _可以_ 做的一些事情，因此你可以在需要时了解如何使用这些功能。
 
 :::
 
-## Editing Posts
+## 编辑帖子
 
-We've already added a mutation endpoint to save new Post entries to the server, and used that in our `<AddPostForm>`. Next, we need to handle updating the `<EditPostForm>` to let us edit an existing post.
+我们已经添加了一个 mutation 请求接口来将新的 Post 条目保存到服务器，并在我们的 `<AddPostForm>` 中使用它。接下来，我们需要处理更新 `<EditPostForm>` 让我们可以编辑现有帖子。
 
-### Updating the Edit Post Form
+### 更新编辑帖子表单
 
-As with adding posts, the first step is to define a new mutation endpoint in our API slice. This will look much like the mutation for adding a post, but the endpoint needs to include the post ID in the URL and use an HTTP `PATCH` request to indicate that it's updating some of the fields.
+与添加帖子一样，第一步是在我们的 API Slice 中定义一个新的 mutation 请求接口。这看起来很像添加帖子的 mutation，但请求接口需要在 URL 中包含帖子 ID 并使用 HTTP `PATCH` 请求来指出它正在更新某些字段。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -84,9 +84,9 @@ export const {
 } = apiSlice
 ```
 
-Once that's added, we can update the `<EditPostForm>`. It needs to read the original `Post` entry from the store, use that to initialize the component state to edit the fields, and then send the updated changes to the server. Currently, we're reading the `Post` entry with `selectPostById`, and manually dispatching a `postUpdated` thunk for the request.
+添加后，我们可以更新 `<EditPostForm>`。它需要从 store 中读取原始的 `Post` 条目，使用它来初始化组件状态以编辑字段，然后将更新的更改发送到服务器。目前，我们正在使用 `selectPostById` 读取 `Post` 条目，并为请求手动调度 `postUpdated` thunk。
 
-We can use the same `useGetPostQuery` hook that we used in `<SinglePostPage>` to read the `Post` entry from the cache in the store, and we'll use the new `useEditPostMutation` hook to handle saving the changes.
+我们可以使用我们在 `<SinglePostPage>` 中使用的相同 `useGetPostQuery` Hook 从存储中的缓存中读取 `Post` 条目，并将使用新的 `useEditPostMutation` Hook 来处理保存更改。
 
 ```jsx title="features/posts/EditPostForm.js"
 import React, { useState } from 'react'
@@ -124,38 +124,38 @@ export const EditPostForm = ({ match }) => {
 }
 ```
 
-### Cache Data Subscription Lifetimes
+### 缓存数据订阅生命周期
 
-Let's try this out and see what happens. Open up your browser's DevTools, go to the Network tab, and refresh the main page. You should see a `GET` request to `/posts` as we fetch the initial data. When you click on a "View Post" button, you should see a second request to `/posts/:postId` that returns that single post entry.
+让我们试试这个，看看会发生什么。打开浏览器的 DevTools，转到 Network 选项卡，然后刷新主页。当我们获取初始数据时，你应该会看到对 `/posts` 的 `GET` 请求。当你单击 “View Post” 按钮时，你应该会看到对 `/posts/:postId` 的第二个请求，该请求返回该单个帖子条目。
 
-Now click "Edit Post" inside the single post page. The UI switches over to show `<EditPostForm>`, but this time there's no network request for the individual post. Why not?
+现在单击单个帖子页面内的 “Edit Post”。UI 切换到 `<EditPostForm>`，但这次没有针对单个帖子的网络请求。为什么没有？
 
 ![RTK Query network requests](/img/tutorials/essentials/devtools-cached-requests.png)
 
-**RTK Query allows multiple components to subscribe to the same data, and will ensure that each unique set of data is only fetched once.** Internally, RTK Query keeps a reference counter of active "subscriptions" to each endpoint + cache key combination. If Component A calls `useGetPostQuery(42)`, that data will be fetched. If Component B then mounts and also calls `useGetPostQuery(42)`, it's the exact same data being requested. The two hook usages will return the exact same results, including fetched `data` and loading status flags.
+**RTK Query 允许多个组件订阅相同的数据，并且将确保每个唯一的数据集只获取一次。** 在内部，RTK Query 为每个请求接口 + 缓存键组合保留一个 action 订阅的引用计数器。如果组件 A 调用 `useGetPostQuery(42)`，则将获取该数据。如果组件 B 挂载并调用 `useGetPostQuery(42)`，则请求的数据完全相同。两种钩子用法将返回完全相同的结果，包括获取的 “data” 和加载状态标志。
 
-When the number of active subscriptions goes down to 0, RTK Query starts an internal timer. **If the timer expires before any new subscriptions for the data are added, RTK Query will remove that data from the cache automatically**, because the app no longer needs the data. However, if a new subscription _is_ added before the timer expires, the timer is canceled, and the already-cached data is used without needing to refetch it.
+当活跃订阅数下降到 0 时，RTK Query 会启动一个内部计时器。 **如果在添加任何新的数据订阅之前计时器到期，RTK Query 将自动从缓存中删除该数据**，因为应用程序不再需要该数据。但是，如果在计时器到期之前添加了新订阅，则取消计时器，并使用已缓存的数据而无需重新获取它。
 
-In this case, our `<SinglePostPage>` mounted and requested that individual `Post` by ID. When we clicked on "Edit Post", the `<SinglePostPage>` component was unmounted by the router, and the active subscription was removed due to unmounting. RTK Query immediately started a "remove this post data" timer. But, the `<EditPostPage>` component mounted right away and subscribed to the same `Post` data with the same cache key. So, RTK Query canceled the timer and kept using the same cached data instead of fetching it from the server.
+在这种情况下，我们的 `<SinglePostPage>` 挂载并通过 ID 请求单个 `Post`。当我们点击 “Edit Post” 时，`<SinglePostPage>` 组件被路由器卸载，并且活动订阅由于卸载而被删除。RTK Query 立即启动 “remove this post data” 计时器。但是，`<EditPostPage>` 组件会立即挂载并使用相同的缓存键订阅相同的 `Post` 数据。因此，RTK Query 取消了计时器并继续使用相同的缓存数据，而不是从服务器获取数据。
 
-By default, **unused data is removed from the cache after 60 seconds**, but this can be configured in either the root API slice definition or overridden in the individual endpoint definitions using the `keepUnusedDataFor` flag, which specifies a cache lifetime in seconds.
+默认情况下，**未使用的数据会在 60 秒后从缓存中删除**，但这可以在根 API Slice 定义中进行配置，也可以使用 `keepUnusedDataFor` 标志在各个请求接口定义中覆盖，该标志指定缓存生存期 秒。
 
-### Invalidating Specific Items
+### 使特定项目无效
 
-Our `<EditPostForm>` component can now save the edited post to the server, but we have a problem. If we click "Save Post" while editing, it returns us to the `<SinglePostPage>`, but it's still showing the old data without the edits. The `<SinglePostPage>` is still using the cached `Post` entry that was fetched earlier. For that matter, if we return to the main page and look at the `<PostsList>`, it's also showing the old data. **We need a way to force a refetch of _both_ the individual `Post` entry, and the entire list of posts**.
+我们的 `<EditPostForm>` 组件现在可以将编辑后的帖子保存到服务器，但是我们遇到了一个问题。如果我们在编辑时单击 “Save Post”，它会将我们返回到 `<SinglePostPage>`，但仍然显示没有编辑的旧数据。`<SinglePostPage>` 仍在使用之前获取的缓存 `Post` 条目。就此而言，如果我们返回主页面并查看 `<PostsList>`，它也会显示旧数据。**我们需要一种方法来强制重新获取 _所有_ 单个帖子条目和整个帖子列表**。
 
-Earlier, we saw how we can use "tags" to invalidate parts of our cached data. We declared that the `getPosts` query endpoint _provides_ a `'Post'` tag, and that the `addNewPost` mutation endpoint _invalidates_ that same `'Post'` tag. That way, every time we add a new post, we force RTK Query to refetch the entire list of posts from the `getQuery` endpoint.
+早些时候，我们看到了如何使用标签使部分缓存数据无效。我们声明 `getPosts` 查询请求接口 _提供_ 了 `'Post'` 标签，而 `addNewPost` mutation 请求接口使相同的 `'Post'` 标签 _无效_。这样，每次添加新帖子时，我们都会强制 RTK Query 从 `getQuery` 请求接口重新获取整个帖子列表。
 
-We could add a `'Post'` tag to both the `getPost` query and the `editPost` mutation, but that would force all the other individual posts to be refetched as well. Fortunately, **RTK Query lets us define specific tags, which let us be more selective in invalidating data**. These specific tags look like `{type: 'Post', id: 123}`.
+我们可以在 `getPost` 查询和 `editPost` mutation 中添加一个 `'Post'` 标签，但这会强制所有其他单独的帖子也被重新获取。幸运的是，**RTK Query 让我们可以定义特定的标签，这让我们在无效数据方面更有选择性**。这些特定标签看起来像 `{type: 'Post', id: 123}`。
 
-Our `getPosts` query defines a `providesTags` field that is an array of strings. The `providesTags` field can also accept a callback function that receives the `result` and `arg`, and returns an array. This allows us to create tag entries based on IDs of data that is being fetched. Similarly, `invalidatesTags` can be a callback as well.
+我们的 `getPosts` 查询定义了一个 `providesTags` 字段，它是一个字符串数组。`providesTags` 字段还可以接受一个回调函数，该函数接收 `result` 和 `arg`，并返回一个数组。这允许我们根据正在获取的数据的 ID 创建标签条目。同样，`invalidatesTags` 也可以是回调。
 
-In order to get the right behavior, we need to set up each endpoint with the right tags:
+为了获得正确的行为，我们需要使用正确的标签设置每个请求接口：
 
-- `getPosts`: provides a general `'Post'` tag for the whole list, as well as a specific `{type: 'Post', id}` tag for each received post object
-- `getPost`: provides a specific `{type: 'Post', id}` object for the individual post object
-- `addNewPost`: invalidates the general `'Post'` tag, to refetch the whole list
-- `editPost`: invalidates the specific `{type: 'Post', id}` tag. This will force a refetch of both the _individual_ post from `getPost`, as well as the _entire_ list of posts from `getPosts`, because they both provide a tag that matches that `{type, id}` value.
+- `getPosts`：为整个列表提供一个通用的 `'Post'` 标签，以及为每个接收到的帖子对象提供一个特定的 `{type: 'Post', id}` 标签
+- `getPost`：为单个 post 对象提供特定的 `{type: 'Post', id}` 对象
+- `addNewPost`：使一般的`'Post'`标签无效，重新获取整个列表
+- `editPost`：使特定的 `{type: 'Post', id}` 标签无效。这将强制重新获取 “getPost” 中的个人帖子以及 “getPosts” 中的整个帖子列表，因为它们都提供了与 “{type, id}” 值匹配的标签。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -200,28 +200,28 @@ export const apiSlice = createApi({
 })
 ```
 
-It's possible for the `result` argument in these callbacks to be undefined if the response has no data or there's an error, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we're already returning a single-item array based on the argument ID. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
+如果响应没有数据或有错误，这些回调中的 `result` 参数可能是未定义的，因此我们必须安全地处理它。对于 `getPosts`，我们可以通过使用默认的参数数组值映射来做到这一点，而对于 `getPost`，我们已经根据参数 ID 返回了一个单项数组。对于 `editPost`，我们从传递给触发器函数的部分帖子对象中知道帖子的 ID，因此我们可以从那里读取它。
 
-With those changes in place, let's go back and try editing a post again, with the Network tab open in the browser DevTools.
+完成这些更改后，让我们返回并尝试再次编辑帖子，并在浏览器 DevTools 中打开 Network 选项卡。
 
-![RTK Query invalidation and refetching](/img/tutorials/essentials/devtools-cached-invalidation-refetching.png)
+![RTK Query 失效和重新获取](/img/tutorials/essentials/devtools-cached-invalidation-refetching.png)
 
-When we save the edited post this time, we should see two requests happen back-to-back:
+这次保存编辑后的帖子时，我们应该看到两个请求连续发生：
 
-- The `PATCH /posts/:postId` from the `editPost` mutation
-- A `GET /posts/:postId` as the `getPost` query is refetched
+- 来自 `editPost` mutation 的 `PATCH /posts/:postId`
+- 重新获取作为 `getPost` 查询的 `GET /posts/:postId`
 
-Then, if we click back to the main "Posts" tab, we should also see:
+然后，如果我们单击返回主帖子选项卡，我们还应该看到：
 
-- A `GET /posts` as the `getPosts` query is refetched
+- 重新获取作为 `getPosts` 查询的 `GET /posts`
 
-Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed! Meanwhile, as we were editing the post, the cache removal timer for the `getPosts` data expired, so it was removed from the cache. When we opened the `<PostsList>` component again, RTK Query saw that it did not have the data in cache and refetched it.
+因为我们使用标签提供了请求接口之间的关系，**RTK Query 知道当我们进行编辑并且具有该 ID 的特定标签无效时，它需要重新获取单个帖子和帖子列表** - 无需进一步更改！同时，在我们编辑帖子时，`getPosts` 数据的缓存删除计时器已过期，因此已将其从缓存中删除。当我们再次打开 `<PostsList>` 组件时，RTK Query 发现它没有缓存中的数据并重新获取它。
 
-There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPost` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead. The RTK Query docs have [a table that describes what will happen if certain general/specific tag combinations are invalidated](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#tag-invalidation-behavior).
+这里有一个警告。通过在 `getPosts` 中指定一个普通的 `'Post'` 标记并在 `addNewPost` 中使其无效，我们实际上最终也会强制重新获取所有 _个人_ 帖子。如果我们真的只想重新获取 `getPost` 请求接口的帖子列表，你可以包含一个具有任意 ID 的附加标签，例如 `{type: 'Post', id: 'LIST'}`，并使该标签无效。 RTK 查询文档有 [一个描述如果某些通用/特定标签组合失效会发生什么的表格](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#tag-invalidation-behavior）。
 
 :::info
 
-RTK Query has many other options for controlling when and how to refetch data, including "conditional fetching", "lazy queries", and "prefetching", and query definitions can be customized in a variety of ways. See the RTK Query usage guide docs for more details on using these features:
+RTK Query 有许多其他选项可用于控制何时以及如何重新获取数据，包括条件获取、延迟查询和预取，并且可以通过多种方式自定义查询定义。有关使用这些功能的更多详细信息，请参阅 RTK 查询使用指南文档：
 
 - [RTK Query: Automated Re-Fetching](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching)
 - [RTK Query: Conditional Fetching](https://redux-toolkit.js.org/rtk-query/usage/conditional-fetching)
@@ -231,17 +231,17 @@ RTK Query has many other options for controlling when and how to refetch data, i
 
 :::
 
-## Managing Users Data
+## 管理用户数据
 
-We've finished converting our posts data management over to use RTK Query. Next up, we'll convert the list of users.
+我们已完成将帖子数据管理转换为使用 RTK Query。接下来，我们将转换用户列表。
 
-Since we've already seen how to use the RTK Query hooks for fetching and reading data, for this section we're going to try a different approach. RTK Query's core API is UI-agnostic and can be used with any UI layer, not just React. Normally you should stick with using the hooks, but here we're going to work with the user data using _just_ the RTK Query core API so you can see how to use it.
+由于我们已经了解了如何使用 RTK Query Hooks 来获取和读取数据，因此在本节中我们将尝试不同的方法。RTK Query 的核心 API 与 UI 无关，可以与任何 UI 层一起使用，而不仅仅是 React。通常你应该坚持使用 hooks，但在这里我们将 _只_ 使用 RTK Query 核心 API 来处理用户数据，以便你了解如何使用它。
 
-### Fetching Users Manually
+### 手动获取用户
 
-We're currently defining a `fetchUsers` async thunk in `usersSlice.js`, and dispatching that thunk manually in `index.js` so that the list of users is available as soon as possible. We can do that same process using RTK Query.
+我们目前正在 `usersSlice.js` 中定义 `fetchUsers` 异步 thunk，并在 `index.js` 中手动调度该 thunk，以便用户列表尽快可用。我们可以使用 RTK Query 执行相同的过程。
 
-We'll start by defining a `getUsers` query endpoint in `apiSlice.js`, similar to our existing endpoints. We'll export the `useGetUsersQuery` hook just for consistency, but for now we're not going to use it.
+我们将首先在 `apiSlice.js` 中定义一个 `getUsers` 查询请求接口，类似于我们现有的请求接口。我们将导出 `useGetUsersQuery` hook 只是为了保持一致性，但现在我们不打算使用它。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -249,7 +249,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   tagTypes: ['Post'],
   endpoints: builder => ({
-    // omit other endpoints
+    // 忽略部分依赖
 
     // highlight-start
     getUsers: builder.query({
@@ -269,27 +269,27 @@ export const {
 } = apiSlice
 ```
 
-If we inspect the API slice object, it includes an `endpoints` field, with one endpoint object inside for each endpoint we've defined.
+如果我们检查 API slice 对象，它包含一个 `endpoints` 字段，我们定义的每个请求接口都有一个请求接口对象。
 
-![API slice endpoint contents](/img/tutorials/essentials/api-slice-contents.png)
+![API slice 请求接口内容](/img/tutorials/essentials/api-slice-contents.png)
 
-Each endpoint object contains:
+每个请求接口对象包含:
 
-- The same primary query/mutation hook that we exported from the root API slice object, but named as `useQuery` or `useMutation`
-- For query endpoints, an additional set of query hooks for scenarios like "lazy queries" or partial subscriptions
-- A set of ["matcher" utilities](https://redux-toolkit.js.org/api/matching-utilities) to check for the `pending/fulfilled/rejected` actions dispatched by requests for this endpoint
-- An `initiate` thunk that triggers a request for this endpoint
-- A `select` function that creates [memoized selectors](../../usage/deriving-data-selectors.md) that can retrieve the cached result data + status entries for this endpoint
+- 我们从根 API slice 对象导出的相同主 query/mutation hooks，但命名为 `useQuery` 或 `useMutation`
+- 对于查询请求接口，一组额外的 query hook 用于惰性查询或部分订阅等场景
+- 一组 ["matcher" 实用程序](https://redux-toolkit.js.org/api/matching-utilities) 用于检查由对该请求接口的请求 dispatch 的 `pending/fulfilled/rejected` action
+- 触发对此请求接口的请求的 `initiate` thunk
+- 一个 `select` 函数，创建 [memoized selectors](../../usage/deriving-data-selectors.md)，可以检索缓存的结果数据 + 此请求接口的状态条目
 
-If we want to fetch the list of users outside of React, we can dispatch the `getUsers.initiate()` thunk in our index file:
+如果我们想在 React 之外获取用户列表，我们可以在我们的索引文件中调度 `getUsers.initiate()` thunk：
 
 ```jsx title="index.js"
-// omit other imports
+// 忽略部分依赖
 // highlight-next-line
 import { apiSlice } from './features/api/apiSlice'
 
 async function main() {
-  // Start our mock API server
+  // 启动 mock API server
   await worker.start({ onUnhandledRequest: 'bypass' })
 
   // highlight-next-line
@@ -307,21 +307,21 @@ async function main() {
 main()
 ```
 
-This dispatch happens automatically inside the query hooks, but we can start it manually if needed.
+这种 dispatch 在 query hooks 内自动发生，但如果需要，我们可以手动启动它。
 
 :::caution
 
-Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsubscribing.
+手动 dispatch RTKQ 请求 thunk 将创建一个订阅条目，但随后由你决定[稍后取消订阅该数据](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react -hooks#removing-a-subscription) - 否则数据将永久保留在缓存中。在这种情况下，总是需要用户数据，所以我们可以跳过退订。
 
 :::
 
-### Selecting Users Data
+### 选择用户数据
 
-We currently have selectors like `selectAllUsers` and `selectUserById` that are generated by our `createEntityAdapter` users adapter, and are reading from `state.users`. If we reload the page, all of our user-related display is broken because the `state.users` slice has no data. Now that we're fetching data for RTK Query's cache, we should replace those selectors with equivalents that read from the cache instead.
+我们目前有像 `selectAllUsers` 和 `selectUserById` 这样的 selector，它们是由我们的 `createEntityAdapter` 用户适配器生成的，并且从 `state.users` 中读取。如果我们重新加载页面，我们所有与用户相关的显示都会被破坏，因为 `state.users` slice 没有数据。 现在我们正在为 RTK Query 的缓存获取数据，我们应该将这些 selector 替换为从缓存中读取的等价物。
 
-The `endpoint.select()` function in the API slice endpoints will create a new memoized selector function _every_ time we call it. `select()` takes a cache key as its argument, and this must be the _same_ cache key that you pass as an argument to either the query hooks or the `initiate()` thunk. The generated selector uses that cache key to know exactly which cached result it should return from the cache state in the store.
+API slice 请求接口中的 `endpoint.select()` 函数将在我们每次调用它时创建一个新的 memoized selector 函数。`select()` 将缓存键作为其参数，并且这必须与你作为参数传递给 query hook 或 `initiate()` thunk 的缓存键相同。生成的 selector 使用该缓存键来准确知道它应该从存储中的缓存状态返回哪个缓存结果。
 
-In this case, our `getUsers` endpoint doesn't need any parameters - we always fetch the entire list of users. So, we can create a cache selector with no argument, and the cache key becomes `undefined`.
+在这种情况下，我们的 `getUsers` 请求接口不需要任何参数——我们总是获取整个用户列表。 所以，我们可以创建一个不带参数的 cache selector，缓存键变成 `undefined`。
 
 ```js title="features/users/usersSlice.js"
 import {
@@ -333,17 +333,17 @@ import {
 // highlight-next-line
 import { apiSlice } from '../api/apiSlice'
 
-/* Temporarily ignore adapter - we'll use this again shortly
+/* 暂时忽略适配器 - 我们很快会再次使用它
 const usersAdapter = createEntityAdapter()
 
 const initialState = usersAdapter.getInitialState()
 */
 
 // highlight-start
-// Calling `someEndpoint.select(someArg)` generates a new selector that will return
-// the query result object for a query with those parameters.
-// To generate a selector for a specific query argument, call `select(theQueryArg)`.
-// In this case, the users query has no params, so we don't pass anything to select()
+// 调用 `someEndpoint.select(someArg)` 会生成一个新的 selector，该 selector 将返回
+// 带有这些参数的查询的查询结果对象。
+// 要为特定查询参数生成 selector，请调用 `select(theQueryArg)`。
+// 在这种情况下，用户查询没有参数，所以我们不向 select() 传递任何内容
 export const selectUsersResult = apiSlice.endpoints.getUsers.select()
 
 const emptyUsers = []
@@ -360,7 +360,7 @@ export const selectUserById = createSelector(
 )
 // highlight-end
 
-/* Temporarily ignore selectors - we'll come back to this later
+/* 暂时忽略 selector——我们稍后再讨论
 export const {
   selectAll: selectAllUsers,
   selectById: selectUserById,
@@ -368,23 +368,23 @@ export const {
 */
 ```
 
-Once we have that initial `selectUsersResult` selector, we can replace the existing `selectAllUsers` selector with one that returns the array of users from the cache result, and then replace `selectUserById` with one that finds the right user from that array.
+一旦我们有了初始的 `selectUsersResult` selector，我们可以将现有的 `selectAllUsers` selector 替换为从缓存结果中返回用户数组的 selector，然后将 `selectUserById` 替换为从该数组中找到正确用户的 selector。
 
-For now we're going to comment out those selectors from the `usersAdapter` - we're going to make another change later that switches back to using those.
+现在我们要从 `usersAdapter` 中注释掉那些 selector——稍后我们将进行另一项更改，切换回使用这些 selector。
 
-Our components are already importing `selectAllUsers` and `selectUserById`, so this change should just work! Try refreshing the page and clicking through the posts list and single post view. The correct user names should appear in each displayed post, and in the dropdown in the `<AddPostForm>`.
+我们的组件已经在导入 `selectAllUsers` 和 `selectUserById`，所以这个更改应该可以正常工作！尝试刷新页面并单击帖子列表和单个帖子视图。 正确的用户名应该出现在每个显示的帖子中，以及 `<AddPostForm>` 的下拉列表中。
 
-Since the `usersSlice` is no longer even being used at all, we can go ahead and delete the `createSlice` call from this file, and remove `users: usersReducer` from our store setup. We've still got a couple bits of code that reference `postsSlice`, so we can't quite remove that yet - we'll get to that shortly.
+由于 `usersSlice` 根本不再被使用，我们可以继续从该文件中删除 `createSlice` 调用，并从我们的 store 设置中删除 `users: usersReducer`。我们仍然有一些引用 `postsSlice` 的代码，所以还不能完全删除它——我们很快就会解决这个问题。
 
-### Injecting Endpoints
+### 注入请求接口
 
-It's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. We said that RTK Query normally has a single "API slice" per application, and so far we've defined all of our endpoints directly in `apiSlice.js`. What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
+大型应用程序通常会将功能代码拆分到单独的包中，然后在首次使用该功能时按需延迟加载它们。我们说过 RTK Query 通常每个应用程序都有一个 “API slice”，到目前为止，我们已经直接在 `apiSlice.js` 中定义了所有请求接口。如果我们想对一些请求接口定义进行代码拆分，或者将它们移动到另一个文件中以防止 API slice 文件变得太大，会发生什么？
 
-**RTK Query supports splitting out endpoint definitions with `apiSlice.injectEndpoints()`**. That way, we can still have a single API slice with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
+**RTK Query 支持使用 `apiSlice.injectEndpoints()` 拆分请求接口定义**。这样，我们仍然可以拥有一个带有单个 middleware 和 cache reducer 的 API slice，但我们可以将一些请求接口的定义移动到其他文件中。这可以实现代码拆分方案，以及在需要时将一些请求接口与功能文件夹放在一起。
 
-To illustrate this process, let's switch the `getUsers` endpoint to be injected in `usersSlice.js`, instead of defined in `apiSlice.js`.
+为了说明这个过程，让我们将 `getUsers` 请求接口切换到 `usersSlice.js` 中，而不是在 `apiSlice.js` 中定义。
 
-We're already importing `apiSlice` into `usersSlice.js` so that we can access the `getUsers` endpoint, so we can switch to calling `apiSlice.injectEndpoints()` here instead.
+我们已经将 `apiSlice` 导入到 `usersSlice.js` 中，以便可以访问 `getUsers` 请求接口，因此可以切换到在这里调用 `apiSlice.injectEndpoints()`。
 
 ```js title="features/users/usersSlice.js"
 import { apiSlice } from '../api/apiSlice'
@@ -404,12 +404,12 @@ export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 // highlight-end
 ```
 
-`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value has the added types for the new endpoints.)
+`injectEndpoints()` **改变原始 API slice 对象以添加额外的请求接口定义，然后返回它**。我们最初添加到存储中的实际 cache reducer 和 middleware 仍然可以正常工作。此时，`apiSlice` 和 `extendedApiSlice` 是同一个对象，但在这里参考 `extendedApiSlice` 对象而不是 `apiSlice` 会有所帮助，提醒自己。（如果你使用的是 TypeScript，这一点更为重要，因为只有 `extendedApiSlice` 值具有为新请求接口添加的类型。）
 
-At the moment, the only file that references the `getUsers` endpoint is our index file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
+目前，唯一引用 `getUsers` 请求接口的文件是我们的索引文件，它正在 dispatch `initiate` thunk。我们需要更新它以导入扩展的 API slice：
 
 ```diff title="index.js"
-  // omit other imports
+  // 忽略部分依赖
   // highlight-start
 - import { apiSlice } from './features/api/apiSlice'
 + import { extendedApiSlice } from './features/users/usersSlice'
@@ -417,7 +417,7 @@ At the moment, the only file that references the `getUsers` endpoint is our inde
 
 
   async function main() {
-    // Start our mock API server
+    // 启动 mock API server
     await worker.start({ onUnhandledRequest: 'bypass' })
 
 
@@ -439,25 +439,25 @@ At the moment, the only file that references the `getUsers` endpoint is our inde
   main()
 ```
 
-Alternately, you could just export the specific endpoints themselves from the slice file.
+或者，你可以只从 slice 文件中导出特定请求接口本身。
 
-## Manipulating Response Data
+## 处理响应数据
 
-So far, all of our query endpoints have simply stored the response data from the server exactly as it was received in the body. `getPosts` and `getUsers` both expect the server to return an array, and `getPost` expects the individual `Post` object as the body.
+到目前为止，我们所有的查询请求接口都只是简单地存储了来自服务器的响应数据，就像它在正文中收到的一样。`getPosts` 和 `getUsers` 都期望服务器返回一个数组，而 `getPost` 期望单独的 `Post` 对象作为主体。
 
-It's common for clients to need to extract pieces of data from the server response, or to transform the data in some way before caching it. For example, what if the `/getPost` request returns a body like `{post: {id}}`, with the data nested?
+客户端通常需要从服务器响应中提取数据片段，或者在缓存数据之前以某种方式转换数据。例如，如果 `/getPost` 请求返回一个像 `{post: {id}}` 这样的主体，并且数据嵌套了怎么办？
 
-There's a couple ways that we _could_ handle this conceptually. One option would be to extract the `responseData.post` field and store that in the cache, instead of the entire body. Another would be to store the entire response data in the cache, but have our components specify just a specific piece of that cached data that they need.
+有几种方法可以让我们在概念上处理这个问题。 一种选择是提取 “responseData.post” 字段并将其存储在缓存中，而不是整个正文。另一种是将整个响应数据存储在缓存中，但让我们的组件仅指定他们需要的缓存数据的特定部分。
 
-### Transforming Responses
+### 转换响应
 
-**Endpoints can define a `transformResponse` handler that can extract or modify the data received from the server before it's cached**. For the `getPost` example, we could have `transformResponse: (responseData) => responseData.post`, and it would cache just the actual `Post` object instead of the entire body of the response.
+**请求接口可以定义一个 `transformResponse` 处理程序，该处理程序可以在缓存之前提取或修改从服务器接收到的数据**。对于 `getPost` 示例，我们可以有 `transformResponse: (responseData) => responseData.post`，它只会缓存实际的 `Post` 对象，而不是整个响应体。
 
-In [Part 6: Performance and Normalization](./part-6-performance-normalization.md), we discussed reasons why it's useful to store data in a normalized structure. In particular, it lets us look up and update items based on an ID, rather than having to loop over an array to find the right item.
+在 [第 6 部分：性能和规范化](./part-6-performance-normalization.md) 中，我们讨论了将数据存储在归一化结构中有用的原因。特别是，它让我们可以根据 ID 查找和更新项目，而不必遍历数组来查找正确的项目。
 
-Our `selectUserById` selector currently has to loop over the cached array of users to find the right `User` object. If we were to transform the response data to be stored using a normalized approach, we could simplify that to directly find the user by ID.
+我们的 `selectUserById` selector 当前必须遍历缓存的用户数组才能找到正确的 `User` 对象。如果我们要使用归一化方法转换要存储的响应数据，我们可以将其简化为直接通过 ID 查找用户。
 
-We were previously using `createEntityAdapter` in `usersSlice` to manage normalized users data. We can integrate `createEntityAdapter` into our `extendedApiSlice`, and actually use `createEntityAdapter` to transform the data before it's cached. We'll uncomment the `usersAdapter` lines we originally had, and use its update functions and selectors again.
+我们之前在 `usersSlice` 中使用 `createEntityAdapter` 来管理归一化用户数据。现在可以将 `createEntityAdapter` 集成到我们的 `extendedApiSlice` 中，并实际使用 `createEntityAdapter` 在数据缓存之前对其进行转换。并且将取消注释我们最初拥有的 `usersAdapter` 行，并再次使用它的更新函数和 selector。
 
 ```js title="features/users/usersSlice.js"
 import { apiSlice } from '../api/apiSlice'
@@ -483,10 +483,10 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const { useGetUsersQuery } = extendedApiSlice
 
-// Calling `someEndpoint.select(someArg)` generates a new selector that will return
-// the query result object for a query with those parameters.
-// To generate a selector for a specific query argument, call `select(theQueryArg)`.
-// In this case, the users query has no params, so we don't pass anything to select()
+// 调用 `someEndpoint.select(someArg)` 生成一个新的 selector，该 selector将返回
+// 带有这些参数的查询的查询结果对象。
+// 要为特定查询参数生成 selector，请调用 `select(theQueryArg)`。
+// 在这种情况下，用户查询没有参数，所以我们不向 select() 传递任何内容
 export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 
 const selectUsersData = createSelector(
@@ -500,40 +500,40 @@ export const { selectAll: selectAllUsers, selectById: selectUserById } =
 // highlight-end
 ```
 
-We've added a `transformResponse` option to the `getUsers` endpoint. It receives the entire response data body as its argument, and should return the actual data to be cached. By calling `usersAdapter.setAll(initialState, responseData)`, it will return the standard `{ids: [], entities: {}}` normalized data structure containing all of the received items.
+我们在 `getUsers` 请求接口添加了一个 `transformResponse` 选项。它接收整个响应数据体作为其参数，并应返回要缓存的实际数据。通过调用`usersAdapter.setAll(initialState, responseData)`，它将返回标准的 `{ids: [],entities: {}}` 归一化数据结构，包含所有接收到的项目。
 
-The `adapter.getSelectors()` function needs to be given an "input selector" so it knows where to find that normalized data. In this case, the data is nested down inside the RTK Query cache reducer, so we select the right field out of the cache state.
+`adapter.getSelectors()` 函数需要给定一个输入 selector，以便它知道在哪里可以找到归一化数据。在这种情况下，数据嵌套在 RTK Query cache reducer 中，因此我们从缓存状态中选择正确的字段。
 
-### Normalized vs Document Caches
+### 归一化 vs 文档缓存
 
-It's worth stepping back for a minute to discuss what we just did further.
+值得花一点时间来讨论一下我们刚刚做了什么。
 
-You may have heard the term "normalized cache" in relation to other data fetching libraries like Apollo. It's important to understand that **RTK Query uses a "document cache" approach, not a "normalized cache"**.
+你可能听说过与 Apollo 等其他数据获取库相关的术语归一化缓存。重要的是要了解 **RTK Query 使用文档缓存方法，而不是归一化缓存**。
 
-A fully normalized cache tries to deduplicate similar items across _all_ queries, based on item type and ID. As an example, say that we have an API slice with `getTodos` and `getTodo` endpoints, and our components make the following queries:
+一个完全归一化的缓存会尝试根据项目类型和 ID 对 _所有_ 查询中的相似项目进行重复数据删除。例如，假设我们有一个带有 `getTodos` 和 `getTodo` 请求接口的 API slice，并且我们的组件进行以下查询：
 
 - `getTodos()`
 - `getTodos({filter: 'odd'})`
 - `getTodo({id: 1})`
 
-Each of these query results would include a Todo object that looks like `{id: 1}`.
+这些查询结果中的每一个都将包含一个类似于 `{id: 1}` 的 Todo 对象。
 
-In a fully normalized de-duplicating cache, only a single copy of this Todo object would be stored. However, **RTK Query saves each query result independently in the cache**. So, this would result in three separate copies of this Todo being cached in the Redux store. However, if all the endpoints are consistently providing the same tags (such as `{type: 'Todo', id: 1}`), then invalidating that tag will force all the matching endpoints to refetch their data for consistency.
+在完全归一化的去重缓存中，只会存储这个 Todo 对象的一个副本。但是，**RTK Query 将每个查询结果独立保存在缓存中**。因此，这将导致此 Todo 的三个单独副本缓存在 Redux store 中。但是，如果所有请求接口都始终提供相同的标签（例如 `{type: 'Todo', id: 1}`），则使该标签无效，迫使所有匹配的请求接口重新获取其数据以保持一致性。
 
-RTK Query deliberately **does _not_ implement a cache that would deduplicate identical items across multiple requests**. There are several reasons for this:
+RTK Query 故意**没有实现一个缓存，该缓存会在多个请求中对相同的项目进行重复数据删除**。有几个原因：
 
-- A fully normalized shared-across-queries cache is a _hard_ problem to solve
-- We don't have the time, resources, or interest in trying to solve that right now
-- In many cases, simply re-fetching data when it's invalidated works well and is easier to understand
-- At a minimum, RTKQ can help solve the general use case of "fetch some data", which is a big pain point for a lot of people
+- 完全规范化的跨查询共享缓存是一个很难解决的问题
+- 我们现在没有时间、资源或兴趣尝试解决这个问题
+- 在许多情况下，在数据失效时简单地重新获取数据效果很好并且更容易理解
+- RTKQ 至少可以帮助解决 “获取一些数据” 的一般用例，这是很多人的一大痛点
 
-In comparison, we just normalized the response data for the `getUsers` endpoint, in that it's being stored as an `{[id]: value}` lookup table. However, **this is _not_ the same thing as a "normalized cache" - we only transformed _how this one response is stored_** rather than deduplicating results across endpoints or requests.
+相比之下，我们只是将 `getUsers` 请求接口的响应数据归一化，因为它被存储为 `{[id]: value}` 查找表。然而，**这 _不_ 与 “归一化缓存” 相同——我们只转换了 _如何存储这个响应_**，而不是跨请求接口或请求对结果进行重复数据删除。
 
-### Selecting Values from Results
+### 从结果中选择值
 
-The last component that is reading from the old `postsSlice` is `<UserPage>`, which filters the list of posts based on the current user. We've already seen that we can get the entire list of posts with `useGetPostsQuery()` and then transform it in the component, such as sorting inside of a `useMemo`. The query hooks also give us the ability to select pieces of the cached state by providing a `selectFromResult` option, and only re-render when the selected pieces change.
+从旧的 `postsSlice` 读取的最后一个组件是 `<UserPage>`，它根据当前用户过滤帖子列表。我们已经看到，可以使用 `useGetPostsQuery()` 获取整个帖子列表，然后在组件中对其进行转换，例如在 `useMemo` 中进行排序。query hooks 还使我们能够通过提供 `selectFromResult` 选项来选择缓存状态的片段，并且仅在所选片段更改时重新渲染。
 
-We can use `selectFromResult` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResult` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UsersPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
+我们可以使用 `selectFromResult` 让 `<UserPage>` 从缓存中读取过滤后的帖子列表。然而，为了让 `selectFromResult` 避免不必要的重新渲染，我们需要确保我们提取的任何数据都被正确记忆。为此，我们应该创建一个新的 selector 实例，`<UsersPage>` 组件可以在每次渲染时重用它，以便 selector 根据其输入来记忆结果。
 
 ```jsx title="features/users/UsersPage.js"
 // highlight-next-line
@@ -551,8 +551,8 @@ export const UserPage = ({ match }) => {
   // highlight-start
   const selectPostsForUser = useMemo(() => {
     const emptyArray = []
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
+    // 返回此页面的唯一 selector 实例，以便
+     // 过滤后的结果被正确记忆
     return createSelector(
       res => res.data,
       (res, userId) => userId,
@@ -561,14 +561,14 @@ export const UserPage = ({ match }) => {
   }, [])
   // highlight-end
 
-  // Use the same posts query, but extract only part of its data
+  // 使用相同的帖子查询，但仅提取其部分数据
   const { postsForUser } = useGetPostsQuery(undefined, {
     // highlight-start
     selectFromResult: result => ({
-      // We can optionally include the other metadata fields from the result here
+      // 我们可以选择在此处包含结果中的其他元数据字段
       ...result,
-      // Include a field called `postsForUser` in the hook result object,
-      // which will be a filtered list of posts
+      // 在 hook 结果对象中包含一个名为 “postsForUser” 的字段，
+       // 这将是一个过滤的帖子列表
       postsForUser: selectPostsForUser(result, userId)
     })
     // highlight-end
@@ -578,35 +578,35 @@ export const UserPage = ({ match }) => {
 }
 ```
 
-There's a key difference with the memoized selector function we've created here. Normally, [selectors expect the entire Redux `state` as their first argument](../../usage/deriving-data-selectors.md), and extract or derive a value from `state`. However, in this case we're only dealing with the "result" value that is kept in the cache. The result object has a `data` field inside with the actual values we need, as well as some of the request metadata fields.
+我们在这里创建的 memoized selector 函数有一个关键的区别。通常，[selector 期望整个 Redux `state` 作为它们的第一个参数](../../usage/deriving-data-selectors.md)，并从 `state` 中提取或派生一个值。但是，在这种情况下，我们只处理保存在缓存中的 “result” 值。result 对象内部有一个 “data” 字段，其中包含我们需要的实际值，以及一些请求元数据字段。
 
-Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, it's preferably to always return an object from `selectFromResult` with the fields inside that you need.
+我们的 `selectFromResult` 回调从服务器接收包含原始请求元数据和 `data` 的 `result` 对象，并且应该返回一些提取或派生的值。因为 query hooks 为这里返回的任何内容添加了一个额外的 `refetch` 方法，所以最好始终从 `selectFromResult` 返回一个对象，其中包含你需要的字段。
 
-Since `result` is being kept in the Redux store, we can't mutate it - we need to return a new object. The query hook will do a "shallow" comparison on this returned object, and only re-render the component if one of the fields has changed. We can optimize re-renders by only returning the specific fields needed by this component - if we don't need the rest of the metadata flags, we could omit them entirely. If you do need them, you can spread the original `result` value to include them in the output.
+由于 `result` 保存在 Redux 存储中，我们不能改变它 - 我们需要返回一个新对象。query hooks 将对返回的对象进行浅层比较，并且仅在其中一个字段发生更改时才重新渲染组件 我们可以通过仅返回此组件所需的特定字段来优化重新渲染 - 如果我们不需要其余的元数据标志，我们可以完全省略它们。如果你确实需要它们，你可以传播原始的 `result` 值以将它们包含在输出中。
 
-In this case, we'll call the field `postsForUser`, and we can destructure that new field from the hook result. By calling `selectPostsForUser(result, userId)` every time, it will memoize the filtered array and only recalculate it if the fetched data or the user ID changes.
+在这种情况下，我们将调用字段 “postsForUser”，我们可以从 hook 结果中解构这个新字段。通过每次调用 `selectPostsForUser(result, userId)`，它会记住过滤后的数组，只有在获取的数据或用户ID发生变化时才会重新计算。
 
-### Comparing Transformation Approaches
+### 比较转换方法
 
-We've now seen three different ways that we can manage transforming responses:
+我们现在已经看到了三种不同的方式来管理转换响应：
 
-- Keep original response in cache, read full result in component and derive values
-- Keep original response in cache, read derived result with `selectFromResult`
-- Transform response before storing in cache
+- 将原始响应保存在缓存中，读取组件中的完整结果并导出值
+- 将原始响应保存在缓存中，使用 `selectFromResult` 读取派生结果
+- 在存储到缓存之前转换响应
 
-Each of these approaches can be useful in different situations. Here's some suggestions for when you should consider using them:
+这些方法中的每一种都可以在不同的情况下有用。 以下是你何时应该考虑使用它们的一些建议：
 
-- `transformResponse`: all consumers of the endpoint want a specific format, such as normalizing the response to enable faster lookups by ID
-- `selectFromResult`: some consumers of the endpoint only need partial data, such as a filtered list
-- per-component / `useMemo`: when only some specific components need to transform the cached data
+- `transformResponse`：请求接口的所有消费者都需要特定的格式，例如标准化响应以实现更快的 ID 查找
+- `selectFromResult`：请求接口的一些消费者只需要部分数据，例如过滤列表
+- per-component / `useMemo`：当只有某些特定组件需要转换缓存数据时
 
-## Advanced Cache Updates
+## 高级缓存更新
 
-We've completed updating our posts and users data, so all that's left is working with reactions and notifications. Switching these to use RTK Query will give us a chance to try out some of the advanced techniques available for working with RTK Query's cached data, and allow us to provide a better experience for our users.
+我们已经完成更新我们的帖子和用户数据，所以剩下的就是处理反应和通知。将这些切换为使用 RTK Query 将使我们有机会尝试一些可用于处理 RTK Query 缓存数据的高级技术，并使我们能够为用户提供更好的体验。
 
-### Persisting Reactions
+### 持续反应
 
-Originally, we only tracked reactions on the client side and did not persist them to the server. Let's add a new `addReaction` mutation and use that to update the corresponding `Post` on the server every time the user clicks a reaction button.
+最初，我们只跟踪客户端的反应，并没有将它们持久化到服务器。让我们添加一个新的 `addReaction` mutation，并在每次用户单击反应按钮时使用它来更新服务器上相应的 `Post`。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -614,14 +614,14 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   tagTypes: ['Post'],
   endpoints: builder => ({
-    // omit other endpoints
+    // 忽略部分依赖
     // highlight-start
     addReaction: builder.mutation({
       query: ({ postId, reaction }) => ({
         url: `posts/${postId}/reactions`,
         method: 'POST',
-        // In a real app, we'd probably need to base this on user ID somehow
-        // so that a user can't do the same reaction more than once
+        // 在一个真实的应用程序中，我们可能需要以某种方式基于用户 ID
+        // 这样用户就不能多次做出相同的反应
         body: { reaction }
       }),
       invalidatesTags: (result, error, arg) => [
@@ -642,11 +642,11 @@ export const {
 } = apiSlice
 ```
 
-Similar to our other mutations, we take some parameters and make a request to the server, with some data in the body of the request. Since this example app is small, we'll just give the name of the reaction, and let the server increment the counter for that reaction type on this post.
+与我们的其他 mutations 类似，我们获取一些参数并向服务器发出请求，请求正文中包含一些数据。由于这个示例应用程序很小，我们将只给出反应的名称，并让服务器在这篇文章中为该反应类型增加计数器。
 
-We already know that we need to refetch this post in order to see any of the data change on the client, so we can invalidate this specific `Post` entry based on its ID.
+我们已经知道我们需要重新获取此帖子才能查看客户端上的任何数据更改，因此我们可以根据其 ID 使这个特定的帖子条目无效。
 
-With that in place, let's update `<ReactionButtons>` to use this mutation.
+有了这些，让我们更新 `<ReactionButtons>` 以使用这个 mutations。
 
 ```jsx title="features/posts/ReactionButtons.js"
 import React from 'react'
@@ -688,17 +688,16 @@ export const ReactionButtons = ({ post }) => {
 }
 ```
 
-Let's see this in action! Go to the main `<PostsList>`, and click one of the reactions to see what happens.
+让我们看看这个在行动！转到主 `<PostsList>`，然后单击其中一个反应以查看会发生什么。
 
-![PostsList disabled while fetching](/img/tutorials/essentials/disabled-posts-fetching.png)
+![获取时禁用 PostsList](/img/tutorials/essentials/disabled-posts-fetching.png)
 
-Uh-oh. The entire `<PostsList>` component was grayed out, because we just refetched the _entire_ list of posts in response to that one post being updated. This is deliberately more visible because our mock API server is set to have a 2-second delay before responding, but even if the response is faster, this still isn't a good user experience.
+整个 `<PostsList>` 组件是灰色的，因为我们刚刚重新获取了整个帖子列表以响应更新的帖子。很明显这是故意，因为我们的模拟 API 服务器被设置为在响应之前有 2 秒的延迟，但是即使响应更快，这仍然不是一个好的用户体验。
+### 实施 Optimistic Updates
 
-### Implementing Optimistic Updates
+对于像添加反应这样的小更新，我们可能不需要重新获取整个帖子列表。相反，我们可以尝试只更新客户端上已经缓存的数据，以匹配我们期望在服务器上发生的数据。此外，如果我们立即更新缓存，用户在单击按钮时会立即获得反馈，而不必等待响应返回。**这种立即更新客户端状态的方法称为 “Optimistic Updates”**，它是 Web 应用程序中的常见模式。
 
-For a small update like adding a reaction, we probably don't need to re-fetch the entire list of posts. Instead, we could try just updating the already-cached data on the client to match what we expect to have happen on the server. Also, if we update the cache immediately, the user gets instant feedback when they click the button instead of having to wait for the response to come back. **This approach of updating client state right away is called an "optimistic update"**, and it's a common pattern in web apps.
-
-**RTK Query lets you implement optimistic updates by modifying the client-side cache based on "request lifecycle" handlers**. Endpoints can define an `onQueryStarted` function that will be called when a request starts, and we can run additional logic in that handler.
+**RTK Query 允许你通过基于请求生命周期处理程序修改客户端缓存来实现 Optimistic Updates**。请求接口可以定义一个 `onQueryStarted` 函数，该函数将在请求开始时调用，我们可以在该处理程序中运行其他逻辑。
 
 ```js title="features/api/apiSlice.js"
 export const apiSlice = createApi({
@@ -706,23 +705,23 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   tagTypes: ['Post'],
   endpoints: builder => ({
-    // omit other endpoints
+    // 忽略部分依赖
 
     addReaction: builder.mutation({
       query: ({ postId, reaction }) => ({
         url: `posts/${postId}/reactions`,
         method: 'POST',
-        // In a real app, we'd probably need to base this on user ID somehow
-        // so that a user can't do the same reaction more than once
+        // 在一个真实的应用程序中，我们可能需要以某种方式基于用户 ID
+        // 这样用户就不能多次做出相同的反应
         body: { reaction }
       }),
       // highlight-start
       async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
-        // `updateQueryData` requires the endpoint name and cache key arguments,
-        // so it knows which piece of cache state to update
+        // `updateQueryData` 需要请求接口名称和缓存键参数，
+        // 所以它知道要更新哪一块缓存状态
         const patchResult = dispatch(
           apiSlice.util.updateQueryData('getPosts', undefined, draft => {
-            // The `draft` is Immer-wrapped and can be "mutated" like in createSlice
+            // `draft` 是 Immer-wrapped 的，可以像 createSlice 中一样 “mutated”
             const post = draft.find(post => post.id === postId)
             if (post) {
               post.reactions[reaction]++
@@ -741,29 +740,29 @@ export const apiSlice = createApi({
 })
 ```
 
-The `onQueryStarted` handler receives two parameters. The first is the cache key `arg` that was passed when the request started. The second is an object that contains some of the same fields as the `thunkApi` in `createAsyncThunk` ( `{dispatch, getState, extra, requestId}`), but also a `Promise` called `queryFulfilled`. This `Promise` will resolve when the request returns, and either fulfill or reject based on the request.
+`onQueryStarted` 处理程序接收两个参数。第一个是请求开始时传递的缓存键 arg。 第二个是一个对象，它包含一些与 `createAsyncThunk` 中的 `thunkApi` 相同的字段（`{dispatch, getState, extra, requestId}`），但也包含一个名为 `queryFulfilled` 的 `Promise`。这个 `Promise` 将在请求返回时解析，并根据请求执行或拒绝。
 
-The API slice object includes a `updateQueryData` util function that lets us update cached values. It takes three arguments: the name of the endpoint to update, the same cache key value used to identify the specific cached data, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**.
+API slice 对象包含一个 `updateQueryData` 实用函数，可让我们更新缓存值。它需要三个参数：要更新的请求接口的名称、用于标识特定缓存数据的相同缓存键值以及更新缓存数据的回调。 **`updateQueryData` 使用 Immer，因此你可以像在 `createSlice`** 中一样“改变”起草的缓存数据。
 
-We can implement the optimistic update by finding the specific `Post` entry in the `getPosts` cache, and "mutating" it to increment the reaction counter.
+我们可以通过在 `getPosts` 缓存中找到特定的 `Post` 条目来实现 optimistic update，并“改变”它以增加反应计数器。
 
-`updateQueryData` generates an action object with a patch diff of the changes we made. When we dispatch that action, the return value is a `patchResult` object. If we call `patchResult.undo()`, it automatically dispatches an action that reverses the patch diff changes.
+`updateQueryData` 生成一个动作对象，其中包含我们所做更改的补丁差异。当我们 dispatch 该 action 时，返回值是一个 `patchResult` 对象。如果我们调用 `patchResult.undo()`，它会自动 dispatch 一个操作来反转补丁差异更改。
 
-By default, we expect that the request will succeed. In case the request fails, we can `await queryFulfilled`, catch a failure, and undo the patch changes to revert the optimistic update.
+默认情况下，我们期望请求会成功。如果请求失败，我们可以 `await queryFulfilled`，捕获失败，并撤消补丁更改以恢复 optimistic update。
 
-For this case, we've also removed the `invalidatesTags` line we'd just added, since we _don't_ want to refetch the posts when we click a reaction button.
+对于这种情况，我们还删除了刚刚添加的 `invalidatesTags` 行，因为我们 _不_ 希望在单击反应按钮时重新获取帖子。
 
-Now, if we click several times on a reaction button quickly, we should see the number increment in the UI each time. If we look at the Network tab, we'll also see each individual request go out to the server as well.
+现在，如果我们快速单击一个反应按钮几次，我们应该会在 UI 中看到每次的数字增量。如果我们查看 Network 选项卡，我们还会看到每个单独的请求也会发送到服务器。
 
-### Streaming Cache Updates
+### 流式缓存更新
 
-Our final feature is the notifications tab. When we originally built this feature in [Part 6](./part-6-performance-normalization.md#adding-notifications), we said that "in a real app, the server would push updates to our client every time something happens". We initially faked that feature by adding a "Refresh Notifications" button, and having it make an HTTP `GET` request for more notifications entries.
+我们的最后一个功能是通知选项卡。当我们最初在 [第 6 部分](./part-6-performance-normalization.md#adding-notifications) 中构建此功能时，我们说过“在真正的应用程序中，每次发生某些事情时，服务器都会向我们的客户端推送更新 ”。 我们最初通过添加 “刷新通知” 按钮来伪造该功能，并让它发出 HTTP `GET` 请求以获取更多通知条目。
 
-It's common for apps to make an _initial_ request to fetch data from the server, and then open up a Websocket connection to receive additional updates over time. **RTK Query provides an `onCacheEntryAdded` endpoint lifecycle handler that lets us implement "streaming updates" to cached data**. We'll use that capability to implement a more realistic approach to managing notifications.
+应用程序通常会发出初始请求以从服务器获取数据，然后打开 Websocket 连接以随着时间的推移接收额外的更新。**RTK Query 提供了一个 `onCacheEntryAdded` 请求接口生命周期处理程序，让我们可以对缓存数据实施“流式更新”**。我们将使用该功能来实现一种更现实的方法来管理通知。
 
-Our `src/api/server.js` file has a mock Websocket server already configured, similar to the mock HTTP server. We'll write a new `getNotifications` endpoint that fetches the initial list of notifications, and then establishes the Websocket connection to listen for future updates. We still need to manually tell the mock server _when_ to send new notifications, so we'll continue faking that by having a button we click to force the update.
+我们的 `src/api/server.js` 文件已经配置了一个模拟 Websocket 服务器，类似于模拟 HTTP 服务器。我们将编写一个新的 `getNotifications` 请求接口来获取初始通知列表，然后建立 Websocket 连接以监听未来的更新。并仍然需要手动告诉模拟服务器 _什么时间_ 发送新通知，所以我们将继续通过单击按钮来强制更新来伪装它。
 
-We'll inject the `getNotifications` endpoint in `notificationsSlice` like we did with `getUsers`, just to show it's possible.
+我们将在 `notificationsSlice` 中注入 `getNotifications` 请求接口，就像对 `getUsers` 所做的那样，只是为了表明它是可能的。
 
 ```js title="features/notifications/notificationsSlice.js"
 import { forceGenerateNotifications } from '../../api/server'
@@ -777,21 +776,21 @@ export const extendedApi = apiSlice.injectEndpoints({
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
       ) {
-        // create a websocket connection when the cache subscription starts
+        // 当缓存订阅开始时创建一个 websocket 连接
         const ws = new WebSocket('ws://localhost')
         try {
-          // wait for the initial query to resolve before proceeding
+         // 等待初始查询解决后再继续
           await cacheDataLoaded
 
-          // when data is received from the socket connection to the server,
-          // update our query result with the received message
+          // 当从套接字连接到服务器接收到数据时，
+          // 用收到的消息更新我们的查询结果
           const listener = event => {
             const message = JSON.parse(event.data)
             switch (message.type) {
               case 'notifications': {
                 updateCachedData(draft => {
-                  // Insert all received notifications from the websocket
-                  // into the existing RTKQ cache array
+                  // 插入所有从 websocket 接收到的通知
+                  // 进入现有的 RTKQ 缓存数组
                   draft.push(...message.payload)
                   draft.sort((a, b) => b.date.localeCompare(a.date))
                 })
@@ -804,12 +803,12 @@ export const extendedApi = apiSlice.injectEndpoints({
 
           ws.addEventListener('message', listener)
         } catch {
-          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-          // in which case `cacheDataLoaded` will throw
+          // 如果 `cacheEntryRemoved` 在 `cacheDataLoaded` 之前解析，则无操作，
+          // 在这种情况下 `cacheDataLoaded` 将抛出
         }
-        // cacheEntryRemoved will resolve when the cache subscription is no longer active
+        // cacheEntryRemoved 将在缓存订阅不再活动时解析
         await cacheEntryRemoved
-        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
+        // 一旦 `cacheEntryRemoved` 承诺解决，执行清理步骤
         ws.close()
       }
     })
@@ -832,36 +831,36 @@ export const fetchNotificationsWebsocket = () => (dispatch, getState) => {
   const allNotifications = selectNotificationsData(getState())
   const [latestNotification] = allNotifications
   const latestTimestamp = latestNotification?.date ?? ''
-  // Hardcode a call to the mock server to simulate a server push scenario over websockets
+  // 对模拟服务器的调用进行硬编码，以通过 websocket 模拟服务器推送场景
   forceGenerateNotifications(latestTimestamp)
 }
 
 // omit existing slice code
 ```
 
-Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives the `arg` cache key as its first parameter, and an options object with the `thunkApi` values as the second parameter. The options object also contains an `updateCachedData` util function, and two lifecycle `Promise`s - `cacheDataLoaded` and `cacheEntryRemoved`. `cacheDataLoaded` resolves when the _initial_ data for this subscription is added to the store. This happens when the first subscription for this endpoint + cache key is added. As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
+与 `onQueryStarted` 一样，`onCacheEntryAdded` 生命周期处理程序接收 `arg` 缓存键作为其第一个参数，并接收具有 `thunkApi` 值的选项对象作为第二个参数。options 对象还包含一个 `updateCachedData` 实用程序函数和两个生命周期 `Promise` - `cacheDataLoaded` 和 `cacheEntryRemoved`。`cacheDataLoaded` 在此订阅的 _初始化_ 数据添加到存储时解析。当添加此请求接口 + 缓存键的第一个订阅时，会发生这种情况。只要数据的 1+ 个订阅者仍然处于活动状态，缓存条目就会保持活动状态。当订阅者数量变为 0 并且缓存生存期计时器到期时，缓存条目将被删除，并且 `cacheEntryRemoved` 将解析。 通常，使用模式是：
 
-- `await cacheDataLoaded` right away
-- Create a server-side data subscription like a Websocket
-- When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
-- `await cacheEntryRemoved` at the end
-- Clean up subscriptions afterwwards
+- 立即 `await cacheDataLoaded`
+- 创建像 Websocket 一样的服务器端数据订阅
+- 收到更新时，使用 `updateCachedData` 根据更新 “mutate” 缓存值
+- `await cacheEntryRemoved` 在最后
+- 之后清理订阅
 
-Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
+我们的模拟 Websocket 服务器文件公开了一个 `forceGenerateNotifications` 方法来模拟将数据推送到客户端。这取决于知道最新的通知时间戳，因此我们添加了一个可以调度的 thunk，它从缓存状态读取最新的时间戳并告诉模拟服务器生成更新的通知。
 
-Inside of `onCacheEntryAdded`, we create a real `Websocket` connection to `localhost`. In a real app, this could be any kind of external subscription or polling connection you need to receive ongoing updates. Whenever the mock server sends us an update, we push all of the received notifications into the cache and re-sort it.
+在 `onCacheEntryAdded` 内部，我们创建了一个到 `localhost` 的真实 `Websocket` 连接。在一个真实的应用程序中，这可能是你需要接收持续更新的任何类型的外部订阅或轮询连接。每当模拟服务器向我们发送更新时，我们会将所有收到的通知推送到缓存中并重新排序。
 
-When the cache entry is removed, we clean up the Websocket subscription. In this app, the notifications cache entry will never be removed because we never unsubscribe from the data, but it's important to see how the cleanup would work for a real app.
+当缓存条目被删除时，我们清理 Websocket 订阅。在这个应用程序中，通知缓存条目永远不会被删除，因为我们永远不会取消订阅数据，但重要的是要了解清理对真实应用程序的工作方式。
 
-### Tracking Client-Side State
+### 跟踪客户端状态
 
-We need to make one final set of updates. Our `<Navbar>` component has to initiate the fetching of notifications, and `<NotificationsList>` needs to show the notification entries with the correct read/unread status. However, we were previously adding the read/unread fields on the client side in our `notificationsSlice` reducer when we received the entries, and now the notification entries are being kept in the RTK Query cache.
+我们需要进行最后一组更新。我们的 `<Navbar>` 组件必须启动通知的获取，而 `<NotificationsList>` 需要显示具有正确已读/未读状态的通知条目。然而，当我们收到条目时，我们之前在客户端的 “notificationsSlice” reducer 中添加了已读/未读字段，现在通知条目被保存在 RTK 查询缓存中。
 
-We can rewrite `notificationsSlice` so that it listens for any received notifications, and tracks some additional state on the client side for each notification entry.
+我们可以重写 `notificationsSlice` 以便它侦听任何收到的通知，并在客户端跟踪每个通知条目的一些附加状态。
 
-There's two cases when new notification entries are received: when we fetch the initial list over HTTP, and when we receive an update pushed over the Websocket connection. Ideally, we want to use the same logic in response to both cases. We can use RTK's ["matching utilities"](https://redux-toolkit.js.org/api/matching-utilities) to write one case reducer that runs in response to multiple action types.
+收到新的通知条目有两种情况：当我们通过 HTTP 获取初始列表时，以及当我们收到通过 Websocket 连接推送的更新时。理想情况下，我们希望使用相同的逻辑来响应这两种情况。我们可以使用 RTK 的 ["matching utility"](https://redux-toolkit.js.org/api/matching-utilities) 编写一个 case reducer 来响应多种动作类型。
 
-Let' see what `notificationsSlice` looks like after we add this logic.
+让我们看看添加此逻辑后的 `notificationsSlice` 是什么样子。
 
 ```js title="features/notifications/notificationsSlice.js"
 import {
@@ -892,26 +891,26 @@ export const extendedApi = apiSlice.injectEndpoints({
         // highlight-next-line
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
       ) {
-        // create a websocket connection when the cache subscription starts
+        // 缓存订阅开始时创建 websocket 连接
         const ws = new WebSocket('ws://localhost')
         try {
-          // wait for the initial query to resolve before proceeding
+          // 等待初始查询解决后再继续
           await cacheDataLoaded
 
-          // when data is received from the socket connection to the server,
-          // update our query result with the received message
+          // 当从 socket 连接到服务器接收到数据时，
+           // 用收到的消息更新我们的查询结果
           const listener = event => {
             const message = JSON.parse(event.data)
             switch (message.type) {
               case 'notifications': {
                 updateCachedData(draft => {
-                  // Insert all received notifications from the websocket
-                  // into the existing RTKQ cache array
+                  // 插入所有从 websocket 接收到的通知
+                   // 进入现有的 RTKQ 缓存数组
                   draft.push(...message.payload)
                   draft.sort((a, b) => b.date.localeCompare(a.date))
                 })
                 // highlight-start
-                // Dispatch an additional action so we can track "read" state
+                // dispatch 一个额外的 action，以便我们可以跟踪 “read” state
                 dispatch(notificationsReceived(message.payload))
                 // highlight-end
                 break
@@ -923,12 +922,12 @@ export const extendedApi = apiSlice.injectEndpoints({
 
           ws.addEventListener('message', listener)
         } catch {
-          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-          // in which case `cacheDataLoaded` will throw
+          // 如果 `cacheEntryRemoved` 在 `cacheDataLoaded` 之前解析，则无操作，
+          // 在这种情况下 `cacheDataLoaded` 将抛出
         }
-        // cacheEntryRemoved will resolve when the cache subscription is no longer active
+        // cacheEntryRemoved 将在缓存订阅不再活动时解析
         await cacheEntryRemoved
-        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
+        // 一旦 `cacheEntryRemoved` 承诺解决，执行清理步骤
         ws.close()
       }
     })
@@ -937,7 +936,7 @@ export const extendedApi = apiSlice.injectEndpoints({
 
 export const { useGetNotificationsQuery } = extendedApi
 
-// omit selectors and websocket thunk
+// 忽略 selector 和 websocket thunk
 
 // highlight-start
 const notificationsAdapter = createEntityAdapter()
@@ -961,7 +960,7 @@ const notificationsSlice = createSlice({
   extraReducers(builder) {
     // highlight-start
     builder.addMatcher(matchNotificationsReceived, (state, action) => {
-      // Add client-side metadata for tracking new notifications
+      // 添加客户端元数据以跟踪新通知
       const notificationsMetadata = action.payload.map(notification => ({
         id: notification.id,
         read: false,
@@ -969,7 +968,7 @@ const notificationsSlice = createSlice({
       }))
 
       Object.values(state.entities).forEach(notification => {
-        // Any notifications we've read are no longer new
+        // 我们读过的任何通知都不再是新的
         notification.isNew = !notification.read
       })
 
@@ -991,19 +990,19 @@ export const {
 } = notificationsAdapter.getSelectors(state => state.notifications)
 ```
 
-There's a lot going on, but let's break down the changes one at a time.
+有很多事情要做，但让我们一次分解一个变化。
 
-There isn't currently a good way for the `notificationsSlice` reducer to know when we've received an updated list of new notifications via the Websocket. So, we'll import `createAction`, define a new action type specifically for the "received some notifications" case, and dispatch that action after updating the cache state.
+`notificationsSlice` reducer 目前还没有一个好的方法可以知道我们何时通过 Websocket 收到了新通知的更新列表。因此，我们将导入`createAction`，专门为“收到一些通知”的情况定义一个新的 action 类型，并在更新缓存状态后 dispatch 该 action。
 
-We want to run the same "add read/new metadata" logic for _both_ the "fulfilled `getNotifications`" action _and_ the "received from Websocket" action. We can create a new "matcher" function by calling `isAnyOf()` and passing in each of those action creators. The `matchNotificationsReceived` matcher function will return true if the current action matches either of those types.
+我们希望为“已完成的 `getNotifications`”操作和“从 Websocket 接收”操作运行相同的“添加读取/新元数据”逻辑。我们可以通过调用 `isAnyOf()` 并传入每个 action 创建者来创建一个新的 “matcher” 函数。如果当前操作匹配其中任何一种类型，则 `matchNotificationsReceived` matcher 函数将返回 true。
 
-Previously, we had a normalized lookup table for all of our notifications, and the UI selected those as a single sorted array. We're going to repurpose this slice to instead store "metadata" objects that describe the read/unread status.
+以前，我们所有的通知都有一个归一化查找表，UI 将它们选择为单个排序数组。我们将重新利用此 slice 来存储描述已读/未读状态的“元数据”对象。
 
-We can use the `builder.addMatcher()` API inside of `extraReducers` to add a case reducer that runs whenever we match one of those two action types. Inside of there, we add a new "read/isNew" metadata entry that corresponds to each notification by ID, and store that inside of `notificationsSlice`.
+我们可以使用 `extraReducers` 中的 `builder.addMatcher()` API 添加一个 case reducer，只要我们匹配这两种 action 类型之一，它就会运行。在其中，我们添加了一个新的 “read/isNew” 元数据条目，它按 ID 对应于每个通知，并将其存储在 `notificationsSlice` 中。
 
-Finally, we need change the selectors we're exporting from this slice. Instead of exporting `selectAll` as `selectAllNotifications`, we're going to export it as `selectNotificationsMetadata`. It still returns an array of the values from the normalized state, but we're changing the name since the items themselves have changed. We're also going to export the `selectEntities` selector, which returns the lookup table object itself, as `selectMetadataEntities`. That will be useful when we try to use this data in the UI.
+最后，我们需要更改从该 slice 中导出的 selectors。我们不会将 `selectAll` 导出为 `selectAllNotifications`，而是将其导出为 `selectNotificationsMetadata`。它仍然从归一化状态返回一个值数组，但是更改了名称，因为项目本身已经更改。我们还将导出`selectEntities` selectors，它作为 `selectMetadataEntities` 返回查找表对象本身。当我们尝试在 UI 中使用这些数据时，这将很有用。
 
-With those changes in place, we can update our UI components to fetch and display notifications.
+通过这些更改，我们可以更新我们的 UI 组件以获取和显示通知。
 
 ```jsx title="app/Navbar.js"
 import React from 'react'
@@ -1022,7 +1021,7 @@ export const Navbar = () => {
   const dispatch = useDispatch()
 
   // highlight-start
-  // Trigger initial fetch of notifications and keep the websocket open to receive updates
+  // 触发通知的初始获取并保持 websocket 打开以接收更新
   useGetNotificationsQuery()
 
   const notificationsMetadata = useSelector(selectNotificationsMetadata)
@@ -1047,9 +1046,9 @@ export const Navbar = () => {
 }
 ```
 
-In `<NavBar>`, we trigger the initial notifications fetch with `useGetNotificationsQuery()`, and switch to reading the metadata objects from `state.notificationsSlice`. Clicking the "Refresh" button now triggers the mock Websocket server to push out another set of notifications.
+在 `<NavBar>` 中，我们使用 `useGetNotificationsQuery()` 触发初始通知获取，并切换到从 `state.notificationsSlice` 读取元数据对象。单击“刷新”按钮现在会触发模拟 Websocket 服务器推出另一组通知。
 
-Our `<NotificationsList>` similarly switches over to reading the cached data and metadata.
+我们的 `<NotificationsList>` 也类似地切换到读取缓存的数据和元数据。
 
 ```jsx title="features/notifications/NotificationsList.js"
 import {
@@ -1091,17 +1090,17 @@ export const NotificationsList = () => {
 }
 ```
 
-We read the list of notifications from cache and the new metadata entries from the notificationsSlice, and continue displaying them the same way as before.
+我们从缓存中读取通知列表和从通知 slice 中读取新的元数据条目，并继续以与以前相同的方式显示它们。
 
-As a final step, we can do some additional cleanup here - the `postsSlice` is no longer being used, so that can be removed entirely.
+作为最后一步，我们可以在这里做一些额外的清理 - `postsSlice` 不再被使用，因此可以完全删除。
 
-With that, we've finished converting our application over to use RTK Query! All of the data fetching has been switched over to use RTKQ, and we've improved the user experience by adding optimistic updates and streaming updates.
+至此，我们已经完成了将应用程序转换为使用 RTK Query！所有数据获取都已切换为使用 RTKQ，我们通过添加 optimistic updates 和流式更新来改善用户体验。
 
-## What You've Learned
+## 你的所学
 
-As we've seen, RTK Query includes some powerful options for controlling how we manage cached data. While you may not need all of these options right away, they provide flexibility and key capabilities to help implement specific application behaviors.
+RTK Query 包含一些强大的选项来控制我们如何管理缓存数据。虽然你可能不需要立即使用所有这些选项，但它们提供了灵活性和关键功能来帮助实现特定的应用程序行为。
 
-Let's take one last look at the whole application in action:
+让我们最后看一下整个应用程序的运行情况：
 
 <iframe
   class="codesandbox"
@@ -1111,31 +1110,31 @@ Let's take one last look at the whole application in action:
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-:::tip Summary
+:::tip 总结
 
-- **Specific cache tags can be used for finer-grained cache invalidation**
-  - Cache tags can be either `'Post'` or `{type: 'Post', id}`
-  - Endpoints can provide or invalidate cache tags based on results and arg cache keys
-- **RTK Query's APIs are UI-agnostic and can be used outside of React**
-  - Endpoint objects include functions for initating requests, generating result selectors, and matching request action objects
-- **Responses can be transformed in different ways as needed**
-  - Endpoints can define a `transformResponse` callback to modify the data before caching
-  - Hooks can be given a `selectFromResult` option to extract/transform data
-  - Components can read an entire value and transform with `useMemo`
-- **RTK Query has advanced options for manipulating cached data for better user experience**
-  - The `onQueryStarted` lifecycle can be used for optimistic updates by updating cache immediately before a request returns
-  - The `onCacheEntryAdded` lifecycle can be used for streaming updates by updating cache over time based on server push connections
+- **特定的缓存标签可用于更细粒度的缓存失效**
+  - 缓存标签可以是 `'Post'` 或 `{type: 'Post', id}`
+  - 请求接口可以根据结果和 arg 缓存键提供或使缓存标记无效
+- **RTK Query 的 API 与 UI 无关，可以在 React 之外使用**
+  - 请求接口对象包括用于发起请求、生成结果 selectors 和匹配请求 action 对象的函数
+- **响应可以根据需要以不同的方式进行转换**
+  - 请求接口可以定义一个 `transformResponse` 回调来在缓存之前修改数据
+  - 可以给 Hooks 一个 `selectFromResult` 选项来提取/转换数据
+  - 组件可以读取整个值并使用 `useMemo` 进行转换
+- **RTK Query 具有用于操作缓存数据以获得更好用户体验的高级选项**
+  - `onQueryStarted` 生命周期可用于通过在请求返回之前立即更新缓存来进行 optimistic updates
+  - `onCacheEntryAdded` 生命周期可用于通过基于服务器推送连接随时间更新缓存来进行流式更新
 
 :::
 
-## What's Next?
+## 下一步
 
-Congratulations, **you've completed the Redux Essentials tutorial!** You should now have a solid understanding of what Redux Toolkit and React-Redux are, how to write and organize Redux logic, Redux data flow and usage with React, and how to use APIs like `configureStore` and `createSlice`. You should also see how RTK Query can simplify the process of fetching and using cached data.
+恭喜，**你已完成 Redux Essentials 教程！**你现在应该对 Redux Toolkit 和 React-Redux 是什么、如何编写和组织 Redux 逻辑、Redux 数据流和 React 使用以及如何 使用 `configureStore` 和 `createSlice` 等 API有所了解了。你还应该了解 RTK Query 如何简化获取和使用缓存数据的过程。
 
-The ["What's Next?" section in Part 6](./part-6-performance-normalization.md) has links to additional resources for app ideas, tutorials, and documentation.
+[第 6 部分中的“下一步”部分](./part-6-performance-normalization.md) 包含指向应用程序创意、教程和文档的其他资源的链接。
 
-For more details on using RTK Query, see [the RTK Query usage guide docs](https://redux-toolkit.js.org/rtk-query/usage/queries) and [API reference](https://redux-toolkit.js.org/rtk-query/api/createApi).
+有关使用 RTK Query 的更多详细信息，请参阅 [RTK Query 使用指南文档](https://redux-toolkit.js.org/rtk-query/usage/queries) 和 [API 参考](https://redux- toolkit.js.org/rtk-query/api/createApi）。
 
-If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
+如果你正在寻求有关 Redux 问题的帮助，请加入 [Discord 上 Reactiflux 服务器中的 `#redux` 频道](https://www.reactiflux.com)。
 
-**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**
+**感谢你阅读本教程，我们希望你喜欢使用 Redux 构建应用程序！**

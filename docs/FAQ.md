@@ -1,8 +1,7 @@
 ---
 id: faq
-title: FAQ Index
-sidebar_label: FAQ Index
-description: 'FAQ Index: Frequently Asked Questions about Redux'
+title: FAQ 目录
+description: 'FAQ 目录: Redux 常见问答'
 ---
 
 # Redux 常见问答
@@ -10,8 +9,8 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
 ## 目录
 
 - **常见问题**
-  - [应该什么时候学习 Redux？](faq/General.md#when-should-i-learn-redux)
-  - [应该什么时候使用 Redux？](faq/General.md#when-should-i-use-redux)
+  - [什么时候需要学习 Redux？](faq/General.md#when-should-i-learn-redux)
+  - [什么时候需要使用 Redux？](faq/General.md#when-should-i-use-redux)
   - [Redux 只能与 React 一起使用吗？](faq/General.md#can-redux-only-be-used-with-react)
   - [是否需要特定的构建工具才能使用 Redux？](faq/General.md#do-i-need-to-have-a-particular-build-tool-to-use-redux)
 - **Reducers**
@@ -33,9 +32,9 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
   - [应该使用哪个异步 middleware？如何在 thunk、sagas、observables 或其他中做出选择？](faq/Actions.md#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
   - [应该从一个 action creator 连续 dispatch 多个 actions 吗？](faq/Actions.md#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
 - **不可变数据**
-  - [不变性有什么好处？](faq/ImmutableData.md#what-are-the-benefits-of-immutability)
-  - [为什么 Redux 需要不可变性？](faq/ImmutableData.md#why-is-immutability-required-by-redux)
-  - [有哪些方法可以处理数据不变性？必须使用 Immer 吗？](faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
+  - [不可变数据有什么好处？](faq/ImmutableData.md#what-are-the-benefits-of-immutability)
+  - [为什么 Redux 需要不可变数据？](faq/ImmutableData.md#why-is-immutability-required-by-redux)
+  - [有哪些方法可以实现数据不可变？必须使用 Immer 吗？](faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
   - [使用 JavaScript 进行不可变操作会有什么问题？](faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
 - **代码结构**
   - [文件结构应该是什么样的？应该如何对 action creators 和 reducers 进行分组？Selectors 应该放在哪里？](faq/CodeStructure.md#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
@@ -45,14 +44,14 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
   - [如何在非组件文件中使用 Redux store？](faq/CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files)
 - **性能**
   - [Redux 在性能和架构方面的“扩展性”如何？](faq/Performance.md#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
-  - [为每个 action 调用“所有的 reducers” 会不会很慢？](faq/Performance.md#wont-calling-all-my-reducers-for-each-action-be-slow)
+  - [为每个 action 调用“所有的 reducers”会不会很慢？](faq/Performance.md#wont-calling-all-my-reducers-for-each-action-be-slow)
   - [必须在 reducer 中深拷贝 state 吗？拷贝 state 不会很慢吗？](faq/Performance.md#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
   - [如何减少 store 更新事件的数量？](faq/Performance.md#how-can-i-reduce-the-number-of-store-update-events)
   - [“单状态树”会导致内存问题吗？Dispatch 很多 actions 会占用内存吗？](faq/Performance.md#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
   - [缓存远端数据会导致内存问题吗？](faq/Performance.md#will-caching-remote-data-cause-memory-problems)
 - **设计决策**
   - [为什么 Redux 不将 state 和 action 传递给订阅者？](faq/DesignDecisions.md#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
-  - [为什么 Redux 不支持对 action 和 reducer 使用 class？](faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
+  - [为什么 Redux 不支持使用类 class 做 action 和 reducer ？](faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
   - [为什么 middleware 签名使用柯里化？](faq/DesignDecisions.md#why-does-the-middleware-signature-use-currying)
   - [为什么 applyMiddleware 使用闭包进行 dispatch？](faq/DesignDecisions.md#why-does-applymiddleware-use-a-closure-for-dispatch)
   - [为什么 `combineReducers` 在调用每个 reducer 时不接收整个 state 作为第三个参数？](faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
@@ -62,8 +61,8 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
   - [为什么我的组件没有重新渲染，或者 mapStateToProps 没有运行？](faq/ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
   - [为什么我的组件经常重新渲染？](faq/ReactRedux.md#why-is-my-component-re-rendering-too-often)
   - [如何加速 mapStateToProps？](faq/ReactRedux.md#how-can-i-speed-up-my-mapstatetoprops)
-  - [为什么 connected 组件中没有 this.props.dispatch 可用？](faq/ReactRedux.md#why-dont-i-have-this-props-dispatch-available-in-my-connected-component)
+  - [为什么 connect 过的组件中没有 this.props.dispatch 可用？](faq/ReactRedux.md#why-dont-i-have-this-props-dispatch-available-in-my-connected-component)
   - [应该只 connect 顶层组件，还是可以 connect 树中的多个组件？](faq/ReactRedux.md#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
 - **其他**
-  - [有没有更大的、“真实的” Redux 项目？](faq/Miscellaneous.md#are-there-any-larger-real-redux-projects)
+  - [有没有更大的、“真正生产环境的” Redux 项目？](faq/Miscellaneous.md#are-there-any-larger-real-redux-projects)
   - [如何在 Redux 中实现身份验证？](faq/Miscellaneous.md#how-can-i-implement-authentication-in-redux)
