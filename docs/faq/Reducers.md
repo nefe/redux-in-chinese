@@ -1,62 +1,62 @@
 ---
 id: reducers
 title: Reducers
-hide_title: false
+sidebar_label: Reducers
 ---
 
-# Redux FAQ: Reducers
+# Redux 常见问答：Reducers
 
-## Table of Contents
+## 目录
 
-- [Redux FAQ: Reducers](#redux-faq-reducers)
-  - [Table of Contents](#table-of-contents)
+- [Redux 常见问答：Reducers](#redux-faq-reducers)
+  - [目录](#table-of-contents)
   - [Reducers](#reducers)
-    - [How do I share state between two reducers? Do I have to use `combineReducers`?](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
-      - [Further information](#further-information)
-    - [Do I have to use the `switch` statement to handle actions?](#do-i-have-to-use-the-switch-statement-to-handle-actions)
-      - [Further information](#further-information-1)
+    - [如何在两个 reducers 之间共享 state？必须使用 combineReducers 吗？](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
+      - [更多信息](#further-information)
+    - [是否必须使用 switch 语句来处理 actions 吗？](#do-i-have-to-use-the-switch-statement-to-handle-actions)
+      - [更多信息](#further-information-1)
 
 ## Reducers
 
-### How do I share state between two reducers? Do I have to use `combineReducers`?
+### 如何在两个 reducers 之间共享 state？必须使用 combineReducers 吗？
 
-The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](../api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is _not_ required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
+Redux store 的建议结构是将 state 对象按键拆分为多个 slices 或 domains，并提供单独的 reducer 函数来管理每个 slice。这类似于标准 Flux 模式包含多个独立 stores 的方式，Redux 提供了 [`combineReducers`](../api/combineReducers.md) 工具函数来使这种模式变得更容易。然而，需要重点注意 `combineReducers` _不是_ 必需的——它只是一个工具函数，适用于每个 state slice 只有一个 reducer 函数的常见用例，数据是纯 JavaScript 对象。
 
-Many users later want to try to share data between two reducers, but find that `combineReducers` does not allow them to do so. There are several approaches that can be used:
+很多用户后来想尝试在两个 reducer 之间共享数据，但发现 `combineReducers` 不允许这样做。有几种解决办法：
 
-- If a reducer needs to know data from another slice of state, the state tree shape may need to be reorganized so that a single reducer is handling more of the data.
-- You may need to write some custom functions for handling some of these actions. This may require replacing `combineReducers` with your own top-level reducer function. You can also use a utility such as [reduce-reducers](https://github.com/acdlite/reduce-reducers) to run `combineReducers` to handle most actions, but also run a more specialized reducer for specific actions that cross state slices.
-- [Middleware with async logic](../tutorials/fundamentals/part-4-store.md#middleware) such as [redux-thunk](https://github.com/reduxjs/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
+- 如果 reducer 需要知道来自另一个 state slice 的数据，则可能需要重新组织 state 树，以便单个 reducer 可以处理更多数据。
+- 你可能需要编写自定义函数来处理其中一些 actions。这可能需要用你自己的顶层 reducer 函数替换 `combineReducers`。你还可以使用诸如 [reduce-reducers](https://github.com/acdlite/reduce-reducers) 之类的实用程序来运行 `combineReducers` 以处理大多数 actions，但也可以为跨 state slices 的特定的 actions 运行更专业的 reducer。
+- [具有异步逻辑的 middleware](../tutorials/fundamentals/part-4-store.md#middleware) 例如 [redux-thunk](https://github.com/reduxjs/redux-thunk)，可以通过 `getState()` 获取整个 state。Action creator 可以从 state 中检索额外的数据并将其放入 action 中，以便每个 reducer 都有足够的信息来更新自己的 state slice。
 
-In general, remember that reducers are just functions—you can organize them and subdivide them any way you want, and you are encouraged to break them down into smaller, reusable functions (“reducer composition”). While you do so, you may pass a custom third argument from a parent reducer if a child reducer needs additional data to calculate its next state. You just need to make sure that together they follow the basic rules of reducers: `(state, action) => newState`, and update state immutably rather than mutating it directly.
+总之，请记住 reducer 仅仅只是函数——你可以按照自己的方式组织和细分它们，并且我们鼓励你将它们分解为更小的、可重用的函数（“reducer 组合”）。当你这样做时，如果子 reducer 需要额外的数据来计算它的下一个 state，你可以从父 reducer 传递一个自定义的第三个参数。你只需要确保它们一起遵循 reducer 的基本规则：`(state, action) => newState`，并且不可变地更新 state 而不是直接改变它。
 
-#### Further information
+#### 更多信息
 
-**Documentation**
+**文档**
 
-- [API: combineReducers](../api/combineReducers.md)
-- [Recipes: Structuring Reducers](../recipes/structuring-reducers/StructuringReducers.md)
+- [API：combineReducers](../api/combineReducers.md)
+- [Redux 使用指南：构建 Reducers](../usage/structuring-reducers/StructuringReducers.md)
 
-**Discussions**
+**讨论**
 
-- [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reduxjs/redux/issues/601)
-- [#1400: Is passing top-level state object to branch reducer an anti-pattern?](https://github.com/reduxjs/redux/issues/1400)
-- [Stack Overflow: Accessing other parts of the state when using combined reducers?](https://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
-- [Stack Overflow: Reducing an entire subtree with redux combineReducers](https://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
-- [Sharing State Between Redux Reducers](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
+- [#601：当一个 action 与多个 reducer 相关时，combineReducers 值得关注](https://github.com/reduxjs/redux/issues/601)
+- [#1400：将顶级 state 对象传递给分支 reducer 是一种反模式吗？](https://github.com/reduxjs/redux/issues/1400)
+- [Stack Overflow：使用组合 reducers 时可以访问 state 的其他部分吗？](https://stackoverflow.com/questions/34333979/accessing-other-parts-of-the-state-when-using-combined-reducers)
+- [Stack Overflow：使用 redux combineReducers 以减少整个子树](https://stackoverflow.com/questions/34427851/reducing-an-entire-subtree-with-redux-combinereducers)
+- [在 Redux Reducer 之间共享 State](https://invalidpatent.wordpress.com/2016/02/18/sharing-state-between-redux-reducers/)
 
-### Do I have to use the `switch` statement to handle actions?
+### 是否必须使用 switch 语句来处理 actions 吗？
 
-No. You are welcome to use any approach you'd like to respond to an action in a reducer. The `switch` statement is the most common approach, but it's fine to use `if` statements, a lookup table of functions, or to create a function that abstracts this away. In fact, while Redux does require that action objects contain a `type` field, your reducer logic doesn't even have to rely on that to handle the action. That said, the standard approach is definitely using a switch statement or a lookup table based on `type`.
+不是的，欢迎你使用任何方法来响应 reducer 中的 action。`switch` 语句只是最常用的方法，但完全可以使用 `if` 语句、函数查找表或创建一个将其抽象出来的函数。事实上，虽然 Redux 确实需要 action 对象包含一个 `type` 字段，但 reducer 逻辑甚至不必依赖它来处理 action。也就是说，标准方法肯定是使用 switch 语句或基于 `type` 的查找表。
 
-#### Further information
+#### 更多信息
 
-**Documentation**
+**文档**
 
-- [Recipes: Reducing Boilerplate](../recipes/ReducingBoilerplate.md)
-- [Recipes: Structuring Reducers - Splitting Reducer Logic](../recipes/structuring-reducers/SplittingReducerLogic.md)
+- [Redux 使用指南：减少样板文件](../usage/ReducingBoilerplate.md)
+- [Redux 使用指南：结构化 Reducer——拆分 Reducer 逻辑](../usage/structuring-reducers/SplittingReducerLogic.md)
 
-**Discussions**
+**讨论**
 
-- [#883: take away the huge switch block](https://github.com/reduxjs/redux/issues/883)
-- [#1167: Reducer without switch](https://github.com/reduxjs/redux/issues/1167)
+- [#883：去掉冗杂的 switch 代码块](https://github.com/reduxjs/redux/issues/883)
+- [#1167：不包含 switch 语句的 Reducer](https://github.com/reduxjs/redux/issues/1167)
