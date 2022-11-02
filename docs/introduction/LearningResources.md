@@ -58,7 +58,7 @@ _通过构建项目来教授 Redux 概念的教程，包括更大的现实场景
 - **实用的 Redux** <br/>
   https://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/ <br/>
   https://blog.isquaredsoftware.com/series/practical-redux/ <br/>
-  An ongoing series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, 一系列正在更新的帖子旨在通过构建示例应用程序来演示一些特定的 Redux 技术，该应用程序基于用于管理 Battletech 活动的 MekHQ 应用程序。由 Redux 共同维护者 Mark Erikson 撰写。涵盖管理关系数据，连接多个组件和列表、功能的复杂 reducer 逻辑，处理表单，显示模态对话框等主题。（注：这是一个较老的系列，今天我们推荐更新的编写 Redux 代码的模式。但是，这个系列中的许多原则仍然很有价值。）
+  一系列正在更新的帖子旨在通过构建示例应用程序来演示一些特定的 Redux 技术，该应用程序基于用于管理 Battletech 活动的 MekHQ 应用程序。由 Redux 共同维护者 Mark Erikson 撰写。涵盖管理关系数据，连接多个组件和列表、功能的复杂 reducer 逻辑，处理表单，显示模态对话框等主题。（注：这是一个较老的系列，今天我们推荐更新的编写 Redux 代码的模式。但是，这个系列中的许多原则仍然很有价值。）
 
 <!-- - **使用 React + Redux 构建简单的 CRUD 应用程序** <br/>
   https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ <br/>
