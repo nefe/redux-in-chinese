@@ -40,7 +40,7 @@ Redux Toolkit 已经用 TypeScript 编写，所以它的 TS 类型定义是内�
 
 [Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) 不需要任何额外的类型。 但是，你需要提取 `RootState` 类型和 `Dispatch` 类型。以便可以根据需要引用它们。从 store 本身推断这些类型，意味着它们会随着你添加更多 state slices 或修改 middleware 设置而正确更新。
 
-因为有了这些是类型定义，可以安全地直接从你的 store 设置文件（例如 `app/store.ts`）导出它们，然后将它们直接导入其他文件。
+因为有了这些类型定义，可以安全地直接从你的 store 设置文件（例如 `app/store.ts`）导出它们，然后将它们直接导入其他文件。
 
 ```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
