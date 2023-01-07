@@ -173,11 +173,7 @@ Redux Toolkit 使我们可以编写更精短且更易于阅读的代码，同时
 
 ### Redux 基础教程
 
-[**Redux 基础教程**](../tutorials/essentials/part-1-overview-concepts.md) 是一个“自上而下”的教程，使用推荐的最新 API 和最佳实践来教“如何以正确的方式使用 Redux”。建议从这个教程开始。
-
-### Redux 基础教程
-
-[**Redux 基础教程**](../tutorials/fundamentals/part-1-overview.md) 是一个“自下而上”的教程，该教程从最初的原理开始，没有任何抽象地讲授“Redux 工作原理”，以及 Redux 标准规范存在背后的原因。
+[**Redux 基础教程**](../tutorials/essentials/part-1-overview-concepts.md) 是一个“自上而下”的教程，使用推荐的最新 API 和最佳实践来教“如何以正确的方式使用 Redux”。建议从这个教程开始。该教程从最初的原理开始，没有任何抽象地讲授“Redux 工作原理”，以及 Redux 标准规范存在背后的原因。
 
 ### 学习流行的 Redux 流
 
