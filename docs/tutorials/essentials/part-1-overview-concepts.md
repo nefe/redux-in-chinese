@@ -1,6 +1,6 @@
 ---
 id: part-1-overview-concepts
-title: 'Redux 循序渐进，第一节：Redux 概述和概念'
+title: 'Redux 基础教程，第一节：Redux 概述和概念'
 sidebar_label: '基础概念'
 hide_title: false
 description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## 简介
 
-欢迎来到 Redux 循序渐进教程! **本教程将向你介绍 Redux 并教你如何正确得使用我们最新推荐的工具和最佳实践**。当你完成时，你应该能够通过已学到的工具和模式开始构建你自己的 Redux 应用程序。
+欢迎来到 Redux 基础教程! **本教程将向你介绍 Redux 并教你如何正确得使用我们最新推荐的工具和最佳实践**。当你完成时，你应该能够通过已学到的工具和模式开始构建你自己的 Redux 应用程序。
 
 在教程的第 1 节，会包含使用 Redux 需要了解的关键术语和概念，然后在[第 2 节: Redux 应用骨架](./part-2-app-structure.md) 我们将尝试一个基本的 React + Redux 应用程序，以了解各个部分如何组合在一起。
 

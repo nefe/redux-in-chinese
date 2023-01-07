@@ -867,7 +867,7 @@ export const selectFilteredTodoIds = createSelector(
 
 这个“基础”教程专注于 Redux 的低级层面：手动编写 action types 和不可变更新，Redux store 和 middleware 如何工作，以及为什么我们使用 action creators 和归一化 state 等模式。此外，todo 示例应用程序相当小，并不意味着是构建完整应用程序的现实例子。
 
-而 [**Redux 循序渐进教程**](../essentials/part-1-overview-concepts.md) 是专门教你**如何构建“真实世界”类型的应用程序**。它通过 Redux Toolkit 来聚焦于如何以正确的方式使用 Redux，并讨论你将在大型应用程序中看到的更现实的模式。它涵盖了许多与本“基础”教程相同的主题，例如为什么 reducer 需要使用不可变更新，但重点是构建一个真实工作中的应用程序。**我们强烈建议你在下一步阅读 Redux 循序渐进教程。**
+而 [**Redux 基础教程**](../essentials/part-1-overview-concepts.md) 是专门教你**如何构建“真实世界”类型的应用程序**。它通过 Redux Toolkit 来聚焦于如何以正确的方式使用 Redux，并讨论你将在大型应用程序中看到的更现实的模式。它涵盖了许多与本“基础”教程相同的主题，例如为什么 reducer 需要使用不可变更新，但重点是构建一个真实工作中的应用程序。**我们强烈建议你在下一步阅读 Redux 基础教程。**
 
 同时，我们在本教程中介绍的概念应该足以让你开始使用 React 和 Redux 构建自己的应用程序。现在就是你自己来尝试进行项目以巩固这些概念，并了解它们在实践中如何工作的好时机。如果你不确定要构建什么样的项目，请参阅此[应用程序项目创意列表](https://github.com/florinpop17/app-ideas)来获得一些灵感。
 

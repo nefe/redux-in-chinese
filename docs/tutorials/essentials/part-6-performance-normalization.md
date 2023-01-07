@@ -1,6 +1,6 @@
 ---
 id: part-6-performance-normalization
-title: 'Redux 循序渐进，第六节：性能与数据范式化'
+title: 'Redux 基础教程，第六节：性能与数据范式化'
 sidebar_label: '性能与数据范式化'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
@@ -1003,7 +1003,7 @@ export const { selectAll: selectAllNotifications } =
 
 我们在本教程中介绍的概念应该足以让你开始使用 React 和 Redux 构建自己的应用程序。现在是尝试自己进行项目以巩固这些概念并了解它们在实践中如何工作的好时机。如果你不确定要构建什么样的项目，请参阅 [应用项目创意列表](https://github.com/florinpop17/app-ideas) 以获得一些灵感。
 
-Redux 循序渐进教程侧重于“如何正确使用 Redux”，而不是“它是如何工作的”或“为什么它会这样工作”。特别是，Redux Toolkit 是一组更高级别的抽象和实用程序，它有助于理解 RTK 中的抽象实际上为你做了什么。通读 ["Redux 基础" 教程](../fundamentals/part-1-overview.md) 将帮助你了解如何“手动”编写 Redux 代码，以及为什么我们推荐 Redux Toolkit 作为编写 Redux 逻辑的默认方式。
+Redux 基础教程侧重于“如何正确使用 Redux”，而不是“它是如何工作的”或“为什么它会这样工作”。特别是，Redux Toolkit 是一组更高级别的抽象和实用程序，它有助于理解 RTK 中的抽象实际上为你做了什么。通读 ["Redux 基础" 教程](../fundamentals/part-1-overview.md) 将帮助你了解如何“手动”编写 Redux 代码，以及为什么我们推荐 Redux Toolkit 作为编写 Redux 逻辑的默认方式。
 
 [Recipes](../../recipes/README.md) 部分包含有关许多重要概念的信息，例如 [如何构建 reducer](../../recipes/structuring-reducers/StructuringReducers.md) 和 [我们的样式指南页面](../../style-guide/style-guide) 包含有关推荐模式和最佳实践的重要信息。
 
