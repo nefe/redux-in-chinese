@@ -176,7 +176,9 @@ const fetchIssuesCount = (org, repo) => async dispatch => {
 
 Redux Toolkit 有一个新的 [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview)。 RTK Query 是专门为 Redux 应用程序构建的数据获取和缓存解决方案，**可以不用编写任何 thunk 或 reducer 来处理数据获取**。 我们鼓励你尝试一下，看看它是否有助于简化你自己的应用程序中的数据获取逻辑！
 
-我们将从 [第 7 部分：RTK query 基础](./part-7-rtk-query-basics.md) 开始介绍如何使用 RTK Query。:::
+我们将从 [第 7 部分：RTK query 基础](./part-7-rtk-query-basics.md) 开始介绍如何使用 RTK Query。
+
+:::
 
 ## 加载帖子
 
