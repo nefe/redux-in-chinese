@@ -15,7 +15,7 @@ module.exports = {
       'tutorials/typescript-quick-start',
       {
         type: 'category',
-        label: 'Redux 循序渐进',
+        label: 'Redux 基础教程',
         items: [
           'tutorials/essentials/part-1-overview-concepts',
           'tutorials/essentials/part-2-app-structure',

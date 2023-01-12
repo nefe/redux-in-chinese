@@ -1,6 +1,6 @@
 ---
 id: part-3-data-flow
-title: 'Redux 循序渐进，第三节：数据流基础'
+title: 'Redux 基础教程，第三节：数据流基础'
 sidebar_label: '数据流基础'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'

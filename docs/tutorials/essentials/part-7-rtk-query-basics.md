@@ -1,6 +1,6 @@
 ---
 id: part-7-rtk-query-basics
-title: 'Redux 循序渐进, 第七节: RTK Query 基础'
+title: 'Redux 基础教程, 第七节: RTK Query 基础'
 sidebar_label: 'RTK Query 基础'
 description: 'Redux Essentials 官方教程：学习如何使用 RTK Query 获取数据'
 ---

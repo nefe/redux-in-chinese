@@ -36,7 +36,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 如果你想了解有关如何使用 Redux 编写实际应用程序的更多信息，请参阅：
 
 - [**本教程中 “Modern Redux” 章节**](./part-8-modern-redux.md)，会演示怎样把前几个章节里示例的初级（low-level）用法转换为我们推荐的实际应用中的现代化模式（modern patterns）用法
-- [**"Redux 循序渐进"**](../essentials/part-1-overview-concepts.md)，会教你在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
+- [**"Redux 基础教程"**](../essentials/part-1-overview-concepts.md)，会教你在实际应用中“如何正确地使用 Redux”，利用我们推荐的模式和最佳实践。
   :::
 
 我们尽量让教程对初学者友好，但为了我们能专注于讲解 Redux 本身，我们假定你已经有了一些预备知识。**本教程假设你：**

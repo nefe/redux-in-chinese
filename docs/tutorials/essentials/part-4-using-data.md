@@ -1,6 +1,6 @@
 ---
 id: part-4-using-data
-title: 'Redux 循序渐进，第四节：使用数据'
+title: 'Redux 基础教程，第四节：使用数据'
 sidebar_label: '使用数据'
 hide_title: false
 description: 'The official Redux Essentials tutorial: learn how to work with complex Redux state in React components'
@@ -20,7 +20,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 :::info 预置知识
 
-- 理解 [Redux 循序渐进，第三节：数据流基础](./part-3-data-flow.md)
+- 理解 [Redux 基础教程，第三节：数据流基础](./part-3-data-flow.md)
 - 熟悉 [使用 React Router 中 `<Link>` 与 `<Route>` 组件来做页面路由](https://reacttraining.com/react-router/web/api)
 
 :::
@@ -171,7 +171,7 @@ export const Navbar = () => {
   return (
     <nav>
       <section>
-        <h1>Redux 循序渐进示例</h1>
+        <h1>Redux 基础教程示例</h1>
 
         <div className="navContent">
           // highlight-start
