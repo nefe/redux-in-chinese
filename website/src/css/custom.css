@@ -253,3 +253,9 @@ details.detailed-explanation p {
   fill: black;
   stroke: black;
 }
+
+
+:root[data-theme='dark'] .admonition a {
+  color: var(--ifm-alert-color);
+  text-decoration: underline;
+}
