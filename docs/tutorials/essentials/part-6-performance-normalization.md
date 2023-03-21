@@ -613,7 +613,7 @@ export const UserPage = ({ match }) => {
 
 为什么会这样？ 其他帖子都没有改变，为什么他们也发生了重新渲染？
 
-[**React 的默认行为是当父组件渲染时，React 会递归渲染其中的所有子组件！**](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly -complete-guide-to-react-rendering-behavior/)。 一个 post 对象的不可变更新也创建了一个新的 `posts` 数组。`<PostsList>` 必须重新渲染，因为 `posts` 数组是一个新的引用，所以在渲染之后，React 继续向下并重新渲染所有的 `<PostExcerpt>` 组件。
+[**React 的默认行为是当父组件渲染时，React 会递归渲染其中的所有子组件！**](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/)。 一个 post 对象的不可变更新也创建了一个新的 `posts` 数组。`<PostsList>` 必须重新渲染，因为 `posts` 数组是一个新的引用，所以在渲染之后，React 继续向下并重新渲染所有的 `<PostExcerpt>` 组件。
 
 这对于我们的小示例应用程序来说并不是一个严重的问题，但是在一个更大的真实应用程序中，可能有一些非常长的列表或者非常大的组件树，重新渲染所有额外的组件可能会导致速度下降。
 
