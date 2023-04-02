@@ -48,13 +48,13 @@ Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated
 
 修改 state 是 Redux 应用 bug 的最常见的诱因，包括组件没有正确再渲染，且阻碍了 Redux DevTools 的时间旅行调试。无论是 reducer 中还是任意其他应用代码中，**都要始终避免 state 的真实变换**。
 
-请使用类似于 [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获，并使用 [Immer](https://immerjs.github.io/immer/) 库来避免偶然的 state 更新.
+请使用类似于 [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获mutations，并使用 [Immer](https://immerjs.github.io/immer/) 库来避免意外的 state 更新.
 
 > **注意**：修改已有值的 _副本_ 是没问题的——这是一种朴素的 immutable 更新方式。 同样的， 如果我们使用了 Immer 库做 immutable 更新， 编写 "mutating" 逻辑也是允许的，因为真实的数据没有被修改—— Immer 在内部进行了安全的变化追踪并且生成了新的 immutably 值。
 
 ### Reducers 不能产生副作用
 
-Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重新计算并返回一个新的 state。**其中禁止执行任何异步代码（AJAX 调用, timeouts, promises），生成随机值 （`Date.now()`, `Math.random()`，在 reducer 外面修改变量，或者执行一些修改 reducer 函数作用域之外变量的代码**。
+Reducer 函数必须*只* 依赖于 `state` 和 `action` 参数，且必须重新计算并返回一个新的 state。**其中禁止执行任何异步代码（AJAX 调用, timeouts, promises），生成随机值 （`Date.now()`, `Math.random()`，修改在 reducer 外面定义的变量，或者执行一些修改 reducer 函数作用域之外变量的代码**。
 
 > **注意**：只要符合同样的规则，在 reducer 中调用外部定义的一些方法，比如从库或工具类中 import 的函数等，也是可以的。
 
