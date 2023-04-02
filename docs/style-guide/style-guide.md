@@ -48,7 +48,7 @@ Redux 核心库和绝大多数的 Redux 文档都是无观点的（unopinionated
 
 修改 state 是 Redux 应用 bug 的最常见的诱因，包括组件没有正确再渲染，且阻碍了 Redux DevTools 的时间旅行调试。无论是 reducer 中还是任意其他应用代码中，**都要始终避免 state 的真实变换**。
 
-请使用类似于 [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获mutations，并使用 [Immer](https://immerjs.github.io/immer/) 库来避免意外的 state 更新.
+请使用类似于 [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) 的工具在开发中捕获mutation，并使用 [Immer](https://immerjs.github.io/immer/) 库来避免意外的 state 更新.
 
 > **注意**：修改已有值的 _副本_ 是没问题的——这是一种朴素的 immutable 更新方式。 同样的， 如果我们使用了 Immer 库做 immutable 更新， 编写 "mutating" 逻辑也是允许的，因为真实的数据没有被修改—— Immer 在内部进行了安全的变化追踪并且生成了新的 immutably 值。
 
@@ -115,7 +115,7 @@ Redux 本身并不关心应用的目录结构怎么组织。但是，按照一�
     - `App.tsx`: React 根组件
   - `/common`: hooks、通用组件、工具方法等
   - `/features`: 包含所有的“功能性文件夹”
-    - `/todos`: 但个功能的文件夹
+    - `/todos`: 单个功能的文件夹
       - `todosSlice.ts`: Redux reducer 逻辑和相关的 action
       - `Todos.tsx`: 一个 React 组件
 
