@@ -575,7 +575,7 @@ export function Counter() {
 
 虽然 React 包含几个内置 hooks，如 `useState` 和 `useEffect`，其他库可以创建自己的 [自定义 hooks](https://reactjs.org/docs/hooks-custom.html)，使用 React 的 hooks 来构建自定义逻辑。
 
-[React-Redux 库](https://react-redux.js.org/) 有 [一组自定义 hooks，允许你的 React 组件与 Redux store 交互](https://react-redux.js .org/api/hooks）。
+[React-Redux 库](https://react-redux.js.org/) 有 [一组自定义 hooks，允许你的 React 组件与 Redux store 交互](https://react-redux.js.org/api/hooks）。
 
 #### 使用 `useSelector` 提取数据
 
