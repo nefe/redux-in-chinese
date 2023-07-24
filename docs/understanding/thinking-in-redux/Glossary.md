@@ -40,7 +40,7 @@ type Reducer<S, A> = (state: S, action: A) => S
 
 _Reducer_ (也称为 _reducing function_) 是一个函数，接受两个参数：之前累积运算的结果和当前需要被被累积计算的值，返回的是一个新的累积计算结果。该函数把一个集合归并成一个单值。
 
-Reducer 并不是 Redux 特有的函数 —— 它是函数式编程中的一个基本概念，甚至大部分的非函数式变成范式语言比如 JavaScript，都有一个内置的 reduce API。比如对于 JavaScript，有个 [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 的 API .
+Reducer 并不是 Redux 特有的函数 —— 它是函数式编程中的一个基本概念，甚至大部分的非函数式编程范式语言比如 JavaScript，都有一个内置的 reduce API。比如对于 JavaScript，有个 [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) 的 API .
 
 在 Redux 中，累计运算的结果就是 state 对象，将要累计运算的是 action。Reducer 由上次累积的结果 state 与当前被累积的 action 计算得到一个新 state。Reducer 必须是**纯函数**——即相同的输入只会返回相同的结果的函数。纯函数不能产生任何副作用。只有这样，才可能实现一些花里胡哨的特性，比如热重载和时间旅行（time travel）。
 
