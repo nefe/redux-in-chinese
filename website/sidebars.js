@@ -130,7 +130,7 @@ module.exports = {
       'faq/react-redux',
       'faq/miscellaneous'
     ],
-    '编码规范': ['style-guide/style-guide'],
+    '编码规范': ['style-guide'],
     'API 文档': [
       'api/api-reference',
       'api/createstore',
