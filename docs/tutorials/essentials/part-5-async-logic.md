@@ -816,7 +816,7 @@ export const AddPostForm = () => {
   - 官方的处理异步 middleware 叫 `redux-thunk`，包含在 Redux Toolkit 中
   - Thunk 函数接收 `dispatch` 和`getState` 作为参数，并且可以在异步逻辑中使用它们
 - **你可以 dispatch 其他 action 来帮助跟踪 API 调用的加载状态**
-  - 典型的模式是在调用之前 dispatch 一个 "pending" 的 action，然后是包含数据的 “sucdess” 或包含错误的 “failure” action
+  - 典型的模式是在调用之前 dispatch 一个 "pending" 的 action，然后是包含数据的 “success” 或包含错误的 “failure” action
   - 加载状态通常应该使用枚举类型，如 `'idle' | 'loading' | 'succeeded' | 'failed'`
 - **Redux Toolkit 有一个 `createAsyncThunk` API 可以为你 dispatch 这些 action **
   - `createAsyncThunk` 接受一个 “payload creator” 回调函数，它应该返回一个 `Promise`，并自动生成 `pending/fulfilled/rejected` action 类型
