@@ -62,7 +62,7 @@ npm install redux
 yarn add redux
 ```
 
-还有一个使用方式是通过预编译的 UMD 包，定义了 `window.Redux` 这个全局变量。UMD 包可以通过 [`<script>` tag](https://unpkg.com/redux/dist/redux.js) 直接使用。
+还有一个使用方式是通过预编译的 UMD 包，定义了 `window.Redux` 这个全局变量。UMD 包可以通过 [`<script>` tag](https://unpkg.com/redux@5.0.1/dist/redux.browser.mjs) 直接使用。
 
 想要获取更多信息，查看 [安装](Installation.md).
 
