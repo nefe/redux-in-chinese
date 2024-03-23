@@ -487,7 +487,7 @@ hooks 的引入改变了大多数 React 开发人员编写组件编写风格。�
 
 推荐以一种更细的粒度，在 UI 组件中从 Redux store 中多次订阅不同的数据。这通常会保持一个更好的 UI 性能，因为给出的这些 state 变化后造成的需要更新的组件更少。
 
-举个例子，应该使 `<UserList>` 检索出一个具有所有用户的 ID 的列表并通过 `<UserListItem userId={userId}>` 来渲染列表项，并使 `<UserListItem>` 关联到它自己关心的那个用户数据。而应该直接关联 `<UserList>` 并读取整个的用户数组。
+举个例子，应该使 `<UserList>` 检索出一个具有所有用户的 ID 的列表并通过 `<UserListItem userId={userId}>` 来渲染列表项，并使 `<UserListItem>` 关联到它自己关心的那个用户数据。而不应该直接关联 `<UserList>` 并读取整个的用户数组。
 
 以上对于 React-Redux `connect()` API 和 `useSelector()` hook 都适用。
 
